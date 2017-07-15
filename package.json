@@ -1,0 +1,51 @@
+{
+  "name": "app-skeleton",
+  "version": "1.0.0",
+  "description": "A basic skeleton for ES6 web applications",
+  "keywords": [
+    "skeleton",
+    "JavaScript",
+    "ES6",
+    "babel",
+    "webpack"
+  ],
+  "author": "Damien Carcel",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damien-carcel/app-skeleton.git"
+  },
+  "bugs": {
+    "url": "https://github.com/damien-carcel/app-skeleton/issues"
+  },
+  "homepage": "https://github.com/damien-carcel/app-skeleton#README.md",
+  "license": "MIT",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --progress",
+    "lint": "node ./node_modules/eslint/bin/eslint 'src/**/*.js'",
+    "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix",
+    "serve": "webpack-dev-server --config webpack.config.js --open"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.4",
+    "eslint": "^4.2.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.29.0",
+    "html-webpack-template": "^5.6.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.18.2",
+    "uglify-js": "^3.0.24",
+    "webpack": "^3.1.0",
+    "webpack-dev-server": "^2.5.1"
+  }
+}
