@@ -9,7 +9,7 @@
     "babel",
     "webpack"
   ],
-  "author": "Damien Carcel",
+  "author": "Damien Carcel <damien.carcel@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/damien-carcel/app-skeleton.git"
