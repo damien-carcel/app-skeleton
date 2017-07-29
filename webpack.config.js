@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -87,6 +88,23 @@ module.exports = {
     }),
     new CleanWebpackPlugin(['dist']),
     new ExtractTextPlugin('[chunkhash].min.css'),
+    new FaviconsWebpackPlugin({
+      logo: './assets/images/pingoo.png',
+      persistentCache: true,
+      background: '#3737c8',
+      icons: {
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        coast: false,
+        favicons: true,
+        firefox: true,
+        opengraph: false,
+        twitter: false,
+        yandex: false,
+        windows: true
+      }
+    }),
     new HtmlWebpackPlugin({
       inject: false,
       template: require('html-webpack-template'),
