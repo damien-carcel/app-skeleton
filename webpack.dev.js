@@ -28,7 +28,7 @@ module.exports = merge(commonConfig, {
     }),
     new HtmlWebpackPlugin({
       inject: false,
-      template: require('html-webpack-template'),
+      template: './src/templates/index.ejs',
       lang: 'en',
       meta: [
         {
