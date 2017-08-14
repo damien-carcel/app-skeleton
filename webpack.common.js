@@ -2,6 +2,7 @@ const babelPresets = ['es2015', 'es2016', 'es2017'];
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
@@ -65,6 +66,10 @@ module.exports = {
       name: 'common'
     }),
     new CleanWebpackPlugin(['dist']),
+    new CopyWebpackPlugin([
+      { from: './assets/files/humans.txt' },
+      { from: './assets/files/robots.txt' }
+    ]),
     new ExtractTextPlugin('[chunkhash].css'),
     new FaviconsWebpackPlugin({
       logo: './assets/images/pingoo.png',
