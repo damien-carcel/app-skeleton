@@ -7,9 +7,26 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = merge(commonConfig, {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
-    port: 9000
+    port: 9000,
+    hot: true
   },
   devtool: 'inline-source-map',
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist')
+  },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       beautify: true,
@@ -22,6 +39,7 @@ module.exports = merge(commonConfig, {
       },
       comments: true
     }),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
       debug: true
