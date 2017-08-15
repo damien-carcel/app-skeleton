@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+    networks:
+      - skeleton
+    ports:
+      - 8080:80
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+
+networks:
+  skeleton: ~
