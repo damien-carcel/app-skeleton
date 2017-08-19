@@ -4,9 +4,13 @@ This is a basic application skeleton to easily bootstrap ES 6 applications with 
 
 ## How to use it
 
-You need to have `node` 6+ and `npm` 5+ installed on your computer.
+You need to have `node` 6+ and `npm` 5+ installed on your computer. You can also use `yarn` to manage dependencies (recommended).
 
-First install the dependencies:
+First install the dependencies. With `yarn`
+```bash
+$ yarn install
+```
+or with `npm`
 ```bash
 $ npm install
 ```

@@ -1,5 +1,6 @@
 /cache
 /dist
 /node_modules
-/docker-compose.yml
-/package-lock.json
+docker-compose.yml
+package-lock.json
+yarn.lock
