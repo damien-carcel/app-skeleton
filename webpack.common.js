@@ -1,4 +1,3 @@
-const babelPresets = ['es2015', 'es2016', 'es2017'];
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
@@ -17,7 +16,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: babelPresets,
+            presets: ['env'],
             cacheDirectory: 'cache'
           }
         }
