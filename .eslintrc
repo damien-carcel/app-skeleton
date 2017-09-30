@@ -1,5 +1,4 @@
 {
-  "parser": "babel-eslint",
   "env": {
     "browser": true
   },
@@ -13,6 +12,15 @@
     "__contextPlaceholder": true,
     "__contextPaths": true
   },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "space-infix-ops": 2,
     "no-bitwise": 2,

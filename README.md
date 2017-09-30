@@ -1,6 +1,6 @@
 # ES 6 and webpack
 
-This is a basic application skeleton to easily bootstrap ES 6 applications with webpack.
+This is a basic skeleton to easily bootstrap a ReactJS applications with ES6 and webpack.
 
 ## How to use it
 
@@ -22,7 +22,7 @@ $ npm run serve
 
 Build the files for production environments by running:
 ```bash
-$ npm run build
+$ npm run build:prod
 ```
 
 ## License
