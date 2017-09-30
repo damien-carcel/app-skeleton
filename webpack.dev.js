@@ -28,17 +28,6 @@ module.exports = merge(commonConfig, {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: true,
-      mangle: {
-        screw_ie8: true,
-        keep_fnames: true
-      },
-      compress: {
-        screw_ie8: true
-      },
-      comments: true
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
