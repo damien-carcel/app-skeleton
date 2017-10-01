@@ -1,6 +1,8 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const InlineChunkManifestHtmlWebpackPlugin = require('inline-chunk-manifest-html-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
   entry: {
@@ -56,6 +58,14 @@ module.exports = {
         yandex: false,
         windows: true
       }
+    }),
+    new ManifestPlugin({
+      seed: {
+        name: 'My skeleton manifest'
+      }
+    }),
+    new InlineChunkManifestHtmlWebpackPlugin({
+      inlineManifest: true
     })
   ]
 };
