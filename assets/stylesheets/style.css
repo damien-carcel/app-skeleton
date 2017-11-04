@@ -1,7 +1,8 @@
 @font-face {
   font-family: 'MyHackFont';
-  src:  url('../fonts/Hack-Regular.woff2') format('woff2'),
-        url('../fonts/Hack-Regular.woff') format('woff');
+  src:
+    url('../fonts/Hack-Regular.woff2') format('woff2'),
+    url('../fonts/Hack-Regular.woff') format('woff');
   font-weight: 600;
   font-style: normal;
 }
