@@ -3,8 +3,6 @@ version: '2'
 services:
   nginx:
     image: nginx
-    networks:
-      - skeleton
     ports:
       - 8080:80
     volumes:
@@ -12,8 +10,6 @@ services:
 
   node:
     image: node:8
-    networks:
-      - skeleton
     user: node
     volumes:
       - .:/home/node/app
@@ -21,6 +17,3 @@ services:
       - ~/.cache/yarn:/home/node/.cache/yarn
       - ~/.config/yarn:/home/node/.config/yarn
     working_dir: /home/node/app
-
-networks:
-  skeleton: ~
