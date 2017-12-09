@@ -4,13 +4,13 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: './src/index.jsx',
+    index: './front/index.jsx',
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        include: /src/,
+        include: /front/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -34,7 +34,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['public'], {
+      exclude: ['index.php']
+    }),
     new CopyWebpackPlugin([
       { from: './assets/files/humans.txt' },
       { from: './assets/files/robots.txt' }

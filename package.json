@@ -23,9 +23,9 @@
   "scripts": {
     "build:prod": "webpack --env=prod -p --progress",
     "build:dev": "webpack --env=dev --progress",
+    "build:watch": "webpack --env=dev --progress --watch",
     "lint": "node ./node_modules/eslint/bin/eslint 'src/**/*.js'",
-    "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix",
-    "serve": "webpack-dev-server --env=dev --open"
+    "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix"
   },
   "dependencies": {
     "react": "^16.0.0",
@@ -54,7 +54,6 @@
     "stylelint-config-standard": "^17.0.0",
     "uglify-js": "^3.0.27",
     "webpack": "^3.5.4",
-    "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0"
   }
 }

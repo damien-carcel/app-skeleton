@@ -45,6 +45,13 @@
 
   </head>
   <body>
+  <noscript>
+    <div style="text-align: center">
+      JavaScript is not activated in your web browser.
+      <br>
+      Please activate it in order to see the web site.
+    </div>
+  </noscript>
   <div id="root"></div>
     <% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
     <style>.unsupported-browser { display: none; }</style>
@@ -100,12 +107,5 @@
     </script>
     <script async defer src="https://www.google-analytics.com/analytics.js" type="text/javascript"></script>
     <% } %>
-  <noscript>
-    <div style="text-align: center">
-      JavaScript is not activated in your web browser.
-      <br>
-      Please activate it in order to see the web site.
-    </div>
-  </noscript>
   </body>
 </html>

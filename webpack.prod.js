@@ -26,7 +26,7 @@ module.exports = merge(commonConfig, {
   },
   output: {
     filename: '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'public')
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
@@ -50,7 +50,7 @@ module.exports = merge(commonConfig, {
     new ExtractTextPlugin('[name].[chunkhash].css'),
     new HtmlWebpackPlugin({
       inject: false,
-      template: './src/templates/index.ejs',
+      template: './front/templates/index.ejs',
       lang: 'en',
       meta: [
         {

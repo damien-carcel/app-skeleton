@@ -5,11 +5,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(commonConfig, {
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 9000,
-    hot: true
-  },
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -25,7 +20,7 @@ module.exports = merge(commonConfig, {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'public')
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -35,7 +30,7 @@ module.exports = merge(commonConfig, {
     }),
     new HtmlWebpackPlugin({
       inject: false,
-      template: './src/templates/index.ejs',
+      template: './front/templates/index.ejs',
       lang: 'en',
       meta: [
         {

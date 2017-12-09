@@ -1,29 +1,30 @@
-# ES 6 and webpack
+# Symfony, React and webpack
 
-This is a basic skeleton to easily bootstrap a ReactJS applications with ES6 and webpack.
+This is a basic skeleton to easily bootstrap a full stack web application, with ReactJS and webpack on the front-end side, and Symfony 4 on the back-end side.
 
 ## How to use it
 
-You need to have `node` 6+ and `npm` 5+ installed on your computer. You can also use `yarn` to manage dependencies (recommended).
+The easiest way is to use Docker and Docker Compose. Copy the file `docker-compose.yml.dist` as `docker-compose.yml` at the root of your project.
 
-First install the dependencies. With `yarn`
+Launch the containers with
 ```bash
-$ yarn install
-```
-or with `npm`
-```bash
-$ npm install
+$ docker-compose up -d
 ```
 
-Then run the test server:
+First, install the dependencies (for both back and front-end):
 ```bash
-$ npm run serve
+$ docker-compose exec fpm composer update
+$ docker-compose run --rm node yarn install
 ```
 
-Build the files for production environments by running:
+Then build the front-end:
 ```bash
-$ npm run build:prod
+$ docker-compose run --rm node yarn build:prod
 ```
+
+You can alternatively use `build:dev` to have non minified results, or `build:watch` (also non minified) for watching dependencies and recompiling on change.
+
+You can now access the application on [localhost:8080](http://localhost:8080).
 
 ## License
 

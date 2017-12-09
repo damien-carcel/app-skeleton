@@ -1,6 +1,14 @@
+
+###> symfony/framework-bundle ###
+.env
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
 /cache
-/dist
 /node_modules
+/public
+!/public/index.php
+composer.lock
 docker-compose.yml
-package-lock.json
 yarn.lock
