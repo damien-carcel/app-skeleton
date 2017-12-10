@@ -25,8 +25,8 @@ Then run the test server:
 
 ```bash
 $ yarn serve
-$ npm run serve
 # or
+$ npm run serve
 ```
 
 You can build the files for production environments by running:
