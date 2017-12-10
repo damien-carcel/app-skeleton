@@ -50,7 +50,7 @@ module.exports = merge(commonConfig, {
     new ExtractTextPlugin('[name].[chunkhash].css'),
     new HtmlWebpackPlugin({
       inject: false,
-      template: './src/templates/index.ejs',
+      template: './public/templates/index.ejs',
       lang: 'en',
       meta: [
         {

@@ -34,7 +34,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['public']),
     new CopyWebpackPlugin([
       { from: './assets/files/humans.txt' },
       { from: './assets/files/robots.txt' }
