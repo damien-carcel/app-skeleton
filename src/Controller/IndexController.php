@@ -11,20 +11,30 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class IndexController extends Controller
+class IndexController
 {
+    /** @var string */
+    private $projectDir;
+
+    /**
+     * @param string $projectDir
+     */
+    public function __construct(string $projectDir)
+    {
+        $this->projectDir = $projectDir;
+    }
+
     /**
      * @return Response
      */
     public function __invoke(): Response
     {
-        $pathToHtmlIndex = $this->container->getParameter('kernel.project_dir').'/public/index.html';
+        $pathToHtmlIndex = $this->projectDir.'/public/index.html';
 
         $html = file_get_contents($pathToHtmlIndex);
 
