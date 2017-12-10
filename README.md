@@ -1,8 +1,16 @@
-# Symfony, React and webpack
+# My application skeleton
 
-This is a basic skeleton to easily bootstrap a full stack web application, with ReactJS and webpack on the front-end side, and Symfony 4 on the back-end side.
+This is a basic application skeleton to easily bootstrap a web application. There is currently 3 maintained branches.
+
+- `master`: A basic full front application with native ES 6, managed with webpack.
+- `react`: A ReactJS full front application (ES 6), managed with webpack.
+  **It inherits from the `master` branch**.
+- `react-symfony`: A full stack web application, with ReactJS and webpack for the front-end part, and Symfony 4 (managed with Flex) for the back-end part (no Form nor Twig component).
+  **It inherits from the `react` branch**.
 
 ## How to use it
+
+**The following documentation is only valid for the master branch**
 
 The easiest way is to use Docker and Docker Compose. Copy the file `docker-compose.yml.dist` as `docker-compose.yml` at the root of your project.
 
@@ -11,7 +19,7 @@ Launch the containers with
 $ docker-compose up -d
 ```
 
-First, install the dependencies (for both back and front-end):
+First, install the dependencies (for both back-end and front-end):
 ```bash
 $ docker-compose exec fpm composer update
 $ docker-compose run --rm node yarn install
