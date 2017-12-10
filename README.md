@@ -1,27 +1,39 @@
-# ES 6 and webpack
+# My application skeleton
 
-This is a basic skeleton to easily bootstrap a ReactJS applications with ES6 and webpack.
+This is a basic application skeleton to easily bootstrap a web application. There is currently 3 maintained branches.
+
+- `master`: A basic full front application with native ES 6, managed with webpack.
+- `react`: A ReactJS full front application (ES 6), managed with webpack.
+  **It inherits from the `master` branch**.
+- `react-symfony`: A full stack web application, with ReactJS and webpack for the front-end part, and Symfony 4 (managed with Flex) for the back-end part (no Form nor Twig component).
+  **It inherits from the `react` branch**.
 
 ## How to use it
 
-You need to have `node` 6+ and `npm` 5+ installed on your computer. You can also use `yarn` to manage dependencies (recommended).
+**The following documentation is only valid for the master branch**
 
-First install the dependencies. With `yarn`
+You need to have `node` 6+ and `npm` 5+ installed on your computer, but it is recommended to use `yarn` to manage your dependencies.
+
+First install the dependencies:
+
 ```bash
 $ yarn install
-```
-or with `npm`
-```bash
+# or
 $ npm install
 ```
-
 Then run the test server:
+
 ```bash
+$ yarn serve
 $ npm run serve
+# or
 ```
 
-Build the files for production environments by running:
+You can build the files for production environments by running:
+
 ```bash
+$ yarn build:prod
+# or
 $ npm run build:prod
 ```
 
