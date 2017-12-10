@@ -6,7 +6,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./dist:/usr/share/nginx/html:ro
+      - ./public:/usr/share/nginx/html:ro
 
   node:
     image: node:8
