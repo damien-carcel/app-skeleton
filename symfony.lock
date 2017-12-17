@@ -1,4 +1,7 @@
 {
+    "monolog/monolog": {
+        "version": "1.23.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -64,6 +67,18 @@
     },
     "symfony/lts": {
         "version": "4-dev"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.0.2"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.1",
+            "ref": "c24944bd87dacf0bb8fa218dc21e4a70fff56882"
+        }
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
