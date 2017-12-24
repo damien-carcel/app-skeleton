@@ -25,7 +25,12 @@ $ docker-compose exec fpm composer update
 $ docker-compose run --rm node yarn install
 ```
 
-Then build the front-end:
+Then update the schema of the MySQL database:
+```bash
+$ docker-compose exec fpm doctrine:schema:update --force
+```
+
+And finally build the front-end:
 ```bash
 $ docker-compose run --rm node yarn build:prod
 ```
