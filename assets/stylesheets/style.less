@@ -8,18 +8,27 @@
 }
 
 body {
-  height: 480px;
-  width: 640px;
+  background: url('../images/background.png');
 }
 
-.hello {
+.post {
   text-align: center;
-  background: url('../images/background.png');
-  color: firebrick;
   font-family: 'MyHackFont', sans-serif;
+  margin-bottom: 100px;
+
+  .title {
+    color: firebrick;
+    font-size: large;
+  }
+
+  .content {
+    color: maroon;
+    font-size: medium;
+  }
 }
 
 button {
-  position: relative;
-  bottom: 280px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
