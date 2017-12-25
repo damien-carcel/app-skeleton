@@ -1,4 +1,4 @@
-import '../assets/stylesheets/style.css';
+import '../assets/stylesheets/style.less';
 import Background from '../assets/images/background.png';
 import printMe from './print.js';
 
