@@ -1,5 +1,9 @@
 import '../assets/stylesheets/style.less';
-import listPosts from '../src/components/ListPosts';
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import ListPosts from './components/ListPosts';
 
 const posts = [
   {
@@ -19,8 +23,7 @@ const posts = [
   }
 ];
 
-const renderedPosts = document.createElement('div');
-renderedPosts.innerHTML = listPosts(posts);
-
-const root = document.getElementById('root');
-root.appendChild(renderedPosts);
+ReactDOM.render(
+  <ListPosts posts={posts}/>,
+  document.getElementById('root')
+);
