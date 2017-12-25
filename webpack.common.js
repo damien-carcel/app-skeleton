@@ -4,12 +4,12 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: './src/index.jsx',
+    index: './src/index.js'
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js$/,
         include: /src/,
         exclude: /node_modules/,
         use: {
@@ -56,8 +56,5 @@ module.exports = {
         windows: true
       }
     })
-  ],
-  resolve: {
-    extensions: ['.js', '.json', '.jsx']
-  }
+  ]
 };
