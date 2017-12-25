@@ -9,9 +9,11 @@ export default class ListPosts extends React.Component {
     const renderedPosts = posts.map((post) => <Post key={post.id.toString()} post={post} />);
 
     return (
-      <div className="blog-posts">
+      <div className="container">
         <Create />
-        {renderedPosts}
+        <div className="blog-posts">
+          {renderedPosts}
+        </div>
       </div>
     );
   }
