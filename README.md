@@ -10,7 +10,7 @@ This is a basic application skeleton to easily bootstrap a web application. Ther
 
 ## How to use it
 
-**The following documentation is only valid for the master branch**
+**The following documentation is only valid for the `master` branch**
 
 You need to have `node` 6+ and `npm` 5+ installed on your computer, but it is recommended to use `yarn` to manage your dependencies.
 
