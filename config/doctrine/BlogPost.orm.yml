@@ -1,0 +1,17 @@
+App\Entity\BlogPost:
+    type: entity
+    table: blog_post
+    repositoryClass: App\Repository\BlogPostRepository
+    id:
+        id:
+            type: uuid
+            generator:
+                strategy: CUSTOM
+            customIdGenerator:
+                class: Ramsey\Uuid\Doctrine\UuidGenerator
+    fields:
+        title:
+            type: string
+            length: 255
+        content:
+            type: text

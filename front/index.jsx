@@ -1,10 +1,16 @@
-import '../assets/stylesheets/style.css';
+import '../assets/stylesheets/style.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Hello from './components/Hello';
 
-ReactDOM.render(
-  <Hello />,
-  document.getElementById('root')
+import ListPosts from './components/ListPosts';
+
+fetch('/rest/blog_post/list')
+  .then((response) => response.json())
+  .then((posts) => {
+    ReactDOM.render(
+      <ListPosts posts={posts}/>,
+      document.getElementById('root')
+    );
+  }
 );
