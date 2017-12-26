@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Ramsey\Uuid\Uuid;
+
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class BlogPost
 {
-    /** @var int */
+    /** @var Uuid */
     private $id;
 
     /** @var string */
@@ -28,9 +30,9 @@ class BlogPost
     private $content = '';
 
     /**
-     * @return int
+     * @return Uuid
      */
-    public function id(): int
+    public function id(): Uuid
     {
         return $this->id;
     }

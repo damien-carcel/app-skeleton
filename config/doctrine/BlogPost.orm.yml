@@ -4,8 +4,11 @@ App\Entity\BlogPost:
     repositoryClass: App\Repository\BlogPostRepository
     id:
         id:
-            type: integer
-            generator: { strategy: AUTO }
+            type: uuid
+            generator:
+                strategy: CUSTOM
+            customIdGenerator:
+                class: Ramsey\Uuid\Doctrine\UuidGenerator
     fields:
         title:
             type: string

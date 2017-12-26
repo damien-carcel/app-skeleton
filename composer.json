@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.1.3",
+        "ramsey/uuid-doctrine": "^1.4",
         "symfony/console": "^4.0",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^4.0",
@@ -51,7 +52,7 @@
     "extra": {
         "symfony": {
             "id": "01C0Y4X3Q8GCEHX7AH8SJJB02E",
-            "allow-contrib": false
+            "allow-contrib": true
         }
     }
 }
