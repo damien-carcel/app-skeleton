@@ -1,12 +1,6 @@
 import React from 'react';
 
 export default class Create extends React.Component {
-  constructor () {
-    super();
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
   handleClick() {
     alert('I get called from a button!');
   }
