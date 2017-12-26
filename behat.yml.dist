@@ -1,0 +1,16 @@
+default:
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+    suites:
+        acceptance:
+            paths: [ '%paths.base%/tests/acceptance/features']
+            contexts:
+                - App\Tests\Acceptance\Context\FeatureContext:
+                    kernel: '@kernel'
+        integration:
+            paths: [ '%paths.base%/tests/integration/features']
+            contexts:
+                - App\Tests\Integration\Context\FeatureContext
