@@ -10,7 +10,7 @@ This is a basic application skeleton to easily bootstrap a web application. Ther
 
 ## How to use it
 
-**The following documentation is only valid for the `symfony-react` branch**
+**The following documentation is only valid for the `react-symfony` branch**
 
 The easiest way is to use Docker and Docker Compose. Copy the file `docker-compose.yml.dist` as `docker-compose.yml` at the root of your project.
 
