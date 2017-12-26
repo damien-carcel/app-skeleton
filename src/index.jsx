@@ -1,9 +1,7 @@
 import '../assets/stylesheets/style.less';
-
+import ListPosts from './components/ListPosts';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import ListPosts from './components/ListPosts';
 
 const posts = [
   {
