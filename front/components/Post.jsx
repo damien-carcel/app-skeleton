@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from 'react';
 
 export default class Post extends React.Component {
@@ -16,3 +17,7 @@ export default class Post extends React.Component {
     );
   }
 }
+
+Post.propTypes = {
+  post: PropTypes.string
+};

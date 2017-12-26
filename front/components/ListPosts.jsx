@@ -1,7 +1,7 @@
-import React from 'react';
-
 import Create from './Create';
 import Post from './Post';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export default class ListPosts extends React.Component {
   render() {
@@ -18,3 +18,7 @@ export default class ListPosts extends React.Component {
     );
   }
 }
+
+ListPosts.propTypes = {
+  posts: PropTypes.string
+};
