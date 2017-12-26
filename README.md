@@ -10,7 +10,7 @@ This is a basic application skeleton to easily bootstrap a web application. Ther
 
 ## How to use it
 
-**The following documentation is only valid for the master branch**
+**The following documentation is only valid for the `symfony-react` branch**
 
 The easiest way is to use Docker and Docker Compose. Copy the file `docker-compose.yml.dist` as `docker-compose.yml` at the root of your project.
 
@@ -30,7 +30,12 @@ Then update the schema of the MySQL database:
 $ docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
-And finally build the front-end:
+You can optionally load some test fixtures as follow:
+```bash
+$ docker-compose exec fpm bin/console doctrine:fixtures:load
+```
+
+Finally build the front-end:
 ```bash
 $ docker-compose run --rm node yarn build:prod
 ```
