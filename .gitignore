@@ -11,4 +11,5 @@
 !/public/index.php
 composer.lock
 docker-compose.yml
+phpspec.yml
 yarn.lock
