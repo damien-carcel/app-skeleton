@@ -5,6 +5,15 @@
     "behat/gherkin": {
         "version": "v4.5.1"
     },
+    "behat/mink": {
+        "version": "v1.7.1"
+    },
+    "behat/mink-browserkit-driver": {
+        "version": "v1.3.2"
+    },
+    "behat/mink-extension": {
+        "version": "2.3.0"
+    },
     "behat/symfony2-extension": {
         "version": "2.1",
         "recipe": {
@@ -158,6 +167,9 @@
     "sebastian/recursion-context": {
         "version": "3.0.0"
     },
+    "symfony/browser-kit": {
+        "version": "v3.4.2"
+    },
     "symfony/cache": {
         "version": "v4.0.1"
     },
@@ -176,6 +188,9 @@
             "ref": "9f94d3ea453cd8a3b95db7f82592d7344fe3a76a"
         }
     },
+    "symfony/css-selector": {
+        "version": "v3.4.2"
+    },
     "symfony/debug": {
         "version": "v4.0.1"
     },
@@ -184,6 +199,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v4.0.2"
+    },
+    "symfony/dom-crawler": {
+        "version": "v3.4.2"
     },
     "symfony/dotenv": {
         "version": "v4.0.1"

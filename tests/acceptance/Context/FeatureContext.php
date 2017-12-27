@@ -2,20 +2,26 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of AppSkeleton.
+ *
+ * Copyright (c) 2017 Damien Carcel <damien.carcel@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Tests\Acceptance\Context;
 
-use Behat\Behat\Context\Context;
+use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * This context class contains the definitions of the steps used by the demo
- * feature file. Learn how to get started with Behat and BDD on Behat's website.
- *
- * @see http://behat.org/en/latest/quick_start.html
+ * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext implements Context
+class FeatureContext implements KernelAwareContext
 {
     /** @var KernelInterface */
     private $kernel;
@@ -24,9 +30,9 @@ class FeatureContext implements Context
     private $response;
 
     /**
-     * @param KernelInterface $kernel
+     * {@inheritdoc}
      */
-    public function __construct(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }
