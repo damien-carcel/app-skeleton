@@ -1,0 +1,29 @@
+default:
+    extensions:
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+    suites:
+        acceptance:
+            paths:
+                - '%paths.base%/tests/acceptance/features'
+            contexts:
+                - App\Tests\Acceptance\Context\FeatureContext: ~
+        integration:
+            paths:
+                - '%paths.base%/tests/integration/features'
+            contexts:
+                - App\Tests\Integration\Context\FeatureContext: ~
+        system:
+            paths:
+                - '%paths.base%/tests/system/features'
+            contexts:
+                - App\Tests\System\Context\FeatureContext: ~
+                - App\Tests\System\Context\FixtureContext:
+                    fixturesLoader: '@doctrine.fixtures.loader'
+                    entityManager: '@doctrine.orm.entity_manager'
