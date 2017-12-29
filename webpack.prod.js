@@ -26,7 +26,7 @@ module.exports = merge(commonConfig, {
   },
   output: {
     filename: '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'public')
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
