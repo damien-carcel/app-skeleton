@@ -11,8 +11,7 @@ behat.yml
 
 /cache
 /node_modules
-/public
-!/public/index.php
+/public/build
 composer.lock
 docker-compose.yml
 phpspec.yml

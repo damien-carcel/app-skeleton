@@ -11,22 +11,24 @@
 
 namespace App\Controller;
 
+use App\Repository\BlogPostRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class IndexController
+class IndexController extends Controller
 {
-    /** @var string */
-    private $projectDir;
+    /** @var BlogPostRepository */
+    private $repository;
 
     /**
-     * @param string $projectDir
+     * @param BlogPostRepository $repository
      */
-    public function __construct(string $projectDir)
+    public function __construct(BlogPostRepository $repository)
     {
-        $this->projectDir = $projectDir;
+        $this->repository = $repository;
     }
 
     /**
@@ -34,10 +36,8 @@ class IndexController
      */
     public function __invoke(): Response
     {
-        $pathToHtmlIndex = $this->projectDir.'/public/index.html';
+        $posts = $this->repository->findAll();
 
-        $html = file_get_contents($pathToHtmlIndex);
-
-        return new Response($html);
+        return $this->render('app/app.html.twig', ['posts' => $posts]);
     }
 }

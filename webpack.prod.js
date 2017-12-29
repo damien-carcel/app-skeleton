@@ -1,9 +1,7 @@
 const commonConfig = require('./webpack.common.js');
 const merge = require('webpack-merge');
-const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(commonConfig, {
   module: {
@@ -24,14 +22,7 @@ module.exports = merge(commonConfig, {
       }
     ]
   },
-  output: {
-    filename: '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'public')
-  },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common'
-    }),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       mangle: {
@@ -47,23 +38,6 @@ module.exports = merge(commonConfig, {
       minimize: true,
       debug: false
     }),
-    new ExtractTextPlugin('[name].[chunkhash].css'),
-    new HtmlWebpackPlugin({
-      inject: false,
-      template: './front/templates/index.ejs',
-      lang: 'en',
-      meta: [
-        {
-          name: 'description',
-          content: 'A better default template for html-webpack-plugin.'
-        }
-      ],
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      },
-      mobile: true,
-      title: 'My ES6 application skeleton'
-    })
+    new ExtractTextPlugin('[name].css')
   ]
 });

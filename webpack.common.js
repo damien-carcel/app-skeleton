@@ -1,16 +1,21 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   entry: {
-    index: './front/index.jsx',
+    app: './assets/javascript/app.js',
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'public/build')
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        include: /front/,
+        test: /\.js$/,
+        include: /assets/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -34,9 +39,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['public'], {
-      exclude: ['index.php']
-    }),
+    new CleanWebpackPlugin(['public/build']),
     new CopyWebpackPlugin([
       { from: './assets/files/humans.txt' },
       { from: './assets/files/robots.txt' }
@@ -44,6 +47,7 @@ module.exports = {
     new FaviconsWebpackPlugin({
       logo: './assets/images/pingoo.png',
       persistentCache: true,
+      prefix: 'icons/',
       background: '#3737c8',
       icons: {
         android: true,
