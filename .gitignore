@@ -9,10 +9,6 @@
 behat.yml
 ###< behat/symfony2-extension ###
 
-/cache
-/node_modules
-/public/build
 composer.lock
 docker-compose.yml
 phpspec.yml
-yarn.lock

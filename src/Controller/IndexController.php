@@ -11,7 +11,9 @@
 
 namespace App\Controller;
 
+use App\Entity\BlogPost;
 use App\Repository\BlogPostRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,35 +24,29 @@ class IndexController
     /** @var BlogPostRepository */
     private $repository;
 
-    /** @var \Twig_Environment */
-    private $twig;
-
     /**
      * @param BlogPostRepository $repository
-     * @param \Twig_Environment  $twig
      */
-    public function __construct(BlogPostRepository $repository, \Twig_Environment $twig)
+    public function __construct(BlogPostRepository $repository)
     {
         $this->repository = $repository;
-        $this->twig = $twig;
     }
 
     /**
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     *
      * @return Response
      */
     public function __invoke(): Response
     {
         $posts = $this->repository->findAll();
 
-        $content = $this->twig->render('app/app.html.twig', ['posts' => $posts]);
+        $normalizedPosts = array_map(function (BlogPost $post) {
+            return [
+                'id' => $post->id(),
+                'title' => $post->title(),
+                'content' => $post->content(),
+            ];
+        }, $posts);
 
-        $response = new Response();
-        $response->setContent($content);
-
-        return $response;
+        return new JsonResponse($normalizedPosts);
     }
 }
