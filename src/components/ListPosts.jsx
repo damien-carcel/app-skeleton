@@ -16,11 +16,12 @@ export default class ListPosts extends React.Component {
 
   componentDidMount() {
     listPosts()
+      .then(response => response.json())
       .then(
         (result) => {
           this.setState({
             isLoaded: true,
-            posts: result.posts
+            posts: result
           });
         },
         (error) => {
