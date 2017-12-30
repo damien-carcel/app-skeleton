@@ -19,5 +19,5 @@ export default class Post extends React.Component {
 }
 
 Post.propTypes = {
-  post: PropTypes.string
+  post: PropTypes.objectOf(PropTypes.string)
 };
