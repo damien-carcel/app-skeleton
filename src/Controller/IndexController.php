@@ -11,25 +11,26 @@
 
 namespace App\Controller;
 
-use App\Entity\BlogPost;
-use App\Repository\BlogPostRepository;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
+ *
+ * @Route("/", name="index")
  */
 class IndexController
 {
-    /** @var BlogPostRepository */
-    private $repository;
+    /** @var UrlGeneratorInterface */
+    private $urlGenerator;
 
     /**
-     * @param BlogPostRepository $repository
+     * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(BlogPostRepository $repository)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
-        $this->repository = $repository;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -37,16 +38,20 @@ class IndexController
      */
     public function __invoke(): Response
     {
-        $posts = $this->repository->findAll();
+        $listBlogPostsUrl = $this->urlGenerator->generate('rest_blog_posts_list');
 
-        $normalizedPosts = array_map(function (BlogPost $post) {
-            return [
-                'id' => $post->id(),
-                'title' => $post->title(),
-                'content' => $post->content(),
-            ];
-        }, $posts);
+        $html = <<<HTML
+<html>
+<body>
+    <ul>
+        <li>
+            <a href="$listBlogPostsUrl">List all posts</a>
+        </li>
+    </ul>
+</body>
+</html>
+HTML;
 
-        return new JsonResponse($normalizedPosts);
+        return new Response($html);
     }
 }
