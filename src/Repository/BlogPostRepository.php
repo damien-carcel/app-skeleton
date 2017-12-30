@@ -36,9 +36,20 @@ class BlogPostRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(BlogPost $post)
+    public function save(BlogPost $post): void
     {
         $this->getEntityManager()->persist($post);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param BlogPost $post
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function delete(BlogPost $post): void
+    {
+        $this->getEntityManager()->remove($post);
         $this->getEntityManager()->flush();
     }
 }
