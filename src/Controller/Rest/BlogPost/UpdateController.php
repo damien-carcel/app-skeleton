@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest\BlogPost;
 
+use App\Entity\BlogPost;
 use App\Repository\BlogPostRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,9 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/rest/blog/post/{uuid}", name="rest_blog_post_get")
+ * @Route("/rest/blog/post/{uuid}/update", name="rest_blog_post_update")
  */
-class GetController
+class UpdateController
 {
     /** @var BlogPostRepository */
     private $repository;
@@ -38,30 +40,31 @@ class GetController
     }
 
     /**
-     * @param string $uuid
+     * @param string  $uuid
+     * @param Request $request
      *
-     * @throws NotFoundHttpException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return Response
      */
-    public function __invoke(string $uuid): Response
+    public function __invoke(string $uuid, Request $request): Response
     {
-        $post = $this->repository->find($uuid);
+        $content = $request->getContent();
+        $postData = json_decode($content, true);
 
+        $post = $this->repository->find($uuid);
         if (null === $post) {
             throw new NotFoundHttpException(sprintf(
                 'There is no blog post with identifier "%s"',
                 $uuid
             ));
         }
+        $post->update($postData);
 
-        $normalizedPost =  [
-            'id' => $post->id(),
-            'title' => $post->title(),
-            'content' => $post->content(),
-        ];
+        $this->repository->save($post);
 
-        $response = new JsonResponse($normalizedPost);
+        $response = new JsonResponse();
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $response;
