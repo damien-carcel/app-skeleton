@@ -5,10 +5,10 @@ This is a basic application skeleton to easily bootstrap a web application. Ther
 - `master`: A basic full front application with native ES 6, managed with webpack.
 - `react`: A ReactJS full front application (ES 6), managed with webpack.
   **It inherits from the `master` branch**.
-- `react-symfony`: A full stack web application, with ReactJS and webpack for the front-end part, and Symfony 4 (managed with Flex) for the back-end part (no Form nor Twig component).
-  **It inherits from the `react` branch**.
 - `symfony`: A Symfony 4 full stack web application (managed with Flex). Twig is used for the front-end part, with Webpack to manage assets.
-  **It inherits from the `react-symfony` branch**.
+  **It inherits from the `react` branch**.
+- `symfony-api`: A Symfony 4 REST application (managed with Flex), no front-end element.
+  **It inherits from the `symfony` branch**.
 
 ## How to use it
 
