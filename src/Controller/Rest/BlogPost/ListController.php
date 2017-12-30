@@ -52,6 +52,9 @@ class ListController
             ];
         }, $posts);
 
-        return new JsonResponse($normalizedPosts);
+        $response = new JsonResponse($normalizedPosts);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 }
