@@ -1,5 +1,6 @@
-import React from 'react';
 import Modal from 'react-modal';
+import PostForm from './PostForm';
+import React from 'react';
 
 export default class Create extends React.Component {
   constructor () {
@@ -25,6 +26,7 @@ export default class Create extends React.Component {
       <div>
         <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Create a new post</button>
         <Modal isOpen={this.state.showModal} contentLabel="Create a new post">
+          <PostForm/>
           <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>

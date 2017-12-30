@@ -2,7 +2,7 @@ import Create from './Create';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import React from 'react';
-import listPosts from '../containers/posts/list';
+import { listPosts } from '../containers/posts';
 
 export default class ListPosts extends React.Component {
   constructor(props) {
