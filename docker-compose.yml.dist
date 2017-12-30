@@ -1,16 +1,6 @@
 version: '2'
 
 services:
-    node:
-        image: node:8
-        user: node
-        volumes:
-            - .:/home/node/app
-            - ~/.npm:/home/node/.npm
-            - ~/.cache/yarn:/home/node/.cache/yarn
-            - ~/.config/yarn:/home/node/.config/yarn
-        working_dir: /home/node/app
-
     fpm:
         image: akeneo/fpm:php-7.1
         environment:
