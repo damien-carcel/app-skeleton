@@ -16,15 +16,16 @@ namespace App\Controller\Rest\BlogPost;
 use App\Entity\BlogPost;
 use App\Repository\BlogPostRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/rest/blog/posts", name="rest_blog_posts_list")
+ * @Route("/rest/blog/post/create", name="rest_blog_post_create")
  */
-class ListController
+class CreateController
 {
     /** @var BlogPostRepository */
     private $repository;
@@ -38,21 +39,24 @@ class ListController
     }
 
     /**
+     * @param Request $request
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return Response
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        $posts = $this->repository->findAll();
+        $content = $request->getContent();
+        $postData = json_decode($content, true);
 
-        $normalizedPosts = array_map(function (BlogPost $post) {
-            return [
-                'id' => $post->id(),
-                'title' => $post->title(),
-                'content' => $post->content(),
-            ];
-        }, $posts);
+        $post = new BlogPost();
+        $post->update($postData);
 
-        $response = new JsonResponse($normalizedPosts);
+        $this->repository->save($post);
+
+        $response = new JsonResponse();
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $response;

@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest\BlogPost;
 
-use App\Entity\BlogPost;
 use App\Repository\BlogPostRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/rest/blog/posts", name="rest_blog_posts_list")
+ * @Route("/rest/blog/post/{uuid}/delete", name="rest_blog_post_delete")
  */
-class ListController
+class DeleteController
 {
     /** @var BlogPostRepository */
     private $repository;
@@ -38,21 +38,27 @@ class ListController
     }
 
     /**
+     * @param string $uuid
+     *
+     * @throws NotFoundHttpException
+     * @throws \Doctrine\ORM\ORMException
+     *
      * @return Response
      */
-    public function __invoke(): Response
+    public function __invoke(string $uuid): Response
     {
-        $posts = $this->repository->findAll();
+        $post = $this->repository->find($uuid);
 
-        $normalizedPosts = array_map(function (BlogPost $post) {
-            return [
-                'id' => $post->id(),
-                'title' => $post->title(),
-                'content' => $post->content(),
-            ];
-        }, $posts);
+        if (null === $post) {
+            throw new NotFoundHttpException(sprintf(
+                'There is no blog post with identifier "%s"',
+                $uuid
+            ));
+        }
 
-        $response = new JsonResponse($normalizedPosts);
+        $this->repository->delete($post);
+
+        $response = new JsonResponse();
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $response;
