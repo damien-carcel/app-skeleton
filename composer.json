@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.1.3",
+        "nelmio/cors-bundle": "^1.5",
         "ramsey/uuid-doctrine": "^1.4",
         "symfony/console": "^4.0",
         "symfony/flex": "^1.0",

@@ -61,9 +61,6 @@ class GetController
             'content' => $post->content(),
         ];
 
-        $response = new JsonResponse($normalizedPost);
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        return $response;
+        return new JsonResponse($normalizedPost);
     }
 }

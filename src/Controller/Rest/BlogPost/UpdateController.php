@@ -64,9 +64,6 @@ class UpdateController
 
         $this->repository->save($post);
 
-        $response = new JsonResponse();
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        return $response;
+        return new JsonResponse();
     }
 }
