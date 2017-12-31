@@ -1,3 +1,4 @@
+import Delete from './Delete';
 import Edit from './Edit';
 import PropTypes from "prop-types";
 import React from 'react';
@@ -15,6 +16,7 @@ export default class Post extends React.Component {
           <p>{post.content}</p>
         </div>
         <Edit postId={post.id}/>
+        <Delete postId={post.id}/>
       </div>
     );
   }
