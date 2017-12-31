@@ -2,7 +2,7 @@ import Create from './Create';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import React from 'react';
-import listPosts from '../containers/posts/list';
+import { listPosts } from '../containers/posts';
 
 export default class ListPosts extends React.Component {
   constructor(props) {
@@ -16,7 +16,6 @@ export default class ListPosts extends React.Component {
 
   componentDidMount() {
     listPosts()
-      .then(response => response.json())
       .then(
         (result) => {
           this.setState({
@@ -48,7 +47,7 @@ export default class ListPosts extends React.Component {
 
     return (
       <div className="container">
-        <Create />
+        <Create/>
         <div className="blog-posts">
           {renderedPosts}
         </div>
