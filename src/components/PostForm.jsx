@@ -1,16 +1,47 @@
 import React from 'react';
-import { createPosts } from '../containers/posts';
+import PropTypes from "prop-types";
+import { createPost } from '../containers/posts';
+import { getPost } from '../containers/posts';
+import { updatePost } from '../containers/posts';
 
 export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoaded: false,
       title: '',
       content: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const postId = this.props.postId;
+
+    if (null !== postId) {
+      getPost(postId)
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              title: result.title,
+              content: result.content
+            });
+          },
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        );
+    } else {
+      this.setState({
+        isLoaded: true
+      });
+    }
   }
 
   handleInputChange(event) {
@@ -24,15 +55,25 @@ export default class PostForm extends React.Component {
   }
 
   handleSubmit() {
+    const postId = this.props.postId;
     const data = {
       'title': this.state.title,
       'content': this.state.content,
     };
 
-    createPosts(data);
+    postId ? updatePost(postId, data) : createPost(data);
   }
 
   render() {
+    const { error, isLoaded, title, content } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    }
+
+    if (!isLoaded) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -40,7 +81,7 @@ export default class PostForm extends React.Component {
           <input
             name="title"
             type="text"
-            value={this.state.title}
+            value={title}
             onChange={this.handleInputChange} />
         </label>
         <br />
@@ -48,7 +89,7 @@ export default class PostForm extends React.Component {
           Content:
           <textarea
             name="content"
-            value={this.state.content}
+            value={content}
             onChange={this.handleInputChange} />
         </label>
         <input className="btn-action btn-create-post" type="submit" value="Save" />
@@ -56,3 +97,11 @@ export default class PostForm extends React.Component {
     );
   }
 }
+
+PostForm.propTypes = {
+  postId: PropTypes.string
+};
+
+PostForm.defaultProps = {
+  postId: null
+};

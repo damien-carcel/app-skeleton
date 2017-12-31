@@ -1,10 +1,11 @@
 import Modal from 'react-modal';
 import PostForm from './PostForm';
+import PropTypes from "prop-types";
 import React from 'react';
 
-export default class Create extends React.Component {
-  constructor() {
-    super();
+export default class Edit extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       showModal: false
     };
@@ -22,16 +23,21 @@ export default class Create extends React.Component {
   }
 
   render() {
+    const postId = this.props.postId;
     const showModal = this.state.showModal;
 
     return (
       <div>
-        <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Create a new post</button>
-        <Modal isOpen={showModal} contentLabel="Create a new post">
-          <PostForm/>
+        <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Edit</button>
+        <Modal isOpen={showModal} contentLabel="Edit a post">
+          <PostForm postId={postId}/>
           <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );
   }
 }
+
+Edit.propTypes = {
+  postId: PropTypes.string
+};
