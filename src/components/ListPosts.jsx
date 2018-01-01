@@ -2,34 +2,57 @@ import Create from './Create';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { listPosts } from '../containers/posts';
+import {deletePost, listPosts} from '../containers/posts';
 
 export default class ListPosts extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       error: null,
       isLoaded: false,
       posts: []
     };
+
+    this.delete = this.delete.bind(this);
   }
 
   componentDidMount() {
-    listPosts()
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            posts: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
+    listPosts().then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          posts: result
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
+    );
+  }
+
+  delete(postId) {
+    this.setState({
+      isLoaded: false
+    });
+
+    deletePost(postId).then(
+      (result) => {
+        this.setState(prevState => ({
+          isLoaded: true,
+          posts: prevState.posts.filter(post => post.id !== postId)
+        }));
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
+    );
   }
 
   render() {
@@ -43,7 +66,11 @@ export default class ListPosts extends React.Component {
       return <div>Loading...</div>;
     }
 
-    const renderedPosts = posts.map((post) => <Post key={post.id.toString()} post={post} />);
+    const renderedPosts = posts.map((post) => {
+      return <Post key={post.id.toString()}
+                   post={post}
+                   handleDelete={this.delete} />;
+    });
 
     return (
       <div className="container">

@@ -3,8 +3,9 @@ import PostForm from './PostForm';
 import React from 'react';
 
 export default class Create extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
       showModal: false
     };
