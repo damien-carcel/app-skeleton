@@ -2,7 +2,7 @@ import Create from './Create';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {deletePost, listPosts} from '../containers/posts';
+import { createPost, deletePost, listPosts, updatePost } from '../containers/posts';
 
 export default class ListPosts extends React.Component {
   constructor(props) {
@@ -15,23 +15,11 @@ export default class ListPosts extends React.Component {
     };
 
     this.delete = this.delete.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   componentDidMount() {
-    listPosts().then(
-      (result) => {
-        this.setState({
-          isLoaded: true,
-          posts: result
-        });
-      },
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
-    );
+    this.getAllPosts();
   }
 
   delete(postId) {
@@ -49,7 +37,53 @@ export default class ListPosts extends React.Component {
       (error) => {
         this.setState({
           isLoaded: true,
-          error
+          error: error
+        });
+      }
+    );
+  }
+
+  submit(postId, data) {
+    this.setState({
+      isLoaded: false
+    });
+
+    if (null !== postId) {
+      updatePost(postId, data).then((result) => {
+        this.setState(prevState => ({
+          isLoaded: true,
+          posts: prevState.posts.map((post) => {
+            if (post.id === postId) {
+              post.title = data.title;
+              post.content = data.content;
+            }
+
+            return post;
+          })
+        }));
+      }, (error) => {
+        this.setState({
+          isLoaded: true,
+          error: error
+        });
+      });
+    } else {
+      createPost(data).then(result => this.getAllPosts());
+    }
+  }
+
+  getAllPosts() {
+    listPosts().then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          posts: result
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error: error
         });
       }
     );
@@ -69,12 +103,13 @@ export default class ListPosts extends React.Component {
     const renderedPosts = posts.map((post) => {
       return <Post key={post.id.toString()}
                    post={post}
+                   handleSubmit={this.submit}
                    handleDelete={this.delete} />;
     });
 
     return (
       <div className="container">
-        <Create/>
+        <Create handleSubmit={this.submit}/>
         <div className="blog-posts">
           {renderedPosts}
         </div>

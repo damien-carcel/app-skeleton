@@ -1,6 +1,7 @@
 import Modal from 'react-modal';
 import PostForm from './PostForm';
 import React from 'react';
+import PropTypes from "prop-types";
 
 export default class Create extends React.Component {
   constructor(props) {
@@ -10,15 +11,22 @@ export default class Create extends React.Component {
       showModal: false
     };
 
-    this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
   }
 
   handleOpenModal() {
     this.setState({ showModal: true });
   }
 
-  handleCloseModal() {
+  handleSubmit(postId, data) {
+    this.props.handleSubmit(postId, data);
+
     this.setState({ showModal: false });
   }
 
@@ -29,10 +37,14 @@ export default class Create extends React.Component {
       <div>
         <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Create a new post</button>
         <Modal isOpen={showModal} contentLabel="Create a new post">
-          <PostForm/>
+          <PostForm handleSubmit={this.handleSubmit}/>
           <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );
   }
 }
+
+Create.propTypes = {
+  handleSubmit: PropTypes.func
+};

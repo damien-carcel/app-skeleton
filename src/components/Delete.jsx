@@ -25,6 +25,6 @@ export default class Delete extends React.Component {
 }
 
 Delete.propTypes = {
-  postId: PropTypes.string,
-  handleDelete: PropTypes.func
+  handleDelete: PropTypes.func,
+  postId: PropTypes.string
 };

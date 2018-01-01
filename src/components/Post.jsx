@@ -14,7 +14,7 @@ export default function Post(props) {
       <div className="content">
         <p>{post.content}</p>
       </div>
-      <Edit postId={post.id}/>
+      <Edit postId={post.id} handleSubmit={props.handleSubmit}/>
       <Delete postId={post.id} handleDelete={props.handleDelete}/>
     </div>
   );
@@ -22,5 +22,6 @@ export default function Post(props) {
 
 Post.propTypes = {
   post: PropTypes.objectOf(PropTypes.string),
-  handleDelete: PropTypes.func
+  handleDelete: PropTypes.func,
+  handleSubmit: PropTypes.func
 };
