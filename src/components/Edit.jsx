@@ -6,19 +6,27 @@ import React from 'react';
 export default class Edit extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       showModal: false
     };
 
-    this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleCloseModal() {
+    this.setState({ showModal: false });
   }
 
   handleOpenModal() {
     this.setState({ showModal: true });
   }
 
-  handleCloseModal() {
+  handleSubmit(postId, data) {
+    this.props.handleSubmit(postId, data);
+
     this.setState({ showModal: false });
   }
 
@@ -29,8 +37,8 @@ export default class Edit extends React.Component {
     return (
       <div>
         <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Edit</button>
-        <Modal isOpen={showModal} contentLabel="Edit a post">
-          <PostForm postId={postId}/>
+        <Modal isOpen={showModal} contentLabel={"Edit post " + postId}>
+          <PostForm postId={postId} handleSubmit={this.handleSubmit}/>
           <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
@@ -39,5 +47,6 @@ export default class Edit extends React.Component {
 }
 
 Edit.propTypes = {
+  handleSubmit: PropTypes.func,
   postId: PropTypes.string
 };

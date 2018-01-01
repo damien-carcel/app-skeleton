@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import { createPost } from '../containers/posts';
 import { getPost } from '../containers/posts';
-import { updatePost } from '../containers/posts';
 
 export default class PostForm extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      error: null,
       isLoaded: false,
       title: '',
       content: ''
@@ -21,27 +21,25 @@ export default class PostForm extends React.Component {
     const postId = this.props.postId;
 
     if (null !== postId) {
-      getPost(postId)
-        .then(
-          (result) => {
-            this.setState({
-              isLoaded: true,
-              title: result.title,
-              content: result.content
-            });
-          },
-          (error) => {
-            this.setState({
-              isLoaded: true,
-              error
-            });
-          }
-        );
-    } else {
-      this.setState({
-        isLoaded: true
-      });
+      getPost(postId).then(
+        (result) => {
+          this.setState({
+            title: result.title,
+            content: result.content
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error: error
+          });
+        }
+      );
     }
+
+    this.setState({
+      isLoaded: true
+    });
   }
 
   handleInputChange(event) {
@@ -54,14 +52,16 @@ export default class PostForm extends React.Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
+
     const postId = this.props.postId;
     const data = {
       'title': this.state.title,
       'content': this.state.content,
     };
 
-    postId ? updatePost(postId, data) : createPost(data);
+    this.props.handleSubmit(postId, data);
   }
 
   render() {
@@ -99,6 +99,7 @@ export default class PostForm extends React.Component {
 }
 
 PostForm.propTypes = {
+  handleSubmit: PropTypes.func,
   postId: PropTypes.string
 };
 

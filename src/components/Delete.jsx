@@ -1,29 +1,30 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import { deletePost } from '../containers/posts';
 
 export default class Delete extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleDelete = this.handleDelete.bind(this, props.postId);
   }
 
-  handleDelete() {
-    const postId = this.props.postId;
-
-    deletePost(postId);
+  handleDelete(postId) {
+    this.props.handleDelete(postId);
   }
 
   render() {
     return (
       <div>
-        <button className="btn-action btn-create-post" onClick={this.handleDelete}>Delete</button>
+        <button className="btn-action btn-create-post"
+                onClick={this.handleDelete}>
+          Delete
+        </button>
       </div>
     );
   }
 }
 
 Delete.propTypes = {
+  handleDelete: PropTypes.func,
   postId: PropTypes.string
 };
