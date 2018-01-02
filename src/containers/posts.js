@@ -1,7 +1,10 @@
 export function listPosts() {
   const url = 'http://localhost:8001/rest/blog/posts';
 
-  return fetch(url).then(response => response.json());
+  return fetch(url, {
+      headers: createHeaders(),
+      method: 'GET'
+  }).then(response => response.json());
 }
 
 export function getPost(postId) {
@@ -38,7 +41,7 @@ export function updatePost(postId, data) {
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
-    method: 'POST'
+    method: 'PATCH'
   }).then(response => response.json());
 }
 

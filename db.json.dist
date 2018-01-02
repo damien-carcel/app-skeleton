@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "title": "A first post",
+      "content": "A very uninteresting content.",
+      "id": "XIa_H8p"
+    },
+    {
+      "title": "Another post",
+      "content": "Bla bla bla bla bla bla.",
+      "id": "_D4pvBw"
+    },
+    {
+      "title": "And yet another",
+      "content": "Still nothing interesting.",
+      "id": "FeZwhwE"
+    }
+  ]
+}
