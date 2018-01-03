@@ -1,5 +1,8 @@
+import config from '../../config/api.json';
+
 export function listPosts() {
-  const url = 'http://localhost:8001/rest/blog/posts';
+  const route = config.api_config.routes.list;
+  const url = getApiUrl(route);
 
   return fetch(url, {
       headers: createHeaders(),
@@ -8,7 +11,8 @@ export function listPosts() {
 }
 
 export function getPost(postId) {
-  const url = 'http://localhost:8001/rest/blog/post/' + postId;
+  const route = config.api_config.routes.get;
+  const url = getApiUrl(route, postId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -17,7 +21,8 @@ export function getPost(postId) {
 }
 
 export function deletePost(postId) {
-  const url = 'http://localhost:8001/rest/blog/post/' + postId + '/delete';
+  const route = config.api_config.routes.delete;
+  const url = getApiUrl(route, postId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -26,7 +31,8 @@ export function deletePost(postId) {
 }
 
 export function createPost(data) {
-  const url = 'http://localhost:8001/rest/blog/post/create';
+  const route = config.api_config.routes.create;
+  const url = getApiUrl(route);
 
   return fetch(url, {
     body: JSON.stringify(data),
@@ -36,13 +42,29 @@ export function createPost(data) {
 }
 
 export function updatePost(postId, data) {
-  const url = 'http://localhost:8001/rest/blog/post/' + postId + '/update';
+  const route = config.api_config.routes.update;
+  const url = getApiUrl(route, postId);
 
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
     method: 'PATCH'
   }).then(response => response.json());
+}
+
+function getApiUrl(route, postId = null) {
+  const protocol = config.api_config.protocol;
+  const host = config.api_config.host;
+  const port = config.api_config.port;
+  const prefix = config.api_config.prefix;
+
+  const baseUrl = protocol + '://' + host + ':' + port + prefix;
+
+  if (null !== postId) {
+    return baseUrl + route.replace('{id}', postId);
+  }
+
+  return baseUrl + route;
 }
 
 function createHeaders() {

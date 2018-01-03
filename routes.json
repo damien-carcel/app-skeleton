@@ -1,7 +1,0 @@
-{
-  "/rest/blog/post/create": "/posts",
-  "/rest/blog/posts": "/posts",
-  "/rest/blog/post/:id": "/posts/:id",
-  "/rest/blog/post/:id/update": "/posts/:id",
-  "/rest/blog/post/:id/delete": "/posts/:id"
-}

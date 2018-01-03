@@ -26,7 +26,7 @@
     "lint": "node ./node_modules/eslint/bin/eslint 'src/**/*.js'",
     "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix",
     "serve": "webpack-dev-server --env=dev --open",
-    "serve-api": "json-server --watch db.json --routes routes.json"
+    "serve-api": "json-server --watch db.json"
   },
   "dependencies": {
     "prop-types": "^15.6.0",

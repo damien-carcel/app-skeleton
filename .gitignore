@@ -1,4 +1,7 @@
 /cache
+/config/*
+!/config/json-server.json
+!/config/api-skeleton.json
 /public
 /node_modules
 db.json
