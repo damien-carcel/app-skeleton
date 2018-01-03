@@ -1,0 +1,15 @@
+{
+  "api_config": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 8080,
+    "prefix": "/rest/blog",
+    "routes": {
+      "list": "/posts",
+      "get": "/post/{id}",
+      "create": "/post/create",
+      "update": "/post/{id}/update",
+      "delete": "/post/{id}/delete"
+    }
+  }
+}
