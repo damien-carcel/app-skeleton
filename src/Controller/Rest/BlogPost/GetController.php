@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/rest/blog/post/{uuid}", name="rest_blog_post_get")
+ * @Route("/api/blog/post/{uuid}", name="rest_blog_post_get")
  */
 class GetController
 {

@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/rest/blog/post/{uuid}/delete", name="rest_blog_post_delete")
+ * @Route("/api/blog/post/{uuid}/delete", name="rest_blog_post_delete")
  */
 class DeleteController
 {
