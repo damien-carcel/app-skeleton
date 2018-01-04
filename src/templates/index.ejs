@@ -38,11 +38,19 @@
     <% } %>
 
     <% for (key in htmlWebpackPlugin.files.css) { %>
+    <% if (htmlWebpackPlugin.files.cssIntegrity) { %>
+    <link
+      href="<%= htmlWebpackPlugin.files.css[key] %>"
+      rel="stylesheet"
+      integrity="<%= htmlWebpackPlugin.files.cssIntegrity[key] %>"
+      crossorigin="<%= webpackConfig.output.crossOriginLoading %>">
+    <% } else { %>
     <link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet">
     <% } %>
-
-    <link type="text/plain" rel="author" href="humans.txt" />
-
+    <% } %>
+    <% if (htmlWebpackPlugin.options.headHtmlSnippet) { %>
+      <%= htmlWebpackPlugin.options.headHtmlSnippet %>
+    <% } %>
   </head>
   <body>
     <noscript>
@@ -60,9 +68,17 @@
       site. See <a href="http://outdatedbrowser.com/">outdatedbrowser.com</a> for options.
     </div>
     <% } %>
-
+    <% if (htmlWebpackPlugin.options.bodyHtmlSnippet) { %>
+      <%= htmlWebpackPlugin.options.bodyHtmlSnippet %>
+    <% } %>
     <% if (htmlWebpackPlugin.options.appMountId) { %>
-    <div id="<%= htmlWebpackPlugin.options.appMountId %>"></div>
+    <div id="<%= htmlWebpackPlugin.options.appMountId %>">
+
+		<% if (htmlWebpackPlugin.options.appMountHtmlSnippet) { %>
+		  <%= htmlWebpackPlugin.options.appMountHtmlSnippet %>
+		<% } %>
+
+	</div>
     <% } %>
     <% for (item of htmlWebpackPlugin.options.appMountIds) { %>
     <div id="<%= item %>"></div>
@@ -86,7 +102,15 @@
     <% } %>
 
     <% for (key in htmlWebpackPlugin.files.chunks) { %>
+    <% if (htmlWebpackPlugin.files.jsIntegrity) { %>
+    <script
+      src="<%= htmlWebpackPlugin.files.chunks[key].entry %>"
+      type="text/javascript"
+      integrity="<%= htmlWebpackPlugin.files.jsIntegrity[htmlWebpackPlugin.files.js.indexOf(htmlWebpackPlugin.files.chunks[key].entry)] %>"
+      crossorigin="<%= webpackConfig.output.crossOriginLoading %>"></script>
+    <% } else { %>
     <script src="<%= htmlWebpackPlugin.files.chunks[key].entry %>" type="text/javascript"></script>
+    <% } %>
     <% } %>
 
     <% if (htmlWebpackPlugin.options.devServer) { %>
