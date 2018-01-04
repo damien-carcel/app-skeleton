@@ -23,5 +23,5 @@ const renderedPosts = document.createElement('div');
 renderedPosts.innerHTML = listPosts(posts);
 
 const root = document.getElementById('root');
-root.addClass('container');
+root.className = 'container';
 root.appendChild(renderedPosts);
