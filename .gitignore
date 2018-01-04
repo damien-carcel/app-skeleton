@@ -14,4 +14,5 @@ behat.yml
 /public/build
 composer.lock
 docker-compose.yml
+package-lock.json
 yarn.lock

@@ -27,8 +27,7 @@
     "lint": "node ./node_modules/eslint/bin/eslint 'src/**/*.js'",
     "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^8.0.1",
@@ -44,9 +43,9 @@
     "file-loader": "^1.1.4",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.1",
     "stylelint": "^8.1.1",
-    "stylelint-config-standard": "^17.0.0",
+    "stylelint-config-standard": "^18.0.0",
     "uglify-js": "^3.0.27",
     "webpack": "^3.5.4",
     "webpack-merge": "^4.1.0"
