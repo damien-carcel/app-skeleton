@@ -14,5 +14,4 @@ behat.yml
 /public/build
 composer.lock
 docker-compose.yml
-phpspec.yml
 yarn.lock
