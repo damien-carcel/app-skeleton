@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/api/blog/post/create", name="rest_blog_post_create")
+ * @Route("/api/blog/post/create", name="rest_blog_post_create", methods={"POST"})
  */
 class CreateController
 {
