@@ -11,4 +11,3 @@ behat.yml
 
 composer.lock
 docker-compose.yml
-phpspec.yml
