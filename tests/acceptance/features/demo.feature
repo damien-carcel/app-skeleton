@@ -7,6 +7,7 @@ Feature:
   As a user
   I want to have a demo scenario
 
+  @system
   Scenario: It receives a response from Symfony's kernel
     When a demo scenario sends a request to "/"
     Then a response should be received

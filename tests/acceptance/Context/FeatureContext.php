@@ -32,7 +32,7 @@ class FeatureContext implements KernelAwareContext
     /**
      * {@inheritdoc}
      */
-    public function setKernel(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel): void
     {
         $this->kernel = $kernel;
     }
@@ -44,15 +44,17 @@ class FeatureContext implements KernelAwareContext
      *
      * @When a demo scenario sends a request to :path
      */
-    public function aDemoScenarioSendsARequestTo(string $path)
+    public function aDemoScenarioSendsARequestTo(string $path): void
     {
         $this->response = $this->kernel->handle(Request::create($path, 'GET'));
     }
 
     /**
+     * @throws \RuntimeException
+     *
      * @Then a response should be received
      */
-    public function theResponseShouldBeReceived()
+    public function theResponseShouldBeReceived(): void
     {
         if ($this->response === null) {
             throw new \RuntimeException('No response received');

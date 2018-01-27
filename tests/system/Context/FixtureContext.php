@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\System\Context;
 
+use App\DataFixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
-use Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
@@ -24,19 +24,14 @@ use Doctrine\ORM\EntityManager;
  */
 class FixtureContext implements Context
 {
-    /** @var SymfonyFixturesLoader */
-    private $fixturesLoader;
-
     /** @var EntityManager */
     private $entityManager;
 
     /**
-     * @param SymfonyFixturesLoader $fixturesLoader
-     * @param EntityManager         $entityManager
+     * @param EntityManager $entityManager
      */
-    public function __construct(SymfonyFixturesLoader $fixturesLoader, EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->fixturesLoader = $fixturesLoader;
         $this->entityManager = $entityManager;
     }
 
@@ -47,6 +42,6 @@ class FixtureContext implements Context
     {
         $purger = new ORMPurger($this->entityManager);
         $executor = new ORMExecutor($this->entityManager, $purger);
-        $executor->execute($this->fixturesLoader->getFixtures());
+        $executor->execute([new BlogPostFixtures()]);
     }
 }
