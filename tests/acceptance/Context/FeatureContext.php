@@ -46,7 +46,7 @@ class FeatureContext implements KernelAwareContext
      *
      * @When a request is sent to :path
      */
-    public function aDemoScenarioSendsARequestTo(string $path): void
+    public function aRequestIsSentTo(string $path): void
     {
         $this->response = $this->kernel->handle(Request::create($path, 'GET'));
     }
@@ -56,7 +56,7 @@ class FeatureContext implements KernelAwareContext
      *
      * @Then a response should be received
      */
-    public function theResponseShouldBeReceived(): void
+    public function aResponseShouldBeReceived(): void
     {
         if ($this->response === null) {
             throw new \RuntimeException('No response received');
