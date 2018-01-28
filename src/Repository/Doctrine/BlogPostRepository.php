@@ -11,16 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Repository;
+namespace App\Repository\Doctrine;
 
 use App\Entity\BlogPost;
+use App\Repository\BlogPostRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPostRepository extends ServiceEntityRepository
+class BlogPostRepository extends ServiceEntityRepository implements BlogPostRepositoryInterface
 {
     /**
      * {@inheritdoc}
@@ -31,10 +32,23 @@ class BlogPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param BlogPost $post
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * {@inheritdoc}
+     */
+    public function getAllBlogPosts(): array
+    {
+        return $this->findAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOneById(string $uuid): BlogPost
+    {
+        return $this->find($uuid);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function save(BlogPost $post): void
     {
@@ -43,9 +57,7 @@ class BlogPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param BlogPost $post
-     *
-     * @throws \Doctrine\ORM\ORMException
+     * {@inheritdoc}
      */
     public function delete(BlogPost $post): void
     {

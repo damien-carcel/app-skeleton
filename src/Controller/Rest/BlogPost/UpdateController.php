@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Rest\BlogPost;
 
-use App\Entity\BlogPost;
-use App\Repository\BlogPostRepository;
+use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,13 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UpdateController
 {
-    /** @var BlogPostRepository */
+    /** @var BlogPostRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepository $repository
+     * @param BlogPostRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepository $repository)
+    public function __construct(BlogPostRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -43,9 +42,6 @@ class UpdateController
      * @param string  $uuid
      * @param Request $request
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return Response
      */
     public function __invoke(string $uuid, Request $request): Response
@@ -53,7 +49,7 @@ class UpdateController
         $content = $request->getContent();
         $postData = json_decode($content, true);
 
-        $post = $this->repository->find($uuid);
+        $post = $this->repository->getOneById($uuid);
         if (null === $post) {
             throw new NotFoundHttpException(sprintf(
                 'There is no blog post with identifier "%s"',

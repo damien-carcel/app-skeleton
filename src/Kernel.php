@@ -28,16 +28,25 @@ class Kernel extends BaseKernel
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCacheDir()
     {
         return $this->getProjectDir().'/var/cache/'.$this->environment;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getLogDir()
     {
         return $this->getProjectDir().'/var/log';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function registerBundles()
     {
         $contents = require $this->getProjectDir().'/config/bundles.php';
@@ -48,6 +57,9 @@ class Kernel extends BaseKernel
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
         $container->setParameter('container.autowiring.strict_mode', true);
@@ -61,6 +73,9 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/services_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         $confDir = $this->getProjectDir().'/config';

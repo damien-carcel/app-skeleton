@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\System\Context;
 
+use App\DataFixtures\BlogPostFixtures;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -28,8 +29,41 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     /**
      * {@inheritdoc}
      */
-    public function setKernel(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel): void
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @When a request asks for the list of blog posts
+     */
+    public function listAllTheBlogPosts(): void
+    {
+        $router = $this->kernel->getContainer()->get('router');
+
+        $this->visitPath($router->generate('rest_blog_posts_list'));
+    }
+
+    /**
+     * @return bool
+     *
+     * @Then all the blog posts should be retrieved
+     */
+    public function allBlogPostsShouldBeRetrieved(): bool
+    {
+        $responseContent = $this->getSession()->getPage()->getContent();
+        $decodedContent = json_decode($responseContent, true);
+
+        $filteredContent = array_filter($decodedContent, function ($post) {
+            unset($post['id']);
+
+            return $post;
+        });
+
+        if ($filteredContent !== BlogPostFixtures::NORMALIZED_POSTS) {
+            return false;
+        }
+
+        return true;
     }
 }

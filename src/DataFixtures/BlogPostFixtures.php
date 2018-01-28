@@ -22,7 +22,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class BlogPostFixtures extends Fixture
 {
-    private const NORMALIZED_POSTS = [
+    public const NORMALIZED_POSTS = [
         [
             'title' => 'A first post',
             'content' => 'A very uninteresting content.'

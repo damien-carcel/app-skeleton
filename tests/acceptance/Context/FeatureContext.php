@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
+use App\DataFixtures\BlogPostFixtures;
+use App\Entity\BlogPost;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +34,7 @@ class FeatureContext implements KernelAwareContext
     /**
      * {@inheritdoc}
      */
-    public function setKernel(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel): void
     {
         $this->kernel = $kernel;
     }
@@ -42,20 +44,55 @@ class FeatureContext implements KernelAwareContext
      *
      * @throws \Exception
      *
-     * @When a demo scenario sends a request to :path
+     * @When a request is sent to :path
      */
-    public function aDemoScenarioSendsARequestTo(string $path)
+    public function aDemoScenarioSendsARequestTo(string $path): void
     {
         $this->response = $this->kernel->handle(Request::create($path, 'GET'));
     }
 
     /**
+     * @throws \RuntimeException
+     *
      * @Then a response should be received
      */
-    public function theResponseShouldBeReceived()
+    public function theResponseShouldBeReceived(): void
     {
         if ($this->response === null) {
             throw new \RuntimeException('No response received');
         }
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @When a request asks for the list of blog posts
+     */
+    public function listAllTheBlogPosts(): void
+    {
+        $router = $this->kernel->getContainer()->get('router');
+        $path = $router->generate('rest_blog_posts_list');
+
+        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
+    }
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @return bool
+     *
+     * @Then all the blog posts should be retrieved
+     */
+    public function allBlogPostsShouldBeRetrieved(): bool
+    {
+        $jsonResponse = $this->response->getContent();
+
+        $blogPosts = json_decode($jsonResponse, true);
+
+        if ($blogPosts !== array_values(BlogPostFixtures::NORMALIZED_POSTS)) {
+            return false;
+        }
+
+        return true;
     }
 }
