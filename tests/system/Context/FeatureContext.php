@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\System\Context;
 
+use App\DataFixtures\BlogPostFixtures;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -35,24 +35,35 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
-     * @param string $path
-     *
-     * @throws \Exception
-     *
-     * @When a demo scenario sends a request to :path
+     * @When a request asks for the list of blog posts
      */
-    public function aDemoScenarioSendsARequestTo(string $path): void
+    public function listAllTheBlogPosts(): void
     {
-        $this->visitPath($path);
+        $router = $this->kernel->getContainer()->get('router');
+
+        $this->visitPath($router->generate('rest_blog_posts_list'));
     }
 
     /**
-     * @throws \RuntimeException
+     * @return bool
      *
-     * @Then a response should be received
+     * @Then all the blog posts should be retrieved
      */
-    public function theResponseShouldBeReceived(): void
+    public function allBlogPostsShouldBeRetrieved(): bool
     {
-        $this->assertResponseContains('');
+        $responseContent = $this->getSession()->getPage()->getContent();
+        $decodedContent = json_decode($responseContent, true);
+
+        $filteredContent = array_filter($decodedContent, function ($post) {
+            unset($post['id']);
+
+            return $post;
+        });
+
+        if ($filteredContent !== BlogPostFixtures::NORMALIZED_POSTS) {
+            return false;
+        }
+
+        return true;
     }
 }

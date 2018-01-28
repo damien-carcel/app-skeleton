@@ -40,10 +40,15 @@ class BlogPostRepository extends ServiceEntityRepository implements BlogPostRepo
     }
 
     /**
-     * @param BlogPost $post
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * {@inheritdoc}
+     */
+    public function getOneById(string $uuid): BlogPost
+    {
+        return $this->find($uuid);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function save(BlogPost $post): void
     {
@@ -52,9 +57,7 @@ class BlogPostRepository extends ServiceEntityRepository implements BlogPostRepo
     }
 
     /**
-     * @param BlogPost $post
-     *
-     * @throws \Doctrine\ORM\ORMException
+     * {@inheritdoc}
      */
     public function delete(BlogPost $post): void
     {

@@ -29,14 +29,32 @@ class BlogPostRepository implements BlogPostRepositoryInterface
      */
     public function getAllBlogPosts(): array
     {
-        return $this->blogPosts;
+        return array_values($this->blogPosts);
     }
 
     /**
-     * @param BlogPost $blogPost
+     * @param string $uuid
+     *
+     * @return BlogPost
      */
-    public function addBlogPost(BlogPost $blogPost): void
+    public function getOneById(string $uuid): BlogPost
     {
-        $this->blogPosts[] = $blogPost;
+        return $this->blogPosts[$uuid];
+    }
+
+    /**
+     * @param BlogPost $post
+     */
+    public function save(BlogPost $post): void
+    {
+        $this->blogPosts[$post->id()->toString()] = $post;
+    }
+
+    /**
+     * @param BlogPost $post
+     */
+    public function delete(BlogPost $post): void
+    {
+        unset($this->blogPosts[$post->id()->toString()]);
     }
 }

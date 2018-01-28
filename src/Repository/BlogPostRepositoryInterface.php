@@ -24,4 +24,21 @@ interface BlogPostRepositoryInterface
      * @return BlogPost[]
      */
     public function getAllBlogPosts(): array;
+
+    /**
+     * @param string $uuid
+     *
+     * @return BlogPost
+     */
+    public function getOneById(string $uuid): BlogPost;
+
+    /**
+     * @param BlogPost $post
+     */
+    public function save(BlogPost $post): void;
+
+    /**
+     * @param BlogPost $post
+     */
+    public function delete(BlogPost $post): void;
 }

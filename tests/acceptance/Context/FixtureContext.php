@@ -15,7 +15,7 @@ namespace App\Tests\Acceptance\Context;
 
 use App\DataFixtures\BlogPostFixtures;
 use App\Entity\BlogPost;
-use App\Repository\InMemory\BlogPostRepository;
+use App\Repository\BlogPostRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;
 
@@ -24,13 +24,13 @@ use Ramsey\Uuid\Uuid;
  */
 class FixtureContext implements Context
 {
-    /** @var BlogPostRepository */
+    /** @var BlogPostRepositoryInterface */
     private $inMemoryBlogPostRepository;
 
     /**
-     * @param BlogPostRepository $inMemoryBlogPostRepository
+     * @param BlogPostRepositoryInterface $inMemoryBlogPostRepository
      */
-    public function __construct(BlogPostRepository $inMemoryBlogPostRepository)
+    public function __construct(BlogPostRepositoryInterface $inMemoryBlogPostRepository)
     {
         $this->inMemoryBlogPostRepository = $inMemoryBlogPostRepository;
     }
@@ -48,7 +48,7 @@ class FixtureContext implements Context
             $postEntity = new BlogPost();
             $postEntity->update($post);
 
-            $this->inMemoryBlogPostRepository->addBlogPost($postEntity);
+            $this->inMemoryBlogPostRepository->save($postEntity);
         }
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Controller\Rest\BlogPost;
 
 use App\Entity\BlogPost;
-use App\Repository\BlogPostRepository;
+use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,22 +27,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CreateController
 {
-    /** @var BlogPostRepository */
+    /** @var BlogPostRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepository $repository
+     * @param BlogPostRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepository $repository)
+    public function __construct(BlogPostRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
      * @param Request $request
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return Response
      */
