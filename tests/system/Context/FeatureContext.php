@@ -15,6 +15,7 @@ namespace App\Tests\System\Context;
 
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -28,8 +29,30 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     /**
      * {@inheritdoc}
      */
-    public function setKernel(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel): void
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @param string $path
+     *
+     * @throws \Exception
+     *
+     * @When a demo scenario sends a request to :path
+     */
+    public function aDemoScenarioSendsARequestTo(string $path): void
+    {
+        $this->visitPath($path);
+    }
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @Then a response should be received
+     */
+    public function theResponseShouldBeReceived(): void
+    {
+        $this->assertResponseContains('');
     }
 }
