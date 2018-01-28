@@ -11,7 +11,7 @@
 
 namespace App\Controller;
 
-use App\Repository\BlogPostRepository;
+use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,17 +19,17 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class IndexController
 {
-    /** @var BlogPostRepository */
+    /** @var BlogPostRepositoryInterface */
     private $repository;
 
     /** @var \Twig_Environment */
     private $twig;
 
     /**
-     * @param BlogPostRepository $repository
-     * @param \Twig_Environment  $twig
+     * @param BlogPostRepositoryInterface $repository
+     * @param \Twig_Environment           $twig
      */
-    public function __construct(BlogPostRepository $repository, \Twig_Environment $twig)
+    public function __construct(BlogPostRepositoryInterface $repository, \Twig_Environment $twig)
     {
         $this->repository = $repository;
         $this->twig = $twig;
@@ -44,7 +44,7 @@ class IndexController
      */
     public function __invoke(): Response
     {
-        $posts = $this->repository->findAll();
+        $posts = $this->repository->getAllBlogPosts();
 
         $content = $this->twig->render('app/app.html.twig', ['posts' => $posts]);
 

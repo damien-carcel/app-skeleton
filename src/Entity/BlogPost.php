@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class BlogPost
 {
-    /** @var Uuid */
+    /** @var UuidInterface */
     private $id;
 
     /** @var string */
@@ -30,9 +30,9 @@ class BlogPost
     private $content = '';
 
     /**
-     * @return Uuid
+     * @return UuidInterface
      */
-    public function id(): Uuid
+    public function id(): UuidInterface
     {
         return $this->id;
     }
@@ -58,28 +58,16 @@ class BlogPost
      */
     public function update(array $data): void
     {
-        if ($data['title']) {
-            $this->setTitle($data['title']);
+        if (array_key_exists('id', $data) && null === $this->id) {
+            $this->id = $data['id'];
         }
 
-        if ($data['content']) {
-            $this->setContent($data['content']);
+        if (array_key_exists('title', $data)) {
+            $this->title = $data['title'];
         }
-    }
 
-    /**
-     * @param string $title
-     */
-    private function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @param string $content
-     */
-    private function setContent(string $content): void
-    {
-        $this->content = $content;
+        if (array_key_exists('content', $data)) {
+            $this->content = $data['content'];
+        }
     }
 }

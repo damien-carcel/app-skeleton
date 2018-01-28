@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    app.repository.blog_post:
+        class: 'App\Repository\Doctrine\BlogPostRepository'

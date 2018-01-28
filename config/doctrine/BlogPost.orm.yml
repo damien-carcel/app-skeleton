@@ -1,7 +1,7 @@
 App\Entity\BlogPost:
     type: entity
     table: blog_post
-    repositoryClass: App\Repository\BlogPostRepository
+    repositoryClass: App\Repository\BlogPostRepositoryInterface
     id:
         id:
             type: uuid
