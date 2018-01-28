@@ -48,7 +48,7 @@ class FixtureContext implements Context
             $postEntity = new BlogPost();
             $postEntity->update($post);
 
-            $this->inMemoryBlogPostRepository->addBlogPost($postEntity);
+            $this->inMemoryBlogPostRepository->save($postEntity);
         }
     }
 }
