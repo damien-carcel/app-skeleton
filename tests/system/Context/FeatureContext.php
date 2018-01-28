@@ -39,9 +39,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      *
      * @throws \Exception
      *
-     * @When a demo scenario sends a request to :path
+     * @When a request is sent to :path
      */
-    public function aDemoScenarioSendsARequestTo(string $path): void
+    public function aRequestIsSentTo(string $path): void
     {
         $this->visitPath($path);
     }
@@ -51,7 +51,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      *
      * @Then a response should be received
      */
-    public function theResponseShouldBeReceived(): void
+    public function aResponseShouldBeReceived(): void
     {
         $this->assertResponseContains('');
     }

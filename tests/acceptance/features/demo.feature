@@ -9,5 +9,5 @@ Feature:
 
   @system
   Scenario: It receives a response from Symfony's kernel
-    When a demo scenario sends a request to "/"
+    When a request is sent to "/"
     Then a response should be received

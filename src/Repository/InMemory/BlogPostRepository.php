@@ -29,14 +29,14 @@ class BlogPostRepository implements BlogPostRepositoryInterface
      */
     public function getAllBlogPosts(): array
     {
-        return $this->blogPosts;
+        return array_values($this->blogPosts);
     }
 
     /**
-     * @param BlogPost $blogPost
+     * @param BlogPost $post
      */
-    public function addBlogPost(BlogPost $blogPost): void
+    public function save(BlogPost $post): void
     {
-        $this->blogPosts[] = $blogPost;
+        $this->blogPosts[$post->id()->toString()] = $post;
     }
 }

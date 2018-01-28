@@ -4,5 +4,5 @@ services:
         autoconfigure: true
         public: false
 
-    app.repository.blog_post:
-        class: 'App\Repository\Doctrine\BlogPostRepository'
+    App\Repository\Doctrine\BlogPostRepository: ~
+    App\Repository\BlogPostRepositoryInterface: '@App\Repository\Doctrine\BlogPostRepository'

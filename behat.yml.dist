@@ -30,7 +30,7 @@ acceptance:
             contexts:
                 - App\Tests\Acceptance\Context\FeatureContext: ~
                 - App\Tests\Acceptance\Context\FixtureContext:
-                    inMemoryBlogPostRepository: '@app.repository.blog_post'
+                    inMemoryBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
 
 system:
     extensions:
