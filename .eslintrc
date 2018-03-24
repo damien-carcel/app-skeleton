@@ -9,7 +9,6 @@
     "sourceType": "module"
   },
   "rules": {
-    "camelcase": 1,
     "no-extra-parens": 1
   }
 }
