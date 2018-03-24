@@ -1,3 +1,5 @@
+/* eslint-env amd, node */
+
 const commonConfig = require('./webpack.common.js');
 const merge = require('webpack-merge');
 const path = require('path');
