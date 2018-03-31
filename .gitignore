@@ -1,5 +1,6 @@
 /cache
 /public
 /node_modules
+docker-compose.override.yaml
 package-lock.json
 yarn.lock
