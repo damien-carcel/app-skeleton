@@ -4,8 +4,8 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
 module.exports = (env, argv) => ({
   devServer: {
@@ -57,30 +57,13 @@ module.exports = (env, argv) => ({
       { from: './assets/files/humans.txt' },
       { from: './assets/files/robots.txt' }
     ]),
-    new FaviconsWebpackPlugin({
-      logo: './assets/images/pingoo.png',
-      persistentCache: true,
-      background: '#3737c8',
-      icons: {
-        android: true,
-        appleIcon: true,
-        appleStartup: true,
-        coast: false,
-        favicons: true,
-        firefox: true,
-        opengraph: false,
-        twitter: false,
-        yandex: false,
-        windows: true
-      }
-    }),
     new HtmlWebpackPlugin({
       inject: false,
       lang: 'en',
       meta: [
         {
           name: 'description',
-          content: 'A better default template for html-webpack-plugin.'
+          content: 'A basic skeleton for ES6 web applications'
         }
       ],
       mobile: true,
@@ -91,6 +74,31 @@ module.exports = (env, argv) => ({
       template: './src/templates/index.ejs',
       title: 'My ES6 application skeleton'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new WebappWebpackPlugin({
+      logo: './assets/images/pingoo.png',
+      inject: true,
+      cache: 'cache/favicons',
+      favicons: {
+        appName: 'app-skeleton',
+        appDescription: 'A basic skeleton for ES6 web applications',
+        developerName: 'Damien Carcel',
+        developerURL: 'https://github.com/damien-carcel/',
+        background: '#3737c8',
+        theme_color: '#373737',
+        icons: {
+          android: true,
+          appleIcon: true,
+          appleStartup: true,
+          coast: false,
+          favicons: true,
+          firefox: true,
+          opengraph: false,
+          twitter: false,
+          yandex: false,
+          windows: true
+        }
+      }
+    })
   ]
 });
