@@ -11,8 +11,8 @@ behat.yml
 
 /cache
 /node_modules
-/public/build
+/public
+!/public/index.php
 composer.lock
-docker-compose.yml
 package-lock.json
 yarn.lock
