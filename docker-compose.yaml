@@ -6,9 +6,7 @@ services:
         user: node
         volumes:
             - .:/home/node/app
-            - ~/.npm:/home/node/.npm
             - ~/.cache/yarn:/home/node/.cache/yarn
-            - ~/.config/yarn:/home/node/.config/yarn
         working_dir: /home/node/app
 
     fpm:
@@ -33,7 +31,7 @@ services:
         environment:
             PHP_IDE_CONFIG: 'serverName=app-skeleton'
         ports:
-            - '8080:80'
+            - '8000:80'
         volumes:
             - ./:/srv/application:ro
             - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
