@@ -14,5 +14,6 @@ behat.yml
 /public
 !/public/index.php
 composer.lock
+docker-compose.override.yaml
 package-lock.json
 yarn.lock
