@@ -4,7 +4,7 @@ services:
     nginx:
         image: nginx
         ports:
-            - 8080:80
+            - 8000:80
         volumes:
             - ./public:/usr/share/nginx/html:ro
 
@@ -13,7 +13,5 @@ services:
         user: node
         volumes:
             - .:/home/node/app
-            - ~/.npm:/home/node/.npm
             - ~/.cache/yarn:/home/node/.cache/yarn
-            - ~/.config/yarn:/home/node/.config/yarn
         working_dir: /home/node/app
