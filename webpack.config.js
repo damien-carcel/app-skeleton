@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -55,24 +55,32 @@ module.exports = {
       { from: './assets/files/humans.txt', to: '../../public' },
       { from: './assets/files/robots.txt', to: '../../public' }
     ]),
-    new FaviconsWebpackPlugin({
+    new webpack.HotModuleReplacementPlugin(),
+    new WebappWebpackPlugin({
       logo: './assets/images/pingoo.png',
-      persistentCache: true,
-      prefix: 'icons/',
-      background: '#3737c8',
-      icons: {
-        android: true,
-        appleIcon: true,
-        appleStartup: true,
-        coast: false,
-        favicons: true,
-        firefox: true,
-        opengraph: false,
-        twitter: false,
-        yandex: false,
-        windows: true
+      inject: true,
+      cache: 'cache/favicons',
+      prefix: 'assets/',
+      favicons: {
+        appName: 'app-skeleton',
+        appDescription: 'A basic skeleton for ES6 web applications',
+        developerName: 'Damien Carcel',
+        developerURL: 'https://github.com/damien-carcel/',
+        background: '#3737c8',
+        theme_color: '#373737',
+        icons: {
+          android: true,
+          appleIcon: true,
+          appleStartup: true,
+          coast: false,
+          favicons: true,
+          firefox: true,
+          opengraph: false,
+          twitter: false,
+          yandex: false,
+          windows: true
+        }
       }
-    }),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ]
 };
