@@ -32,11 +32,6 @@ Then update the schema of the MySQL database:
 $ docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
-You can optionally load some test fixtures as follow:
-```bash
-$ docker-compose exec fpm bin/console doctrine:fixtures:load
-```
-
 Finally build the front-end:
 ```bash
 $ docker-compose run --rm node yarn build:prod

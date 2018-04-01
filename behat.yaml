@@ -10,14 +10,13 @@ integration:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts:
-                - App\Tests\Integration\Context\FeatureContext: ~
+                - App\Tests\Integration\Context\FeatureContext:
+                    doctrineBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
+                - App\Tests\System\Context\FixtureContext:
+                    entityManager: '@doctrine.orm.entity_manager'
 
 acceptance:
     extensions:
-        Behat\MinkExtension:
-            sessions:
-                default:
-                    symfony2: ~
         Behat\Symfony2Extension:
             kernel:
                 bootstrap: tests/bootstrap.php
@@ -26,7 +25,7 @@ acceptance:
     suites:
         default:
             paths:
-                - '%paths.base%/tests/acceptance/features'
+                - '%paths.base%/tests/features'
             contexts:
                 - App\Tests\Acceptance\Context\FeatureContext: ~
                 - App\Tests\Acceptance\Context\FixtureContext:
@@ -46,7 +45,7 @@ system:
     suites:
         default:
             paths:
-                - '%paths.base%/tests/acceptance/features'
+                - '%paths.base%/tests/features'
             contexts:
                 - App\Tests\System\Context\FeatureContext: ~
                 - App\Tests\System\Context\FixtureContext:

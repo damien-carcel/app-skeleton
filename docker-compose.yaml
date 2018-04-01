@@ -2,47 +2,46 @@ version: '2'
 
 services:
     node:
-        image: node:8
-        user: node
+        image: 'node:8'
+        environment:
+          YARN_CACHE_FOLDER: '/home/node/.yarn-cache'
+        user: 'node'
         volumes:
-            - .:/home/node/app
-            - ~/.cache/yarn:/home/node/.cache/yarn
-        working_dir: /home/node/app
+            - './:/srv/application'
+            - '~/.cache/yarn:/home/node/.yarn-cache'
+        working_dir: '/srv/application'
 
     fpm:
-        image: akeneo/fpm:php-7.1
+        image: 'akeneo/fpm:php-7.2'
         environment:
             COMPOSER_CACHE_DIR: '/home/docker/.cache/composer'
             COMPOSER_HOME: '/home/docker/.config/composer'
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
-            PHP_XDEBUG_ENABLED: 0
-            XDEBUG_CONFIG: 'remote_host=xxx.xxx.xxx.xxx'
-        user: docker
+            PHP_IDE_CONFIG: 'serverName=symfony-cli'
+            XDEBUG_CONFIG: 'remote_host=172.17.0.1'
+        user: 'docker'
         volumes:
-            - ./:/srv/application
-            - ~/.cache/composer:/home/docker/.cache/composer
-            - ~/.config/composer:/home/docker/.config/composer
-        working_dir: /srv/application
+            - './:/srv/application'
+            - '~/.cache/composer:/home/docker/.cache/composer'
+            - '~/.config/composer:/home/docker/.config/composer'
+        working_dir: '/srv/application'
 
     nginx:
-        image: nginx
+        image: 'nginx'
         depends_on:
-            - fpm
+            - 'fpm'
         environment:
-            PHP_IDE_CONFIG: 'serverName=app-skeleton'
+            PHP_IDE_CONFIG: 'serverName=symfony-web'
         ports:
             - '8000:80'
         volumes:
-            - ./:/srv/application:ro
-            - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
-            - ./docker/upload.conf:/etc/nginx/conf.d/upload.conf
+            - './:/srv/application:ro'
+            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
 
     mysql:
-        image: mysql:5.7
+        image: 'mysql:5.7'
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_USER: app-skeleton
-            MYSQL_PASSWORD: app-skeleton
-            MYSQL_DATABASE: app-skeleton
-        ports:
-            - '3306:3306'
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_USER: 'app-skeleton'
+            MYSQL_PASSWORD: 'app-skeleton'
+            MYSQL_DATABASE: 'app-skeleton'

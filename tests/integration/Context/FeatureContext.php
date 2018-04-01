@@ -13,22 +13,60 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Context;
 
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Symfony\Component\HttpKernel\KernelInterface;
+use App\Entity\BlogPost;
+use App\Repository\BlogPostRepositoryInterface;
+use App\Tests\Fixtures\BlogPostFixtures;
+use Behat\Behat\Context\Context;
+use Ramsey\Uuid\Uuid;
+use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext implements KernelAwareContext
+class FeatureContext implements Context
 {
-    /** @var KernelInterface */
-    private $kernel;
+    /** @var BlogPostRepositoryInterface */
+    private $doctrineBlogPostRepository;
+
+    /** @var array */
+    private $result;
 
     /**
-     * {@inheritdoc}
+     * @param BlogPostRepositoryInterface $doctrineBlogPostRepository
      */
-    public function setKernel(KernelInterface $kernel): void
+    public function __construct(BlogPostRepositoryInterface $doctrineBlogPostRepository)
     {
-        $this->kernel = $kernel;
+        $this->doctrineBlogPostRepository = $doctrineBlogPostRepository;
+    }
+
+    /**
+     * @param string $methodName
+     *
+     * @When the ":methodName" method from the Doctrine BlogPostRepository is called
+     */
+    public function callGetMethodFromRepository(string $methodName): void
+    {
+        $this->result = $this->doctrineBlogPostRepository->$methodName();
+    }
+
+    /**
+     * @Then all the blog posts should be retrieved from database
+     */
+    public function allBlogPostsAreRetrieved(): void
+    {
+        Assert::count($this->result, 3);
+
+        $normalizedBlogPosts = [];
+        foreach ($this->result as $blogPost) {
+            Assert::isInstanceOf($blogPost, BlogPost::class);
+            Assert::isInstanceOf($blogPost->id(), Uuid::class);
+
+            $normalizedBlogPosts[] = [
+                'title' => $blogPost->title(),
+                'content' => $blogPost->content(),
+            ];
+        }
+
+        Assert::allOneOf($normalizedBlogPosts, BlogPostFixtures::NORMALIZED_POSTS);
     }
 }
