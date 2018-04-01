@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\System\Context;
 
-use App\DataFixtures\BlogPostFixtures;
+use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;

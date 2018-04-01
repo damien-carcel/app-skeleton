@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\DataFixtures;
+namespace App\Tests\Fixtures;
 
 use App\Entity\BlogPost;
 use Doctrine\Bundle\FixturesBundle\Fixture;

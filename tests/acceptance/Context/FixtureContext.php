@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
-use App\DataFixtures\BlogPostFixtures;
 use App\Entity\BlogPost;
 use App\Repository\InMemory\BlogPostRepository;
+use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;
 
