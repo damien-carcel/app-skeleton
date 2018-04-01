@@ -2,14 +2,13 @@ version: '2'
 
 services:
     fpm:
-        image: akeneo/fpm:php-7.1
+        image: 'akeneo/fpm:php-7.2'
         environment:
             COMPOSER_CACHE_DIR: '/home/docker/.cache/composer'
             COMPOSER_HOME: '/home/docker/.config/composer'
             PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
-            PHP_XDEBUG_ENABLED: 0
-            XDEBUG_CONFIG: 'remote_host=xxx.xxx.xxx.xxx'
-        user: docker
+            XDEBUG_CONFIG: 'remote_host=172.17.0.1'
+        user: 'docker'
         volumes:
             - ./:/srv/application
             - ~/.cache/composer:/home/docker/.cache/composer
@@ -17,24 +16,22 @@ services:
         working_dir: /srv/application
 
     nginx:
-        image: nginx
+        image: 'nginx'
         depends_on:
-            - fpm
+            - 'fpm'
         environment:
             PHP_IDE_CONFIG: 'serverName=app-skeleton'
         ports:
-            - '8080:80'
+            - '8000:80'
         volumes:
-            - ./:/srv/application
-            - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
-            - ./docker/upload.conf:/etc/nginx/conf.d/upload.conf
+            - './:/srv/application:ro'
+            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
 
     mysql:
-        image: mysql:5.7
+        image: 'mysql:5.7'
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_USER: app-skeleton
-            MYSQL_PASSWORD: app-skeleton
-            MYSQL_DATABASE: app-skeleton
-        ports:
-            - '3306:3306'
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_USER: 'app-skeleton'
+            MYSQL_PASSWORD: 'app-skeleton'
+            MYSQL_DATABASE: 'app-skeleton'

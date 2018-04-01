@@ -2,7 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     App\Repository\Doctrine\BlogPostRepository: ~
     App\Repository\BlogPostRepositoryInterface: '@App\Repository\Doctrine\BlogPostRepository'
