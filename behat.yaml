@@ -10,7 +10,10 @@ integration:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts:
-                - App\Tests\Integration\Context\FeatureContext: ~
+                - App\Tests\Integration\Context\FeatureContext:
+                    doctrineBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
+                - App\Tests\System\Context\FixtureContext:
+                    entityManager: '@doctrine.orm.entity_manager'
 
 acceptance:
     extensions:
