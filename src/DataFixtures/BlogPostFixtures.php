@@ -25,16 +25,16 @@ class BlogPostFixtures extends Fixture
     public const NORMALIZED_POSTS = [
         [
             'title' => 'A first post',
-            'content' => 'A very uninteresting content.'
+            'content' => 'A very uninteresting content.',
         ],
         [
             'title' => 'Another post',
-            'content' => 'Bla bla bla bla bla bla.'
+            'content' => 'Bla bla bla bla bla bla.',
         ],
         [
             'title' => 'And yet another',
-            'content' => 'Still nothing interesting.'
-        ]
+            'content' => 'Still nothing interesting.',
+        ],
     ];
 
     /**
