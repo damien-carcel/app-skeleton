@@ -31,11 +31,6 @@ Then update the schema of the MySQL database:
 $ docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
-You can optionally load some test fixtures as follow:
-```bash
-$ docker-compose exec fpm bin/console doctrine:fixtures:load
-```
-
 You can now access the application on [localhost:8080](http://localhost:8080).
 
 ## License

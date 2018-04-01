@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\System\Context;
 
-use App\DataFixtures\BlogPostFixtures;
+use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -60,7 +60,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
             return $post;
         });
 
-        if ($filteredContent !== BlogPostFixtures::NORMALIZED_POSTS) {
+        if (BlogPostFixtures::NORMALIZED_POSTS !== $filteredContent) {
             return false;
         }
 

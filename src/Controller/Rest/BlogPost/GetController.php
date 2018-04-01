@@ -55,7 +55,7 @@ class GetController
             ));
         }
 
-        $normalizedPost =  [
+        $normalizedPost = [
             'id' => $post->id(),
             'title' => $post->title(),
             'content' => $post->content(),

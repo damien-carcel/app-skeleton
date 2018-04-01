@@ -1,0 +1,32 @@
+language: php
+php:
+  - '7.1'
+  - '7.2'
+
+git:
+    depth: 10
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+before_install:
+    - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    - phpenv config-rm xdebug.ini
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - composer self-update --no-interaction
+
+install:
+    - cp .env.dist .env
+    - composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+    - mysql -e 'CREATE DATABASE db_name;'
+    - mysql -e 'GRANT ALL PRIVILEGES ON db_name.* TO db_user@localhost IDENTIFIED BY "db_password"'
+    - bin/console doctrine:schema:update --force --env=test > /dev/null
+
+script:
+    - vendor/bin/phpcs -p --standard=PSR2 --extensions=php src tests/acceptance tests/integration tests/system
+    - vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+    - vendor/bin/phpspec run
+    - vendor/bin/behat --profile=integration
+    - vendor/bin/behat --profile=acceptance
+    - vendor/bin/behat --profile=system

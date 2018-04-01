@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
-use App\DataFixtures\BlogPostFixtures;
-use App\Entity\BlogPost;
+use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -52,15 +52,11 @@ class FeatureContext implements KernelAwareContext
     }
 
     /**
-     * @throws \RuntimeException
-     *
      * @Then a response should be received
      */
     public function aResponseShouldBeReceived(): void
     {
-        if ($this->response === null) {
-            throw new \RuntimeException('No response received');
-        }
+        Assert::notNull($this->response);
     }
 
     /**
