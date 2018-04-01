@@ -56,7 +56,7 @@ class FeatureContext implements KernelAwareContext
      */
     public function aResponseShouldBeReceived(): void
     {
-        if ($this->response === null) {
+        if (null === $this->response) {
             throw new \RuntimeException('No response received');
         }
     }
