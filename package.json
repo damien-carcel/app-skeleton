@@ -25,7 +25,7 @@
     "build:dev": "webpack --mode development --progress",
     "lint": "node ./node_modules/eslint/bin/eslint 'src/**/*.js'",
     "lint-fix": "node ./node_modules/eslint/bin/eslint 'src/**/*.js' --fix",
-    "serve": "webpack-dev-server --mode development --open"
+    "serve": "webpack-dev-server --mode development --open --hot --inline"
   },
   "dependencies": {},
   "devDependencies": {

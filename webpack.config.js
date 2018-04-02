@@ -1,7 +1,6 @@
 /* eslint-env amd, node */
 
 const path = require('path');
-const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -11,7 +10,9 @@ module.exports = (env, argv) => ({
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: 9000,
-    hot: true
+    stats: {
+      colors: true
+    }
   },
   output: {
     path: path.resolve(__dirname, 'public')
@@ -31,15 +32,11 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.(gif|jpg|png|svg)$/,
-        use: [
-          'file-loader'
-        ]
+        use: ['file-loader']
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
-        use: [
-          'file-loader'
-        ]
+        use: ['file-loader']
       },
       {
         test: /\.less$/,
@@ -54,8 +51,8 @@ module.exports = (env, argv) => ({
   plugins: [
     new CleanWebpackPlugin(['public']),
     new CopyWebpackPlugin([
-      { from: './assets/files/humans.txt' },
-      { from: './assets/files/robots.txt' }
+      {from: './assets/files/humans.txt'},
+      {from: './assets/files/robots.txt'}
     ]),
     new HtmlWebpackPlugin({
       inject: false,
@@ -74,7 +71,6 @@ module.exports = (env, argv) => ({
       template: './src/templates/index.ejs',
       title: 'My ES6 application skeleton'
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new WebappWebpackPlugin({
       logo: './assets/images/pingoo.png',
       inject: true,
