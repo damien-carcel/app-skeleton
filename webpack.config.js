@@ -1,9 +1,9 @@
 /* eslint-env amd, node */
 
 const path = require('path');
-const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
 module.exports = {
@@ -29,33 +29,41 @@ module.exports = {
       },
       {
         test: /\.(gif|jpg|png|svg)$/,
-        use: [
-          'file-loader'
-        ]
+        use: ['file-loader']
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
-        use: [
-          'file-loader'
-        ]
+        use: ['file-loader']
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "less-loader"
+          }],
+          fallback: "style-loader"
+        })
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }],
+          fallback: "style-loader"
+        })
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(['public/build']),
     new CopyWebpackPlugin([
-      { from: './assets/files/humans.txt', to: '../../public' },
-      { from: './assets/files/robots.txt', to: '../../public' }
+      {from: './assets/files/humans.txt', to: '../../public'},
+      {from: './assets/files/robots.txt', to: '../../public'}
     ]),
-    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin('[name].css'),
     new WebappWebpackPlugin({
       logo: './assets/images/pingoo.png',
       inject: true,
