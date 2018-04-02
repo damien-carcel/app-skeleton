@@ -3,6 +3,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
@@ -15,6 +16,7 @@ module.exports = (env, argv) => ({
     }
   },
   output: {
+    filename: argv.mode === 'development' ? '[name].js' : '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'public')
   },
   module: {
@@ -40,11 +42,23 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "less-loader"
+          }],
+          fallback: "style-loader"
+        })
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }],
+          fallback: "style-loader"
+        })
       }
     ]
   },
@@ -54,15 +68,17 @@ module.exports = (env, argv) => ({
       {from: './assets/files/humans.txt'},
       {from: './assets/files/robots.txt'}
     ]),
+    new ExtractTextPlugin({
+      filename: "[name].[chunkhash].css",
+      disable: argv.mode === 'development'
+    }),
     new HtmlWebpackPlugin({
       inject: false,
       lang: 'en',
-      meta: [
-        {
-          name: 'description',
-          content: 'A basic skeleton for ES6 web applications'
-        }
-      ],
+      meta: [{
+        name: 'description',
+        content: 'A basic skeleton for ES6 web applications'
+      }],
       mobile: true,
       minify: {
         removeComments: argv.mode === 'production',
