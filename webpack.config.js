@@ -15,6 +15,9 @@ module.exports = (env, argv) => ({
       colors: true
     }
   },
+  entry: {
+    index: './src/index.jsx',
+  },
   output: {
     filename: argv.mode === 'development' ? '[name].js' : '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'public')
@@ -22,7 +25,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx$/,
         include: /src/,
         exclude: /node_modules/,
         use: {
@@ -112,5 +115,8 @@ module.exports = (env, argv) => ({
         }
       }
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['.js', '.json', '.jsx']
+  }
 });
