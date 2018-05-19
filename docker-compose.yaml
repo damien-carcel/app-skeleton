@@ -10,10 +10,10 @@ services:
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
         user: 'docker'
         volumes:
-            - ./:/srv/application
-            - ~/.cache/composer:/home/docker/.cache/composer
-            - ~/.config/composer:/home/docker/.config/composer
-        working_dir: /srv/application
+            - './back:/srv/application'
+            - '~/.cache/composer:/home/docker/.cache/composer'
+            - '~/.config/composer:/home/docker/.config/composer'
+        working_dir: '/srv/application'
 
     nginx:
         image: 'nginx'
@@ -24,9 +24,9 @@ services:
         ports:
             - '8000:80'
         volumes:
-            - './:/srv/application:ro'
-            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
-            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
+            - './back:/srv/application:ro'
+            - './back/docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+            - './back/docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
 
     mysql:
         image: 'mysql:5.7'
