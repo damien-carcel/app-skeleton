@@ -1,0 +1,9 @@
+/cache
+/config/*
+!/config/json-server.json
+!/config/docker-compose.json
+/public
+/node_modules
+db.json
+package-lock.json
+yarn.lock

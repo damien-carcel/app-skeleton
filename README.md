@@ -1,74 +1,39 @@
 # My application skeleton
 
-This is a basic application skeleton to easily bootstrap a web application. There is currently 3 maintained branches.
+This is a skeleton to easily bootstrap a web application.
 
-- `master`: A basic full front application with native ES 6, managed with webpack.
-- `react`: A ReactJS full front application (ES 6), managed with webpack.
-  **It inherits from the `master` branch**.
-- `symfony`: A Symfony 4 full stack web application (managed with Flex). Twig is used for the front-end part, with Webpack to manage assets.
-  **It inherits from the `react` branch**.
-- `symfony-api`: A Symfony 4 REST application (managed with Flex), no front-end element.
-  **It inherits from the `symfony` branch**.
+It is composed of two main part:
+- a front-end application, written with ReactJS and managed with webpack,
+- a back-end REST API, written with Symfony 4 and managed with Flex.
 
 ## How to use it
 
-**The following documentation is only valid for the `react` branch**
+Both back and front-end applications can be ran alone. Their respective behavior is detailed in their own README.md:
+[front](https://github.com/damien-carcel/app-skeleton/blob/master/front/README.md) and [back](https://github.com/damien-carcel/app-skeleton/blob/master/back/README.md).
 
-You need to have `node` 6+ and `npm` 5+ installed on your computer, but it is recommended to use `yarn` to manage your dependencies.
-
-### Build the application
-
-First install the dependencies:
-
-```bash
-$ yarn install
-# or
-$ npm install
-```
-
-Then run the test server, which will open the application in your default browser (at `localhost:9000`):
-
-```bash
-$ yarn serve
-# or
-$ npm run serve
-```
-
-If you want to run the application through a web server like `Apache` or `nginx`, you can build it for production by running:
-
-```bash
-$ yarn build:prod
-# or
-$ npm run build:prod
-```
-
-or for development (non minimized Javascript and CSS files) by running:
-
-```bash
-$ yarn build:dev
-# or
-$ npm run build:dev
-```
+In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `Makefile` and `docker-compose.yaml` files.
 
 ### Configure the API access
 
-This application is made to consume an API. You can either use a real API or use the `json-server` library.
+Copy the configuration file `config/docker-compose.json` into `config/api.json`. This configuration is made to run with the Symfony API.
 
-- **With a real API**
+Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml`. This will allow you to access the application from outside the containers.
 
-First, clone the [`symfony-api`](https://github.com/damien-carcel/app-skeleton/tree/symfony-api) branch from this repository and follow its installation instructions.
+### Build the application
 
-Then copy the configuration file `config/api-skeleton.json` into `configuration/api.json`. This configuration is made accordingly to the `symfony-api` branch default configuration.
+First start the containers:
+ 
+```bash
+$ make up
+```
 
-- **With the `json-server` library**
-
-Copy the configuration file `config/json-server.json` into `configuration/api.json`, then run the JSON server:
+Then install the dependencies and prepare the database:
 
 ```bash
-$ yarn serve-api
-# or
-$ npm run serve-api
+$ make initialize
 ```
+
+You can now access the application on [localhost:9000](http://localhost:9000). You can also directly access the API on [localhost:8000](http://localhost:8000)
 
 ## License
 

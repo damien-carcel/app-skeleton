@@ -1,0 +1,54 @@
+integration:
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+                env: test
+    suites:
+        default:
+            paths:
+                - '%paths.base%/tests/integration/features'
+            contexts:
+                - App\Tests\Integration\Context\FeatureContext:
+                    doctrineBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
+                - App\Tests\System\Context\FixtureContext:
+                    entityManager: '@doctrine.orm.entity_manager'
+
+acceptance:
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+                env: acceptance
+    suites:
+        default:
+            paths:
+                - '%paths.base%/tests/features'
+            contexts:
+                - App\Tests\Acceptance\Context\FeatureContext: ~
+                - App\Tests\Acceptance\Context\FixtureContext:
+                    inMemoryBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
+
+system:
+    extensions:
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+                env: test
+    suites:
+        default:
+            paths:
+                - '%paths.base%/tests/features'
+            contexts:
+                - App\Tests\System\Context\FeatureContext: ~
+                - App\Tests\System\Context\FixtureContext:
+                    entityManager: '@doctrine.orm.entity_manager'
+            filters:
+                tags: '@system'
