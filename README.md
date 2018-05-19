@@ -1,20 +1,10 @@
-# My application skeleton
+# The front-end application
 
-This is a basic application skeleton to easily bootstrap a web application. There is currently 3 maintained branches.
-
-- `master`: A basic full front application with native ES 6, managed with webpack.
-- `react`: A ReactJS full front application (ES 6), managed with webpack.
-  **It inherits from the `master` branch**.
-- `symfony`: A Symfony 4 full stack web application (managed with Flex). Twig is used for the front-end part, with Webpack to manage assets.
-  **It inherits from the `react` branch**.
-- `symfony-api`: A Symfony 4 REST application (managed with Flex), no front-end element.
-  **It inherits from the `symfony` branch**.
+This README only applied to the front-end part of the app-skeleton application.
 
 ## How to use it
 
-**The following documentation is only valid for the `react` branch**
-
-You need to have `node` 6+ and `npm` 5+ installed on your computer, but it is recommended to use `yarn` to manage your dependencies.
+You need to have `node` 8+ and either `yarn` 1.x or `npm` 5+ installed on your computer.
 
 ### Build the application
 
@@ -52,15 +42,7 @@ $ npm run build:dev
 
 ### Configure the API access
 
-This application is made to consume an API. You can either use a real API or use the `json-server` library.
-
-- **With a real API**
-
-First, clone the [`symfony-api`](https://github.com/damien-carcel/app-skeleton/tree/symfony-api) branch from this repository and follow its installation instructions.
-
-Then copy the configuration file `config/api-skeleton.json` into `configuration/api.json`. This configuration is made accordingly to the `symfony-api` branch default configuration.
-
-- **With the `json-server` library**
+This application is made to consume an API. The full skeleton application uses the real API located in the `back` directory. But you can also use a fake API thanks to the `json-server` library.
 
 Copy the configuration file `config/json-server.json` into `configuration/api.json`, then run the JSON server:
 

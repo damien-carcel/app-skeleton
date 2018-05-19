@@ -5,6 +5,5 @@
 /public
 /node_modules
 db.json
-docker-compose.override.yaml
 package-lock.json
 yarn.lock
