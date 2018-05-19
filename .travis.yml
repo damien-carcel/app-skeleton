@@ -18,8 +18,8 @@ before_install:
     - composer self-update --no-interaction
 
 install:
-    - cp .env.dist .env
-    - composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+    - cp back/.env.dist back/.env
+    - cd ${TRAVIS_BUILD_DIR}/back && composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
     - mysql -e 'CREATE DATABASE db_name;'
     - mysql -e 'GRANT ALL PRIVILEGES ON db_name.* TO db_user@localhost IDENTIFIED BY "db_password"'
     - bin/console doctrine:schema:update --force --env=test > /dev/null

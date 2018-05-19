@@ -18,7 +18,7 @@ phpcs :
 php-cs-fixer :
 	docker-compose exec fpm vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
 
-phpspec :
+unit :
 	docker-compose exec fpm vendor/bin/phpspec run
 
 integration :
@@ -30,4 +30,4 @@ acceptance :
 system :
 	docker-compose exec fpm vendor/bin/behat --profile=system
 
-tests : phpcs php-cs-fixer phpspec integration acceptance system
+tests : phpcs php-cs-fixer unit integration acceptance system
