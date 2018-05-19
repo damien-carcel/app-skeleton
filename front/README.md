@@ -40,11 +40,13 @@ $ yarn build:dev
 $ npm run build:dev
 ```
 
+You can now access the application on [localhost:9000](http://localhost:9000).
+
 ### Configure the API access
 
 This application is made to consume an API. The full skeleton application uses the real API located in the `back` directory. But you can also use a fake API thanks to the `json-server` library.
 
-Copy the configuration file `config/json-server.json` into `configuration/api.json`, then run the JSON server:
+Copy the configuration file `config/json-server.json` into `config/api.json`, then run the JSON server:
 
 ```bash
 $ yarn serve-api

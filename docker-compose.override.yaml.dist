@@ -1,0 +1,11 @@
+version: '3'
+services:
+    nginx-front:
+        ports:
+              - '9000:80'
+    nginx-back:
+        ports:
+              - '8000:80'
+    fpm:
+        environment:
+            PHP_XDEBUG_ENABLED: 0

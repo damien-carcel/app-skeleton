@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    App\Repository\InMemory\BlogPostRepository:
+    App\Repository\BlogPostRepositoryInterface: '@App\Repository\InMemory\BlogPostRepository'

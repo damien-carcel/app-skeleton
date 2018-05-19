@@ -1,8 +1,8 @@
 {
   "api_config": {
     "protocol": "http",
-    "host": "localhost",
-    "port": 8080,
+    "host": "nginx-back",
+    "port": 80,
     "prefix": "/api/blog",
     "routes": {
       "list": "/posts",
