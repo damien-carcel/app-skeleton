@@ -22,7 +22,7 @@ Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml`.
 ### Build the application
 
 First start the containers:
- 
+
 ```bash
 $ make up
 ```
