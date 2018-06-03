@@ -8,7 +8,7 @@ yarn :
 	docker-compose run --rm node yarn install
 
 webpack :
-	docker-compose run --rm node yarn build:dev
+	docker-compose run --rm node yarn build:dev && docker-compose restart nginx-front
 
 composer :
 	docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
