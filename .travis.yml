@@ -1,13 +1,12 @@
 language: php
 
 php:
-  - '7.1'
-  - '7.2'
+    - '7.1'
+    - '7.2'
 
 env:
-  - TRAVIS_NODE_VERSION='8'
-  - TRAVIS_NODE_VERSION='9'
-  - TRAVIS_NODE_VERSION='10'
+    - TRAVIS_NODE_VERSION='8'
+    - TRAVIS_NODE_VERSION='10'
 
 git:
     depth: 10
