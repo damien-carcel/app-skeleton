@@ -25,7 +25,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.jsx$/,
+        test: /\.(tsx?)|(js)$/,
         include: /src/,
         exclude: /node_modules/,
         use: {
@@ -117,6 +117,6 @@ module.exports = (env, argv) => ({
     })
   ],
   resolve: {
-    extensions: ['.js', '.json', '.jsx']
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx']
   }
 });
