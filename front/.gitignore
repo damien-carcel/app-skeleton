@@ -1,7 +1,5 @@
 /cache
-/config/*
-!/config/json-server.json
-!/config/docker-compose.json
+/config/api.json
 /public
 /node_modules
 db.json
