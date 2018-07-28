@@ -9,31 +9,39 @@ It is composed of two main part:
 ## How to use it
 
 Both back and front-end applications can be ran alone. Their respective behavior is detailed in their own README.md:
-[front](https://github.com/damien-carcel/app-skeleton/blob/master/front/README.md) and [back](https://github.com/damien-carcel/app-skeleton/blob/master/back/README.md).
+[front-end](https://github.com/damien-carcel/app-skeleton/blob/master/front/README.md) and [back-end](https://github.com/damien-carcel/app-skeleton/blob/master/back/README.md).
 
-In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `Makefile` and `docker-compose.yaml` files.
+In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `docker-compose.yaml` files. They are 2 of them, one for the front-end, one for the back-end.
 
 ### Configure the API access
 
-Copy the configuration file `config/docker-compose.json` into `config/api.json`. This configuration is made to run with the Symfony API.
+Copy the content of the configuration file `config/api.json.dist` into a new file `config/api.json`. This configuration is made to run with the Symfony API.
 
-Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml`. This will allow you to access the application from outside the containers.
+Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml` and configure it as you see fit. This will allow you to access the application from outside the containers.
 
 ### Build the application
 
-First start the containers:
-
+First start the containers. Start with those of the front-end, so the Docker network is initialized, and continue with the back-end:
 ```bash
-$ make up
+$ cd /path/to/the/project/front && docker-compose up -d
+$ cd /path/to/the/project/back && docker-compose up -d
 ```
 
-Then install the dependencies and prepare the database:
-
+Then install the dependencies and build the front-end application:
 ```bash
-$ make initialize
+$ cd /path/to/the/project/front
+$ docker-compose run --rm node yarn install
+$ docker-compose run --rm node yarn build:prod
 ```
 
-You can now access the application on [localhost:9000](http://localhost:9000). You can also directly access the API on [localhost:8000](http://localhost:8000)
+Finally, install the dependencies of the back-end application and setup the database:
+```bash
+$ cd /path/to/the/project/front
+$ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
+$ docker-compose exec fpm composer update-schema
+```
+
+You can now access the application on [localhost:9000](http://localhost:3000). You can also directly access the API on [localhost:8000](http://localhost:8000)
 
 ## License
 
