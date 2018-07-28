@@ -41,7 +41,7 @@ $ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
 $ docker-compose exec fpm composer update-schema
 ```
 
-You can now access the application on [localhost:9000](http://localhost:3000). You can also directly access the API on [localhost:8000](http://localhost:8000)
+You can now access the application on [localhost:8080](http://localhost:8080). You can also directly access the API on [localhost:8000](http://localhost:8000)
 
 ## License
 

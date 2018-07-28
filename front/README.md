@@ -36,7 +36,7 @@ $ yarn build:dev
 $ npm run build:dev
 ```
 
-You can now access the application on [localhost:3000](http://localhost:3000).
+You can now access the application on [localhost:3000](http://localhost:8080).
 
 ### Configure the API access
 
