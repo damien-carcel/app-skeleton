@@ -58,7 +58,16 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "update-schema": "bin/console doctrine:schema:update --force",
+        "tests": ["@phpcs", "@php-cs-fixer", "@phpspec", "@acceptance", "@integration", "@system"],
+        "phpcs": "vendor/bin/phpcs -p --standard=PSR2 --extensions=php src tests/acceptance tests/integration tests/system",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php",
+        "php-cs-fixer-fix": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
+        "phpspec": "vendor/bin/phpspec run",
+        "acceptance": "vendor/bin/behat --profile=acceptance",
+        "integration": "vendor/bin/behat --profile=integration",
+        "system": "vendor/bin/behat --profile=system"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -1,3 +1,19 @@
+acceptance:
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap.php
+                class: App\Kernel
+                env: acceptance
+    suites:
+        default:
+            paths:
+                - '%paths.base%/tests/features'
+            contexts:
+                - App\Tests\Acceptance\Context\FeatureContext: ~
+                - App\Tests\Acceptance\Context\FixtureContext:
+                    inMemoryBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
+
 integration:
     extensions:
         Behat\Symfony2Extension:
@@ -14,22 +30,6 @@ integration:
                     doctrineBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
                 - App\Tests\System\Context\FixtureContext:
                     entityManager: '@doctrine.orm.entity_manager'
-
-acceptance:
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-                bootstrap: tests/bootstrap.php
-                class: App\Kernel
-                env: acceptance
-    suites:
-        default:
-            paths:
-                - '%paths.base%/tests/features'
-            contexts:
-                - App\Tests\Acceptance\Context\FeatureContext: ~
-                - App\Tests\Acceptance\Context\FixtureContext:
-                    inMemoryBlogPostRepository: '@App\Repository\BlogPostRepositoryInterface'
 
 system:
     extensions:
