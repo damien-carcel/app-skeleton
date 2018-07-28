@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    nginx-back:
+        ports:
+            - '8000:80'
+        networks:
+            - 'front_app-skeleton'
+
+    fpm:
+        environment:
+            PHP_XDEBUG_ENABLED: 0
+        networks:
+            - 'front_app-skeleton'
+
+    mysql:
+        ports:
+            - '33006:33006'
+        networks:
+            - 'front_app-skeleton'
+
+# Use the networks only when front run on Docker too
+networks:
+    front_app-skeleton:
+        external: true

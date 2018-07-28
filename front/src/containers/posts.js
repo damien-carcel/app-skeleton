@@ -5,8 +5,8 @@ export function listPosts() {
   const url = getApiUrl(route);
 
   return fetch(url, {
-      headers: createHeaders(),
-      method: 'GET'
+    headers: createHeaders(),
+    method: 'GET'
   }).then(response => response.json());
 }
 

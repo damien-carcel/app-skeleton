@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+    nginx-front:
+        ports:
+            - '3000:80'
