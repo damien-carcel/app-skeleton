@@ -1,65 +1,62 @@
-import Create from './Create';
-import Post from './Post';
 import React, {ReactNode} from 'react';
 import {BlogPostData, createPost, deletePost, listPosts, updatePost} from '../containers/posts';
-import {isEmpty} from "../tools/isEmpty";
-
-interface ListPostsProps {
-}
+import {isEmpty} from '../tools/isEmpty';
+import Create from './Create';
+import Post from './Post';
 
 interface ListPostsState {
-  error: {[key: string]: any},
-  isLoaded: boolean,
-  posts: Array<BlogPostData>,
+  error: {[key: string]: any};
+  isLoaded: boolean;
+  posts: BlogPostData[];
 }
 
-export default class ListPosts extends React.Component<ListPostsProps, ListPostsState> {
-  constructor(props: ListPostsProps) {
+export default class ListPosts extends React.Component<{}, ListPostsState> {
+  constructor(props: {}) {
     super(props);
 
     this.state = {
       error: {},
       isLoaded: false,
-      posts: []
+      posts: [],
     };
 
     this.delete = this.delete.bind(this);
     this.submit = this.submit.bind(this);
   }
 
-  componentDidMount(): void {
+  public componentDidMount(): void {
     this.getAllPosts();
   }
 
-  delete(postId: string): void {
+  public delete(postId: string): void {
     this.setState({
-      isLoaded: false
+      isLoaded: false,
     });
 
     deletePost(postId).then(
       () => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           isLoaded: true,
-          posts: prevState.posts.filter((post: BlogPostData) => post.id !== postId)
+          posts: prevState.posts.filter((post: BlogPostData) => post.id !== postId),
         }));
       },
       (error) => {
         this.setState({
+          error,
           isLoaded: true,
-          error: error
         });
-      }
+      },
     );
   }
 
-  submit(postId: string, data: BlogPostData): void {
+  public submit(postId: string, data: BlogPostData): void {
     this.setState({
-      isLoaded: false
+      isLoaded: false,
     });
 
     if (postId) {
       updatePost(postId, data).then(() => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           isLoaded: true,
           posts: prevState.posts.map((post: BlogPostData) => {
             if (post.id === postId) {
@@ -68,12 +65,12 @@ export default class ListPosts extends React.Component<ListPostsProps, ListPosts
             }
 
             return post;
-          })
+          }),
         }));
       }, (error) => {
         this.setState({
+          error,
           isLoaded: true,
-          error: error
         });
       });
     } else {
@@ -81,24 +78,24 @@ export default class ListPosts extends React.Component<ListPostsProps, ListPosts
     }
   }
 
-  getAllPosts(): void {
+  public getAllPosts(): void {
     listPosts().then(
       (result) => {
         this.setState({
           isLoaded: true,
-          posts: result
+          posts: result,
         });
       },
       (error) => {
         this.setState({
+          error,
           isLoaded: true,
-          error: error
         });
-      }
+      },
     );
   }
 
-  render(): ReactNode {
+  public render(): ReactNode {
     const {error, isLoaded, posts} = this.state;
 
     if (!isEmpty(error)) {
@@ -109,17 +106,19 @@ export default class ListPosts extends React.Component<ListPostsProps, ListPosts
       return <div>Loading...</div>;
     }
 
-    const renderedPosts: Array<any> = posts.map((post: BlogPostData) => {
-      return <Post key={post.id}
-                   post={post}
-                   handleSubmit={this.submit}
-                   handleDelete={this.delete}/>;
+    const renderedPosts: any[] = posts.map((post: BlogPostData) => {
+      return <Post
+        key={post.id}
+        post={post}
+        handleSubmit={this.submit}
+        handleDelete={this.delete}
+      />;
     });
 
     return (
-      <div className="container">
+      <div className='container'>
         <Create handleSubmit={this.submit}/>
-        <div className="blog-posts">
+        <div className='blog-posts'>
           {renderedPosts}
         </div>
       </div>

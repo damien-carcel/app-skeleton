@@ -1,15 +1,15 @@
-import Modal from 'react-modal';
-import PostForm from './PostForm';
 import React, {ReactNode} from 'react';
-import {BlogPostData} from "../containers/posts";
+import Modal from 'react-modal';
+import {BlogPostData} from '../containers/posts';
+import PostForm from './PostForm';
 
 interface EditProps {
-  handleSubmit: Function,
-  postId: string,
+  handleSubmit: (postId: string, data: BlogPostData) => void;
+  postId: string;
 }
 
 interface EditState {
-  showModal: boolean,
+  showModal: boolean;
 }
 
 export default class Edit extends React.Component<EditProps, EditState> {
@@ -17,7 +17,7 @@ export default class Edit extends React.Component<EditProps, EditState> {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
     };
 
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -25,30 +25,30 @@ export default class Edit extends React.Component<EditProps, EditState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCloseModal(): void {
+  public handleCloseModal(): void {
     this.setState({showModal: false});
   }
 
-  handleOpenModal(): void {
+  public handleOpenModal(): void {
     this.setState({showModal: true});
   }
 
-  handleSubmit(postId: string, data: BlogPostData): void {
+  public handleSubmit(postId: string, data: BlogPostData): void {
     this.props.handleSubmit(postId, data);
 
     this.setState({showModal: false});
   }
 
-  render(): ReactNode {
+  public render(): ReactNode {
     const postId: string = this.props.postId;
     const showModal: boolean = this.state.showModal;
 
     return (
       <div>
-        <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Edit</button>
-        <Modal isOpen={showModal} contentLabel={"Edit post " + postId}>
+        <button className='btn-action btn-create-post' onClick={this.handleOpenModal}>Edit</button>
+        <Modal isOpen={showModal} contentLabel={'Edit post ' + postId}>
           <PostForm postId={postId} handleSubmit={this.handleSubmit}/>
-          <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
+          <button className='btn-action btn-create-post' onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );

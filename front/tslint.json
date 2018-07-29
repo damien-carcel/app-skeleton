@@ -1,0 +1,15 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "jsx-wrap-multiline": false,
+    "no-var-requires": false, // Used for "post.ts". To remove once configuration is done with environment variables.
+    "quotemark": [true, "single", "jsx-single"]
+  },
+  "rulesDirectory": []
+}

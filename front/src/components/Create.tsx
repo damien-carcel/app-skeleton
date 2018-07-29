@@ -1,14 +1,14 @@
-import Modal from 'react-modal';
-import PostForm from './PostForm';
 import React, {ReactNode} from 'react';
-import {BlogPostData} from "../containers/posts";
+import Modal from 'react-modal';
+import {BlogPostData} from '../containers/posts';
+import PostForm from './PostForm';
 
 interface CreateProps {
-  handleSubmit: Function,
+  handleSubmit: (postId: string, data: BlogPostData) => void;
 }
 
 interface CreateState {
-  showModal: boolean,
+  showModal: boolean;
 }
 
 export default class Create extends React.Component<CreateProps, CreateState> {
@@ -16,7 +16,7 @@ export default class Create extends React.Component<CreateProps, CreateState> {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
     };
 
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -24,29 +24,29 @@ export default class Create extends React.Component<CreateProps, CreateState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCloseModal(): void {
+  public handleCloseModal(): void {
     this.setState({showModal: false});
   }
 
-  handleOpenModal(): void {
+  public handleOpenModal(): void {
     this.setState({showModal: true});
   }
 
-  handleSubmit(postId: string, data: BlogPostData): void {
+  public handleSubmit(postId: string, data: BlogPostData): void {
     this.props.handleSubmit(postId, data);
 
     this.setState({showModal: false});
   }
 
-  render(): ReactNode {
+  public render(): ReactNode {
     const showModal: boolean = this.state.showModal;
 
     return (
       <div>
-        <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Create a new post</button>
-        <Modal isOpen={showModal} contentLabel="Create a new post">
+        <button className='btn-action btn-create-post' onClick={this.handleOpenModal}>Create a new post</button>
+        <Modal isOpen={showModal} contentLabel='Create a new post'>
           <PostForm postId={''} handleSubmit={this.handleSubmit}/>
-          <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
+          <button className='btn-action btn-create-post' onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );
