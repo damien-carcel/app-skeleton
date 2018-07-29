@@ -1,4 +1,10 @@
-import config from '../../config/api.json';
+const config = require('../../config/api.json');
+
+export interface BlogPostData {
+  id: string,
+  title: string,
+  content: string,
+}
 
 export function listPosts() {
   const route = config.api_config.routes.list;
@@ -10,7 +16,7 @@ export function listPosts() {
   }).then(response => response.json());
 }
 
-export function getPost(postId) {
+export function getPost(postId: string) {
   const route = config.api_config.routes.get;
   const url = getApiUrl(route, postId);
 
@@ -20,7 +26,7 @@ export function getPost(postId) {
   }).then(response => response.json());
 }
 
-export function deletePost(postId) {
+export function deletePost(postId: string) {
   const route = config.api_config.routes.delete;
   const url = getApiUrl(route, postId);
 
@@ -30,7 +36,7 @@ export function deletePost(postId) {
   }).then(response => response.json());
 }
 
-export function createPost(data) {
+export function createPost(data: BlogPostData) {
   const route = config.api_config.routes.create;
   const url = getApiUrl(route);
 
@@ -41,7 +47,7 @@ export function createPost(data) {
   }).then(response => response.json());
 }
 
-export function updatePost(postId, data) {
+export function updatePost(postId: string, data: BlogPostData) {
   const route = config.api_config.routes.update;
   const url = getApiUrl(route, postId);
 
@@ -52,7 +58,7 @@ export function updatePost(postId, data) {
   }).then(response => response.json());
 }
 
-function getApiUrl(route, postId = null) {
+function getApiUrl(route: string, postId?: string) {
   const protocol = config.api_config.protocol;
   const host = config.api_config.host;
   const port = config.api_config.port;
@@ -60,7 +66,7 @@ function getApiUrl(route, postId = null) {
 
   const baseUrl = protocol + '://' + host + ':' + port + prefix;
 
-  if (null !== postId) {
+  if (postId) {
     return baseUrl + route.replace('{id}', postId);
   }
 

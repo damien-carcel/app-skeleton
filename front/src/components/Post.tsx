@@ -1,10 +1,16 @@
 import Delete from './Delete';
 import Edit from './Edit';
-import PropTypes from "prop-types";
 import React from 'react';
+import {BlogPostData} from "../containers/posts";
 
-export default function Post(props) {
-  const post = props.post;
+interface PostProps {
+  post: BlogPostData,
+  handleDelete: Function,
+  handleSubmit: Function,
+}
+
+export default function Post(props: PostProps) {
+  const post: BlogPostData = props.post;
 
   return (
     <div className="post">
@@ -19,9 +25,3 @@ export default function Post(props) {
     </div>
   );
 }
-
-Post.propTypes = {
-  post: PropTypes.objectOf(PropTypes.string),
-  handleDelete: PropTypes.func,
-  handleSubmit: PropTypes.func
-};

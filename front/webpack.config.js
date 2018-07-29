@@ -10,13 +10,13 @@ const WebappWebpackPlugin = require('webapp-webpack-plugin');
 module.exports = (env, argv) => ({
   devServer: {
     contentBase: path.join(__dirname, 'public'),
-    port: 3000,
+    port: 8080,
     stats: {
       colors: true
     }
   },
   entry: {
-    index: './src/index.jsx',
+    index: './src/index.tsx',
   },
   output: {
     filename: argv.mode === 'development' ? '[name].js' : '[name].[chunkhash].js',
@@ -25,7 +25,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.jsx$/,
+        test: /\.(tsx?)|(js)$/,
         include: /src/,
         exclude: /node_modules/,
         use: {
@@ -87,7 +87,7 @@ module.exports = (env, argv) => ({
         removeComments: argv.mode === 'production',
         collapseWhitespace: argv.mode === 'production'
       },
-      template: './src/templates/index.ejs',
+      template: require('html-webpack-template'),
       title: 'My ES6 application skeleton'
     }),
     new WebappWebpackPlugin({
@@ -117,6 +117,6 @@ module.exports = (env, argv) => ({
     })
   ],
   resolve: {
-    extensions: ['.js', '.json', '.jsx']
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx']
   }
 });

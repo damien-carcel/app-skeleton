@@ -3,4 +3,4 @@ version: '3'
 services:
     nginx-front:
         ports:
-            - '3000:80'
+            - '8080:80'

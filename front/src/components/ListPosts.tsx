@@ -1,15 +1,24 @@
 import Create from './Create';
 import Post from './Post';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { createPost, deletePost, listPosts, updatePost } from '../containers/posts';
+import React, {ReactNode} from 'react';
+import {BlogPostData, createPost, deletePost, listPosts, updatePost} from '../containers/posts';
+import {isEmpty} from "../tools/isEmpty";
 
-export default class ListPosts extends React.Component {
-  constructor(props) {
+interface ListPostsProps {
+}
+
+interface ListPostsState {
+  error: {[key: string]: any},
+  isLoaded: boolean,
+  posts: Array<BlogPostData>,
+}
+
+export default class ListPosts extends React.Component<ListPostsProps, ListPostsState> {
+  constructor(props: ListPostsProps) {
     super(props);
 
     this.state = {
-      error: null,
+      error: {},
       isLoaded: false,
       posts: []
     };
@@ -18,20 +27,20 @@ export default class ListPosts extends React.Component {
     this.submit = this.submit.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.getAllPosts();
   }
 
-  delete(postId) {
+  delete(postId: string): void {
     this.setState({
       isLoaded: false
     });
 
     deletePost(postId).then(
-      (result) => {
+      () => {
         this.setState(prevState => ({
           isLoaded: true,
-          posts: prevState.posts.filter(post => post.id !== postId)
+          posts: prevState.posts.filter((post: BlogPostData) => post.id !== postId)
         }));
       },
       (error) => {
@@ -43,16 +52,16 @@ export default class ListPosts extends React.Component {
     );
   }
 
-  submit(postId, data) {
+  submit(postId: string, data: BlogPostData): void {
     this.setState({
       isLoaded: false
     });
 
-    if (null !== postId) {
-      updatePost(postId, data).then((result) => {
+    if (postId) {
+      updatePost(postId, data).then(() => {
         this.setState(prevState => ({
           isLoaded: true,
-          posts: prevState.posts.map((post) => {
+          posts: prevState.posts.map((post: BlogPostData) => {
             if (post.id === postId) {
               post.title = data.title;
               post.content = data.content;
@@ -68,11 +77,11 @@ export default class ListPosts extends React.Component {
         });
       });
     } else {
-      createPost(data).then(result => this.getAllPosts());
+      createPost(data).then(() => this.getAllPosts());
     }
   }
 
-  getAllPosts() {
+  getAllPosts(): void {
     listPosts().then(
       (result) => {
         this.setState({
@@ -89,10 +98,10 @@ export default class ListPosts extends React.Component {
     );
   }
 
-  render() {
-    const { error, isLoaded, posts } = this.state;
+  render(): ReactNode {
+    const {error, isLoaded, posts} = this.state;
 
-    if (error) {
+    if (!isEmpty(error)) {
       return <div>Error: {error.message}</div>;
     }
 
@@ -100,11 +109,11 @@ export default class ListPosts extends React.Component {
       return <div>Loading...</div>;
     }
 
-    const renderedPosts = posts.map((post) => {
-      return <Post key={post.id.toString()}
+    const renderedPosts: Array<any> = posts.map((post: BlogPostData) => {
+      return <Post key={post.id}
                    post={post}
                    handleSubmit={this.submit}
-                   handleDelete={this.delete} />;
+                   handleDelete={this.delete}/>;
     });
 
     return (
@@ -117,7 +126,3 @@ export default class ListPosts extends React.Component {
     );
   }
 }
-
-ListPosts.propTypes = {
-  posts: PropTypes.arrayOf(PropTypes.object)
-};
