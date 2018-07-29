@@ -1,9 +1,9 @@
 const config = require('../../config/api.json');
 
 export interface BlogPostData {
-  id: string,
-  title: string,
-  content: string,
+  id: string;
+  title: string;
+  content: string;
 }
 
 export function listPosts() {
@@ -12,8 +12,8 @@ export function listPosts() {
 
   return fetch(url, {
     headers: createHeaders(),
-    method: 'GET'
-  }).then(response => response.json());
+    method: 'GET',
+  }).then((response) => response.json());
 }
 
 export function getPost(postId: string) {
@@ -22,8 +22,8 @@ export function getPost(postId: string) {
 
   return fetch(url, {
     headers: createHeaders(),
-    method: 'GET'
-  }).then(response => response.json());
+    method: 'GET',
+  }).then((response) => response.json());
 }
 
 export function deletePost(postId: string) {
@@ -32,8 +32,8 @@ export function deletePost(postId: string) {
 
   return fetch(url, {
     headers: createHeaders(),
-    method: 'DELETE'
-  }).then(response => response.json());
+    method: 'DELETE',
+  }).then((response) => response.json());
 }
 
 export function createPost(data: BlogPostData) {
@@ -43,8 +43,8 @@ export function createPost(data: BlogPostData) {
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
-    method: 'POST'
-  }).then(response => response.json());
+    method: 'POST',
+  }).then((response) => response.json());
 }
 
 export function updatePost(postId: string, data: BlogPostData) {
@@ -54,8 +54,8 @@ export function updatePost(postId: string, data: BlogPostData) {
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
-    method: 'PATCH'
-  }).then(response => response.json());
+    method: 'PATCH',
+  }).then((response) => response.json());
 }
 
 function getApiUrl(route: string, postId?: string) {
@@ -75,8 +75,8 @@ function getApiUrl(route: string, postId?: string) {
 
 function createHeaders() {
   const headers = new Headers();
-  headers.append("Accept", "application/json");
-  headers.append("Content-Type", "application/json");
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
 
   return headers;
 }
