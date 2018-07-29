@@ -16,7 +16,7 @@ module.exports = (env, argv) => ({
     }
   },
   entry: {
-    index: './src/index.jsx',
+    index: './src/index.tsx',
   },
   output: {
     filename: argv.mode === 'development' ? '[name].js' : '[name].[chunkhash].js',
@@ -87,7 +87,7 @@ module.exports = (env, argv) => ({
         removeComments: argv.mode === 'production',
         collapseWhitespace: argv.mode === 'production'
       },
-      template: './src/templates/index.ejs',
+      template: require('html-webpack-template'),
       title: 'My ES6 application skeleton'
     }),
     new WebappWebpackPlugin({

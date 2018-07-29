@@ -1,10 +1,18 @@
 import Modal from 'react-modal';
 import PostForm from './PostForm';
-import React from 'react';
-import PropTypes from "prop-types";
+import React, {ReactNode} from 'react';
+import {BlogPostData} from "../containers/posts";
 
-export default class Create extends React.Component {
-  constructor(props) {
+interface CreateProps {
+  handleSubmit: Function,
+}
+
+interface CreateState {
+  showModal: boolean,
+}
+
+export default class Create extends React.Component<CreateProps, CreateState> {
+  constructor(props: CreateProps) {
     super(props);
 
     this.state = {
@@ -16,35 +24,31 @@ export default class Create extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCloseModal() {
-    this.setState({ showModal: false });
+  handleCloseModal(): void {
+    this.setState({showModal: false});
   }
 
-  handleOpenModal() {
-    this.setState({ showModal: true });
+  handleOpenModal(): void {
+    this.setState({showModal: true});
   }
 
-  handleSubmit(postId, data) {
+  handleSubmit(postId: string, data: BlogPostData): void {
     this.props.handleSubmit(postId, data);
 
-    this.setState({ showModal: false });
+    this.setState({showModal: false});
   }
 
-  render() {
-    const showModal = this.state.showModal;
+  render(): ReactNode {
+    const showModal: boolean = this.state.showModal;
 
     return (
       <div>
         <button className="btn-action btn-create-post" onClick={this.handleOpenModal}>Create a new post</button>
         <Modal isOpen={showModal} contentLabel="Create a new post">
-          <PostForm handleSubmit={this.handleSubmit}/>
+          <PostForm postId={''} handleSubmit={this.handleSubmit}/>
           <button className="btn-action btn-create-post" onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );
   }
 }
-
-Create.propTypes = {
-  handleSubmit: PropTypes.func
-};
