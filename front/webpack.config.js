@@ -37,7 +37,15 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.(gif|jpg|png|svg)$/,
-        use: ['file-loader']
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: argv.mode === 'development'
+            },
+          }
+        ]
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
