@@ -5,14 +5,7 @@
   "api_config": {
     "protocol": "http",
     "host": "nginx-back",
-    "port": 80,
-    "routes": {
-      "list": "/posts",
-      "get": "/posts/{id}",
-      "create": "/posts",
-      "update": "/posts/{id}",
-      "delete": "/posts/{id}"
-    }
+    "port": 80
   }
 }
 
@@ -21,14 +14,7 @@
   "api_config": {
     "protocol": "http",
     "host": "localhost",
-    "port": 8000,
-    "routes": {
-      "list": "/posts",
-      "get": "/posts/{id}",
-      "create": "/posts",
-      "update": "/posts/{id}",
-      "delete": "/posts/{id}"
-    }
+    "port": 8000
   }
 }
 
@@ -37,13 +23,6 @@
   "api_config": {
     "protocol": "http",
     "host": "localhost",
-    "port": 3000,
-    "routes": {
-      "list": "/posts",
-      "get": "/posts/{id}",
-      "create": "/posts",
-      "update": "/posts/{id}",
-      "delete": "/posts/{id}"
-    }
+    "port": 3000
   }
 }

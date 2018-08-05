@@ -7,8 +7,7 @@ export interface BlogPostData {
 }
 
 export function listPosts() {
-  const route = config.api_config.routes.list;
-  const url = getApiUrl(route);
+  const url = getApiUrl('/posts');
 
   return fetch(url, {
     headers: createHeaders(),
@@ -17,8 +16,7 @@ export function listPosts() {
 }
 
 export function getPost(postId: string) {
-  const route = config.api_config.routes.get;
-  const url = getApiUrl(route, postId);
+  const url = getApiUrl('/posts/{id}', postId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -26,19 +24,8 @@ export function getPost(postId: string) {
   }).then((response) => response.json());
 }
 
-export function deletePost(postId: string) {
-  const route = config.api_config.routes.delete;
-  const url = getApiUrl(route, postId);
-
-  return fetch(url, {
-    headers: createHeaders(),
-    method: 'DELETE',
-  }).then((response) => response.json());
-}
-
 export function createPost(data: BlogPostData) {
-  const route = config.api_config.routes.create;
-  const url = getApiUrl(route);
+  const url = getApiUrl('/posts');
 
   return fetch(url, {
     body: JSON.stringify(data),
@@ -48,13 +35,21 @@ export function createPost(data: BlogPostData) {
 }
 
 export function updatePost(postId: string, data: BlogPostData) {
-  const route = config.api_config.routes.update;
-  const url = getApiUrl(route, postId);
+  const url = getApiUrl('/posts/{id}', postId);
 
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
     method: 'PATCH',
+  }).then((response) => response.json());
+}
+
+export function deletePost(postId: string) {
+  const url = getApiUrl('/posts/{id}', postId);
+
+  return fetch(url, {
+    headers: createHeaders(),
+    method: 'DELETE',
   }).then((response) => response.json());
 }
 
