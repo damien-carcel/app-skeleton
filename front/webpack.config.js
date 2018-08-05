@@ -3,6 +3,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const DotEnv = require('dotenv-webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebappWebpackPlugin = require('webapp-webpack-plugin');
@@ -79,6 +80,7 @@ module.exports = (env, argv) => ({
       {from: './assets/files/humans.txt'},
       {from: './assets/files/robots.txt'}
     ]),
+    new DotEnv(),
     new ExtractTextPlugin({
       filename: "[name].[chunkhash].css",
       disable: argv.mode === 'development'

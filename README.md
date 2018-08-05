@@ -13,9 +13,9 @@ Both back and front-end applications can be ran alone. Their respective behavior
 
 In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `docker-compose.yaml` files. They are 2 of them, one for the front-end, one for the back-end.
 
-### Configure the API access
+### Configure the application
 
-Copy the content of the configuration file `config/api.json.dist` into a new file `config/api.json`. This configuration is made to run with the Symfony API.
+Copy the content of the file `.env.dist` into a new file `.env`. Keep only the line you need out of the 3 options (everything running with Docker, only back-end running with Docker or all running locally).
 
 Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml` and configure it as you see fit. This will allow you to access the application from outside the containers.
 

@@ -6,6 +6,17 @@ This README only applied to the front-end part of the app-skeleton application.
 
 You need to have `node` 8+ and either `yarn` 1.x or `npm` 5+ installed on your computer.
 
+### Configure the API access
+
+This application is made to consume an API. The full skeleton application uses the real API located in the `back` directory. But you can also use a fake API thanks to the `json-server` library.
+
+Copy the content of the file `.env.dist` into a new file `.env`, keep only the line dedicated to the JSON server, then run the server:
+```bash
+$ yarn serve-api
+# or
+$ npm run serve-api
+```
+
 ### Build the application
 
 First install the dependencies:
@@ -37,17 +48,6 @@ $ npm run build:dev
 ```
 
 You can now access the application on [localhost:3000](http://localhost:8080).
-
-### Configure the API access
-
-This application is made to consume an API. The full skeleton application uses the real API located in the `back` directory. But you can also use a fake API thanks to the `json-server` library.
-
-Copy the content of the file `config/api.json.dist` into a new file `config/api.json`, then run the JSON server:
-```bash
-$ yarn serve-api
-# or
-$ npm run serve-api
-```
 
 ## License
 
