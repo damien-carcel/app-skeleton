@@ -6,13 +6,12 @@
     "protocol": "http",
     "host": "nginx-back",
     "port": 80,
-    "prefix": "/api/blog",
     "routes": {
       "list": "/posts",
-      "get": "/post/{id}",
-      "create": "/post/create",
-      "update": "/post/{id}/update",
-      "delete": "/post/{id}/delete"
+      "get": "/posts/{id}",
+      "create": "/posts",
+      "update": "/posts/{id}",
+      "delete": "/posts/{id}"
     }
   }
 }
@@ -23,13 +22,12 @@
     "protocol": "http",
     "host": "localhost",
     "port": 8000,
-    "prefix": "/api/blog",
     "routes": {
       "list": "/posts",
-      "get": "/post/{id}",
-      "create": "/post/create",
-      "update": "/post/{id}/update",
-      "delete": "/post/{id}/delete"
+      "get": "/posts/{id}",
+      "create": "/posts",
+      "update": "/posts/{id}",
+      "delete": "/posts/{id}"
     }
   }
 }
@@ -40,7 +38,6 @@
     "protocol": "http",
     "host": "localhost",
     "port": 3000,
-    "prefix": "",
     "routes": {
       "list": "/posts",
       "get": "/posts/{id}",

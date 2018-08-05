@@ -1,4 +1,6 @@
 {
+    "name": "carcel/app-skeleton",
+    "description": "A basic skeleton for web API using Symfony",
     "type": "project",
     "license": "proprietary",
     "require": {

@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/api/blog/post/{uuid}/update", name="rest_blog_post_update", methods={"PATCH"})
+ * @Route("/posts/{uuid}", name="rest_blog_posts_update", methods={"PATCH"})
  */
 class UpdateController
 {

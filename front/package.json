@@ -1,7 +1,7 @@
 {
   "name": "app-skeleton",
   "version": "1.0.0",
-  "description": "A basic skeleton for ES6 web applications",
+  "description": "A basic skeleton for ReactJS front-end application",
   "keywords": [
     "skeleton",
     "JavaScript",

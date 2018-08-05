@@ -62,9 +62,8 @@ function getApiUrl(route: string, postId?: string) {
   const protocol = config.api_config.protocol;
   const host = config.api_config.host;
   const port = config.api_config.port;
-  const prefix = config.api_config.prefix;
 
-  const baseUrl = protocol + '://' + host + ':' + port + prefix;
+  const baseUrl = protocol + '://' + host + ':' + port;
 
   if (postId) {
     return baseUrl + route.replace('{id}', postId);
