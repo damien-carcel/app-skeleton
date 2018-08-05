@@ -1,5 +1,3 @@
-const config = require('../../config/api.json');
-
 export interface BlogPostData {
   id: string;
   title: string;
@@ -54,11 +52,7 @@ export function deletePost(postId: string) {
 }
 
 function getApiUrl(route: string, postId?: string) {
-  const protocol = config.api_config.protocol;
-  const host = config.api_config.host;
-  const port = config.api_config.port;
-
-  const baseUrl = protocol + '://' + host + ':' + port;
+  const baseUrl = process.env.API_BASE_URL;
 
   if (postId) {
     return baseUrl + route.replace('{id}', postId);
