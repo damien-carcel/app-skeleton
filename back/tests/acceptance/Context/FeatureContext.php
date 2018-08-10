@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Acceptance\Context;
 
 use App\Tests\Fixtures\BlogPostFixtures;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Behat\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext implements KernelAwareContext
+class FeatureContext implements Context
 {
     /** @var KernelInterface */
     private $kernel;
@@ -32,9 +32,9 @@ class FeatureContext implements KernelAwareContext
     private $response;
 
     /**
-     * {@inheritdoc}
+     * @param KernelInterface $kernel
      */
-    public function setKernel(KernelInterface $kernel): void
+    public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }

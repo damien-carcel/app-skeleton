@@ -14,15 +14,6 @@
     "behat/mink-extension": {
         "version": "2.3.0"
     },
-    "behat/symfony2-extension": {
-        "version": "2.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.1",
-            "ref": "6b63fb76d3bb2dd16098f12adf6d6ca844e21862"
-        }
-    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
@@ -112,6 +103,15 @@
     },
     "doctrine/reflection": {
         "version": "v1.0.0"
+    },
+    "friends-of-behat/context-service-extension": {
+        "version": "v1.2.0"
+    },
+    "friends-of-behat/cross-container-extension": {
+        "version": "v1.1.0"
+    },
+    "friends-of-behat/symfony-extension": {
+        "version": "v1.2.2"
     },
     "friendsofphp/php-cs-fixer": {
         "version": "2.2",
