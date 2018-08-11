@@ -46,6 +46,13 @@ integration:
 
 system:
     extensions:
+        Behat\MinkExtension:
+            # Use BEHAT_PARAMS to override this value
+            # BEHAT_PARAMS='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://www.example.com/"}}}'
+            base_url: 'localhost'
+            sessions:
+                default:
+                    symfony: ~
         FriendsOfBehat\ContextServiceExtension:
             imports:
             - 'tests/system/Resources/config/contexts.yml'
