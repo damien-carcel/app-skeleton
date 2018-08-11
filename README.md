@@ -36,7 +36,7 @@ $ docker-compose run --rm node yarn build:prod
 
 Finally, install the dependencies of the back-end application and setup the database:
 ```bash
-$ cd /path/to/the/project/front
+$ cd /path/to/the/project/back
 $ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
 $ docker-compose exec fpm composer update-schema
 ```

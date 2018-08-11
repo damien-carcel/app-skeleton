@@ -14,24 +14,24 @@ declare(strict_types=1);
 namespace App\Tests\System\Context;
 
 use App\Tests\Fixtures\BlogPostFixtures;
+use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext extends MinkContext implements KernelAwareContext
+class FeatureContext extends MinkContext implements Context
 {
-    /** @var KernelInterface */
-    private $kernel;
+    /** @var RouterInterface */
+    private $router;
 
     /**
-     * {@inheritdoc}
+     * @param RouterInterface $router
      */
-    public function setKernel(KernelInterface $kernel): void
+    public function __construct(RouterInterface $router)
     {
-        $this->kernel = $kernel;
+        $this->router = $router;
     }
 
     /**
@@ -39,9 +39,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      */
     public function listAllTheBlogPosts(): void
     {
-        $router = $this->kernel->getContainer()->get('router');
-
-        $this->visitPath($router->generate('rest_blog_posts_list'));
+        $this->visitPath($this->router->generate('rest_blog_posts_list'));
     }
 
     /**

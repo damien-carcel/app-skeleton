@@ -1,0 +1,12 @@
+services:
+    App\Tests\Acceptance\Context\FeatureContext:
+        arguments:
+            - '@__symfony__.kernel'
+        tags:
+            - { name: 'fob.context_service' }
+
+    App\Tests\Acceptance\Context\FixtureContext:
+        arguments:
+            - '@__symfony__.App\Repository\BlogPostRepositoryInterface'
+        tags:
+            - { name: 'fob.context_service' }
