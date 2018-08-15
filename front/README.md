@@ -1,10 +1,12 @@
 # The front-end application
 
-This README only applied to the front-end part of the app-skeleton application.
+This README relates only to the front-end application.
 
-## How to use it
+## Requirements
 
-You need to have `node` 8+ and either `yarn` 1.x or `npm` 5+ installed on your computer.
+You need Yarn 1.x or NPM 6.x with NodeJS 8 or 10.
+
+it could work with other versions, but those are the one tested through continuous integration.
 
 ### Configure the API access
 

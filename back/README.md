@@ -1,10 +1,12 @@
 # The back-end application
 
-This README only applied to the back-end part of the app-skeleton application.
+This README relates only to the back-end application.
 
 ## Requirements
 
 Please read the [requirements for running Symfony](https://symfony.com/doc/current/reference/requirements.html).
+
+The requirements checker tool is already provided as a development requirement, and the script that composer install is placed in `.gitignore`.
 
 ## How to use it
 

@@ -1,14 +1,14 @@
-# My application skeleton
+# A web application skeleton using React and Symfony
 
-This is a skeleton to easily bootstrap a web application.
+This is a skeleton to easily bootstrap a modern web project.
 
-It is composed of two main part:
-- a front-end application, written with ReactJS and managed with webpack,
-- a back-end REST API, written with Symfony 4 and managed with Flex.
+It is composed of two distinct applications:
+- a front-end application, written in TypeScript using ReactJS and managed with webpack,
+- a back-end REST API, written in PHP using Symfony 4 and managed with Symfony Flex.
 
 ## How to use it
 
-Both back and front-end applications can be ran alone. Their respective behavior is detailed in their own README.md:
+Both back-end and front-end applications can be run alone. Their respective behavior is detailed in their own README.md:
 [front-end](https://github.com/damien-carcel/app-skeleton/blob/master/front/README.md) and [back-end](https://github.com/damien-carcel/app-skeleton/blob/master/back/README.md).
 
 In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `docker-compose.yaml` files. They are 2 of them, one for the front-end, one for the back-end.
