@@ -16,7 +16,6 @@
 | Acceptance tests  | Todo
 | Integration tests | Todo
 | System tests      | Todo
-| Changelog         | Todo
 | Documentation     | -
 | Related tickets   | #... <!-- #-prefixed issue number(s), if any -->
 
