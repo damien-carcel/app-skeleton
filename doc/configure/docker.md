@@ -1,1 +1,1 @@
-# How to configure the applications using Docker
+# Run the front-end and back-end applications together using Docker

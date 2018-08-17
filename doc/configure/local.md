@@ -1,1 +1,1 @@
-# How to configure the applications
+# Run the front-end and back-end applications together
