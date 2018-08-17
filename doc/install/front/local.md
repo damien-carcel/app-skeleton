@@ -22,7 +22,7 @@ $ yarn install
 $ npm install
 ```
 
-Copy the content of the file `.env.dist` into a new file `.env`, and keep only the line dedicated to the JSON server.
+Copy the content of the file `.env.dist` into a new file `.env`, and keep only the line [dedicated to the JSON server](https://github.com/damien-carcel/app-skeleton/blob/master/front/.env.dist#L4).
 
 Finally, run the test server, which will open the application in your default browser at [localhost:8080](http://localhost:8080/)`:
 ```bash
