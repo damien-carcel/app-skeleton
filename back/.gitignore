@@ -1,4 +1,5 @@
-composer.lock
+/composer.lock
+/public/check.php
 
 ###> symfony/framework-bundle ###
 .env

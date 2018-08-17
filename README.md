@@ -1,50 +1,33 @@
-# My application skeleton
+# A web application skeleton using React and Symfony
 
-This is a skeleton to easily bootstrap a web application.
+This is a skeleton to easily bootstrap a modern web project.
 
-It is composed of two main part:
-- a front-end application, written with ReactJS and managed with webpack,
-- a back-end REST API, written with Symfony 4 and managed with Flex.
+It is composed of two distinct applications:
+- a front-end application, written in TypeScript, using ReactJS, and managed with webpack,
+- a back-end REST API, written in PHP, using Symfony 4, and managed with Symfony Flex.
 
-## How to use it
+## How to use it?
 
-Both back and front-end applications can be ran alone. Their respective behavior is detailed in their own README.md:
-[front-end](https://github.com/damien-carcel/app-skeleton/blob/master/front/README.md) and [back-end](https://github.com/damien-carcel/app-skeleton/blob/master/back/README.md).
+Both front-end and back-end applications can be run alone. 
 
-In the following documentation, we will focus on running both applications together using `docker-compose` using the provided `docker-compose.yaml` files. They are 2 of them, one for the front-end, one for the back-end.
+The back-end application is a REST API, so it can be used directly through HTTP calls. 
+Follow these documentations to install the back-end application:
+- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back/local.md) (requires PHP CLI and MySQL or MariaDB),
+- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back/docker.md) (requires Docker and Docker Compose).
 
-### Configure the application
+The front-end application is made to consume an API, the real implementation being provided by the back-end application.
+But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) for development.
 
-Copy the content of the file `.env.dist` into a new file `.env`. Keep only the line you need out of the 3 options (everything running with Docker, only back-end running with Docker or all running locally).
+Follow these documentations to install the front-end application with the JSON server:
+- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front/local.md) (requires Yarn or NPM),
+- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front/docker.md) (requires Docker and Docker Compose).
 
-Then copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml` and configure it as you see fit. This will allow you to access the application from outside the containers.
-
-### Build the application
-
-First start the containers. Start with those of the front-end, so the Docker network is initialized, and continue with the back-end:
-```bash
-$ cd /path/to/the/project/front && docker-compose up -d
-$ cd /path/to/the/project/back && docker-compose up -d
-```
-
-Then install the dependencies and build the front-end application:
-```bash
-$ cd /path/to/the/project/front
-$ docker-compose run --rm node yarn install
-$ docker-compose run --rm node yarn build:prod
-```
-
-Finally, install the dependencies of the back-end application and setup the database:
-```bash
-$ cd /path/to/the/project/back
-$ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
-$ docker-compose exec fpm composer update-schema
-```
-
-You can now access the application on [localhost:8080](http://localhost:8080). You can also directly access the API on [localhost:8000](http://localhost:8000)
+You can also run both front-end and back-end applications together. Again, you can install them:
+- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/local.md) (the front-end application is run locally, but the back-end application can be run either locally or through Docker),
+- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/docker.md) (both front-end and back-end application are run through Docker).
 
 ## License
 
-This repository is under the MIT license. See the complete license in the `LICENSE` file.
+This repository is under the MIT license. See the complete license in the [LICENSE](https://github.com/damien-carcel/app-skeleton/blob/master/LICENSE) file.
 
 The "Hack" font provided as asset example is distributed under [the Hack Open Font License v2.0 and the Bitstream Vera License](https://github.com/chrissimpkins/Hack/blob/master/LICENSE.md).
