@@ -28,7 +28,7 @@ You can now access the application on [localhost:8000](http://localhost:8000).
 
 ## Testing
 
-`phpcs` (PHP Code Sniffer) and `php-cs-fixer` (PHP Coding Standards Fixer) are used for static analysis, `phpspec` for unit tests, and `Behat` for acceptance, integration, and system (end to end) tests.
+`phpcs` (PHP Code Sniffer) and `php-cs-fixer` (PHP Coding Standards Fixer) are used for static analysis, `phpspec` for unit tests, and `Behat` for acceptance, integration, and end to end tests.
 
 All the commands below are using `composer` scripts.
 Look at the `composer.json` file to know what command is exactly launched.
@@ -66,5 +66,5 @@ $ composer phpspec
 ```bash
 $ composer acceptance
 $ composer integration
-$ composer system
+$ composer end-to-end
 ```

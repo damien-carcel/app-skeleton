@@ -7,7 +7,7 @@ Feature:
     When a request is sent to "/"
     Then a response should be received
 
-  @system
+  @end-to-end
   Scenario: It gets all existing blog posts
     When a request asks for the list of blog posts
     Then all the blog posts should be retrieved

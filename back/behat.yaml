@@ -44,7 +44,7 @@ integration:
             filters:
                 tags: '@integration'
 
-system:
+end-to-end:
     extensions:
         Behat\MinkExtension:
             # Use BEHAT_PARAMS to override this value
@@ -55,7 +55,7 @@ system:
                     symfony: ~
         FriendsOfBehat\ContextServiceExtension:
             imports:
-            - 'tests/system/Resources/config/contexts.yml'
+            - 'tests/end-to-end/Resources/config/contexts.yml'
         FriendsOfBehat\CrossContainerExtension: ~
         FriendsOfBehat\SymfonyExtension:
             env_file: '.env'
@@ -69,7 +69,7 @@ system:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
-                - 'App\Tests\System\Context\FeatureContext'
-                - 'App\Tests\System\Context\FixtureContext'
+                - 'App\Tests\EndToEnd\Context\FeatureContext'
+                - 'App\Tests\EndToEnd\Context\FixtureContext'
             filters:
-                tags: '@system'
+                tags: '@end-to-end'

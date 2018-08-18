@@ -50,7 +50,7 @@
       "App\\Tests\\Acceptance\\": "tests/acceptance/",
       "App\\Tests\\Fixtures\\": "tests/fixtures/",
       "App\\Tests\\Integration\\": "tests/integration/",
-      "App\\Tests\\System\\": "tests/system/"
+      "App\\Tests\\EndToEnd\\": "tests/end-to-end/"
     }
   },
   "scripts": {
@@ -71,15 +71,15 @@
       "@phpspec",
       "@acceptance",
       "@integration",
-      "@system"
+      "@end-to-end"
     ],
-    "phpcs": "vendor/bin/phpcs -p --standard=PSR2 --extensions=php src tests/acceptance tests/integration tests/system",
+    "phpcs": "vendor/bin/phpcs -p --standard=PSR2 --extensions=php src tests/acceptance tests/integration tests/end-to-end",
     "php-cs-fixer": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php",
     "php-cs-fixer-fix": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
     "phpspec": "vendor/bin/phpspec run",
     "acceptance": "APP_ENV=acceptance vendor/bin/behat --profile=acceptance",
     "integration": "APP_ENV=test vendor/bin/behat --profile=integration",
-    "system": "APP_ENV=test vendor/bin/behat --profile=system"
+    "end-to-end": "APP_ENV=test vendor/bin/behat --profile=end-to-end"
   },
   "conflict": {
     "symfony/symfony": "*"

@@ -1,11 +1,11 @@
 services:
-    App\Tests\System\Context\FeatureContext:
+    App\Tests\EndToEnd\Context\FeatureContext:
         arguments:
             - '@__symfony__.router'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\System\Context\FixtureContext:
+    App\Tests\EndToEnd\Context\FixtureContext:
         arguments:
             - '@__symfony__.doctrine.orm.entity_manager'
         tags:
