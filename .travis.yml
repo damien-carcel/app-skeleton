@@ -1,5 +1,9 @@
 language: php
 
+sudo: required
+addons:
+    chrome: stable
+
 php:
     - '7.1'
     - '7.2'
@@ -37,4 +41,5 @@ script:
     - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/phpspec run
     - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=acceptance vendor/bin/behat --profile=acceptance
     - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=test vendor/bin/behat --profile=integration
-    - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=test vendor/bin/behat --profile=end-to-end
+    - google-chrome-stable --no-sandbox --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 &
+    - cd ${TRAVIS_BUILD_DIR}/back && bin/console server:start && APP_ENV=test vendor/bin/behat --profile=end-to-end
