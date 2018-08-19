@@ -1,5 +1,6 @@
 /composer.lock
 /docker
+!/docker/fpm/Dockerfile
 !/docker/nginx.conf
 !/docker/upload.conf
 /public/check.php
