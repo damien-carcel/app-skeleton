@@ -26,6 +26,14 @@ You can also run both front-end and back-end applications together. Again, you c
 - [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/local.md) (the front-end application is run locally, but the back-end application can be run either locally or through Docker),
 - [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/docker.md) (both front-end and back-end application are run through Docker).
 
+## Testing
+
+The back-end application is fully tested. You can follow these documentations for a detailed explanation about how running the tests:
+- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/test/back/local.md),
+- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/test/back/docker.md).
+
+The front-end application is not tested for now. This will be [coming soon](https://github.com/damien-carcel/app-skeleton/issues/15).
+
 ## License
 
 This repository is under the MIT license. See the complete license in the [LICENSE](https://github.com/damien-carcel/app-skeleton/blob/master/LICENSE) file.

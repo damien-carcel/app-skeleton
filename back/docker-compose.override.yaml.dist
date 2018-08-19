@@ -9,6 +9,7 @@ services:
 
     fpm:
         environment:
+            BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://nginx-back"}}}'
             COMPOSER_CACHE_DIR: '/home/docker/.cache/composer'
             COMPOSER_HOME: '/home/docker/.config/composer'
             PHP_XDEBUG_ENABLED: 0

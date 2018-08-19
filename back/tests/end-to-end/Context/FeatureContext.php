@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\System\Context;
+namespace App\Tests\EndToEnd\Context;
 
 use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
@@ -49,7 +49,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function allBlogPostsShouldBeRetrieved(): bool
     {
-        $responseContent = $this->getSession()->getPage()->getContent();
+        $responseContent = $this->getSession()->getPage()->getText();
         $decodedContent = json_decode($responseContent, true);
 
         $filteredContent = array_filter($decodedContent, function ($post) {

@@ -30,8 +30,3 @@ $ docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
 You can now access the application on [localhost:8000](http://localhost:8000) (`8000` being the default output of the `nginx-back` container).
-
-## Testing
-
-Like for the installation, you can follow the documentation for the [local testing procedure](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back/local.md#testing).
-Again, simply prefix every command with `docker-compose exec fpm`.
