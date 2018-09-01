@@ -13,7 +13,7 @@ services:
             - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
 
     fpm:
-        build: './docker/fpm'
+        image: 'akeneo/fpm:php-7.2'
         environment:
             PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'

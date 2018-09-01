@@ -49,7 +49,7 @@ class FeatureContext extends MinkContext implements Context
      */
     public function allBlogPostsShouldBeRetrieved(): bool
     {
-        $responseContent = $this->getSession()->getPage()->getText();
+        $responseContent = $this->getSession()->getPage()->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         $filteredContent = array_filter($decodedContent, function ($post) {
