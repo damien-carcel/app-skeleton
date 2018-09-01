@@ -11,9 +11,6 @@ env:
     - TRAVIS_NODE_VERSION='8'
     - TRAVIS_NODE_VERSION='10'
 
-addons:
-    chrome: stable
-
 git:
     depth: 10
 
@@ -44,5 +41,4 @@ script:
     - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/phpspec run
     - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=acceptance vendor/bin/behat --profile=acceptance
     - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=test vendor/bin/behat --profile=integration
-    - google-chrome-stable --no-sandbox --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 &
-    - cd ${TRAVIS_BUILD_DIR}/back && bin/console server:start && APP_ENV=test BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"http://localhost:8000"}}}' vendor/bin/behat --profile=end-to-end
+    - cd ${TRAVIS_BUILD_DIR}/back && APP_ENV=test vendor/bin/behat --profile=end-to-end

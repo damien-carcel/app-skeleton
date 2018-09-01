@@ -77,24 +77,9 @@ $ composer integration
 
 ### End to End tests
 
-Those tests use the real application. You'll need a MySQL database ready, but also the Symfony web server:
-```bash
-$ bin/console server:run
-```
+Those tests use the real application. Like for the integration tests, you'll need a MySQL database ready.
 
-You also need a Chrome web browser (Google Chrome or Chromium) running in remote debug mode:
-```bash
-$ google-chrome-stable --disable-gpu --headless --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222
-```
-
-Finally, the server URL will be different if you use the Symfony web server, or a production server like Apache or nginx, or Docker.
-So the corresponding behat configuration is not present in the `behat.yaml` file.
-You need to export it as an environment variable:
-```bash
-export BEHAT_PARAMS='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://localhost:8000"}}}'
-```
-
-You can now run the tests:
+You can then run the tests with:
 ```bash
 $ composer end-to-end
 ```
