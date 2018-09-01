@@ -1,21 +1,24 @@
+dist: trusty
+sudo: required
+
 language: php
 
-sudo: required
-addons:
-    chrome: stable
-
 php:
-    - '7.1'
-    - '7.2'
+    - 7.1
+    - 7.2
 
 env:
     - TRAVIS_NODE_VERSION='8'
     - TRAVIS_NODE_VERSION='10'
 
+addons:
+    chrome: stable
+
 git:
     depth: 10
 
 cache:
+    yarn: true
     directories:
         - $HOME/.composer/cache
 
