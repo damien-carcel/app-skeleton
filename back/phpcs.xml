@@ -12,8 +12,35 @@
     <arg name="extensions" value="php"/>
     <arg value="np"/>
 
-    <rule ref="PSR2">
-        <exclude-pattern>tests/spec/</exclude-pattern>
+    <rule ref="Generic.Arrays.ArrayIndent"/>
+    <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+    <rule ref="Generic.Debug.ClosureLinter"/>
+    <rule ref="Generic.Debug.ESLint"/>
+    <rule ref="Generic.Files.LineEndings"/>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="100" />
+            <property name="absoluteLineLimit" value="120" />
+        </properties>
     </rule>
+    <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
+    <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+    <rule ref="Generic.Metrics.CyclomaticComplexity"/>
+    <rule ref="Generic.Metrics.NestingLevel"/>
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
+        <exclude-pattern>*/tests/spec/*</exclude-pattern>
+    </rule>
+    <rule ref="Generic.PHP.ForbiddenFunctions"/>
+    <rule ref="Generic.PHP.NoSilencedErrors"/>
+    <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+    <rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+    <rule ref="PSR2.Classes.ClassDeclaration"/>
+    <rule ref="PSR2.ControlStructures.ControlStructureSpacing"/>
+    <rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
+    <rule ref="PSR2.Methods.FunctionCallSignature">
+        <exclude-pattern>*/tests/spec/*</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Namespaces.CompoundNamespaceDepth"/>
 
 </ruleset>
