@@ -1,6 +1,14 @@
 <?php
 
-return PhpCsFixer\Config::create()
+declare(strict_types = 1);
+
+$finder = PhpCsFixer\Finder::create()
+    ->name('*.php')
+    ->notName('*Spec.php')
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/tests');
+
+$configuration = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules(
         [
@@ -20,11 +28,8 @@ return PhpCsFixer\Config::create()
             'phpdoc_order' => true,
             'psr4' => true,
         ]
-    )
-    ->setFinder(
-        PhpCsFixer\Finder::create()
-            ->name('*.php')
-            ->notName('*Spec.php')
-            ->in(__DIR__ . '/src')
-            ->in(__DIR__ . '/tests')
     );
+
+$configuration->setFinder($finder);
+
+return $configuration;

@@ -26,7 +26,9 @@ $ composer phpcs
 
 `php-cs-fixer` is another tool to detect coding standard violations. It can also fix the issues it detects.
 It completes `phpcs` as they both don't detect exactly the same issues.
-Its configuration is defined in the `.php_cs.php` file.
+Its configuration is defined in two files:
+- `.php_cs.php` for the code source and the tests code, except the specifications,
+- `.php_cs.phpspec.php` for the specifications.
 
 To use it, run the following command:
 ```bash
