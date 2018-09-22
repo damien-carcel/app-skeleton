@@ -17,7 +17,8 @@ For each of them, configuration is already provided and ready to work.
  
 ## PHP code sniffer
 
-`phpcs` checks for coding standard violations. To use it, run the following command:
+`phpcs` checks for coding standard violations. Its configuration is placed in the `phpcs.xml` file.
+To use it, run the following command:
 ```bash
 $ composer phpcs
 ```
