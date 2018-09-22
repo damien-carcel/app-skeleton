@@ -6,6 +6,8 @@ return PhpCsFixer\Config::create()
         [
             '@PSR2' => true,
             '@Symfony' => true,
+            '@PHP71Migration' => true,
+            '@PHP71Migration:risky' => true,
             'array_syntax' => ['syntax' => 'short'],
             'concat_space' => ['spacing' => 'none'],
             'linebreak_after_opening_tag' => true,
