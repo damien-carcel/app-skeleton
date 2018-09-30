@@ -18,7 +18,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPost
+final class BlogPost
 {
     /** @var UuidInterface */
     private $id;

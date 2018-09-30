@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\Rest\BlogPost;
+namespace App\Controller\BlogPost;
 
 use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts/{uuid}", name="rest_blog_posts_delete", methods={"DELETE"})
+ * @Route("/posts/{uuid}", name="rest_blog_posts_get", methods={"GET"})
  */
-class DeleteController
+class GetController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;
@@ -55,8 +55,12 @@ class DeleteController
             ));
         }
 
-        $this->repository->delete($post);
+        $normalizedPost = [
+            'id' => $post->id(),
+            'title' => $post->title(),
+            'content' => $post->content(),
+        ];
 
-        return new JsonResponse();
+        return new JsonResponse($normalizedPost);
     }
 }

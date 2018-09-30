@@ -134,7 +134,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "1.5",
-            "ref": "7b6cbc842f8cd3d550815247d12294f6f304a8c4"
+            "ref": "1fee84e00c71edee81aa54b470260779a890c9c6"
         }
     },
     "ocramius/package-versions": {

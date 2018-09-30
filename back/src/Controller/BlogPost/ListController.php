@@ -11,22 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\Rest\BlogPost;
+namespace App\Controller\BlogPost;
 
 use App\Entity\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts", name="rest_blog_posts_create", methods={"POST"})
+ * @Route("/posts", name="rest_blog_posts_list", methods={"GET"})
  */
-class CreateController
+class ListController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;
@@ -40,21 +38,20 @@ class CreateController
     }
 
     /**
-     * @param Request $request
-     *
-     * @throws \Exception
-     *
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(): Response
     {
-        $content = $request->getContent();
-        $postData = json_decode($content, true);
+        $posts = $this->repository->getAllBlogPosts();
 
-        $post = new BlogPost(Uuid::uuid4(), $postData['title'], $postData['content']);
+        $normalizedPosts = array_map(function (BlogPost $post) {
+            return [
+                'id' => $post->id(),
+                'title' => $post->title(),
+                'content' => $post->content(),
+            ];
+        }, $posts);
 
-        $this->repository->save($post);
-
-        return new JsonResponse();
+        return new JsonResponse($normalizedPosts);
     }
 }
