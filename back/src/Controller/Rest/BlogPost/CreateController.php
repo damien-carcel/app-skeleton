@@ -15,6 +15,7 @@ namespace App\Controller\Rest\BlogPost;
 
 use App\Entity\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,8 @@ class CreateController
     /**
      * @param Request $request
      *
+     * @throws \Exception
+     *
      * @return Response
      */
     public function __invoke(Request $request): Response
@@ -48,8 +51,7 @@ class CreateController
         $content = $request->getContent();
         $postData = json_decode($content, true);
 
-        $post = new BlogPost();
-        $post->update($postData);
+        $post = new BlogPost(Uuid::uuid4(), $postData['title'], $postData['content']);
 
         $this->repository->save($post);
 

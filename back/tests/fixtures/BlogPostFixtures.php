@@ -16,6 +16,7 @@ namespace App\Tests\Fixtures;
 use App\Entity\BlogPost;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -43,8 +44,7 @@ class BlogPostFixtures extends Fixture
     public function load(ObjectManager $objectManager): void
     {
         foreach (static::NORMALIZED_POSTS as $normalizedPost) {
-            $post = new BlogPost();
-            $post->update($normalizedPost);
+            $post = new BlogPost(Uuid::uuid4(), $normalizedPost['title'], $normalizedPost['content']);
 
             $objectManager->persist($post);
         }

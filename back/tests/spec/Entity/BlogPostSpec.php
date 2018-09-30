@@ -13,29 +13,48 @@ declare(strict_types=1);
 
 namespace spec\App\Entity;
 
-use App\Entity\BlogPost;
 use PhpSpec\ObjectBehavior;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class BlogPostSpec extends ObjectBehavior
 {
-    function it_is_a_blog_post()
+    /** @var UuidInterface */
+    private $uuid;
+
+    public function let()
     {
-        $this->shouldBeAnInstanceOf(BlogPost::class);
+        $this->uuid = Uuid::uuid4();
+
+        $this->beConstructedWith($this->uuid, 'A title', 'A content.');
+    }
+
+    function it_has_a_uuid()
+    {
+        $this->id()->shouldBeAnInstanceOf(Uuid::class);
+        $this->id()->shouldBe($this->uuid);
+    }
+
+    function it_has_a_title()
+    {
+        $this->title()->shouldBe('A title');
+    }
+
+    function it_as_a_content()
+    {
+        $this->content()->shouldBe('A content.');
     }
 
     function it_updates_itself()
     {
         $this->update([
-            'id' => Uuid::uuid4(),
             'title' => 'Foo',
             'content' => 'Bar',
         ]);
 
-        $this->id()->shouldBeAnInstanceOf(Uuid::class);
         $this->title()->shouldBe('Foo');
         $this->content()->shouldBe('Bar');
     }
