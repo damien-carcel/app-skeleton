@@ -143,9 +143,6 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
-    "paragonie/random_compat": {
-        "version": "v2.0.11"
-    },
     "pdepend/pdepend": {
         "version": "2.5.2"
     },
@@ -281,9 +278,6 @@
     "symfony/inflector": {
         "version": "v4.0.2"
     },
-    "symfony/lts": {
-        "version": "4-dev"
-    },
     "symfony/monolog-bridge": {
         "version": "v4.0.2"
     },
@@ -302,14 +296,8 @@
     "symfony/orm-pack": {
         "version": "v1.0.5"
     },
-    "symfony/polyfill-ctype": {
-        "version": "v1.8.0"
-    },
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
-    },
-    "symfony/polyfill-php70": {
-        "version": "v1.7.0"
     },
     "symfony/polyfill-php72": {
         "version": "v1.7.0"
