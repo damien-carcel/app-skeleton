@@ -36,7 +36,6 @@ install:
 script:
     - cd ${TRAVIS_BUILD_DIR}/front && yarn lint
     - cd ${TRAVIS_BUILD_DIR}/front && yarn type-check
-    - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/phpcs
     - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
     - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
     - cd ${TRAVIS_BUILD_DIR}/back && vendor/bin/phpspec run

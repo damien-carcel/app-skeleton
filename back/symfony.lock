@@ -206,9 +206,6 @@
     "sebastian/recursion-context": {
         "version": "3.0.0"
     },
-    "squizlabs/php_codesniffer": {
-        "version": "3.2.3"
-    },
     "symfony/browser-kit": {
         "version": "v3.4.2"
     },
