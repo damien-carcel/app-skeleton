@@ -18,16 +18,28 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPost
+final class BlogPost
 {
     /** @var UuidInterface */
     private $id;
 
     /** @var string */
-    private $title = '';
+    private $title;
 
     /** @var string */
-    private $content = '';
+    private $content;
+
+    /**
+     * @param UuidInterface $id
+     * @param string        $title
+     * @param string        $content
+     */
+    public function __construct(UuidInterface $id, string $title, string $content)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
+    }
 
     /**
      * @return UuidInterface
@@ -58,10 +70,6 @@ class BlogPost
      */
     public function update(array $data): void
     {
-        if (array_key_exists('id', $data) && null === $this->id) {
-            $this->id = $data['id'];
-        }
-
         if (array_key_exists('title', $data)) {
             $this->title = $data['title'];
         }

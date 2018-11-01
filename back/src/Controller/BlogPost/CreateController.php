@@ -11,20 +11,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\Rest\BlogPost;
+namespace App\Controller\BlogPost;
 
+use App\Entity\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts/{uuid}", name="rest_blog_posts_delete", methods={"DELETE"})
+ * @Route("/posts", name="rest_blog_posts_create", methods={"POST"})
  */
-class DeleteController
+final class CreateController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;
@@ -38,24 +40,20 @@ class DeleteController
     }
 
     /**
-     * @param string $uuid
+     * @param Request $request
      *
-     * @throws NotFoundHttpException
+     * @throws \Exception
      *
      * @return Response
      */
-    public function __invoke(string $uuid): Response
+    public function __invoke(Request $request): Response
     {
-        $post = $this->repository->getOneById($uuid);
+        $content = $request->getContent();
+        $postData = json_decode($content, true);
 
-        if (null === $post) {
-            throw new NotFoundHttpException(sprintf(
-                'There is no blog post with identifier "%s"',
-                $uuid
-            ));
-        }
+        $post = new BlogPost(Uuid::uuid4(), $postData['title'], $postData['content']);
 
-        $this->repository->delete($post);
+        $this->repository->save($post);
 
         return new JsonResponse();
     }

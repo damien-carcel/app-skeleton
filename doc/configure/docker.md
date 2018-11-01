@@ -1,7 +1,5 @@
 # Run the front-end and back-end applications together using Docker
 
-**DISCLAIMER**: THIS DOCUMENTATION DOESN'T WORK FOR NOW. IT WILL BE FIXED BY ISSUE [#79](https://github.com/damien-carcel/app-skeleton/issues/79).
-
 ## Launch the containers
 
 Both applications have their own compose files. This needs a specific configuration so they can both run on the same network and talk to each other.

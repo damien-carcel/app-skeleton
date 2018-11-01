@@ -19,7 +19,7 @@ use App\Repository\BlogPostRepositoryInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPostRepository implements BlogPostRepositoryInterface
+final class BlogPostRepository implements BlogPostRepositoryInterface
 {
     /** @var BlogPost[] */
     private $blogPosts;

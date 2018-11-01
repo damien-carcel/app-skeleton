@@ -11,11 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\Rest\BlogPost;
+namespace App\Controller\BlogPost;
 
 use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts/{uuid}", name="rest_blog_posts_update", methods={"PATCH"})
+ * @Route("/posts/{uuid}", name="rest_blog_posts_get", methods={"GET"})
  */
-class UpdateController
+final class GetController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;
@@ -39,27 +38,29 @@ class UpdateController
     }
 
     /**
-     * @param string  $uuid
-     * @param Request $request
+     * @param string $uuid
+     *
+     * @throws NotFoundHttpException
      *
      * @return Response
      */
-    public function __invoke(string $uuid, Request $request): Response
+    public function __invoke(string $uuid): Response
     {
-        $content = $request->getContent();
-        $postData = json_decode($content, true);
-
         $post = $this->repository->getOneById($uuid);
+
         if (null === $post) {
             throw new NotFoundHttpException(sprintf(
                 'There is no blog post with identifier "%s"',
                 $uuid
             ));
         }
-        $post->update($postData);
 
-        $this->repository->save($post);
+        $normalizedPost = [
+            'id' => $post->id(),
+            'title' => $post->title(),
+            'content' => $post->content(),
+        ];
 
-        return new JsonResponse();
+        return new JsonResponse($normalizedPost);
     }
 }

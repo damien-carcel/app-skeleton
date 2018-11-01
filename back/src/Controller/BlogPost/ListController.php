@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\Rest\BlogPost;
+namespace App\Controller\BlogPost;
 
 use App\Entity\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/posts", name="rest_blog_posts_list", methods={"GET"})
  */
-class ListController
+final class ListController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;

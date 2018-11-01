@@ -21,6 +21,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Webmozart\Assert\Assert;
 
 /**
+ * This is a very bad acceptance test context, as it makes use of the framework
+ * (router, request handling), which is not business. This is only for demo.
+ *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class FeatureContext implements Context
