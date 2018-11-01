@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/posts/{uuid}", name="rest_blog_posts_get", methods={"GET"})
  */
-class GetController
+final class GetController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;

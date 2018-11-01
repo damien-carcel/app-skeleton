@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/posts/{uuid}", name="rest_blog_posts_update", methods={"PATCH"})
  */
-class UpdateController
+final class UpdateController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;

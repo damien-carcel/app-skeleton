@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/posts", name="rest_blog_posts_create", methods={"POST"})
  */
-class CreateController
+final class CreateController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;

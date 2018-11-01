@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("/posts/{uuid}", name="rest_blog_posts_delete", methods={"DELETE"})
  */
-class DeleteController
+final class DeleteController
 {
     /** @var BlogPostRepositoryInterface */
     private $repository;

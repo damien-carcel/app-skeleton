@@ -21,7 +21,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPostRepository extends ServiceEntityRepository implements BlogPostRepositoryInterface
+final class BlogPostRepository extends ServiceEntityRepository implements BlogPostRepositoryInterface
 {
     /**
      * {@inheritdoc}
