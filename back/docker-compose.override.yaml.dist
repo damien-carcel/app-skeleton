@@ -17,7 +17,7 @@ services:
 
     mysql:
         ports:
-            - '33006:33006'
+            - '33006:3306'
 #         networks:
 #             - 'front_app-skeleton'
 
