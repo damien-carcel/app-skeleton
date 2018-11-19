@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller\BlogPost;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

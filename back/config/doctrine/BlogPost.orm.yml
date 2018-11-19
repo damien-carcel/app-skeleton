@@ -1,4 +1,4 @@
-App\Entity\BlogPost:
+App\Domain\Model\BlogPost:
     type: entity
     table: blog_post
     repositoryClass: App\Repository\BlogPostRepositoryInterface

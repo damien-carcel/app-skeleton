@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>

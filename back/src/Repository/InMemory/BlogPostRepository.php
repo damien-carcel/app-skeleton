@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Repository\InMemory;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
 
 /**

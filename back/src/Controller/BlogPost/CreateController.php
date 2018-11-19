@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Controller\BlogPost;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;

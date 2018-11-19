@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixtures;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;

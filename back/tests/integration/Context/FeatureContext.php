@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Context;
 
-use App\Entity\BlogPost;
+use App\Domain\Model\BlogPost;
 use App\Repository\BlogPostRepositoryInterface;
 use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
