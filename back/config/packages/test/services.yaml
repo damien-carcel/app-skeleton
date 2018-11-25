@@ -5,4 +5,4 @@ services:
         public: false
 
     App\Repository\Doctrine\BlogPostRepository: ~
-    App\Repository\BlogPostRepositoryInterface: '@App\Repository\Doctrine\BlogPostRepository'
+    App\Domain\Repository\BlogPostRepositoryInterface: '@App\Repository\Doctrine\BlogPostRepository'

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Context;
 
 use App\Domain\Model\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\BlogPostRepositoryInterface;
 use App\Tests\Fixtures\BlogPostFixtures;
 use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;

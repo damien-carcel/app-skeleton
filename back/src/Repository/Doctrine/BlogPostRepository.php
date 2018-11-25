@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Repository\Doctrine;
 
 use App\Domain\Model\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\BlogPostRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

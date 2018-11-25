@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Repository\InMemory;
 
 use App\Domain\Model\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\BlogPostRepositoryInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>

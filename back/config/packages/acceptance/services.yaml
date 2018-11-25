@@ -5,4 +5,4 @@ services:
         public: false
 
     App\Repository\InMemory\BlogPostRepository:
-    App\Repository\BlogPostRepositoryInterface: '@App\Repository\InMemory\BlogPostRepository'
+    App\Domain\Repository\BlogPostRepositoryInterface: '@App\Repository\InMemory\BlogPostRepository'

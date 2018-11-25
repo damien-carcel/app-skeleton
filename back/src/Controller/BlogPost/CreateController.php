@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Controller\BlogPost;
 
 use App\Domain\Model\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\BlogPostRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
