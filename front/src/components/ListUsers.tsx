@@ -1,23 +1,23 @@
 import React, {ReactNode} from 'react';
-import {BlogPostData, createPost, deletePost, listPosts, updatePost} from '../containers/posts';
+import {createUser, deleteUser, listUsers, updateUser, UserData} from '../containers/user';
 import {isEmpty} from '../tools/isEmpty';
 import Create from './Create';
-import Post from './Post';
+import User from './User';
 
-interface ListPostsState {
+interface ListUsersState {
   error: {[key: string]: any};
   isLoaded: boolean;
-  posts: BlogPostData[];
+  users: UserData[];
 }
 
-export default class ListPosts extends React.Component<{}, ListPostsState> {
+export default class ListUsers extends React.Component<{}, ListUsersState> {
   constructor(props: {}) {
     super(props);
 
     this.state = {
       error: {},
       isLoaded: false,
-      posts: [],
+      users: [],
     };
 
     this.delete = this.delete.bind(this);
@@ -25,19 +25,19 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
   }
 
   public componentDidMount(): void {
-    this.getAllPosts();
+    this.getAllUsers();
   }
 
-  public delete(postId: string): void {
+  public delete(userId: string): void {
     this.setState({
       isLoaded: false,
     });
 
-    deletePost(postId).then(
+    deleteUser(userId).then(
       () => {
         this.setState((prevState) => ({
           isLoaded: true,
-          posts: prevState.posts.filter((post: BlogPostData) => post.id !== postId),
+          users: prevState.users.filter((user: UserData) => user.id !== userId),
         }));
       },
       (error) => {
@@ -49,22 +49,22 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
     );
   }
 
-  public submit(postId: string, data: BlogPostData): void {
+  public submit(userId: string, data: UserData): void {
     this.setState({
       isLoaded: false,
     });
 
-    if (postId) {
-      updatePost(postId, data).then(() => {
+    if (userId) {
+      updateUser(userId, data).then(() => {
         this.setState((prevState) => ({
           isLoaded: true,
-          posts: prevState.posts.map((post: BlogPostData) => {
-            if (post.id === postId) {
-              post.title = data.title;
-              post.content = data.content;
+          users: prevState.users.map((user: UserData) => {
+            if (user.id === userId) {
+              user.title = data.title;
+              user.content = data.content;
             }
 
-            return post;
+            return user;
           }),
         }));
       }, (error) => {
@@ -74,16 +74,16 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
         });
       });
     } else {
-      createPost(data).then(() => this.getAllPosts());
+      createUser(data).then(() => this.getAllUsers());
     }
   }
 
-  public getAllPosts(): void {
-    listPosts().then(
+  public getAllUsers(): void {
+    listUsers().then(
       (result) => {
         this.setState({
           isLoaded: true,
-          posts: result,
+          users: result,
         });
       },
       (error) => {
@@ -96,7 +96,7 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
   }
 
   public render(): ReactNode {
-    const {error, isLoaded, posts} = this.state;
+    const {error, isLoaded, users} = this.state;
 
     if (!isEmpty(error)) {
       return <div>Error: {error.message}</div>;
@@ -106,10 +106,10 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
       return <div>Loading...</div>;
     }
 
-    const renderedPosts: any[] = posts.map((post: BlogPostData) => {
-      return <Post
-        key={post.id}
-        post={post}
+    const renderedUsers: any[] = users.map((user: UserData) => {
+      return <User
+        key={user.id}
+        user={user}
         handleSubmit={this.submit}
         handleDelete={this.delete}
       />;
@@ -118,8 +118,8 @@ export default class ListPosts extends React.Component<{}, ListPostsState> {
     return (
       <div className='container'>
         <Create handleSubmit={this.submit}/>
-        <div className='blog-posts'>
-          {renderedPosts}
+        <div className='users'>
+          {renderedUsers}
         </div>
       </div>
     );

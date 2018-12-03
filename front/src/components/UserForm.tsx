@@ -1,13 +1,13 @@
 import React, {ReactNode} from 'react';
-import {BlogPostData, getPost} from '../containers/posts';
+import {getUser, UserData} from '../containers/user';
 import {isEmpty} from '../tools/isEmpty';
 
-interface PostFormProps {
-  handleSubmit: (postId: string, data: BlogPostData) => void;
-  postId: string;
+interface UserFormProps {
+  handleSubmit: (userId: string, data: UserData) => void;
+  userId: string;
 }
 
-interface PostFormState {
+interface UserFormState {
   content: string;
   error: {[key: string]: any};
   isLoaded: boolean;
@@ -15,8 +15,8 @@ interface PostFormState {
   [key: string]: any;
 }
 
-export default class PostForm extends React.Component<PostFormProps, PostFormState> {
-  constructor(props: PostFormProps) {
+export default class UserForm extends React.Component<UserFormProps, UserFormState> {
+  constructor(props: UserFormProps) {
     super(props);
 
     this.state = {
@@ -31,10 +31,10 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
   }
 
   public componentDidMount(): void {
-    const postId: string = this.props.postId;
+    const userId: string = this.props.userId;
 
-    if (postId) {
-      getPost(postId).then(
+    if (userId) {
+      getUser(userId).then(
         (result) => {
           this.setState({
             content: result.content,
@@ -68,14 +68,14 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
   public handleSubmit(event: any): void {
     event.preventDefault();
 
-    const postId: string = this.props.postId;
-    const data: BlogPostData = {
+    const userId: string = this.props.userId;
+    const data: UserData = {
       content: this.state.content,
-      id: this.props.postId,
+      id: this.props.userId,
       title: this.state.title,
     };
 
-    this.props.handleSubmit(postId, data);
+    this.props.handleSubmit(userId, data);
   }
 
   public render(): ReactNode {
@@ -108,7 +108,7 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
             onChange={this.handleInputChange}
           />
         </label>
-        <input className='btn-action btn-create-post' type='submit' value='Save'/>
+        <input className='btn-action btn-create-user' type='submit' value='Save'/>
       </form>
     );
   }

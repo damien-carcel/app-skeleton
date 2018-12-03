@@ -1,5 +1,5 @@
 {
-  "posts": [
+  "users": [
     {
       "title": "A first post",
       "content": "A very uninteresting content.",

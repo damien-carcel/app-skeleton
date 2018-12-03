@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
-use App\Tests\Fixtures\BlogPostFixtures;
+use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,12 +65,12 @@ class FeatureContext implements Context
     /**
      * @throws \Exception
      *
-     * @When a request asks for the list of blog posts
+     * @When a request asks for the list of users
      */
-    public function listAllTheBlogPosts(): void
+    public function listAllTheUsers(): void
     {
         $router = $this->kernel->getContainer()->get('router');
-        $path = $router->generate('rest_blog_posts_list');
+        $path = $router->generate('rest_users_list');
 
         $this->response = $this->kernel->handle(Request::create($path, 'GET'));
     }
@@ -80,15 +80,15 @@ class FeatureContext implements Context
      *
      * @return bool
      *
-     * @Then all the blog posts should be retrieved
+     * @Then all the users should be retrieved
      */
-    public function allBlogPostsShouldBeRetrieved(): bool
+    public function allUsersShouldBeRetrieved(): bool
     {
         $jsonResponse = $this->response->getContent();
 
-        $blogPosts = json_decode($jsonResponse, true);
+        $users = json_decode($jsonResponse, true);
 
-        if ($blogPosts !== array_values(BlogPostFixtures::NORMALIZED_POSTS)) {
+        if ($users !== array_values(UserFixtures::NORMALIZED_USERS)) {
             return false;
         }
 

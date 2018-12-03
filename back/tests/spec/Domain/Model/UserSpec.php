@@ -20,7 +20,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPostSpec extends ObjectBehavior
+class UserSpec extends ObjectBehavior
 {
     /** @var UuidInterface */
     private $uuid;

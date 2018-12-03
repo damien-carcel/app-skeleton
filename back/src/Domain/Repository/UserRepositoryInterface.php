@@ -13,32 +13,32 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\BlogPost;
+use App\Domain\Model\User;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-interface BlogPostRepositoryInterface
+interface UserRepositoryInterface
 {
     /**
-     * @return BlogPost[]
+     * @return User[]
      */
-    public function getAllBlogPosts(): array;
+    public function findAll(): array;
 
     /**
      * @param string $uuid
      *
-     * @return BlogPost
+     * @return User
      */
-    public function getOneById(string $uuid): BlogPost;
+    public function find(string $uuid): ?User;
 
     /**
-     * @param BlogPost $post
+     * @param User $user
      */
-    public function save(BlogPost $post): void;
+    public function save(User $user): void;
 
     /**
-     * @param BlogPost $post
+     * @param User $user
      */
-    public function delete(BlogPost $post): void;
+    public function delete(User $user): void;
 }

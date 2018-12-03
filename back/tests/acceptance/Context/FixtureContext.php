@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
-use App\Domain\Model\BlogPost;
-use App\Repository\InMemory\BlogPostRepository;
-use App\Tests\Fixtures\BlogPostFixtures;
+use App\Domain\Model\User;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;
 
@@ -24,15 +24,15 @@ use Ramsey\Uuid\Uuid;
  */
 class FixtureContext implements Context
 {
-    /** @var BlogPostRepository */
-    private $inMemoryBlogPostRepository;
+    /** @var UserRepositoryInterface */
+    private $userRepository;
 
     /**
-     * @param BlogPostRepository $inMemoryBlogPostRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(BlogPostRepository $inMemoryBlogPostRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->inMemoryBlogPostRepository = $inMemoryBlogPostRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -40,15 +40,12 @@ class FixtureContext implements Context
      */
     public function loadFixturesWithOnlyUsers(): void
     {
-        $blogPosts = BlogPostFixtures::NORMALIZED_POSTS;
+        $normalizedUsers = UserFixtures::NORMALIZED_USERS;
 
-        foreach ($blogPosts as $post) {
-            $post['id'] = Uuid::uuid4();
+        foreach ($normalizedUsers as $normalizedUser) {
+            $user = new User(Uuid::uuid4(), $normalizedUser['title'], $normalizedUser['content']);
 
-            $postEntity = new BlogPost();
-            $postEntity->update($post);
-
-            $this->inMemoryBlogPostRepository->save($postEntity);
+            $this->userRepository->save($user);
         }
     }
 }

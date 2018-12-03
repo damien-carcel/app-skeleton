@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Context;
 
-use App\Domain\Model\BlogPost;
-use App\Domain\Repository\BlogPostRepositoryInterface;
-use App\Tests\Fixtures\BlogPostFixtures;
+use App\Domain\Model\User;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
@@ -25,48 +25,48 @@ use Webmozart\Assert\Assert;
  */
 class FeatureContext implements Context
 {
-    /** @var BlogPostRepositoryInterface */
-    private $doctrineBlogPostRepository;
+    /** @var UserRepositoryInterface */
+    private $doctrineUserRepository;
 
     /** @var array */
     private $result;
 
     /**
-     * @param BlogPostRepositoryInterface $doctrineBlogPostRepository
+     * @param UserRepositoryInterface $doctrineUserRepository
      */
-    public function __construct(BlogPostRepositoryInterface $doctrineBlogPostRepository)
+    public function __construct(UserRepositoryInterface $doctrineUserRepository)
     {
-        $this->doctrineBlogPostRepository = $doctrineBlogPostRepository;
+        $this->doctrineUserRepository = $doctrineUserRepository;
     }
 
     /**
      * @param string $methodName
      *
-     * @When the ":methodName" method from the Doctrine BlogPostRepository is called
+     * @When the ":methodName" method from the Doctrine UserRepository is called
      */
     public function callGetMethodFromRepository(string $methodName): void
     {
-        $this->result = $this->doctrineBlogPostRepository->$methodName();
+        $this->result = $this->doctrineUserRepository->$methodName();
     }
 
     /**
-     * @Then all the blog posts should be retrieved from database
+     * @Then all the users should be retrieved from database
      */
-    public function allBlogPostsAreRetrieved(): void
+    public function allUsersAreRetrieved(): void
     {
         Assert::count($this->result, 3);
 
-        $normalizedBlogPosts = [];
-        foreach ($this->result as $blogPost) {
-            Assert::isInstanceOf($blogPost, BlogPost::class);
-            Assert::isInstanceOf($blogPost->id(), Uuid::class);
+        $normalizedUsers = [];
+        foreach ($this->result as $user) {
+            Assert::isInstanceOf($user, User::class);
+            Assert::isInstanceOf($user->id(), Uuid::class);
 
-            $normalizedBlogPosts[] = [
-                'title' => $blogPost->title(),
-                'content' => $blogPost->content(),
+            $normalizedUsers[] = [
+                'title' => $user->title(),
+                'content' => $user->content(),
             ];
         }
 
-        Assert::allOneOf($normalizedBlogPosts, BlogPostFixtures::NORMALIZED_POSTS);
+        Assert::allOneOf($normalizedUsers, UserFixtures::NORMALIZED_USERS);
     }
 }

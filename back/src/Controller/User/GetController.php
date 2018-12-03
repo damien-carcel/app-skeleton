@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\BlogPost;
+namespace App\Controller\User;
 
-use App\Domain\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,17 +22,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts/{uuid}", name="rest_blog_posts_get", methods={"GET"})
+ * @Route("/users/{uuid}", name="rest_users_get", methods={"GET"})
  */
 final class GetController
 {
-    /** @var BlogPostRepositoryInterface */
+    /** @var UserRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepositoryInterface $repository
+     * @param UserRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -46,21 +46,21 @@ final class GetController
      */
     public function __invoke(string $uuid): Response
     {
-        $post = $this->repository->getOneById($uuid);
+        $user = $this->repository->find($uuid);
 
-        if (null === $post) {
+        if (null === $user) {
             throw new NotFoundHttpException(sprintf(
-                'There is no blog post with identifier "%s"',
+                'There is no user with identifier "%s"',
                 $uuid
             ));
         }
 
-        $normalizedPost = [
-            'id' => $post->id(),
-            'title' => $post->title(),
-            'content' => $post->content(),
+        $normalizedUser = [
+            'id' => $user->id(),
+            'title' => $user->title(),
+            'content' => $user->content(),
         ];
 
-        return new JsonResponse($normalizedPost);
+        return new JsonResponse($normalizedUser);
     }
 }

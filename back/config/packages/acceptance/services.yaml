@@ -2,7 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: public
 
-    App\Repository\InMemory\BlogPostRepository:
-    App\Domain\Repository\BlogPostRepositoryInterface: '@App\Repository\InMemory\BlogPostRepository'
+    App\Repository\InMemory\UserRepository:
+    App\Domain\Repository\UserRepositoryInterface: '@App\Repository\InMemory\UserRepository'

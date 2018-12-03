@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixtures;
 
-use App\Domain\Model\BlogPost;
+use App\Domain\Model\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
@@ -21,15 +21,15 @@ use Ramsey\Uuid\Uuid;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class BlogPostFixtures extends Fixture
+class UserFixtures extends Fixture
 {
-    public const NORMALIZED_POSTS = [
+    public const NORMALIZED_USERS = [
         [
-            'title' => 'A first post',
+            'title' => 'A first user',
             'content' => 'A very uninteresting content.',
         ],
         [
-            'title' => 'Another post',
+            'title' => 'Another user',
             'content' => 'Bla bla bla bla bla bla.',
         ],
         [
@@ -43,10 +43,10 @@ class BlogPostFixtures extends Fixture
      */
     public function load(ObjectManager $objectManager): void
     {
-        foreach (static::NORMALIZED_POSTS as $normalizedPost) {
-            $post = new BlogPost(Uuid::uuid4(), $normalizedPost['title'], $normalizedPost['content']);
+        foreach (static::NORMALIZED_USERS as $normalizedUser) {
+            $user = new User(Uuid::uuid4(), $normalizedUser['title'], $normalizedUser['content']);
 
-            $objectManager->persist($post);
+            $objectManager->persist($user);
         }
 
         $objectManager->flush();

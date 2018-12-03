@@ -1,0 +1,12 @@
+App\Domain\Model\User:
+    type: entity
+    table: user
+    id:
+        id:
+            type: uuid
+    fields:
+        title:
+            type: string
+            length: 255
+        content:
+            type: text
