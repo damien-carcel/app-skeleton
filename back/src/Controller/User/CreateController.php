@@ -51,7 +51,15 @@ final class CreateController
         $content = $request->getContent();
         $userData = json_decode($content, true);
 
-        $user = new User(Uuid::uuid4(), $userData['title'], $userData['content']);
+        $user = new User(
+            Uuid::uuid4(),
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName'],
+            'password',
+            'salt',
+            []
+        );
 
         $this->repository->save($user);
 

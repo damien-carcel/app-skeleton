@@ -26,17 +26,17 @@ use Webmozart\Assert\Assert;
 class FeatureContext implements Context
 {
     /** @var UserRepositoryInterface */
-    private $doctrineUserRepository;
+    private $userRepository;
 
     /** @var array */
     private $result;
 
     /**
-     * @param UserRepositoryInterface $doctrineUserRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $doctrineUserRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->doctrineUserRepository = $doctrineUserRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -46,7 +46,7 @@ class FeatureContext implements Context
      */
     public function callGetMethodFromRepository(string $methodName): void
     {
-        $this->result = $this->doctrineUserRepository->$methodName();
+        $this->result = $this->userRepository->$methodName();
     }
 
     /**
@@ -62,8 +62,12 @@ class FeatureContext implements Context
             Assert::isInstanceOf($user->id(), Uuid::class);
 
             $normalizedUsers[] = [
-                'title' => $user->title(),
-                'content' => $user->content(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'username' => $user->getUsername(),
+                'password' => $user->getPassword(),
+                'salt' => $user->getSalt(),
+                'roles' => $user->getRoles(),
             ];
         }
 

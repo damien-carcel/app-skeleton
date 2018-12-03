@@ -14,11 +14,11 @@ export default function User(props: UserProps) {
 
   return (
     <div className='user'>
-      <div className='title'>
-        <h1>{user.title}</h1>
+      <div className='name'>
+        <h1>{user.firstName} {user.lastName}</h1>
       </div>
       <div className='content'>
-        <p>{user.content}</p>
+        <p>User username: {user.username}</p>
       </div>
       <Edit userId={user.id} handleSubmit={props.handleSubmit}/>
       <Delete userId={user.id} handleDelete={props.handleDelete}/>

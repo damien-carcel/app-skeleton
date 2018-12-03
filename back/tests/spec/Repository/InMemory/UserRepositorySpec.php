@@ -33,8 +33,8 @@ class UserRepositorySpec extends ObjectBehavior
     {
         $this->userIDs = [Uuid::uuid4(), Uuid::uuid4()];
         $this->users = [
-            new User($this->userIDs[0], 'foo', 'bar'),
-            new User($this->userIDs[1], 'bar', 'baz'),
+            new User($this->userIDs[0], 'foobar', 'foo', 'bar', 'pass', 'salt', []),
+            new User($this->userIDs[1], 'barbaz', 'bar', 'baz', 'pass', 'salt', []),
         ];
 
         $this->beConstructedWith($this->users);
@@ -53,7 +53,7 @@ class UserRepositorySpec extends ObjectBehavior
     function it_saves_a_user()
     {
         $userId = Uuid::uuid4();
-        $user = new User($userId, 'foobar', 'barbaz');
+        $user = new User($userId, 'foobarbaz', 'foobar', 'barbaz', 'pass', 'salt', []);
 
         $this->save($user);
 

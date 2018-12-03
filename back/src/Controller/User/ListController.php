@@ -47,8 +47,9 @@ final class ListController
         $normalizedUsers = array_map(function (User $user) {
             return [
                 'id' => $user->id(),
-                'title' => $user->title(),
-                'content' => $user->content(),
+                'username' => $user->getUsername(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
             ];
         }, $users);
 

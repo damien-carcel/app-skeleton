@@ -56,7 +56,7 @@ final class UpdateController
                 $uuid
             ));
         }
-        $user->update($userData);
+        $user->changeName($userData);
 
         $this->repository->save($user);
 

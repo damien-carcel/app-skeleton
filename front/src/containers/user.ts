@@ -1,7 +1,8 @@
 export interface UserData {
   id: string;
-  title: string;
-  content: string;
+  username: string;
+  firstName: string;
+  lastName: string;
 }
 
 export function listUsers() {

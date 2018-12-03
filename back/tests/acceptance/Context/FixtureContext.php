@@ -43,7 +43,15 @@ class FixtureContext implements Context
         $normalizedUsers = UserFixtures::NORMALIZED_USERS;
 
         foreach ($normalizedUsers as $normalizedUser) {
-            $user = new User(Uuid::uuid4(), $normalizedUser['title'], $normalizedUser['content']);
+            $user = new User(
+                Uuid::uuid4(),
+                $normalizedUser['username'],
+                $normalizedUser['firstName'],
+                $normalizedUser['lastName'],
+                $normalizedUser['password'],
+                $normalizedUser['salt'],
+                $normalizedUser['roles']
+            );
 
             $this->userRepository->save($user);
         }

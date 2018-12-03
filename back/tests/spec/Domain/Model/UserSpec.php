@@ -29,7 +29,7 @@ class UserSpec extends ObjectBehavior
     {
         $this->uuid = Uuid::uuid4();
 
-        $this->beConstructedWith($this->uuid, 'A title', 'A content.');
+        $this->beConstructedWith($this->uuid, 'ironman', 'Tony', 'Stark', 'password', 'salt', []);
     }
 
     function it_has_a_uuid()
@@ -38,24 +38,33 @@ class UserSpec extends ObjectBehavior
         $this->id()->shouldBe($this->uuid);
     }
 
-    function it_has_a_title()
+    function it_returns_the_user_username()
     {
-        $this->title()->shouldBe('A title');
+        $this->getUsername()->shouldReturn('ironman');
     }
 
-    function it_as_a_content()
+    function it_returns_the_user_fisrt_name()
     {
-        $this->content()->shouldBe('A content.');
+        $this->getFirstName()->shouldReturn('Tony');
     }
 
-    function it_updates_itself()
+    function it_returns_the_user_last_name()
     {
-        $this->update([
-            'title' => 'Foo',
-            'content' => 'Bar',
-        ]);
+        $this->getLastName()->shouldReturn('Stark');
+    }
 
-        $this->title()->shouldBe('Foo');
-        $this->content()->shouldBe('Bar');
+    function it_returns_the_user_password()
+    {
+        $this->getPassword()->shouldReturn('password');
+    }
+
+    function it_returns_the_user_salt_key()
+    {
+        $this->getSalt()->shouldReturn('salt');
+    }
+
+    function it_returns_the_user_roles()
+    {
+        $this->getRoles()->shouldReturn([]);
     }
 }

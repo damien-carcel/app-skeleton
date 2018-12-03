@@ -8,10 +8,11 @@ interface UserFormProps {
 }
 
 interface UserFormState {
-  content: string;
   error: {[key: string]: any};
+  firstName: string;
   isLoaded: boolean;
-  title: string;
+  lastName: string;
+  username: string;
   [key: string]: any;
 }
 
@@ -22,8 +23,10 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
     this.state = {
       content: '',
       error: {},
+      firstName: '',
       isLoaded: false,
-      title: '',
+      lastName: '',
+      username: '',
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -37,8 +40,9 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
       getUser(userId).then(
         (result) => {
           this.setState({
-            content: result.content,
-            title: result.title,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            username: result.username,
           });
         },
         (error) => {
@@ -70,16 +74,17 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
 
     const userId: string = this.props.userId;
     const data: UserData = {
-      content: this.state.content,
+      firstName: this.state.firstName,
       id: this.props.userId,
-      title: this.state.title,
+      lastName: this.state.lastName,
+      username: this.state.username,
     };
 
     this.props.handleSubmit(userId, data);
   }
 
   public render(): ReactNode {
-    const {error, isLoaded, title, content} = this.state;
+    const {error, isLoaded, firstName, lastName, username} = this.state;
     if (!isEmpty(error)) {
       return <div>Error: {error.message}</div>;
     }
@@ -91,20 +96,29 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          Title:
           <input
-            name='title'
+            name='firstName'
             type='text'
-            value={title}
+            value={firstName}
+            onChange={this.handleInputChange}
+          />
+        </label>
+        &nbsp;
+        <label>
+          <input
+            name='lastName'
+            type='text'
+            value={lastName}
             onChange={this.handleInputChange}
           />
         </label>
         <br/>
         <label>
-          Content:
-          <textarea
-            name='content'
-            value={content}
+          username:
+          <input
+            name='username'
+            type='text'
+            value={username}
             onChange={this.handleInputChange}
           />
         </label>

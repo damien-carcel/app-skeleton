@@ -57,8 +57,9 @@ final class GetController
 
         $normalizedUser = [
             'id' => $user->id(),
-            'title' => $user->title(),
-            'content' => $user->content(),
+            'username' => $user->getUsername(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
         ];
 
         return new JsonResponse($normalizedUser);

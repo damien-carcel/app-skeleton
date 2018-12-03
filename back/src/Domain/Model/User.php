@@ -14,31 +14,59 @@ declare(strict_types=1);
 namespace App\Domain\Model;
 
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class User
+final class User implements UserInterface
 {
     /** @var UuidInterface */
     private $id;
 
     /** @var string */
-    private $title;
+    private $username;
 
     /** @var string */
-    private $content;
+    private $firstName;
+
+    /** @var string */
+    private $lastName;
+
+    /** @var string */
+    private $password;
+
+    /** @var string|null */
+    private $salt;
+
+    /** @var array */
+    private $roles;
 
     /**
      * @param UuidInterface $id
-     * @param string        $title
-     * @param string        $content
+     * @param string        $username
+     * @param string        $firstName
+     * @param string        $lastName
+     * @param string        $password
+     * @param string|null   $salt
+     * @param array         $roles
      */
-    public function __construct(UuidInterface $id, string $title, string $content)
-    {
+    public function __construct(
+        UuidInterface $id,
+        string $username,
+        string $firstName,
+        string $lastName,
+        string $password,
+        ?string $salt,
+        array $roles
+    ) {
         $this->id = $id;
-        $this->title = $title;
-        $this->content = $content;
+        $this->username = $username;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->password = $password;
+        $this->salt = $salt;
+        $this->roles = $roles;
     }
 
     /**
@@ -50,32 +78,72 @@ final class User
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function title(): string
+    public function getUsername(): string
     {
-        return $this->title;
+        return $this->username;
     }
 
     /**
      * @return string
      */
-    public function content(): string
+    public function getFirstName(): string
     {
-        return $this->content;
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt(): ?string
+    {
+        return $this->salt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 
     /**
      * @param array $data
      */
-    public function update(array $data): void
+    public function changeName(array $data): void
     {
-        if (array_key_exists('title', $data)) {
-            $this->title = $data['title'];
+        if (array_key_exists('firstName', $data)) {
+            $this->firstName = $data['firstName'];
         }
 
-        if (array_key_exists('content', $data)) {
-            $this->content = $data['content'];
+        if (array_key_exists('lastName', $data)) {
+            $this->lastName = $data['lastName'];
         }
     }
 }

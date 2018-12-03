@@ -25,16 +25,28 @@ class UserFixtures extends Fixture
 {
     public const NORMALIZED_USERS = [
         [
-            'title' => 'A first user',
-            'content' => 'A very uninteresting content.',
+            'firstName' => 'Tony',
+            'lastName' => 'Stark',
+            'username' => 'ironman',
+            'password' => 'password',
+            'salt' => 'salt',
+            'roles' => [],
         ],
         [
-            'title' => 'Another user',
-            'content' => 'Bla bla bla bla bla bla.',
+            'firstName' => 'Steve',
+            'lastName' => 'Rogers',
+            'username' => 'captain',
+            'password' => 'password',
+            'salt' => 'salt',
+            'roles' => [],
         ],
         [
-            'title' => 'And yet another',
-            'content' => 'Still nothing interesting.',
+            'firstName' => 'Bruce',
+            'lastName' => 'Banner',
+            'username' => 'hulk',
+            'password' => 'password',
+            'salt' => 'salt',
+            'roles' => [],
         ],
     ];
 
@@ -44,7 +56,15 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $objectManager): void
     {
         foreach (static::NORMALIZED_USERS as $normalizedUser) {
-            $user = new User(Uuid::uuid4(), $normalizedUser['title'], $normalizedUser['content']);
+            $user = new User(
+                Uuid::uuid4(),
+                $normalizedUser['username'],
+                $normalizedUser['firstName'],
+                $normalizedUser['lastName'],
+                $normalizedUser['password'],
+                $normalizedUser['salt'],
+                $normalizedUser['roles']
+            );
 
             $objectManager->persist($user);
         }

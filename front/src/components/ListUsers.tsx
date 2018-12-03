@@ -60,8 +60,9 @@ export default class ListUsers extends React.Component<{}, ListUsersState> {
           isLoaded: true,
           users: prevState.users.map((user: UserData) => {
             if (user.id === userId) {
-              user.title = data.title;
-              user.content = data.content;
+              user.firstName = data.firstName;
+              user.lastName = data.lastName;
+              user.username = data.username;
             }
 
             return user;

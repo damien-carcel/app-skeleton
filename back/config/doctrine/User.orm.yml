@@ -5,8 +5,16 @@ App\Domain\Model\User:
         id:
             type: uuid
     fields:
-        title:
+        username:
             type: string
             length: 255
-        content:
+        firstName:
             type: text
+        lastName:
+            type: text
+        password:
+            type: text
+        salt:
+            type: text
+        roles:
+            type: json_array
