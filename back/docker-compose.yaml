@@ -28,6 +28,3 @@ services:
         image: 'mysql:5.7'
         environment:
             MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_USER: 'app-skeleton'
-            MYSQL_PASSWORD: 'app-skeleton'
-            MYSQL_DATABASE: 'app-skeleton'
