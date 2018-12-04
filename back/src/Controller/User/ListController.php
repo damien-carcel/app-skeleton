@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\BlogPost;
+namespace App\Controller\User;
 
-use App\Entity\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Model\User;
+use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,17 +22,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts", name="rest_blog_posts_list", methods={"GET"})
+ * @Route("/users", name="rest_users_list", methods={"GET"})
  */
 final class ListController
 {
-    /** @var BlogPostRepositoryInterface */
+    /** @var UserRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepositoryInterface $repository
+     * @param UserRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -42,16 +42,17 @@ final class ListController
      */
     public function __invoke(): Response
     {
-        $posts = $this->repository->getAllBlogPosts();
+        $users = $this->repository->findAll();
 
-        $normalizedPosts = array_map(function (BlogPost $post) {
+        $normalizedUsers = array_map(function (User $user) {
             return [
-                'id' => $post->id(),
-                'title' => $post->title(),
-                'content' => $post->content(),
+                'id' => $user->id(),
+                'username' => $user->getUsername(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
             ];
-        }, $posts);
+        }, $users);
 
-        return new JsonResponse($normalizedPosts);
+        return new JsonResponse($normalizedUsers);
     }
 }

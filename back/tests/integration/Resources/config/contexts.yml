@@ -1,7 +1,7 @@
 services:
     App\Tests\Integration\Context\FeatureContext:
         arguments:
-            - '@__symfony__.App\Repository\BlogPostRepositoryInterface'
+            - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
         tags:
             - { name: 'fob.context_service' }
 

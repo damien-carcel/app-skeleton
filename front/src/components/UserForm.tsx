@@ -1,29 +1,32 @@
 import React, {ReactNode} from 'react';
-import {BlogPostData, getPost} from '../containers/posts';
+import {getUser, UserData} from '../containers/user';
 import {isEmpty} from '../tools/isEmpty';
 
-interface PostFormProps {
-  handleSubmit: (postId: string, data: BlogPostData) => void;
-  postId: string;
+interface UserFormProps {
+  handleSubmit: (userId: string, data: UserData) => void;
+  userId: string;
 }
 
-interface PostFormState {
-  content: string;
+interface UserFormState {
   error: {[key: string]: any};
+  firstName: string;
   isLoaded: boolean;
-  title: string;
+  lastName: string;
+  username: string;
   [key: string]: any;
 }
 
-export default class PostForm extends React.Component<PostFormProps, PostFormState> {
-  constructor(props: PostFormProps) {
+export default class UserForm extends React.Component<UserFormProps, UserFormState> {
+  constructor(props: UserFormProps) {
     super(props);
 
     this.state = {
       content: '',
       error: {},
+      firstName: '',
       isLoaded: false,
-      title: '',
+      lastName: '',
+      username: '',
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -31,14 +34,15 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
   }
 
   public componentDidMount(): void {
-    const postId: string = this.props.postId;
+    const userId: string = this.props.userId;
 
-    if (postId) {
-      getPost(postId).then(
+    if (userId) {
+      getUser(userId).then(
         (result) => {
           this.setState({
-            content: result.content,
-            title: result.title,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            username: result.username,
           });
         },
         (error) => {
@@ -68,18 +72,19 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
   public handleSubmit(event: any): void {
     event.preventDefault();
 
-    const postId: string = this.props.postId;
-    const data: BlogPostData = {
-      content: this.state.content,
-      id: this.props.postId,
-      title: this.state.title,
+    const userId: string = this.props.userId;
+    const data: UserData = {
+      firstName: this.state.firstName,
+      id: this.props.userId,
+      lastName: this.state.lastName,
+      username: this.state.username,
     };
 
-    this.props.handleSubmit(postId, data);
+    this.props.handleSubmit(userId, data);
   }
 
   public render(): ReactNode {
-    const {error, isLoaded, title, content} = this.state;
+    const {error, isLoaded, firstName, lastName, username} = this.state;
     if (!isEmpty(error)) {
       return <div>Error: {error.message}</div>;
     }
@@ -91,24 +96,33 @@ export default class PostForm extends React.Component<PostFormProps, PostFormSta
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          Title:
           <input
-            name='title'
+            name='firstName'
             type='text'
-            value={title}
+            value={firstName}
+            onChange={this.handleInputChange}
+          />
+        </label>
+        &nbsp;
+        <label>
+          <input
+            name='lastName'
+            type='text'
+            value={lastName}
             onChange={this.handleInputChange}
           />
         </label>
         <br/>
         <label>
-          Content:
-          <textarea
-            name='content'
-            value={content}
+          username:
+          <input
+            name='username'
+            type='text'
+            value={username}
             onChange={this.handleInputChange}
           />
         </label>
-        <input className='btn-action btn-create-post' type='submit' value='Save'/>
+        <input className='btn-action btn-create-user' type='submit' value='Save'/>
       </form>
     );
   }

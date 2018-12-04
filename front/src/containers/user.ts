@@ -1,11 +1,12 @@
-export interface BlogPostData {
+export interface UserData {
   id: string;
-  title: string;
-  content: string;
+  username: string;
+  firstName: string;
+  lastName: string;
 }
 
-export function listPosts() {
-  const url = getApiUrl('/posts');
+export function listUsers() {
+  const url = getApiUrl('/users');
 
   return fetch(url, {
     headers: createHeaders(),
@@ -13,8 +14,8 @@ export function listPosts() {
   }).then((response) => response.json());
 }
 
-export function getPost(postId: string) {
-  const url = getApiUrl('/posts/{id}', postId);
+export function getUser(userId: string) {
+  const url = getApiUrl('/users/{id}', userId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -22,8 +23,8 @@ export function getPost(postId: string) {
   }).then((response) => response.json());
 }
 
-export function createPost(data: BlogPostData) {
-  const url = getApiUrl('/posts');
+export function createUser(data: UserData) {
+  const url = getApiUrl('/users');
 
   return fetch(url, {
     body: JSON.stringify(data),
@@ -32,8 +33,8 @@ export function createPost(data: BlogPostData) {
   }).then((response) => response.json());
 }
 
-export function updatePost(postId: string, data: BlogPostData) {
-  const url = getApiUrl('/posts/{id}', postId);
+export function updateUser(userId: string, data: UserData) {
+  const url = getApiUrl('/users/{id}', userId);
 
   return fetch(url, {
     body: JSON.stringify(data),
@@ -42,8 +43,8 @@ export function updatePost(postId: string, data: BlogPostData) {
   }).then((response) => response.json());
 }
 
-export function deletePost(postId: string) {
-  const url = getApiUrl('/posts/{id}', postId);
+export function deleteUser(userId: string) {
+  const url = getApiUrl('/users/{id}', userId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -51,11 +52,11 @@ export function deletePost(postId: string) {
   }).then((response) => response.json());
 }
 
-function getApiUrl(route: string, postId?: string) {
+function getApiUrl(route: string, userId?: string) {
   const baseUrl = process.env.API_BASE_URL;
 
-  if (postId) {
-    return baseUrl + route.replace('{id}', postId);
+  if (userId) {
+    return baseUrl + route.replace('{id}', userId);
   }
 
   return baseUrl + route;

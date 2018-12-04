@@ -1,10 +1,10 @@
 import React, {ReactNode} from 'react';
 import Modal from 'react-modal';
-import {BlogPostData} from '../containers/posts';
-import PostForm from './PostForm';
+import {UserData} from '../containers/user';
+import UserForm from './UserForm';
 
 interface CreateProps {
-  handleSubmit: (postId: string, data: BlogPostData) => void;
+  handleSubmit: (userId: string, data: UserData) => void;
 }
 
 interface CreateState {
@@ -32,8 +32,8 @@ export default class Create extends React.Component<CreateProps, CreateState> {
     this.setState({showModal: true});
   }
 
-  public handleSubmit(postId: string, data: BlogPostData): void {
-    this.props.handleSubmit(postId, data);
+  public handleSubmit(userId: string, data: UserData): void {
+    this.props.handleSubmit(userId, data);
 
     this.setState({showModal: false});
   }
@@ -43,10 +43,10 @@ export default class Create extends React.Component<CreateProps, CreateState> {
 
     return (
       <div>
-        <button className='btn-action btn-create-post' onClick={this.handleOpenModal}>Create a new post</button>
-        <Modal isOpen={showModal} contentLabel='Create a new post'>
-          <PostForm postId={''} handleSubmit={this.handleSubmit}/>
-          <button className='btn-action btn-create-post' onClick={this.handleCloseModal}>Cancel</button>
+        <button className='btn-action btn-create-user' onClick={this.handleOpenModal}>Create a new user</button>
+        <Modal isOpen={showModal} contentLabel='Create a new user'>
+          <UserForm userId={''} handleSubmit={this.handleSubmit}/>
+          <button className='btn-action btn-create-user' onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );

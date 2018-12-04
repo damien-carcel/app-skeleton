@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\EndToEnd\Context;
 
-use App\Tests\Fixtures\BlogPostFixtures;
+use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Symfony\Component\Routing\RouterInterface;
@@ -35,30 +35,30 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @When a request asks for the list of blog posts
+     * @When a request asks for the list of users
      */
-    public function listAllTheBlogPosts(): void
+    public function listAllTheUsers(): void
     {
-        $this->visitPath($this->router->generate('rest_blog_posts_list'));
+        $this->visitPath($this->router->generate('rest_users_list'));
     }
 
     /**
      * @return bool
      *
-     * @Then all the blog posts should be retrieved
+     * @Then all the users should be retrieved
      */
-    public function allBlogPostsShouldBeRetrieved(): bool
+    public function allUsersShouldBeRetrieved(): bool
     {
         $responseContent = $this->getSession()->getPage()->getContent();
         $decodedContent = json_decode($responseContent, true);
 
-        $filteredContent = array_filter($decodedContent, function ($post) {
-            unset($post['id']);
+        $filteredContent = array_filter($decodedContent, function ($user) {
+            unset($user['id']);
 
-            return $post;
+            return $user;
         });
 
-        if (BlogPostFixtures::NORMALIZED_POSTS !== $filteredContent) {
+        if (UserFixtures::NORMALIZED_USERS !== $filteredContent) {
             return false;
         }
 

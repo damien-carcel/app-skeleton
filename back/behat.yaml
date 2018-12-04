@@ -12,14 +12,12 @@ acceptance:
                 path: 'src/Kernel.php'
                 debug: true
     suites:
-        default:
+        user:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
                 - 'App\Tests\Acceptance\Context\FeatureContext'
                 - 'App\Tests\Acceptance\Context\FixtureContext'
-            filters:
-                tags: '@acceptance'
 
 integration:
     extensions:
@@ -35,14 +33,12 @@ integration:
                 path: 'src/Kernel.php'
                 debug: true
     suites:
-        default:
+        user:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts_services:
                 - 'App\Tests\Integration\Context\FeatureContext'
                 - 'App\Tests\Integration\Context\FixtureContext'
-            filters:
-                tags: '@integration'
 
 end-to-end:
     extensions:
@@ -63,7 +59,7 @@ end-to-end:
                 path: 'src/Kernel.php'
                 debug: true
     suites:
-        default:
+        user:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:

@@ -1,11 +1,11 @@
 import React, {ReactNode} from 'react';
 import Modal from 'react-modal';
-import {BlogPostData} from '../containers/posts';
-import PostForm from './PostForm';
+import {UserData} from '../containers/user';
+import UserForm from './UserForm';
 
 interface EditProps {
-  handleSubmit: (postId: string, data: BlogPostData) => void;
-  postId: string;
+  handleSubmit: (userId: string, data: UserData) => void;
+  userId: string;
 }
 
 interface EditState {
@@ -33,22 +33,22 @@ export default class Edit extends React.Component<EditProps, EditState> {
     this.setState({showModal: true});
   }
 
-  public handleSubmit(postId: string, data: BlogPostData): void {
-    this.props.handleSubmit(postId, data);
+  public handleSubmit(userId: string, data: UserData): void {
+    this.props.handleSubmit(userId, data);
 
     this.setState({showModal: false});
   }
 
   public render(): ReactNode {
-    const postId: string = this.props.postId;
+    const userId: string = this.props.userId;
     const showModal: boolean = this.state.showModal;
 
     return (
       <div>
-        <button className='btn-action btn-create-post' onClick={this.handleOpenModal}>Edit</button>
-        <Modal isOpen={showModal} contentLabel={'Edit post ' + postId}>
-          <PostForm postId={postId} handleSubmit={this.handleSubmit}/>
-          <button className='btn-action btn-create-post' onClick={this.handleCloseModal}>Cancel</button>
+        <button className='btn-action btn-create-user' onClick={this.handleOpenModal}>Edit</button>
+        <Modal isOpen={showModal} contentLabel={'Edit user ' + userId}>
+          <UserForm userId={userId} handleSubmit={this.handleSubmit}/>
+          <button className='btn-action btn-create-user' onClick={this.handleCloseModal}>Cancel</button>
         </Modal>
       </div>
     );

@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\BlogPost;
+namespace App\Controller\User;
 
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,17 +23,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts/{uuid}", name="rest_blog_posts_update", methods={"PATCH"})
+ * @Route("/users/{uuid}", name="rest_users_update", methods={"PATCH"})
  */
 final class UpdateController
 {
-    /** @var BlogPostRepositoryInterface */
+    /** @var UserRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepositoryInterface $repository
+     * @param UserRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -47,18 +47,18 @@ final class UpdateController
     public function __invoke(string $uuid, Request $request): Response
     {
         $content = $request->getContent();
-        $postData = json_decode($content, true);
+        $userData = json_decode($content, true);
 
-        $post = $this->repository->getOneById($uuid);
-        if (null === $post) {
+        $user = $this->repository->find($uuid);
+        if (null === $user) {
             throw new NotFoundHttpException(sprintf(
-                'There is no blog post with identifier "%s"',
+                'There is no user with identifier "%s"',
                 $uuid
             ));
         }
-        $post->update($postData);
+        $user->changeName($userData);
 
-        $this->repository->save($post);
+        $this->repository->save($user);
 
         return new JsonResponse();
     }

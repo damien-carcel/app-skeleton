@@ -1,8 +1,8 @@
 import React, {ReactNode} from 'react';
 
 interface DeleteProps {
-  handleDelete: (postId: string) => void;
-  postId: string;
+  handleDelete: (userId: string) => void;
+  userId: string;
 }
 
 export default class Delete extends React.Component<DeleteProps, {}> {
@@ -10,16 +10,16 @@ export default class Delete extends React.Component<DeleteProps, {}> {
     super(props);
   }
 
-  public handleDelete(postId: string): void {
-    this.props.handleDelete(postId);
+  public handleDelete(userId: string): void {
+    this.props.handleDelete(userId);
   }
 
   public render(): ReactNode {
     return (
       <div>
         <button
-          className='btn-action btn-create-post'
-          onClick={this.handleDelete.bind(this, this.props.postId)}
+          className='btn-action btn-create-user'
+          onClick={this.handleDelete.bind(this, this.props.userId)}
         >
           Delete
         </button>

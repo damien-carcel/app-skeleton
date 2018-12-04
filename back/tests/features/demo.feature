@@ -8,6 +8,6 @@ Feature:
     Then a response should be received
 
   @end-to-end
-  Scenario: It gets all existing blog posts
-    When a request asks for the list of blog posts
-    Then all the blog posts should be retrieved
+  Scenario: It gets all existing users
+    When a request asks for the list of users
+    Then all the users should be retrieved

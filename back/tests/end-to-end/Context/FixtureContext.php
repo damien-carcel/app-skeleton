@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\EndToEnd\Context;
 
-use App\Tests\Fixtures\BlogPostFixtures;
+use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -42,6 +42,6 @@ class FixtureContext implements Context
     {
         $purger = new ORMPurger($this->entityManager);
         $executor = new ORMExecutor($this->entityManager, $purger);
-        $executor->execute([new BlogPostFixtures()]);
+        $executor->execute([new UserFixtures()]);
     }
 }

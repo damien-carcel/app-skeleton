@@ -1,19 +1,31 @@
 {
-  "posts": [
+  "users": [
     {
-      "title": "A first post",
-      "content": "A very uninteresting content.",
-      "id": "XIa_H8p"
+      "id": "XIa_H8p",
+      "firstName": "Tony",
+      "lastName": "Stark",
+      "username": "ironman",
+      "password": "password",
+      "salt": "salt",
+      "roles": []
     },
     {
-      "title": "Another post",
-      "content": "Bla bla bla bla bla bla.",
-      "id": "_D4pvBw"
+      "id": "_D4pvBw",
+      "firstName": "Steve",
+      "lastName": "Rogers",
+      "username": "captain",
+      "password": "password",
+      "salt": "salt",
+      "roles": []
     },
     {
-      "title": "And yet another",
-      "content": "Still nothing interesting.",
-      "id": "FeZwhwE"
+      "id": "FeZwhwE",
+      "firstName": "Bruce",
+      "lastName": "Banner",
+      "username": "hulk",
+      "password": "password",
+      "salt": "salt",
+      "roles": []
     }
   ]
 }

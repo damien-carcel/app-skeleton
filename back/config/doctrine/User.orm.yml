@@ -1,0 +1,20 @@
+App\Domain\Model\User:
+    type: entity
+    table: user
+    id:
+        id:
+            type: uuid
+    fields:
+        username:
+            type: string
+            length: 255
+        firstName:
+            type: text
+        lastName:
+            type: text
+        password:
+            type: text
+        salt:
+            type: text
+        roles:
+            type: json_array

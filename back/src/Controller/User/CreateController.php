@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\BlogPost;
+namespace App\Controller\User;
 
-use App\Entity\BlogPost;
-use App\Repository\BlogPostRepositoryInterface;
+use App\Domain\Model\User;
+use App\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,17 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/posts", name="rest_blog_posts_create", methods={"POST"})
+ * @Route("/users", name="rest_users_create", methods={"POST"})
  */
 final class CreateController
 {
-    /** @var BlogPostRepositoryInterface */
+    /** @var UserRepositoryInterface */
     private $repository;
 
     /**
-     * @param BlogPostRepositoryInterface $repository
+     * @param UserRepositoryInterface $repository
      */
-    public function __construct(BlogPostRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -49,11 +49,19 @@ final class CreateController
     public function __invoke(Request $request): Response
     {
         $content = $request->getContent();
-        $postData = json_decode($content, true);
+        $userData = json_decode($content, true);
 
-        $post = new BlogPost(Uuid::uuid4(), $postData['title'], $postData['content']);
+        $user = new User(
+            Uuid::uuid4(),
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName'],
+            'password',
+            'salt',
+            []
+        );
 
-        $this->repository->save($post);
+        $this->repository->save($user);
 
         return new JsonResponse();
     }
