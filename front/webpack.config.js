@@ -75,7 +75,10 @@ module.exports = (env, argv) => ({
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['public']),
+    new CleanWebpackPlugin(
+        ['public'],
+        {exclude: ['.gitkeep']},
+    ),
     new CopyWebpackPlugin([
       {from: './assets/files/humans.txt'},
       {from: './assets/files/robots.txt'}

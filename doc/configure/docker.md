@@ -9,8 +9,8 @@ In the override file of the back-end application, uncomment the lines related to
 
 Then start the containers. You must first start those of the front-end application, so the Docker network is initialized, and continue with the back-end application:
 ```bash
-$ cd /path/to/the/project/front && docker-compose up -d
-$ cd /path/to/the/project/back && docker-compose up -d
+$ cd /path/to/the/project/front && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d nginx-front
+$ cd /path/to/the/project/back && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d
 ```
 
 ## Configure the applications
@@ -27,15 +27,15 @@ In the front-end application, keep the line dedicated to [full Docker installati
 You can now install the dependencies and build the front-end application:
 ```bash
 $ cd /path/to/the/project/front
-$ docker-compose run --rm node yarn install
-$ docker-compose run --rm node yarn run build:prod
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn install
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn run build:prod
 ```
 
 Then, install the dependencies of the back-end application and setup the database:
 ```bash
 $ cd /path/to/the/project/back
-$ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
-$ docker-compose exec fpm bin/console doctrine:schema:update --force
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
 You can now access the application on [localhost:8080](http://localhost:8080). You can also directly access the API on [localhost:8000](http://localhost:8000)

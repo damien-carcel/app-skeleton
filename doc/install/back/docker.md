@@ -13,20 +13,20 @@ Copy the file `docker-compose.override.yaml.dist` as `docker-compose.override.ya
 You may configure the nginx and MySQL output ports as you see fit.
 Then start the containers by running:
 ```bash
-$ docker-compose up -d
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d
 ```
 
 ## Install
 
 First, install the dependencies with composer:
 ```bash
-$ docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose exec fpm composer update --prefer-dist --optimize-autoloader
 ```
 
 Copy the `.env.dist` file as `.env` and configure the MySQL access by updating the `DATABASE_URL` environment variable.
 Then update the schema of the MySQL database:
 ```bash
-$ docker-compose exec fpm bin/console doctrine:schema:update --force
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose exec fpm bin/console doctrine:schema:update --force
 ```
 
 You can now access the application on [localhost:8000](http://localhost:8000) (`8000` being the default output of the `nginx-back` container).
