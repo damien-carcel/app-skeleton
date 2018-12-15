@@ -13,8 +13,6 @@ services:
 
     nginx-front:
         image: 'nginx:alpine'
-        environment:
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-front'
         volumes:
             - './public:/usr/share/nginx/html:ro'
         networks:

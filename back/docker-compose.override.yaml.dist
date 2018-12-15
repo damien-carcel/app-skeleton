@@ -4,22 +4,22 @@ services:
     nginx-back:
         ports:
             - '8000:80'
-#         networks:
-#             - 'front_app-skeleton'
+#        networks:
+#            - 'front_app-skeleton'
 
-    fpm:
+    php:
         environment:
-            COMPOSER_CACHE_DIR: '/home/docker/.cache/composer'
-            COMPOSER_HOME: '/home/docker/.config/composer'
             PHP_XDEBUG_ENABLED: 0
-#         networks:
-#             - 'front_app-skeleton'
+        ports:
+            - '8000:8000'
+#        networks:
+#            - 'front_app-skeleton'
 
     mysql:
         ports:
             - '33006:3306'
-#         networks:
-#             - 'front_app-skeleton'
+#        networks:
+#            - 'front_app-skeleton'
 
 # Use the networks only when front run on Docker too
 # networks:
