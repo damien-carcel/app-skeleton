@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class User implements UserInterface
+class User implements UserInterface
 {
     /** @var UuidInterface */
     private $id;
