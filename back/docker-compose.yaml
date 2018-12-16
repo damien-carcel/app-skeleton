@@ -32,7 +32,7 @@ services:
             COMPOSER_HOME: '/home/composer/.config/composer'
             PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-        user: '$CURRENT_IDS'
+        user: '${CURRENT_IDS}'
         volumes:
             - './:/srv/app'
             - '~/.cache/composer:/home/composer/.cache/composer'

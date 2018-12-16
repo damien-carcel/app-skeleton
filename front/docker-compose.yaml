@@ -4,11 +4,13 @@ services:
     node:
         build: './docker/node/'
         image: 'skeleton/node:lts'
+        environment:
+            YARN_CACHE_FOLDER: '/home/yarn-cache'
         user: '${CURRENT_IDS}'
         volumes:
-            - './:/home/node/app'
-            - '~/.cache/yarn:/home/node/.cache/yarn'
-        working_dir: '/home/node/app'
+            - './:/srv/app'
+            - '~/.cache/yarn:/home/yarn-cache'
+        working_dir: '/srv/app'
         networks:
             - 'app-skeleton'
 
