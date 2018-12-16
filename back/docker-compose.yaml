@@ -2,29 +2,50 @@ version: '3'
 
 services:
     nginx-back:
-        image: 'nginx'
+        image: 'nginx:alpine'
         depends_on:
             - 'fpm'
-        environment:
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-back'
         volumes:
             - './:/srv/app:ro'
             - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
             - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
 
     fpm:
-        image: 'akeneo/fpm:php-7.2'
+        build: './docker/fpm/'
+        image: 'skeleton/php:7.2-fpm'
         environment:
+            APP_ENV: 'prod'
+            APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
+            DATABASE_URL: 'mysql://app-skeleton:app-skeleton@mysql:3306/app-skeleton'
+            CORS_ALLOW_ORIGIN: '^https?://localhost(:[0-9]+)?$$'
+        user: 'www-data:www-data'
+        volumes:
+            - './:/srv/app:ro'
+            - 'var-data:/srv/app/var:rw'
+        working_dir: '/srv/app'
+
+    php:
+        build: './docker/php/'
+        image: 'skeleton/php:7.2'
+        environment:
+            COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
+            COMPOSER_HOME: '/home/composer/.config/composer'
             PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-        user: 'docker'
+        user: '$CURRENT_IDS'
         volumes:
             - './:/srv/app'
-            - '~/.cache/composer:/home/docker/.cache/composer'
-            - '~/.config/composer:/home/docker/.config/composer'
+            - '~/.cache/composer:/home/composer/.cache/composer'
+            - '~/.config/composer:/home/composer/.config/composer'
         working_dir: '/srv/app'
 
     mysql:
         image: 'mysql:5.7'
         environment:
             MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_USER: 'app-skeleton'
+            MYSQL_PASSWORD: 'app-skeleton'
+            MYSQL_DATABASE: 'app-skeleton'
+
+volumes:
+    var-data:

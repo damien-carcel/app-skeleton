@@ -2,8 +2,9 @@ version: '3'
 
 services:
     node:
-        image: 'node:8'
-        user: 'node'
+        build: './docker/node/'
+        image: 'skeleton/node:lts'
+        user: '${CURRENT_IDS}'
         volumes:
             - './:/home/node/app'
             - '~/.cache/yarn:/home/node/.cache/yarn'
@@ -12,9 +13,7 @@ services:
             - 'app-skeleton'
 
     nginx-front:
-        image: 'nginx'
-        environment:
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-front'
+        image: 'nginx:alpine'
         volumes:
             - './public:/usr/share/nginx/html:ro'
         networks:
