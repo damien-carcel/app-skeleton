@@ -12,6 +12,7 @@ services:
 
     fpm:
         build: './docker/fpm/'
+        image: 'skeleton/php:7.2-fpm'
         environment:
             APP_ENV: 'prod'
             APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
@@ -25,6 +26,7 @@ services:
 
     php:
         build: './docker/php/'
+        image: 'skeleton/php:7.2'
         environment:
             COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
             COMPOSER_HOME: '/home/composer/.config/composer'
