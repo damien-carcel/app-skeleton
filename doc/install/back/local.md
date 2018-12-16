@@ -24,4 +24,4 @@ Finally, run the Symfony built-in server:
 $ bin/console server:run
 ```
 
-You can now access the application on [localhost:8000](http://localhost:8000).
+You can now access the API on [localhost:8000](http://localhost:8000).

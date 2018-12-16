@@ -12,10 +12,11 @@ RUN apk add --no-cache \
        $PHPIZE_DEPS   \
     && docker-php-ext-install -j$(nproc) \
         intl                             \
+        opcache                          \
         pdo                              \
         pdo_mysql                        \
         zip                              \
-    && pecl install apcu opcache && docker-php-ext-enable apcu opcache \
+    && pecl install apcu && docker-php-ext-enable apcu \
     && apk del .build-deps
 
 # Configure PHPH

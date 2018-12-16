@@ -12,15 +12,17 @@ RUN apk add --no-cache \
        $PHPIZE_DEPS   \
     && docker-php-ext-install -j$(nproc) \
         intl                             \
+        opcache                          \
         pdo                              \
         pdo_mysql                        \
         zip                              \
-    && pecl install apcu opcache && docker-php-ext-enable apcu opcache \
+    && pecl install apcu xdebug && docker-php-ext-enable apcu xdebug \
     && apk del .build-deps
 
 # Configure PHPH
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY files/app.ini $PHP_INI_DIR/conf.d/
+COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
 
 # Install composer
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

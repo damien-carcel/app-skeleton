@@ -17,14 +17,7 @@ $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d nginx-front
 
 ## Install
 
-First, launch the JSON server by running:
-```bash
-$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn run serve-api
-# or
-$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node npm run serve-api
-```
-
-Then install the dependencies:
+First install the dependencies:
 ```bash
 $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn install
 # or
@@ -33,7 +26,7 @@ $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node npm install
 
 Copy the content of the file `.env.dist` into a new file `.env`, and keep only the line dedicated to the JSON server.
 
-Finally, build the application for development (non minimized JS and CSS files) by running:
+Then build the application for development (non minimized JS and CSS files) by running:
 ```bash
 $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn run build:dev
 # or
@@ -45,6 +38,13 @@ or for production (minimized JS and CSS files) by running:
 $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn run build:prod
 # or
 $ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node npm run build:prod
+```
+
+Finally, launch the fake JSON server by running:
+```bash
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node yarn run serve-api
+# or
+$ CURRENT_IDS="$(id -u):$(id -g)" docker-compose run --rm node npm run serve-api
 ```
 
 You can now access the application on [localhost:8080](http://localhost:8080) (`8080` being the default output of the `nginx-front` container).

@@ -8,14 +8,7 @@ It may work with older versions, but those are the one tested through continuous
 
 ## Install
 
-First, launch the JSON server by running:
-```bash
-$ yarn run serve-api
-# or
-$ npm run serve-api
-```
-
-Then install the dependencies:
+First, install the dependencies:
 ```bash
 $ yarn install
 # or
@@ -24,7 +17,7 @@ $ npm install
 
 Copy the content of the file `.env.dist` into a new file `.env`, and keep only the line [dedicated to the JSON server](https://github.com/damien-carcel/app-skeleton/blob/master/front/.env.dist#L4).
 
-Finally, run the test server, which will open the application in your default browser at [localhost:8080](http://localhost:8080/)`:
+Then run the test server, which will open the application in your default browser at [localhost:8080](http://localhost:8080/)`:
 ```bash
 $ yarn run serve
 # or
@@ -43,4 +36,11 @@ or for development (non minimized Javascript and CSS files) by running:
 $ yarn run build:dev
 # or
 $ npm run build:dev
+```
+
+Finally, launch the fake JSON server by running:
+```bash
+$ yarn run serve-api
+# or
+$ npm run serve-api
 ```

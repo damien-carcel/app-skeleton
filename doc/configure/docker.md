@@ -1,26 +1,22 @@
 # Run the front-end and back-end applications together using Docker
 
-## Launch the containers
-
-Both applications have their own compose files. This needs a specific configuration so they can both run on the same network and talk to each other.
-
-For both applications, copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml` (you may configure the output ports it as you see fit, but default values should work just fine).
-In the override file of the back-end application, uncomment the lines related to the networks. These commented lines allow to link the back-end application network with the one of the front-end application.
-
-Then start the containers. You must first start those of the front-end application, so the Docker network is initialized, and continue with the back-end application:
-```bash
-$ cd /path/to/the/project/front && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d nginx-front
-$ cd /path/to/the/project/back && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d
-```
-
 ## Configure the applications
 
-Copy the content of the file `.env.dist` into a new file `.env` for both the front-end and the back-end applications.
+For both applications, copy `docker-compose.override.yaml.dist` as `docker-compose.override.yaml`. You may configure the output ports it as you see fit, but default values should work just fine.
+
+Then copy the content of the file `.env.dist` into a new file `.env`, again for both the front-end and the back-end applications.
 
 In the back-end application, configure the environment variable `DATABASE_URL` as follow: `DATABASE_URL=mysql://app-skeleton:app-skeleton@mysql:3306/app-skeleton`.
 Those are the database name, user, and password, already configured in the compose file.
 
 In the front-end application, keep the line dedicated to [full Docker installation](https://github.com/damien-carcel/app-skeleton/blob/master/front/.env.dist#L10).
+
+## Launch the containers
+
+```bash
+$ cd /path/to/the/project/front && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d nginx-front
+$ cd /path/to/the/project/back && CURRENT_IDS="$(id -u):$(id -g)" docker-compose up -d mysql nginx-back
+```
 
 ## Build the applications
 
