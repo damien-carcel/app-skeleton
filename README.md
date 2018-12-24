@@ -8,29 +8,15 @@ It is composed of two distinct applications:
 
 ## How to use it?
 
-Both front-end and back-end applications can be run alone. 
-
-The back-end application is a REST API, so it can be used directly through HTTP calls. 
-Follow these documentations to install the back-end application:
-- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back/local.md) (requires PHP CLI and MySQL or MariaDB),
-- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back/docker.md) (requires Docker and Docker Compose).
-
 The front-end application is made to consume an API, the real implementation being provided by the back-end application.
-But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) for development.
+But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) (for development and testing purpose only).
 
-Follow these documentations to install the front-end application with the JSON server:
-- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front/local.md) (requires Yarn or NPM),
-- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front/docker.md) (requires Docker and Docker Compose).
-
-You can also run both front-end and back-end applications together. Again, you can install them:
-- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/local.md) (the front-end application is run locally, but the back-end application can be run either locally or through Docker),
-- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/configure/docker.md) (both front-end and back-end application are run through Docker).
+Follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front.md) to run the front-end application (with either the JSON server or the back-end application),
+and follow [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md) run the back-end application.
 
 ## Testing
 
-The back-end application is fully tested. You can follow these documentations for a detailed explanation about how running the tests:
-- [locally](https://github.com/damien-carcel/app-skeleton/blob/master/doc/test/back/local.md),
-- [through Docker](https://github.com/damien-carcel/app-skeleton/blob/master/doc/test/back/docker.md).
+The back-end application is fully tested. You can follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/test/back.md) for a detailed explanation about how running the tests:
 
 The front-end application is not tested for now. This will be [coming soon](https://github.com/damien-carcel/app-skeleton/issues/15).
 

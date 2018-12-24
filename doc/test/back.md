@@ -1,6 +1,15 @@
 # Testing the back-end application
 
-## Introductions
+## Requirements
+
+You need to export the following environment variable:
+```bash
+export CURRENT_IDS="$(id -u):$(id -g)" 
+```
+
+There is no need to fully install the application, you only need to [setup the database](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md#setup-the-database) for integration and end-to-end tests.
+
+## Introduction
 
 The back-end application is extensively tested with various tools.
 
@@ -9,7 +18,7 @@ Look at the `composer.json` file to know what command is exactly launched.
 You can run all the tests at once by launching:
 
 ```bash
-$ composer tests
+$ docker-compose run --rm php composer tests
 ```
 
 Here is the complete list of those testing tools and what they are used for.
@@ -20,7 +29,7 @@ For each of them, configuration is already provided and ready to work.
 `phpcs` checks for coding standard violations. Its configuration is placed in the `phpcs.xml` file.
 To use it, run the following command:
 ```bash
-$ composer phpcs
+$ docker-compose run --rm php composer phpcs
 ```
 
 ## PHP Coding Standards Fixer
@@ -33,12 +42,12 @@ Its configuration is defined in two files:
 
 To use it, run the following command:
 ```bash
-$ composer php-cs-fixer
+$ docker-compose run --rm php composer php-cs-fixer
 ```
 
 To fix detected issues:
 ```bash
-$ composer php-cs-fixer-fix
+$ docker-compose run --rm php composer php-cs-fixer-fix
 ```
 ## phpspec
 
@@ -46,7 +55,7 @@ $ composer php-cs-fixer-fix
 
 To use it, run the following command:
 ```bash
-$ composer phpspec
+$ docker-compose run --rm php composer phpspec
 ```
 
 ## Behat
@@ -65,7 +74,7 @@ They can run only with PHP, there is no need to start MySQL or the Symfony PHP s
 
 Launch them with the following command:
 ```bash
-$ composer acceptance
+$ docker-compose run --rm php composer acceptance
 ```
 
 ### Integration tests
@@ -75,7 +84,7 @@ They are mostly used to test the real DB storage.
 
 You'll need to have a MySQL database correctly configured to run them.
 ```bash
-$ composer integration
+$ docker-compose run --rm php composer integration
 ```
 
 ### End to End tests
@@ -84,5 +93,5 @@ Those tests use the real application. Like for the integration tests, you'll nee
 
 You can then run the tests with:
 ```bash
-$ composer end-to-end
+$ docker-compose run --rm php composer end-to-end
 ```
