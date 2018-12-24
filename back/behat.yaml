@@ -37,7 +37,7 @@ integration:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts_services:
-                - 'App\Tests\Integration\Context\FeatureContext'
+                - 'App\Tests\Integration\Context\UserRepositoryContext'
                 - 'App\Tests\Integration\Context\FixtureContext'
 
 end-to-end:

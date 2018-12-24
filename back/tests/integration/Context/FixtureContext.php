@@ -36,12 +36,22 @@ class FixtureContext implements Context
     }
 
     /**
-     * @BeforeScenario
+     * @Given users are loaded in database
      */
-    public function loadFixturesWithOnlyUsers(): void
+    public function loadUsers(): void
     {
         $purger = new ORMPurger($this->entityManager);
         $executor = new ORMExecutor($this->entityManager, $purger);
         $executor->execute([new UserFixtures()]);
+    }
+
+    /**
+     * @Given no user is loaded in database
+     */
+    public function cleanDatabase(): void
+    {
+        $purger = new ORMPurger($this->entityManager);
+        $executor = new ORMExecutor($this->entityManager, $purger);
+        $executor->execute([]);
     }
 }
