@@ -4,7 +4,6 @@ sudo: required
 language: php
 
 php:
-    - 7.1
     - 7.2
 
 addons:
@@ -35,11 +34,11 @@ before_install:
     - sudo service mysql restart
 
 install:
+    - mysql -uroot -proot -e 'CREATE DATABASE db_name;'
+    - mysql -uroot -proot -e 'GRANT ALL PRIVILEGES ON db_name.* TO db_user@localhost IDENTIFIED BY "db_password"'
     - cd ${TRAVIS_BUILD_DIR}/front && yarn install
     - cp ${TRAVIS_BUILD_DIR}/back/.env.dist ${TRAVIS_BUILD_DIR}/back/.env
     - cd ${TRAVIS_BUILD_DIR}/back && composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
-    - mysql -uroot -proot -e 'CREATE DATABASE db_name;'
-    - mysql -uroot -proot -e 'GRANT ALL PRIVILEGES ON db_name.* TO db_user@localhost IDENTIFIED BY "db_password"'
     - cd ${TRAVIS_BUILD_DIR}/back && bin/console --env=test doctrine:schema:update --force > /dev/null
 
 script:
