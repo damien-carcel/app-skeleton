@@ -11,22 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\User;
+namespace App\Infrastructure\Controller\User;
 
-use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users", name="rest_users_create", methods={"POST"})
+ * @Route("/users/{uuid}", name="rest_users_delete", methods={"DELETE"})
  */
-final class CreateController
+final class DeleteController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -40,28 +38,24 @@ final class CreateController
     }
 
     /**
-     * @param Request $request
+     * @param string $uuid
      *
-     * @throws \Exception
+     * @throws NotFoundHttpException
      *
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(string $uuid): Response
     {
-        $content = $request->getContent();
-        $userData = json_decode($content, true);
+        $user = $this->repository->find($uuid);
 
-        $user = new User(
-            Uuid::uuid4(),
-            $userData['username'],
-            $userData['firstName'],
-            $userData['lastName'],
-            'password',
-            'salt',
-            []
-        );
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf(
+                'There is no user with identifier "%s"',
+                $uuid
+            ));
+        }
 
-        $this->repository->save($user);
+        $this->repository->delete($user);
 
         return new JsonResponse();
     }

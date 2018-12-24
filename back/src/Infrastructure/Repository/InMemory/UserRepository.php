@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Repository\InMemory;
+namespace App\Infrastructure\Repository\InMemory;
 
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;

@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\User;
+namespace App\Infrastructure\Controller\User;
 
+use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_get", methods={"GET"})
+ * @Route("/users", name="rest_users_list", methods={"GET"})
  */
-final class GetController
+final class ListController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -38,30 +38,21 @@ final class GetController
     }
 
     /**
-     * @param string $uuid
-     *
-     * @throws NotFoundHttpException
-     *
      * @return Response
      */
-    public function __invoke(string $uuid): Response
+    public function __invoke(): Response
     {
-        $user = $this->repository->find($uuid);
+        $users = $this->repository->findAll();
 
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf(
-                'There is no user with identifier "%s"',
-                $uuid
-            ));
-        }
+        $normalizedUsers = array_map(function (User $user) {
+            return [
+                'id' => $user->id(),
+                'username' => $user->getUsername(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+            ];
+        }, $users);
 
-        $normalizedUser = [
-            'id' => $user->id(),
-            'username' => $user->getUsername(),
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-        ];
-
-        return new JsonResponse($normalizedUser);
+        return new JsonResponse($normalizedUsers);
     }
 }
