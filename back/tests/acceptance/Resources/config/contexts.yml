@@ -1,12 +1,16 @@
 services:
-    App\Tests\Acceptance\Context\FeatureContext:
+    App\Tests\Acceptance\Context\FixtureContext:
+        arguments:
+            - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
+        tags:
+            - { name: 'fob.context_service' }
+
+    App\Tests\Acceptance\Context\ManageUsersContext:
         arguments:
             - '@__symfony__.kernel'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\Acceptance\Context\FixtureContext:
-        arguments:
-            - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
+    App\Tests\Acceptance\Context\AuthenticationContext:
         tags:
             - { name: 'fob.context_service' }

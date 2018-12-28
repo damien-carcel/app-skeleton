@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\User;
+namespace App\Infrastructure\Controller\User;
 
 use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_delete", methods={"DELETE"})
+ * @Route("/users/{uuid}", name="rest_users_get", methods={"GET"})
  */
-final class DeleteController
+final class GetController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -55,8 +55,13 @@ final class DeleteController
             ));
         }
 
-        $this->repository->delete($user);
+        $normalizedUser = [
+            'id' => $user->id(),
+            'username' => $user->getUsername(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+        ];
 
-        return new JsonResponse();
+        return new JsonResponse($normalizedUser);
     }
 }

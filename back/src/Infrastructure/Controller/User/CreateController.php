@@ -11,20 +11,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Controller\User;
+namespace App\Infrastructure\Controller\User;
 
 use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users", name="rest_users_list", methods={"GET"})
+ * @Route("/users", name="rest_users_create", methods={"POST"})
  */
-final class ListController
+final class CreateController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -38,21 +40,29 @@ final class ListController
     }
 
     /**
+     * @param Request $request
+     *
+     * @throws \Exception
+     *
      * @return Response
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        $users = $this->repository->findAll();
+        $content = $request->getContent();
+        $userData = json_decode($content, true);
 
-        $normalizedUsers = array_map(function (User $user) {
-            return [
-                'id' => $user->id(),
-                'username' => $user->getUsername(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-            ];
-        }, $users);
+        $user = new User(
+            Uuid::uuid4(),
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName'],
+            'password',
+            'salt',
+            []
+        );
 
-        return new JsonResponse($normalizedUsers);
+        $this->repository->save($user);
+
+        return new JsonResponse();
     }
 }

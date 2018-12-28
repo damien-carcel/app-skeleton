@@ -1,3 +1,24 @@
+integration:
+    extensions:
+        FriendsOfBehat\ContextServiceExtension:
+            imports:
+                - 'tests/integration/Resources/config/contexts.yml'
+        FriendsOfBehat\CrossContainerExtension: ~
+        FriendsOfBehat\SymfonyExtension:
+            env_file: '.env'
+            kernel:
+                bootstrap: 'vendor/autoload.php'
+                class: 'App\Kernel'
+                path: 'src/Kernel.php'
+                debug: true
+    suites:
+        user:
+            paths:
+                - '%paths.base%/tests/integration/features'
+            contexts_services:
+                - 'App\Tests\Integration\Context\UserRepositoryContext'
+                - 'App\Tests\Integration\Context\FixtureContext'
+
 acceptance:
     extensions:
         FriendsOfBehat\ContextServiceExtension:
@@ -16,29 +37,9 @@ acceptance:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
-                - 'App\Tests\Acceptance\Context\FeatureContext'
                 - 'App\Tests\Acceptance\Context\FixtureContext'
-
-integration:
-    extensions:
-        FriendsOfBehat\ContextServiceExtension:
-            imports:
-            - 'tests/integration/Resources/config/contexts.yml'
-        FriendsOfBehat\CrossContainerExtension: ~
-        FriendsOfBehat\SymfonyExtension:
-            env_file: '.env'
-            kernel:
-                bootstrap: 'vendor/autoload.php'
-                class: 'App\Kernel'
-                path: 'src/Kernel.php'
-                debug: true
-    suites:
-        user:
-            paths:
-                - '%paths.base%/tests/integration/features'
-            contexts_services:
-                - 'App\Tests\Integration\Context\FeatureContext'
-                - 'App\Tests\Integration\Context\FixtureContext'
+                - 'App\Tests\Acceptance\Context\ManageUsersContext'
+                - 'App\Tests\Acceptance\Context\AuthenticationContext'
 
 end-to-end:
     extensions:
@@ -63,7 +64,8 @@ end-to-end:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
-                - 'App\Tests\EndToEnd\Context\FeatureContext'
                 - 'App\Tests\EndToEnd\Context\FixtureContext'
+                - 'App\Tests\EndToEnd\Context\ManageUsersContext'
+                - 'App\Tests\EndToEnd\Context\AuthenticationContext'
             filters:
                 tags: '@end-to-end'

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace App\Tests\EndToEnd\Context;
 
 use App\Tests\Fixtures\UserFixtures;
-use Behat\Behat\Context\Context;
-use Behat\MinkExtension\Context\MinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext extends MinkContext implements Context
+class ManageUsersContext extends RawMinkContext
 {
     /** @var RouterInterface */
     private $router;
@@ -35,7 +34,7 @@ class FeatureContext extends MinkContext implements Context
     }
 
     /**
-     * @When a request asks for the list of users
+     * @When I ask for the list of the users
      */
     public function listAllTheUsers(): void
     {

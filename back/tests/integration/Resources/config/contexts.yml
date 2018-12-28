@@ -1,5 +1,5 @@
 services:
-    App\Tests\Integration\Context\FeatureContext:
+    App\Tests\Integration\Context\UserRepositoryContext:
         arguments:
             - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
         tags:

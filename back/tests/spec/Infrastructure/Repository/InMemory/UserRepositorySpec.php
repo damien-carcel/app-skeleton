@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Repository\InMemory;
+namespace spec\App\Infrastructure\Repository\InMemory;
 
 use App\Domain\Model\User;
 use PhpSpec\ObjectBehavior;

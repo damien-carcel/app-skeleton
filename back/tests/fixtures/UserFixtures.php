@@ -24,7 +24,7 @@ use Ramsey\Uuid\Uuid;
 class UserFixtures extends Fixture
 {
     public const NORMALIZED_USERS = [
-        [
+        '02432f0b-c33e-4d71-8ba9-a5e3267a45d5' => [
             'firstName' => 'Tony',
             'lastName' => 'Stark',
             'username' => 'ironman',
@@ -32,7 +32,7 @@ class UserFixtures extends Fixture
             'salt' => 'salt',
             'roles' => [],
         ],
-        [
+        '7f57d041-a612-4a5a-a61a-e0c96b2c576e' => [
             'firstName' => 'Steve',
             'lastName' => 'Rogers',
             'username' => 'captain',
@@ -40,7 +40,7 @@ class UserFixtures extends Fixture
             'salt' => 'salt',
             'roles' => [],
         ],
-        [
+        'fff8bb6d-5772-4e6c-9d10-41d522683264' => [
             'firstName' => 'Bruce',
             'lastName' => 'Banner',
             'username' => 'hulk',
@@ -55,9 +55,9 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $objectManager): void
     {
-        foreach (static::NORMALIZED_USERS as $normalizedUser) {
+        foreach (static::NORMALIZED_USERS as $userId => $normalizedUser) {
             $user = new User(
-                Uuid::uuid4(),
+                Uuid::fromString($userId),
                 $normalizedUser['username'],
                 $normalizedUser['firstName'],
                 $normalizedUser['lastName'],

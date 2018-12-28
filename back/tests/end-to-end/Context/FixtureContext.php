@@ -38,7 +38,7 @@ class FixtureContext implements Context
     /**
      * @BeforeScenario
      */
-    public function loadFixturesWithOnlyUsers(): void
+    public function loadUsers(): void
     {
         $purger = new ORMPurger($this->entityManager);
         $executor = new ORMExecutor($this->entityManager, $purger);

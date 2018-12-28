@@ -38,7 +38,7 @@ class FixtureContext implements Context
     /**
      * @BeforeScenario
      */
-    public function loadFixturesWithOnlyUsers(): void
+    public function loadUsers(): void
     {
         $normalizedUsers = UserFixtures::NORMALIZED_USERS;
 
