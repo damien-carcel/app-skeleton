@@ -15,7 +15,7 @@
 | Specifications    | Todo
 | Acceptance tests  | Todo
 | Integration tests | Todo
-| System tests      | Todo
+| End to End tests  | Todo
 | Documentation     | -
 | Related tickets   | #... <!-- #-prefixed issue number(s), if any -->
 

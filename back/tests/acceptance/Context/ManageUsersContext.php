@@ -18,7 +18,6 @@ use Behat\Behat\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * This is a very bad acceptance test context, as it makes use of the framework
@@ -26,7 +25,7 @@ use Webmozart\Assert\Assert;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext implements Context
+class ManageUsersContext implements Context
 {
     /** @var KernelInterface */
     private $kernel;
@@ -43,29 +42,9 @@ class FeatureContext implements Context
     }
 
     /**
-     * @param string $path
-     *
      * @throws \Exception
      *
-     * @When a request is sent to :path
-     */
-    public function aRequestIsSentTo(string $path): void
-    {
-        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
-    }
-
-    /**
-     * @Then a response should be received
-     */
-    public function aResponseShouldBeReceived(): void
-    {
-        Assert::notNull($this->response);
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @When a request asks for the list of users
+     * @When I ask for the list of the users
      */
     public function listAllTheUsers(): void
     {
