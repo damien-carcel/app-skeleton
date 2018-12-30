@@ -11,10 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infrastructure\Controller\User;
+namespace App\Infrastructure\API\Controller\User;
 
 use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,9 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_get", methods={"GET"})
+ * @Route("/users/{uuid}", name="rest_users_update", methods={"PATCH"})
  */
-final class GetController
+final class UpdateController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -38,30 +39,27 @@ final class GetController
     }
 
     /**
-     * @param string $uuid
-     *
-     * @throws NotFoundHttpException
+     * @param string  $uuid
+     * @param Request $request
      *
      * @return Response
      */
-    public function __invoke(string $uuid): Response
+    public function __invoke(string $uuid, Request $request): Response
     {
-        $user = $this->repository->find($uuid);
+        $content = $request->getContent();
+        $userData = json_decode($content, true);
 
+        $user = $this->repository->find($uuid);
         if (null === $user) {
             throw new NotFoundHttpException(sprintf(
                 'There is no user with identifier "%s"',
                 $uuid
             ));
         }
+        $user->changeName($userData);
 
-        $normalizedUser = [
-            'id' => $user->id(),
-            'username' => $user->getUsername(),
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-        ];
+        $this->repository->save($user);
 
-        return new JsonResponse($normalizedUser);
+        return new JsonResponse();
     }
 }

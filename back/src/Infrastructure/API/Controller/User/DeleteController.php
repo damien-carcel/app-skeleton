@@ -11,11 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infrastructure\Controller\User;
+namespace App\Infrastructure\API\Controller\User;
 
 use App\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_update", methods={"PATCH"})
+ * @Route("/users/{uuid}", name="rest_users_delete", methods={"DELETE"})
  */
-final class UpdateController
+final class DeleteController
 {
     /** @var UserRepositoryInterface */
     private $repository;
@@ -39,26 +38,24 @@ final class UpdateController
     }
 
     /**
-     * @param string  $uuid
-     * @param Request $request
+     * @param string $uuid
+     *
+     * @throws NotFoundHttpException
      *
      * @return Response
      */
-    public function __invoke(string $uuid, Request $request): Response
+    public function __invoke(string $uuid): Response
     {
-        $content = $request->getContent();
-        $userData = json_decode($content, true);
-
         $user = $this->repository->find($uuid);
+
         if (null === $user) {
             throw new NotFoundHttpException(sprintf(
                 'There is no user with identifier "%s"',
                 $uuid
             ));
         }
-        $user->changeName($userData);
 
-        $this->repository->save($user);
+        $this->repository->delete($user);
 
         return new JsonResponse();
     }

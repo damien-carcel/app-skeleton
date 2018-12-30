@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infrastructure\Controller\User;
+namespace App\Infrastructure\API\Controller\User;
 
 use App\Domain\Model\Write\User;
 use App\Domain\Repository\UserRepositoryInterface;
