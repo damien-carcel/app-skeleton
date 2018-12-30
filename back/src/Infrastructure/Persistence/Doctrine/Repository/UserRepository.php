@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infrastructure\Repository\Doctrine;
+namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Model\Write\User;
 use App\Domain\Repository\UserRepositoryInterface;

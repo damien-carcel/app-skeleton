@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Infrastructure\QueryFunction\InMemory;
+namespace App\Infrastructure\Persistence\InMemory\QueryFunction;
 
 use App\Domain\Model\Read\UserList;
 use App\Domain\Model\Write\User;

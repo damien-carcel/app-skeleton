@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Infrastructure\Repository\Doctrine;
+namespace spec\App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\Repository\Doctrine\UserRepository;
+use App\Infrastructure\Persistence\Doctrine\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpSpec\ObjectBehavior;
 

@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Infrastructure\QueryFunction\InMemory;
+namespace spec\App\Infrastructure\Persistence\InMemory\QueryFunction;
 
 use App\Domain\Model\Read\UserList;
 use App\Domain\QueryFunction\GetUserList;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\QueryFunction\InMemory\GetUserListFromMemory;
-use App\Infrastructure\Repository\InMemory\UserRepository;
+use App\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory;
+use App\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use App\Tests\Fixtures\UserFixtures;
 use PhpSpec\ObjectBehavior;
 

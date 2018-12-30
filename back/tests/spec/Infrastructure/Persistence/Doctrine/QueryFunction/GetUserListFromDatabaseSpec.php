@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Infrastructure\QueryFunction\Doctrine;
+namespace spec\App\Infrastructure\Persistence\Doctrine\QueryFunction;
 
 use App\Domain\QueryFunction\GetUserList;
-use App\Infrastructure\QueryFunction\Doctrine\GetUserListFromDatabase;
+use App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase;
 use Doctrine\DBAL\Connection;
 use PhpSpec\ObjectBehavior;
 
