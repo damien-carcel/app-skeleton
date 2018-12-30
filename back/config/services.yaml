@@ -16,13 +16,19 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Domain/Model,Infrastructure/Migrations}'
+        exclude: '../src/{Domain/Model,Infrastructure/Persistence/Doctrine/Migrations}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Infrastructure\Controller\:
-        resource: '../src/Infrastructure/Controller'
+    App\Infrastructure\API\Controller\:
+        resource: '../src/Infrastructure/API/Controller'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
+    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
+
+    App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
+    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'

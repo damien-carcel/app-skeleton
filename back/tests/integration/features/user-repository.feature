@@ -1,7 +1,7 @@
 Feature:
-  In order to prove that the Doctrine repository work
+  In order to prove that the Doctrine UserRepository works
   As an integration test
-  I want execute queries
+  I want to execute queries
 
   Scenario: It gets all users from the database
     Given users are loaded in database

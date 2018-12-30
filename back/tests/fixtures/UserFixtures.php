@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Fixtures;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
@@ -23,7 +23,7 @@ use Ramsey\Uuid\Uuid;
  */
 class UserFixtures extends Fixture
 {
-    public const NORMALIZED_USERS = [
+    public const USERS_DATA = [
         '02432f0b-c33e-4d71-8ba9-a5e3267a45d5' => [
             'firstName' => 'Tony',
             'lastName' => 'Stark',
@@ -55,20 +55,61 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $objectManager): void
     {
-        foreach (static::NORMALIZED_USERS as $userId => $normalizedUser) {
-            $user = new User(
-                Uuid::fromString($userId),
-                $normalizedUser['username'],
-                $normalizedUser['firstName'],
-                $normalizedUser['lastName'],
-                $normalizedUser['password'],
-                $normalizedUser['salt'],
-                $normalizedUser['roles']
-            );
+        $users = static::instantiateUserEntities();
 
+        foreach ($users as $user) {
             $objectManager->persist($user);
         }
 
         $objectManager->flush();
+    }
+
+    /**
+     * @return User[]
+     */
+    public static function instantiateUserEntities(): array
+    {
+        $users = [];
+        foreach (static::USERS_DATA as $userId => $userData) {
+            $users[] = new User(
+                Uuid::fromString($userId),
+                $userData['username'],
+                $userData['firstName'],
+                $userData['lastName'],
+                $userData['password'],
+                $userData['salt'],
+                $userData['roles']
+            );
+        }
+
+        return $users;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getNormalizedUsers(): array
+    {
+        $normalizedUsers = [];
+        foreach (UserFixtures::USERS_DATA as $userId => $userData) {
+            $normalizedUsers[] = static::getNormalizedUser($userId);
+        }
+
+        return $normalizedUsers;
+    }
+
+    /**
+     * @param string $userId
+     *
+     * @return array
+     */
+    public static function getNormalizedUser(string $userId): array
+    {
+        return [
+            'id' => $userId,
+            'username' => static::USERS_DATA[$userId]['username'],
+            'firstName' => static::USERS_DATA[$userId]['firstName'],
+            'lastName' => static::USERS_DATA[$userId]['lastName'],
+        ];
     }
 }

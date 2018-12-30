@@ -8,6 +8,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-json": "*",
+    "ext-pdo": "*",
     "nelmio/cors-bundle": "^1.5",
     "ramsey/uuid-doctrine": "^1.5",
     "symfony/console": "4.2.*",
@@ -49,9 +50,9 @@
   "autoload-dev": {
     "psr-4": {
       "App\\Tests\\Acceptance\\": "tests/acceptance/",
+      "App\\Tests\\EndToEnd\\": "tests/end-to-end/",
       "App\\Tests\\Fixtures\\": "tests/fixtures/",
-      "App\\Tests\\Integration\\": "tests/integration/",
-      "App\\Tests\\EndToEnd\\": "tests/end-to-end/"
+      "App\\Tests\\Integration\\": "tests/integration/"
     }
   },
   "replace": {

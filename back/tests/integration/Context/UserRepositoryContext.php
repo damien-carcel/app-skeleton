@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Context;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
@@ -72,12 +72,12 @@ class UserRepositoryContext implements Context
     {
         $user = new User(
             Uuid::fromString($userId),
-            UserFixtures::NORMALIZED_USERS[$userId]['username'],
-            UserFixtures::NORMALIZED_USERS[$userId]['firstName'],
-            UserFixtures::NORMALIZED_USERS[$userId]['lastName'],
-            UserFixtures::NORMALIZED_USERS[$userId]['password'],
-            UserFixtures::NORMALIZED_USERS[$userId]['salt'],
-            UserFixtures::NORMALIZED_USERS[$userId]['roles']
+            UserFixtures::USERS_DATA[$userId]['username'],
+            UserFixtures::USERS_DATA[$userId]['firstName'],
+            UserFixtures::USERS_DATA[$userId]['lastName'],
+            UserFixtures::USERS_DATA[$userId]['password'],
+            UserFixtures::USERS_DATA[$userId]['salt'],
+            UserFixtures::USERS_DATA[$userId]['roles']
         );
 
         $this->userRepository->save($user);
@@ -117,7 +117,7 @@ class UserRepositoryContext implements Context
             ];
         }
 
-        Assert::same($normalizedUsers, UserFixtures::NORMALIZED_USERS);
+        Assert::same($normalizedUsers, UserFixtures::USERS_DATA);
     }
 
     /**
@@ -139,7 +139,7 @@ class UserRepositoryContext implements Context
             'roles' => $this->result->getRoles(),
         ];
 
-        Assert::same($normalizedUser, UserFixtures::NORMALIZED_USERS[$userId]);
+        Assert::same($normalizedUser, UserFixtures::USERS_DATA[$userId]);
     }
 
     /**

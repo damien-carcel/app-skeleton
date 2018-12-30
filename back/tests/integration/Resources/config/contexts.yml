@@ -5,6 +5,12 @@ services:
         tags:
             - { name: 'fob.context_service' }
 
+    App\Tests\Integration\Context\GetUserListQueryContext:
+        arguments:
+            - '@__symfony__.App\Domain\QueryFunction\GetUserList'
+        tags:
+            - { name: 'fob.context_service' }
+
     App\Tests\Integration\Context\FixtureContext:
         arguments:
             - '@__symfony__.doctrine.orm.entity_manager'

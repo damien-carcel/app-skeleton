@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
+use App\Application\Query\GetUserList as GetUserListQuery;
+use App\Application\Query\GetUserListHandler;
+use App\Domain\Model\Read\UserList;
 use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * This is a very bad acceptance test context, as it makes use of the framework
@@ -27,18 +28,18 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class ManageUsersContext implements Context
 {
-    /** @var KernelInterface */
-    private $kernel;
+    /** @var GetUserListHandler */
+    private $getUserList;
 
-    /** @var Response|null */
-    private $response;
+    /** @var UserList */
+    private $userList;
 
     /**
-     * @param KernelInterface $kernel
+     * @param GetUserListHandler $getUserList
      */
-    public function __construct(KernelInterface $kernel)
+    public function __construct(GetUserListHandler $getUserList)
     {
-        $this->kernel = $kernel;
+        $this->getUserList = $getUserList;
     }
 
     /**
@@ -48,29 +49,14 @@ class ManageUsersContext implements Context
      */
     public function listAllTheUsers(): void
     {
-        $router = $this->kernel->getContainer()->get('router');
-        $path = $router->generate('rest_users_list');
-
-        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
+        $this->userList = $this->getUserList->handle(new GetUserListQuery(10, 1));
     }
 
     /**
-     * @throws \RuntimeException
-     *
-     * @return bool
-     *
      * @Then all the users should be retrieved
      */
-    public function allUsersShouldBeRetrieved(): bool
+    public function allUsersShouldBeRetrieved(): void
     {
-        $jsonResponse = $this->response->getContent();
-
-        $users = json_decode($jsonResponse, true);
-
-        if ($users !== array_values(UserFixtures::NORMALIZED_USERS)) {
-            return false;
-        }
-
-        return true;
+        Assert::same($this->userList->normalize(), UserFixtures::getNormalizedUsers());
     }
 }

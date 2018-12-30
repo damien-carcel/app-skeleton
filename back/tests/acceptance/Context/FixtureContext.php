@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Acceptance\Context;
 
-use App\Domain\Model\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -40,19 +38,9 @@ class FixtureContext implements Context
      */
     public function loadUsers(): void
     {
-        $normalizedUsers = UserFixtures::NORMALIZED_USERS;
+        $users = UserFixtures::instantiateUserEntities();
 
-        foreach ($normalizedUsers as $normalizedUser) {
-            $user = new User(
-                Uuid::uuid4(),
-                $normalizedUser['username'],
-                $normalizedUser['firstName'],
-                $normalizedUser['lastName'],
-                $normalizedUser['password'],
-                $normalizedUser['salt'],
-                $normalizedUser['roles']
-            );
-
+        foreach ($users as $user) {
             $this->userRepository->save($user);
         }
     }

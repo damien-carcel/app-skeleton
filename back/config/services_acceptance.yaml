@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    App\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
+    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\InMemory\Repository\UserRepository'
+
+    App\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory: ~
+    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory'
+
+    App\Application\Query\GetUserListHandler: ~
