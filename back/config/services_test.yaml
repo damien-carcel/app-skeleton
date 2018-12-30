@@ -4,8 +4,8 @@ services:
         autoconfigure: true
         public: true
 
-    App\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
-    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
+    Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
+    Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
 
-    App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
-    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'
+    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
+    Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'

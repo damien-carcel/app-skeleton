@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Acceptance\Context;
+namespace Carcel\Tests\Acceptance\Context;
 
-use App\Domain\Repository\UserRepositoryInterface;
-use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
+use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Repository\UserRepositoryInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>

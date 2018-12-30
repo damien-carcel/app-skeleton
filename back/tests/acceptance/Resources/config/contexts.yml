@@ -1,16 +1,16 @@
 services:
-    App\Tests\Acceptance\Context\FixtureContext:
+    Carcel\Tests\Acceptance\Context\FixtureContext:
         arguments:
-            - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
+            - '@__symfony__.Carcel\User\Domain\Repository\UserRepositoryInterface'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\Acceptance\Context\ManageUsersContext:
+    Carcel\Tests\Acceptance\Context\ManageUsersContext:
         arguments:
-            - '@__symfony__.App\Application\Query\GetUserListHandler'
+            - '@__symfony__.Carcel\User\Application\Query\GetUserListHandler'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\Acceptance\Context\AuthenticationContext:
+    Carcel\Tests\Acceptance\Context\AuthenticationContext:
         tags:
             - { name: 'fob.context_service' }

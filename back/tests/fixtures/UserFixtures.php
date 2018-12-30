@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Fixtures;
+namespace Carcel\Tests\Fixtures;
 
-use App\Domain\Model\Write\User;
+use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;

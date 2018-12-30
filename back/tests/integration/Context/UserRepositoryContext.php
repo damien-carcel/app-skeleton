@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Integration\Context;
+namespace Carcel\Tests\Integration\Context;
 
-use App\Domain\Model\Write\User;
-use App\Domain\Repository\UserRepositoryInterface;
-use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
+use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Model\Write\User;
+use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 

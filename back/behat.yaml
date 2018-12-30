@@ -8,7 +8,7 @@ integration:
             env_file: '.env'
             kernel:
                 bootstrap: 'vendor/autoload.php'
-                class: 'App\Kernel'
+                class: 'Carcel\Kernel'
                 path: 'src/Kernel.php'
                 debug: true
     suites:
@@ -16,9 +16,9 @@ integration:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts_services:
-                - 'App\Tests\Integration\Context\FixtureContext'
-                - 'App\Tests\Integration\Context\UserRepositoryContext'
-                - 'App\Tests\Integration\Context\GetUserListQueryContext'
+                - 'Carcel\Tests\Integration\Context\FixtureContext'
+                - 'Carcel\Tests\Integration\Context\UserRepositoryContext'
+                - 'Carcel\Tests\Integration\Context\GetUserListQueryContext'
 
 acceptance:
     extensions:
@@ -30,7 +30,7 @@ acceptance:
             env_file: '.env'
             kernel:
                 bootstrap: 'vendor/autoload.php'
-                class: 'App\Kernel'
+                class: 'Carcel\Kernel'
                 path: 'src/Kernel.php'
                 debug: true
     suites:
@@ -38,9 +38,9 @@ acceptance:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
-                - 'App\Tests\Acceptance\Context\FixtureContext'
-                - 'App\Tests\Acceptance\Context\ManageUsersContext'
-                - 'App\Tests\Acceptance\Context\AuthenticationContext'
+                - 'Carcel\Tests\Acceptance\Context\FixtureContext'
+                - 'Carcel\Tests\Acceptance\Context\ManageUsersContext'
+                - 'Carcel\Tests\Acceptance\Context\AuthenticationContext'
 
 end-to-end:
     extensions:
@@ -57,7 +57,7 @@ end-to-end:
             env_file: '.env'
             kernel:
                 bootstrap: 'vendor/autoload.php'
-                class: 'App\Kernel'
+                class: 'Carcel\Kernel'
                 path: 'src/Kernel.php'
                 debug: true
     suites:
@@ -65,8 +65,8 @@ end-to-end:
             paths:
                 - '%paths.base%/tests/features'
             contexts_services:
-                - 'App\Tests\EndToEnd\Context\FixtureContext'
-                - 'App\Tests\EndToEnd\Context\ManageUsersContext'
-                - 'App\Tests\EndToEnd\Context\AuthenticationContext'
+                - 'Carcel\Tests\EndToEnd\Context\FixtureContext'
+                - 'Carcel\Tests\EndToEnd\Context\ManageUsersContext'
+                - 'Carcel\Tests\EndToEnd\Context\AuthenticationContext'
             filters:
                 tags: '@end-to-end'

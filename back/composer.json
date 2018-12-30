@@ -44,15 +44,15 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "src/"
+      "Carcel\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "App\\Tests\\Acceptance\\": "tests/acceptance/",
-      "App\\Tests\\EndToEnd\\": "tests/end-to-end/",
-      "App\\Tests\\Fixtures\\": "tests/fixtures/",
-      "App\\Tests\\Integration\\": "tests/integration/"
+      "Carcel\\Tests\\Acceptance\\": "tests/acceptance/",
+      "Carcel\\Tests\\EndToEnd\\": "tests/end-to-end/",
+      "Carcel\\Tests\\Fixtures\\": "tests/fixtures/",
+      "Carcel\\Tests\\Integration\\": "tests/integration/"
     }
   },
   "replace": {
