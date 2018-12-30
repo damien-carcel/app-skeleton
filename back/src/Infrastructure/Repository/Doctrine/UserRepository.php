@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository\Doctrine;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;

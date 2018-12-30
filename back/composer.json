@@ -8,6 +8,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-json": "*",
+    "ext-pdo": "*",
     "nelmio/cors-bundle": "^1.5",
     "ramsey/uuid-doctrine": "^1.5",
     "symfony/console": "4.2.*",

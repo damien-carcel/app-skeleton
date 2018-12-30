@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Controller\User;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;

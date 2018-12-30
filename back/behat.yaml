@@ -16,8 +16,9 @@ integration:
             paths:
                 - '%paths.base%/tests/integration/features'
             contexts_services:
-                - 'App\Tests\Integration\Context\UserRepositoryContext'
                 - 'App\Tests\Integration\Context\FixtureContext'
+                - 'App\Tests\Integration\Context\UserRepositoryContext'
+                - 'App\Tests\Integration\Context\GetUserListQueryContext'
 
 acceptance:
     extensions:

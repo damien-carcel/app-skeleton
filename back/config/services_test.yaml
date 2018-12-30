@@ -2,7 +2,10 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+        public: true
 
     App\Infrastructure\Repository\Doctrine\UserRepository: ~
     App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Repository\Doctrine\UserRepository'
+
+    App\Infrastructure\QueryFunction\Doctrine\GetUserListFromDatabase: ~
+    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\QueryFunction\Doctrine\GetUserListFromDatabase'

@@ -7,7 +7,7 @@ services:
 
     App\Tests\Acceptance\Context\ManageUsersContext:
         arguments:
-            - '@__symfony__.kernel'
+            - '@__symfony__.App\Application\Query\GetUserListHandler'
         tags:
             - { name: 'fob.context_service' }
 

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Controller\User;
 
-use App\Domain\Model\User;
-use App\Domain\Repository\UserRepositoryInterface;
+use App\Application\Query\GetUserList;
+use App\Application\Query\GetUserListHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,15 +26,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ListController
 {
-    /** @var UserRepositoryInterface */
-    private $repository;
+    /** @var GetUserListHandler */
+    private $getUserListHandler;
 
     /**
-     * @param UserRepositoryInterface $repository
+     * @param GetUserListHandler $getUserListHandler
      */
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(GetUserListHandler $getUserListHandler)
     {
-        $this->repository = $repository;
+        $this->getUserListHandler = $getUserListHandler;
     }
 
     /**
@@ -42,17 +42,8 @@ final class ListController
      */
     public function __invoke(): Response
     {
-        $users = $this->repository->findAll();
+        $userList = $this->getUserListHandler->handle(new GetUserList(10, 1));
 
-        $normalizedUsers = array_map(function (User $user) {
-            return [
-                'id' => $user->id(),
-                'username' => $user->getUsername(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-            ];
-        }, $users);
-
-        return new JsonResponse($normalizedUsers);
+        return new JsonResponse($userList->normalize());
     }
 }

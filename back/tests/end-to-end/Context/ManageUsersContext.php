@@ -16,6 +16,7 @@ namespace App\Tests\EndToEnd\Context;
 use App\Tests\Fixtures\UserFixtures;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Symfony\Component\Routing\RouterInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -42,25 +43,13 @@ class ManageUsersContext extends RawMinkContext
     }
 
     /**
-     * @return bool
-     *
      * @Then all the users should be retrieved
      */
-    public function allUsersShouldBeRetrieved(): bool
+    public function allUsersShouldBeRetrieved(): void
     {
         $responseContent = $this->getSession()->getPage()->getContent();
         $decodedContent = json_decode($responseContent, true);
 
-        $filteredContent = array_filter($decodedContent, function ($user) {
-            unset($user['id']);
-
-            return $user;
-        });
-
-        if (UserFixtures::NORMALIZED_USERS !== $filteredContent) {
-            return false;
-        }
-
-        return true;
+        Assert::same($decodedContent, UserFixtures::getNormalizedUsers());
     }
 }

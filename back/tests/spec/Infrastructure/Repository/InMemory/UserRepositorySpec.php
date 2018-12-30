@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace spec\App\Infrastructure\Repository\InMemory;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 use PhpSpec\ObjectBehavior;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;

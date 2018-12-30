@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
-use App\Domain\Model\User;
+use App\Domain\Model\Write\User;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>

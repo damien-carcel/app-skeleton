@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: public
-
-    App\Infrastructure\Repository\InMemory\UserRepository:
-    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Repository\InMemory\UserRepository'

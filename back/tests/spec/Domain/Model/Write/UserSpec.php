@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace spec\App\Domain\Model;
+namespace spec\App\Domain\Model\Write;
 
 use PhpSpec\ObjectBehavior;
 use Ramsey\Uuid\Uuid;
