@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\EndToEnd\Context;
+namespace Carcel\Tests\EndToEnd\Context;
 
-use App\Tests\Fixtures\UserFixtures;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Carcel\Tests\Fixtures\UserFixtures;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 

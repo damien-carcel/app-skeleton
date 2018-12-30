@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Acceptance\Context;
+namespace Carcel\Tests\Acceptance\Context;
 
-use App\Application\Query\GetUserList as GetUserListQuery;
-use App\Application\Query\GetUserListHandler;
-use App\Domain\Model\Read\UserList;
-use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
+use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
+use Carcel\User\Application\Query\GetUserListHandler;
+use Carcel\User\Domain\Model\Read\UserList;
 use Webmozart\Assert\Assert;
 
 /**

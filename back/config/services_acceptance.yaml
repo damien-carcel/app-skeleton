@@ -4,10 +4,10 @@ services:
         autoconfigure: true
         public: true
 
-    App\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
-    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\InMemory\Repository\UserRepository'
+    Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
+    Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository'
 
-    App\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory: ~
-    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory'
+    Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory: ~
+    Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory'
 
-    App\Application\Query\GetUserListHandler: ~
+    Carcel\User\Application\Query\GetUserListHandler: ~

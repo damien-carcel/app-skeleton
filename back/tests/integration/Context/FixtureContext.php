@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Integration\Context;
+namespace Carcel\Tests\Integration\Context;
 
-use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
+use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;

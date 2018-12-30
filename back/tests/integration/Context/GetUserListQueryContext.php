@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests\Integration\Context;
+namespace Carcel\Tests\Integration\Context;
 
-use App\Domain\Model\Read\UserList;
-use App\Domain\QueryFunction\GetUserList;
-use App\Tests\Fixtures\UserFixtures;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
+use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Domain\QueryFunction\GetUserList;
 use Webmozart\Assert\Assert;
 
 /**

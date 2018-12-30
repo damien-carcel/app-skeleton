@@ -1,17 +1,17 @@
 services:
-    App\Tests\Integration\Context\UserRepositoryContext:
+    Carcel\Tests\Integration\Context\UserRepositoryContext:
         arguments:
-            - '@__symfony__.App\Domain\Repository\UserRepositoryInterface'
+            - '@__symfony__.Carcel\User\Domain\Repository\UserRepositoryInterface'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\Integration\Context\GetUserListQueryContext:
+    Carcel\Tests\Integration\Context\GetUserListQueryContext:
         arguments:
-            - '@__symfony__.App\Domain\QueryFunction\GetUserList'
+            - '@__symfony__.Carcel\User\Domain\QueryFunction\GetUserList'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\Integration\Context\FixtureContext:
+    Carcel\Tests\Integration\Context\FixtureContext:
         arguments:
             - '@__symfony__.doctrine.orm.entity_manager'
         tags:

@@ -1,4 +1,4 @@
-App\Domain\Model\Write\User:
+Carcel\User\Domain\Model\Write\User:
     type: entity
     table: user
     id:

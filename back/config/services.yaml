@@ -14,21 +14,21 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    Carcel\:
         resource: '../src/*'
-        exclude: '../src/{Domain/Model,Infrastructure/Persistence/Doctrine/Migrations}'
+        exclude: '../src/{User/Domain/Model}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Infrastructure\API\Controller\:
-        resource: '../src/Infrastructure/API/Controller'
+    Carcel\User\Infrastructure\API\Controller\:
+        resource: '../src/User/Infrastructure/API/Controller'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
-    App\Domain\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
+    Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
+    Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
 
-    App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
-    App\Domain\QueryFunction\GetUserList: '@App\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'
+    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
+    Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'

@@ -1,16 +1,16 @@
 services:
-    App\Tests\EndToEnd\Context\FixtureContext:
+    Carcel\Tests\EndToEnd\Context\FixtureContext:
         arguments:
             - '@__symfony__.doctrine.orm.entity_manager'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\EndToEnd\Context\ManageUsersContext:
+    Carcel\Tests\EndToEnd\Context\ManageUsersContext:
         arguments:
             - '@__symfony__.router'
         tags:
             - { name: 'fob.context_service' }
 
-    App\Tests\EndToEnd\Context\AuthenticationContext:
+    Carcel\Tests\EndToEnd\Context\AuthenticationContext:
         tags:
             - { name: 'fob.context_service' }
