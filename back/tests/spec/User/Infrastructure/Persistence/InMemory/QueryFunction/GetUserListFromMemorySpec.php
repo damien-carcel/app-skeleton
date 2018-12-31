@@ -43,7 +43,7 @@ class GetUserListFromMemorySpec extends ObjectBehavior
     {
         $userList = $this->execute(10, 1);
         $userList->shouldHaveType(UserList::class);
-        $userList->normalize()->shouldReturn(UserFixtures::getNormalizedUsers());
+        $userList->normalize()->shouldReturn(array_slice(UserFixtures::getNormalizedUsers(), 0, 10));
     }
 
     function it_gets_a_limited_list_of_users()
@@ -62,14 +62,14 @@ class GetUserListFromMemorySpec extends ObjectBehavior
 
     function it_gets_a_list_of_users_starting_a_certain_page()
     {
-        $userList = $this->execute(2, 2);
+        $userList = $this->execute(5, 2);
         $userList->shouldHaveType(UserList::class);
-        $userList->normalize()->shouldReturn(array_slice(UserFixtures::getNormalizedUsers(), 2, 2));
+        $userList->normalize()->shouldReturn(array_slice(UserFixtures::getNormalizedUsers(), 5, 10));
     }
 
     function it_gets_an_empty_list_of_users_if_the_page_is_too_high()
     {
-        $userList = $this->execute(10, 2);
+        $userList = $this->execute(10, 3);
         $userList->shouldHaveType(UserList::class);
         $userList->normalize()->shouldReturn([]);
     }

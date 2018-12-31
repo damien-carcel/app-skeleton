@@ -100,24 +100,22 @@ class UserRepositoryContext implements Context
      */
     public function allUsersAreRetrieved(): void
     {
-        Assert::count($this->results, 3);
+        Assert::count($this->results, count(UserFixtures::USERS_DATA));
 
         $normalizedUsers = [];
         foreach ($this->results as $user) {
             Assert::isInstanceOf($user, User::class);
             Assert::isInstanceOf($user->id(), Uuid::class);
 
-            $normalizedUsers[(string) $user->id()] = [
+            $normalizedUsers[] = [
+                'id' => (string) $user->id(),
+                'username' => $user->getUsername(),
                 'firstName' => $user->getFirstName(),
                 'lastName' => $user->getLastName(),
-                'username' => $user->getUsername(),
-                'password' => $user->getPassword(),
-                'salt' => $user->getSalt(),
-                'roles' => $user->getRoles(),
             ];
         }
 
-        Assert::same($normalizedUsers, UserFixtures::USERS_DATA);
+        Assert::same($normalizedUsers, UserFixtures::getNormalizedUsers());
     }
 
     /**

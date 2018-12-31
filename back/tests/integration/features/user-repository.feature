@@ -21,4 +21,4 @@ Feature:
   Scenario: It removes the user with ID "02432f0b-c33e-4d71-8ba9-a5e3267a45d5" from the database
     Given users are loaded in database
     When the user "02432f0b-c33e-4d71-8ba9-a5e3267a45d5" is removed
-    Then there should be 2 users in database
+    Then there should be 10 users in database

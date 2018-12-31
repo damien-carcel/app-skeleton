@@ -50,6 +50,6 @@ class ManageUsersContext extends RawMinkContext
         $responseContent = $this->getSession()->getPage()->getContent();
         $decodedContent = json_decode($responseContent, true);
 
-        Assert::same($decodedContent, UserFixtures::getNormalizedUsers());
+        Assert::same($decodedContent, array_slice(UserFixtures::getNormalizedUsers(), 0, 10));
     }
 }
