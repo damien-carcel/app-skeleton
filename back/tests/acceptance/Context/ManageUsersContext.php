@@ -57,6 +57,6 @@ class ManageUsersContext implements Context
      */
     public function allUsersShouldBeRetrieved(): void
     {
-        Assert::same($this->userList->normalize(), UserFixtures::getNormalizedUsers());
+        Assert::same($this->userList->normalize(), array_slice(UserFixtures::getNormalizedUsers(), 0, 10));
     }
 }
