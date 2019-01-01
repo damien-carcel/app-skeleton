@@ -43,20 +43,32 @@ class ManageUsersContext implements Context
     }
 
     /**
-     * @throws \Exception
+     * @param string $position
+     * @param int    $quantity
      *
-     * @When I ask for the list of the users
+     * @When I ask for the :position page of :quantity users
      */
-    public function listAllTheUsers(): void
+    public function listUsers(string $position, int $quantity): void
     {
-        $this->userList = $this->getUserList->handle(new GetUserListQuery(10, 1));
+        $pageNumber = (int) substr($position, 0, 1);
+
+        $this->userList = $this->getUserList->handle(new GetUserListQuery($quantity, $pageNumber));
     }
 
     /**
-     * @Then all the users should be retrieved
+     * @param string $position
+     * @param int    $quantity
+     *
+     * @Then the :position :quantity users should be retrieved
      */
-    public function allUsersShouldBeRetrieved(): void
+    public function allUsersShouldBeRetrieved(string $position, int $quantity): void
     {
-        Assert::same($this->userList->normalize(), array_slice(UserFixtures::getNormalizedUsers(), 0, 10));
+        $pageNumber = (int) substr($position, 0, 1);
+
+        Assert::same($this->userList->normalize(), array_slice(
+            UserFixtures::getNormalizedUsers(),
+            ($pageNumber - 1) * $quantity,
+            $quantity
+        ));
     }
 }

@@ -16,6 +16,7 @@ namespace Carcel\User\Infrastructure\API\Controller\User;
 use Carcel\User\Application\Query\GetUserList;
 use Carcel\User\Application\Query\GetUserListHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,11 +39,16 @@ final class ListController
     }
 
     /**
+     * @param Request $request
+     *
      * @return Response
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        $userList = $this->getUserListHandler->handle(new GetUserList(10, 1));
+        $limit = null === $request->query->get('limit') ? 10 : (int) $request->query->get('_limit');
+        $page = null === $request->query->get('_page') ? 1 : (int) $request->query->get('_page');
+
+        $userList = $this->getUserListHandler->handle(new GetUserList($limit, $page));
 
         return new JsonResponse($userList->normalize());
     }
