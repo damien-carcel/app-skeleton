@@ -35,21 +35,38 @@ class ManageUsersContext extends RawMinkContext
     }
 
     /**
-     * @When I ask for the list of the users
+     * @param string $position
+     * @param int    $quantity
+     *
+     * @When I ask for the :position page of :quantity users
      */
-    public function listAllTheUsers(): void
+    public function listUsers(string $position, int $quantity): void
     {
-        $this->visitPath($this->router->generate('rest_users_list'));
+        $pageNumber = (int) substr($position, 0, 1);
+
+        $this->visitPath($this->router->generate('rest_users_list', [
+            '_page' => $pageNumber,
+            '_limit' => $quantity,
+        ]));
     }
 
     /**
-     * @Then all the users should be retrieved
+     * @param string $position
+     * @param int    $quantity
+     *
+     * @Then the :position :quantity users should be retrieved
      */
-    public function allUsersShouldBeRetrieved(): void
+    public function allUsersShouldBeRetrieved(string $position, int $quantity): void
     {
         $responseContent = $this->getSession()->getPage()->getContent();
         $decodedContent = json_decode($responseContent, true);
 
-        Assert::same($decodedContent, array_slice(UserFixtures::getNormalizedUsers(), 0, 10));
+        $pageNumber = (int) substr($position, 0, 1);
+
+        Assert::same($decodedContent, array_slice(
+            UserFixtures::getNormalizedUsers(),
+            ($pageNumber - 1) * $quantity,
+            $quantity
+        ));
     }
 }
