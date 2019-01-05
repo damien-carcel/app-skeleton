@@ -5,4 +5,3 @@
 /.env.dist
 /db.json
 /package-lock.json
-/yarn.lock
