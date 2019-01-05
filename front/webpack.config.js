@@ -4,8 +4,10 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
 module.exports = (env, argv) => ({
@@ -13,15 +15,15 @@ module.exports = (env, argv) => ({
     contentBase: path.join(__dirname, 'public'),
     port: 8080,
     stats: {
-      colors: true
-    }
+      colors: true,
+    },
   },
   entry: {
     index: './src/index.tsx',
   },
   output: {
     filename: argv.mode === 'development' ? '[name].js' : '[name].[chunkhash].js',
-    path: path.resolve(__dirname, 'public')
+    path: path.resolve(__dirname, 'public'),
   },
   module: {
     rules: [
@@ -32,9 +34,9 @@ module.exports = (env, argv) => ({
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: 'cache'
-          }
-        }
+            cacheDirectory: 'cache',
+          },
+        },
       },
       {
         test: /\.(gif|jpg|png|svg)$/,
@@ -43,36 +45,34 @@ module.exports = (env, argv) => ({
           {
             loader: 'image-webpack-loader',
             options: {
-              disable: argv.mode === 'development'
+              disable: argv.mode === 'development',
             },
-          }
-        ]
+          },
+        ],
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
       {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          use: [{
-            loader: "css-loader"
-          }, {
-            loader: "less-loader"
-          }],
-          fallback: "style-loader"
-        })
+        test: /\.(le|c)ss$/,
+        use: [
+          argv.mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ],
       },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          use: [{
-            loader: "css-loader"
-          }],
-          fallback: "style-loader"
-        })
-      }
-    ]
+    ],
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true,
+      }),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(
@@ -81,27 +81,23 @@ module.exports = (env, argv) => ({
     ),
     new CopyWebpackPlugin([
       {from: './assets/files/humans.txt'},
-      {from: './assets/files/robots.txt'}
+      {from: './assets/files/robots.txt'},
     ]),
     new DotEnv(),
-    new ExtractTextPlugin({
-      filename: "[name].[chunkhash].css",
-      disable: argv.mode === 'development'
-    }),
     new HtmlWebpackPlugin({
       inject: false,
       lang: 'en',
       meta: [{
         name: 'description',
-        content: 'A basic skeleton for ES6 web applications'
+        content: 'A basic skeleton for ES6 web applications',
       }],
       mobile: true,
-      minify: {
-        removeComments: argv.mode === 'production',
-        collapseWhitespace: argv.mode === 'production'
-      },
       template: require('html-webpack-template'),
-      title: 'My ES6 application skeleton'
+      title: 'My ES6 application skeleton',
+    }),
+    new MiniCssExtractPlugin({
+      filename: argv.mode === 'development' ? '[name].css' : '[name].[chunkhash].css',
+      chunkFilename: argv.mode === 'development' ? '[id].css' : '[id].[chunkhash].css',
     }),
     new WebappWebpackPlugin({
       logo: './assets/images/pingoo.png',
@@ -124,12 +120,12 @@ module.exports = (env, argv) => ({
           opengraph: false,
           twitter: false,
           yandex: false,
-          windows: true
-        }
-      }
-    })
+          windows: true,
+        },
+      },
+    }),
   ],
   resolve: {
-    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx']
-  }
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
+  },
 });
