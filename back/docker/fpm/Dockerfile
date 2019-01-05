@@ -1,13 +1,15 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.3-fpm-alpine
 MAINTAINER Damien Carcel <damien.carcel@gmail.com>
 
 # Install needed PHP extensions and related libraries
 RUN apk add --no-cache \
         icu            \
         libintl        \
+        libzip         \
         zlib           \
     && apk add --no-cache --virtual .build-deps \
        icu-dev        \
+       libzip-dev     \
        zlib-dev       \
        $PHPIZE_DEPS   \
     && docker-php-ext-install -j$(nproc) \
