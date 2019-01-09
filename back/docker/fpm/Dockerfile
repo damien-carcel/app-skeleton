@@ -8,17 +8,16 @@ RUN apk add --no-cache \
         libzip         \
         zlib           \
     && apk add --no-cache --virtual .build-deps \
-       icu-dev        \
-       libzip-dev     \
-       zlib-dev       \
-       $PHPIZE_DEPS   \
+       icu-dev                                  \
+       libzip-dev                               \
+       zlib-dev                                 \
+       $PHPIZE_DEPS                             \
     && docker-php-ext-install -j$(nproc) \
         intl                             \
         opcache                          \
         pdo                              \
         pdo_mysql                        \
         zip                              \
-    && pecl install apcu && docker-php-ext-enable apcu \
     && apk del .build-deps
 
 # Configure PHPH
