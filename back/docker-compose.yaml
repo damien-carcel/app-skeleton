@@ -16,7 +16,7 @@ services:
         environment:
             APP_ENV: 'prod'
             APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
-            DATABASE_URL: 'mysql://app-skeleton:app-skeleton@mysql:3306/app-skeleton'
+            DATABASE_URL: 'mysql://app_skeleton:app_skeleton@mysql:3306/app_skeleton'
             CORS_ALLOW_ORIGIN: '^https?://localhost(:[0-9]+)?$$'
         user: 'www-data:www-data'
         volumes:
@@ -43,9 +43,9 @@ services:
         image: 'mysql:5.7'
         environment:
             MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_USER: 'app-skeleton'
-            MYSQL_PASSWORD: 'app-skeleton'
-            MYSQL_DATABASE: 'app-skeleton'
+            MYSQL_USER: 'app_skeleton'
+            MYSQL_PASSWORD: 'app_skeleton'
+            MYSQL_DATABASE: 'app_skeleton'
 
 volumes:
     var-data:
