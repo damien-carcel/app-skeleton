@@ -24,8 +24,7 @@ Then start the MySQL container by running:
 $ docker-compose up -d mysql
 ```
 
-Copy the `.env.dist` file as `.env` and configure the MySQL access by updating the `DATABASE_URL` environment variable.
-Then update the schema of the MySQL database:
+Update the schema of the MySQL database:
 ```bash
 $ docker-compose run --rm php bin/console doctrine:schema:update --force
 ```
