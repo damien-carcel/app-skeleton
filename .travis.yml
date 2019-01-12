@@ -34,12 +34,12 @@ before_install:
     - sudo service mysql restart
 
 install:
-    - mysql -uroot -proot -e 'CREATE DATABASE db_name;'
-    - mysql -uroot -proot -e 'GRANT ALL PRIVILEGES ON db_name.* TO db_user@localhost IDENTIFIED BY "db_password"'
+    - mysql -uroot -proot -e 'CREATE DATABASE app_skeleton;'
+    - mysql -uroot -proot -e 'GRANT ALL PRIVILEGES ON app_skeleton.* TO app_skeleton@localhost IDENTIFIED BY "app_skeleton"'
     - cd ${TRAVIS_BUILD_DIR}/front && yarn install
-    - cp ${TRAVIS_BUILD_DIR}/back/.env.dist ${TRAVIS_BUILD_DIR}/back/.env
+    - cd ${TRAVIS_BUILD_DIR}/back && sed -i "s/@mysql/@localhost/g" .env
     - cd ${TRAVIS_BUILD_DIR}/back && composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
-    - cd ${TRAVIS_BUILD_DIR}/back && bin/console --env=test doctrine:schema:update --force > /dev/null
+    - cd ${TRAVIS_BUILD_DIR}/back && bin/console doctrine:schema:update --force
 
 script:
     - cd ${TRAVIS_BUILD_DIR}/front && yarn lint
