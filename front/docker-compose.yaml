@@ -17,7 +17,9 @@ services:
     nginx-front:
         image: 'nginx:alpine'
         volumes:
-            - './public:/usr/share/nginx/html:ro'
+            - './public:/srv/app:ro'
+            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
         networks:
             - 'app-skeleton'
 
