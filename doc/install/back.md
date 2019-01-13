@@ -9,6 +9,18 @@ You also need to export the following environment variable:
 export CURRENT_IDS="$(id -u):$(id -g)" 
 ```
 
+## Build the Docker images
+
+The image of the `php` service must be build first, as the image used build for `php-debug` inherits from it:
+```bash
+$ docker-compose build --pull php
+```
+
+Then build the other images:
+```bash
+$ docker-compose build --pull
+```
+
 ## Install the dependencies
 
 ```bash

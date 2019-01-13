@@ -18,13 +18,11 @@ RUN apk add --no-cache \
         pdo                              \
         pdo_mysql                        \
         zip                              \
-    && pecl install xdebug-2.7.0beta1 && docker-php-ext-enable xdebug \
     && apk del .build-deps
 
 # Configure PHP
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY files/app.ini $PHP_INI_DIR/conf.d/
-COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
 
 # Install composer
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
