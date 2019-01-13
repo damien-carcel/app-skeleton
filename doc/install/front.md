@@ -9,6 +9,12 @@ You also need to export the following environment variable:
 export CURRENT_IDS="$(id -u):$(id -g)" 
 ```
 
+## Build the Docker images
+
+```bash
+$ docker-compose build --pull
+```
+
 ## Install the dependencies
 
 ```bash

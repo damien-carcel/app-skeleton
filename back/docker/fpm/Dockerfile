@@ -20,7 +20,7 @@ RUN apk add --no-cache \
         zip                              \
     && apk del .build-deps
 
-# Configure PHPH
+# Configure PHP
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY files/app.ini $PHP_INI_DIR/conf.d/
 
