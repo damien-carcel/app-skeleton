@@ -9,6 +9,10 @@ services:
         ports:
             - '8000:8000'
 
+    php-debug:
+        ports:
+            - '8000:8000'
+
     mysql:
         ports:
             - '33006:3306'
