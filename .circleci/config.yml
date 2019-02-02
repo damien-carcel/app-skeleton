@@ -1,0 +1,61 @@
+version: 2
+
+jobs:
+    build:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - checkout
+#            - run: cp .circleci/docker-compose.override.yaml back/docker-compose.override.yaml
+            - run: cd ~/project/front && docker-compose build --pull node
+            - run: cd ~/project/back && docker-compose build --pull php
+            - run: cd ~/project/front && docker-compose run --rm node yarn install
+            - run: cd ~/project/back && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                    - project
+    tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run: cd ~/project/front && docker-compose run --rm node yarn run lint
+            - run: cd ~/project/front && docker-compose run --rm node yarn run type-check
+            - run: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+            - run: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
+
+workflows:
+    version: 2
+    pull_request:
+        jobs:
+            - wait_for_user_approval:
+                type: approval
+                filters:
+                    branches:
+                        ignore:
+                            - master
+            - build:
+                requires:
+                    - wait_for_user_approval
+            - tests:
+                requires:
+                    - build
+    nightly:
+        triggers:
+            - schedule:
+                cron: "0 2 * * *"
+                filters:
+                    branches:
+                        only:
+                            - master
+        jobs:
+            - build
+            - tests:
+                requires:
+                    - build
