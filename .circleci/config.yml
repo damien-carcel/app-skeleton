@@ -1,0 +1,153 @@
+version: 2
+
+jobs:
+    build:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - checkout
+            - run:
+                name: Build front-end docker images
+                command: cd ~/project/front && docker-compose build --pull node
+            - run:
+                name: Copy docker-compose override for front-end
+                command: cp ~/project/.circleci/front/docker-compose.override.yaml.dist ~/project/front/docker-compose.override.yaml
+            - run:
+                name: Create cache directory for front-end dependencies
+                command: mkdir -p ~/.cache/yarn
+            - run:
+                name: Create yarnrc if not already present
+                command: touch ~/.yarnrc
+            - restore_cache:
+                keys:
+                    - node-v1-{{ checksum "front/yarn.lock" }}
+                    - node-v1-
+            - run:
+                name: Install front-end dependencies
+                command: cd ~/project/front && docker-compose run --rm node yarn install
+            - save_cache:
+                key: node-v1-{{ checksum "front/yarn.lock" }}
+                paths:
+                    - ~/.cache/yarn
+            - restore_cache:
+                keys:
+                    - composer-v1-{{ checksum "back/composer.lock" }}
+                    - composer-v1-
+            - run:
+                name: Build back-end docker images
+                command: cd ~/project/back && docker-compose build --pull php
+            - run:
+                name: Copy docker-compose override for back-end
+                command: cp ~/project/.circleci/back/docker-compose.override.yaml.dist ~/project/back/docker-compose.override.yaml
+            - run:
+                name: Create cache directory for back-end dependencies
+                command: mkdir -p ~/.cache/composer
+            - run:
+                name: Create configuration directory for back-end dependencies
+                command: mkdir -p ~/.config/composer
+            - run:
+                name: Install back-end dependencies
+                command: cd ~/project/back && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+            - save_cache:
+                key: composer-v1-{{ checksum "back/composer.lock" }}
+                paths:
+                    - ~/.cache/composer
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                    - project
+    static_unit_and_acceptance_tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run:
+                name: Create cache directory for front-end dependencies
+                command: mkdir -p ~/.cache/yarn
+            - run:
+                name: Create yarnrc if not already present
+                command: touch ~/.yarnrc
+            - run:
+                name: Run static analysis on the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run lint
+            - run:
+                name: Type-check the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run type-check
+            - run:
+                name: Run static analysis on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+            - run:
+                name: Run static analysis on the unit tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
+            - run:
+                name: Run unit tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run
+            - run:
+                name: Run acceptance tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat --profile=acceptance"
+    integration_and_e2e_tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run:
+                name: start MySQL container
+                command: cd ~/project/back && docker-compose up -d mysql
+            - run:
+                name: Update database schema
+                command: |
+                    cd ~/project && sh .circleci/back/wait_for_mysql.sh
+                    cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
+            - run:
+                name: Run integration tests on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=integration"
+            - run:
+                name: Run end to end tests on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=end-to-end"
+
+workflows:
+    version: 2
+    pull_request:
+        jobs:
+            - wait_for_user_approval:
+                type: approval
+                filters:
+                    branches:
+                        ignore:
+                            - master
+            - build:
+                requires:
+                    - wait_for_user_approval
+            - static_unit_and_acceptance_tests:
+                requires:
+                    - build
+            - integration_and_e2e_tests:
+                requires:
+                    - static_unit_and_acceptance_tests
+    weekly:
+        triggers:
+            - schedule:
+                cron: "0 0 * * 1"
+                filters:
+                    branches:
+                        only:
+                            - master
+        jobs:
+            - build
+            - static_unit_and_acceptance_tests:
+                requires:
+                    - build
+            - integration_and_e2e_tests:
+                requires:
+                    - static_unit_and_acceptance_tests
