@@ -59,17 +59,35 @@ jobs:
                     root: ~/
                     paths:
                         - project
-    tests:
+    front_end_static_and_unit_tests:
         machine:
             enabled: true
             docker_layer_caching: true
         steps:
             - attach_workspace:
                 at: ~/
-            - run: cd ~/project/front && docker-compose run --rm node yarn run lint
-            - run: cd ~/project/front && docker-compose run --rm node yarn run type-check
-            - run: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
-            - run: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
+            - run:
+                name: Run static analysis on the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run lint
+            - run:
+                name: Type-check the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run type-check
+    back_end_static_and_unit_tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run:
+                name: Run static analysis on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+            - run:
+                name: Run static analysis on the unit tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
+            - run:
+                name: Run unit tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run
 
 workflows:
     version: 2
@@ -84,7 +102,10 @@ workflows:
             - build:
                 requires:
                     - wait_for_user_approval
-            - tests:
+            - front_end_static_and_unit_tests:
+                requires:
+                    - build
+            - back_end_static_and_unit_tests:
                 requires:
                     - build
     nightly:
@@ -97,6 +118,10 @@ workflows:
                             - master
         jobs:
             - build
-            - tests:
+            - front_end_static_and_unit_tests:
                 requires:
                     - build
+            - back_end_static_and_unit_tests:
+                requires:
+                    - build
+
