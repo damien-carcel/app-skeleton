@@ -56,29 +56,30 @@ jobs:
                 paths:
                     - ~/.cache/composer
             - persist_to_workspace:
-                    root: ~/
-                    paths:
-                        - project
-    front_end_static_and_unit_tests:
+                root: ~/
+                paths:
+                    - project
+    static_unit_and_acceptance_tests:
         machine:
             enabled: true
             docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
         steps:
             - attach_workspace:
                 at: ~/
+            - run:
+                name: Create cache directory for front-end dependencies
+                command: mkdir -p ~/.cache/yarn
+            - run:
+                name: Create yarnrc if not already present
+                command: touch ~/.yarnrc
             - run:
                 name: Run static analysis on the front-end application
                 command: cd ~/project/front && docker-compose run --rm node yarn run lint
             - run:
                 name: Type-check the front-end application
                 command: cd ~/project/front && docker-compose run --rm node yarn run type-check
-    back_end_static_and_unit_tests:
-        machine:
-            enabled: true
-            docker_layer_caching: true
-        steps:
-            - attach_workspace:
-                at: ~/
             - run:
                 name: Run static analysis on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
@@ -88,6 +89,32 @@ jobs:
             - run:
                 name: Run unit tests of the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run
+            - run:
+                name: Run acceptance tests of the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat --profile=acceptance"
+    integration_and_e2e_tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run:
+                name: start MySQL container
+                command: cd ~/project/back && docker-compose up -d mysql
+            - run:
+                name: Update database schema
+                command: |
+                    cd ~/project && sh .circleci/back/wait_for_mysql.sh
+                    cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
+            - run:
+                name: Run integration tests on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=integration"
+            - run:
+                name: Run end to end tests on the back-end application
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=end-to-end"
 
 workflows:
     version: 2
@@ -102,26 +129,25 @@ workflows:
             - build:
                 requires:
                     - wait_for_user_approval
-            - front_end_static_and_unit_tests:
+            - static_unit_and_acceptance_tests:
                 requires:
                     - build
-            - back_end_static_and_unit_tests:
+            - integration_and_e2e_tests:
                 requires:
-                    - build
-    nightly:
+                    - static_unit_and_acceptance_tests
+    weekly:
         triggers:
             - schedule:
-                cron: "0 2 * * *"
+                cron: "0 0 * * 1"
                 filters:
                     branches:
                         only:
                             - master
         jobs:
             - build
-            - front_end_static_and_unit_tests:
+            - static_unit_and_acceptance_tests:
                 requires:
                     - build
-            - back_end_static_and_unit_tests:
+            - integration_and_e2e_tests:
                 requires:
-                    - build
-
+                    - static_unit_and_acceptance_tests
