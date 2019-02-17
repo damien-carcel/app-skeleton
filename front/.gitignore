@@ -2,6 +2,6 @@
 /public
 !/public/.gitkeep
 /node_modules
-/.env.dist
+/.env
 /db.json
 /package-lock.json
