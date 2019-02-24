@@ -11,7 +11,10 @@ jobs:
             - checkout
             - run:
                 name: Build front-end docker images
-                command: cd ~/project/front && docker-compose build --pull node
+                command: |
+                    cd ~/project/front
+                    docker-compose pull --ignore-pull-failures
+                    docker-compose build --pull
             - run:
                 name: Copy docker-compose override for front-end
                 command: cp ~/project/.circleci/front/docker-compose.override.yaml.dist ~/project/front/docker-compose.override.yaml
@@ -19,8 +22,10 @@ jobs:
                 name: Create cache directory for front-end dependencies
                 command: mkdir -p ~/.cache/yarn
             - run:
-                name: Create yarnrc if not already present
-                command: touch ~/.yarnrc
+                name: Create Yarn configuration file and folder if not already present
+                command: |
+                    touch ~/.yarnrc
+                    mkdir ~/.yarn
             - restore_cache:
                 keys:
                     - node-v1-{{ checksum "front/yarn.lock" }}
@@ -38,7 +43,10 @@ jobs:
                     - composer-v1-
             - run:
                 name: Build back-end docker images
-                command: cd ~/project/back && docker-compose build --pull php
+                command: |
+                    cd ~/project/back
+                    docker-compose pull --ignore-pull-failures
+                    docker-compose build --pull
             - run:
                 name: Copy docker-compose override for back-end
                 command: cp ~/project/.circleci/back/docker-compose.override.yaml.dist ~/project/back/docker-compose.override.yaml
@@ -55,6 +63,9 @@ jobs:
                 key: composer-v1-{{ checksum "back/composer.lock" }}
                 paths:
                     - ~/.cache/composer
+            - run:
+                name: Create directories for tests results
+                command: mkdir -p back/var/tests/behat back/var/tests/phpspec front/var/tests/tslint
             - persist_to_workspace:
                 root: ~/
                 paths:
@@ -75,8 +86,13 @@ jobs:
                 name: Create yarnrc if not already present
                 command: touch ~/.yarnrc
             - run:
+                name: Create Yarn configuration file and folder if not already present
+                command: |
+                    touch ~/.yarnrc
+                    mkdir ~/.yarn
+            - run:
                 name: Run static analysis on the front-end application
-                command: cd ~/project/front && docker-compose run --rm node yarn run lint
+                command: cd ~/project/front && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
             - run:
                 name: Type-check the front-end application
                 command: cd ~/project/front && docker-compose run --rm node yarn run type-check
@@ -88,11 +104,19 @@ jobs:
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
             - run:
                 name: Run unit tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run --format=junit > var/tests/phpspec/specs.xml
             - run:
                 name: Run acceptance tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat --profile=acceptance"
-    integration_and_e2e_tests:
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"
+            - store_test_results:
+                path: front/var/tests
+            - store_test_results:
+                path: front/var/tests
+            - store_artifacts:
+                path: back/var/tests
+            - store_artifacts:
+                path: back/var/tests
+    integration_tests:
         machine:
             enabled: true
             docker_layer_caching: true
@@ -111,10 +135,35 @@ jobs:
                     cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
             - run:
                 name: Run integration tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=integration"
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p integration -f junit -o var/tests/behat -f pretty -o std --colors"
+            - store_test_results:
+                path: back/var/tests
+            - store_artifacts:
+                path: back/var/tests
+    e2e_tests:
+        machine:
+            enabled: true
+            docker_layer_caching: true
+        environment:
+            CURRENT_IDS: "1001:1002"
+        steps:
+            - attach_workspace:
+                at: ~/
+            - run:
+                name: start MySQL container
+                command: cd ~/project/back && docker-compose up -d mysql
+            - run:
+                name: Update database schema
+                command: |
+                    cd ~/project && sh .circleci/back/wait_for_mysql.sh
+                    cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
             - run:
                 name: Run end to end tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat --profile=end-to-end"
+                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors"
+            - store_test_results:
+                path: back/var/tests
+            - store_artifacts:
+                path: back/var/tests
 
 workflows:
     version: 2
@@ -132,9 +181,13 @@ workflows:
             - static_unit_and_acceptance_tests:
                 requires:
                     - build
-            - integration_and_e2e_tests:
+            - integration_tests:
+                requires:
+                    - build
+            - e2e_tests:
                 requires:
                     - static_unit_and_acceptance_tests
+                    - integration_tests
     weekly:
         triggers:
             - schedule:
@@ -148,6 +201,10 @@ workflows:
             - static_unit_and_acceptance_tests:
                 requires:
                     - build
-            - integration_and_e2e_tests:
+            - integration_tests:
+                requires:
+                    - build
+            - e2e_tests:
                 requires:
                     - static_unit_and_acceptance_tests
+                    - integration_tests

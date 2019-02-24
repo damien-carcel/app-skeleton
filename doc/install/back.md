@@ -11,12 +11,6 @@ export CURRENT_IDS="$(id -u):$(id -g)"
 
 ## Build the Docker images
 
-The image of the `php` service must be build first, as the image used build for `php-debug` inherits from it:
-```bash
-$ docker-compose build --pull php
-```
-
-Then build the other images:
 ```bash
 $ docker-compose build --pull
 ```
@@ -54,3 +48,12 @@ $ docker-compose up -d nginx-back
 ```
 
 You can now access the API on [localhost:8000](http://localhost:8000).
+
+## Debugging the application
+
+The `skeleton/php` image comes with XDebug installed and configured. It is by default deactivated.
+
+To activate XDebug, set the environment variable `XDEBUG_ENABLED` to `1` in your `docker-compose.override.yaml` file.
+The variable is set to `0` in the `docker-compose.override.yaml.dist` file example. 
+
+Removing this environment variable (which is not present in the `docker-compose.yaml` file) will also keep XDebug deactivated.
