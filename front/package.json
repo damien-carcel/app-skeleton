@@ -27,7 +27,7 @@
     "lint-fix": "node ./node_modules/tslint/bin/tslint 'src/**/*.{ts,tsx}' --fix",
     "serve": "webpack-dev-server --mode development --open --hot --inline",
     "serve-api": "json-server --watch db.json",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit --pretty"
   },
   "dependencies": {
     "@types/react": "^16.4.13",
