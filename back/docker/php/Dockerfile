@@ -19,11 +19,21 @@ RUN apk add --no-cache \
         pdo                              \
         pdo_mysql                        \
         zip                              \
+    && pecl install xdebug-2.7.0RC2      \
+    && docker-php-ext-enable xdebug      \
     && apk del .build-deps
 
 # Configure PHP
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY files/app.ini $PHP_INI_DIR/conf.d/
+
+# Configure XDEBUG
+COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
+
+# Make XDEBUG configurable at container start
+COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
+COPY files/docker-php-entrypoint /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-php-entrypoint && chmod 666 /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install composer
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

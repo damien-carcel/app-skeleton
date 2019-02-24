@@ -30,22 +30,13 @@ services:
         environment:
             COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
             COMPOSER_HOME: '/home/composer/.config/composer'
-        user: '${CURRENT_IDS}'
-        volumes:
-            - './:/srv/app'
-            - '~/.cache/composer:/home/composer/.cache/composer'
-            - '~/.config/composer:/home/composer/.config/composer'
-        working_dir: '/srv/app'
-
-    php-debug:
-        build: './docker/php-debug/'
-        image: 'skeleton/php:7.3-debug'
-        environment:
             PHP_IDE_CONFIG: 'serverName=app-skeleton'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
         user: '${CURRENT_IDS}'
         volumes:
             - './:/srv/app'
+            - '~/.cache/composer:/home/composer/.cache/composer'
+            - '~/.config/composer:/home/composer/.config/composer'
         working_dir: '/srv/app'
 
     mysql:

@@ -6,10 +6,8 @@ services:
             - '8000:80'
 
     php:
-        ports:
-            - '8000:8000'
-
-    php-debug:
+        environment:
+            XDEBUG_ENABLED: 0
         ports:
             - '8000:8000'
 
