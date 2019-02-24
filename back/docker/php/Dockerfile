@@ -4,6 +4,7 @@ MAINTAINER Damien Carcel <damien.carcel@gmail.com>
 # Install needed PHP extensions and related libraries
 RUN apk add --no-cache \
         icu            \
+        git            \
         libintl        \
         libzip         \
         zlib           \
