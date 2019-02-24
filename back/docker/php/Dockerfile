@@ -30,8 +30,7 @@ COPY files/app.ini $PHP_INI_DIR/conf.d/
 # Configure XDEBUG
 COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
 
-# Make XDEBUG configurable at container start
-COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
+# Make XDEBUG activable at container start
 COPY files/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint && chmod 666 /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 

@@ -11,7 +11,10 @@ jobs:
             - checkout
             - run:
                 name: Build front-end docker images
-                command: cd ~/project/front && docker-compose build --pull node
+                command: |
+                    cd ~/project/front
+                    docker-compose pull --ignore-pull-failures
+                    docker-compose build --pull
             - run:
                 name: Copy docker-compose override for front-end
                 command: cp ~/project/.circleci/front/docker-compose.override.yaml.dist ~/project/front/docker-compose.override.yaml
@@ -38,7 +41,10 @@ jobs:
                     - composer-v1-
             - run:
                 name: Build back-end docker images
-                command: cd ~/project/back && docker-compose build --pull php
+                command: |
+                    cd ~/project/back
+                    docker-compose pull --ignore-pull-failures
+                    docker-compose build --pull
             - run:
                 name: Copy docker-compose override for back-end
                 command: cp ~/project/.circleci/back/docker-compose.override.yaml.dist ~/project/back/docker-compose.override.yaml
