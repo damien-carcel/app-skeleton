@@ -22,8 +22,10 @@ jobs:
                 name: Create cache directory for front-end dependencies
                 command: mkdir -p ~/.cache/yarn
             - run:
-                name: Create yarnrc if not already present
-                command: touch ~/.yarnrc
+                name: Create Yarn configuration file and folder if not already present
+                command: |
+                    touch ~/.yarnrc
+                    mkdir ~/.yarn
             - restore_cache:
                 keys:
                     - node-v1-{{ checksum "front/yarn.lock" }}
