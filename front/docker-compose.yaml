@@ -11,6 +11,8 @@ services:
             - './:/srv/app'
             - '~/.cache/yarn:/home/yarn-cache'
         working_dir: '/srv/app'
+        networks:
+            - 'skeleton-front'
 
     nginx-front:
         image: 'nginx:alpine'
