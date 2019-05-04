@@ -6,23 +6,27 @@ services:
         image: 'skeleton/node:lts'
         environment:
             YARN_CACHE_FOLDER: '/home/yarn-cache'
-        user: '${CURRENT_IDS}'
+        user: '${CURRENT_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
             - '~/.cache/yarn:/home/yarn-cache'
         working_dir: '/srv/app'
-        networks:
-            - 'app-skeleton'
 
     nginx-front:
         image: 'nginx:alpine'
+        labels:
+            - 'traefik.docker.network=proxy'
+            - 'traefik.frontend.rule=Host:skeleton.docker.local'
+            - 'traefik.enable=true'
         volumes:
             - './public:/srv/app:ro'
             - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
             - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
         networks:
-            - 'app-skeleton'
+            - 'proxy'
+            - 'skeleton-front'
 
 networks:
-    app-skeleton:
-        driver: 'bridge'
+    proxy:
+        external: true
+    skeleton-front:

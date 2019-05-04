@@ -10,6 +10,9 @@ jobs:
         steps:
             - checkout
             - run:
+                name: Create "proxy" Docker network
+                command: docker network create proxy
+            - run:
                 name: Build front-end docker images
                 command: |
                     cd ~/project/front
@@ -77,6 +80,9 @@ jobs:
         environment:
             CURRENT_IDS: "1001:1002"
         steps:
+            - run:
+                name: Create "proxy" Docker network
+                command: docker network create proxy
             - attach_workspace:
                 at: ~/
             - run:
@@ -123,6 +129,9 @@ jobs:
         environment:
             CURRENT_IDS: "1001:1002"
         steps:
+            - run:
+                name: Create "proxy" Docker network
+                command: docker network create proxy
             - attach_workspace:
                 at: ~/
             - run:
@@ -147,6 +156,9 @@ jobs:
         environment:
             CURRENT_IDS: "1001:1002"
         steps:
+            - run:
+                name: Create "proxy" Docker network
+                command: docker network create proxy
             - attach_workspace:
                 at: ~/
             - run:

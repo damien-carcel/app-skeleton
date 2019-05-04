@@ -4,6 +4,7 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -83,16 +84,17 @@ module.exports = (env, argv) => ({
       {from: './assets/files/robots.txt'},
     ]),
     new DotEnv(),
+    new FaviconsWebpackPlugin('./assets/images/favicon.png'),
     new HtmlWebpackPlugin({
       inject: false,
       lang: 'en',
       meta: [{
         name: 'description',
-        content: 'A basic skeleton for ES6 web applications',
+        content: 'A basic skeleton for React web applications',
       }],
       mobile: true,
       template: require('html-webpack-template'),
-      title: 'My ES6 application skeleton',
+      title: 'My React application skeleton',
     }),
     new MiniCssExtractPlugin({
       filename: argv.mode === 'development' ? '[name].css' : '[name].[chunkhash].css',
@@ -104,7 +106,7 @@ module.exports = (env, argv) => ({
       cache: 'cache/favicons',
       favicons: {
         appName: 'app-skeleton',
-        appDescription: 'A basic skeleton for ES6 web applications',
+        appDescription: 'A basic skeleton for React web applications',
         developerName: 'Damien Carcel',
         developerURL: 'https://github.com/damien-carcel/',
         background: '#3737c8',
