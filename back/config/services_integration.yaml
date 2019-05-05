@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    #- Application services overrides -#
+
+    #Carcel\Tests\Integration\Acme: ~
+
+    #- Tests only services -#
+
+    Carcel\Tests\Fixtures\:
+        resource: '../tests/fixtures'
+        tags: ['doctrine.fixture.orm']
+
+    #- Behat contexts -#
+
+    Carcel\Tests\Integration\Context\UserRepositoryContext:
+        public: true
+        arguments:
+            - '@Carcel\User\Domain\Repository\UserRepositoryInterface'
+
+    Carcel\Tests\Integration\Context\GetUserListQueryContext:
+        public: true
+        arguments:
+            - '@Carcel\User\Domain\QueryFunction\GetUserList'
+
+    Carcel\Tests\Integration\Context\FixtureContext:
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'

@@ -2,7 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
+
+    #- Application services overrides -#
 
     Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
     Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository'
@@ -10,4 +11,21 @@ services:
     Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory: ~
     Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory'
 
-    Carcel\User\Application\Query\GetUserListHandler: ~
+    #- Tests only services -#
+
+    #Carcel\Tests\Acceptance\Acme: ~
+
+    #- Behat contexts -#
+
+    Carcel\Tests\Acceptance\Context\FixtureContext:
+        public: true
+        arguments:
+            - '@Carcel\User\Domain\Repository\UserRepositoryInterface'
+
+    Carcel\Tests\Acceptance\Context\ManageUsersContext:
+        public: true
+        arguments:
+            - '@Carcel\User\Application\Query\GetUserListHandler'
+
+    Carcel\Tests\Acceptance\Context\AuthenticationContext:
+        public: true

@@ -113,14 +113,20 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
-    "friends-of-behat/context-service-extension": {
-        "version": "v1.3.0"
-    },
-    "friends-of-behat/cross-container-extension": {
-        "version": "v1.1.0"
-    },
     "friends-of-behat/symfony-extension": {
-        "version": "v1.4.0"
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "78a2c7ae7f228ada6645d58e57cf919b180b7827"
+        },
+        "files": [
+            "behat.yml.dist",
+            "config/services_test.yaml",
+            "features/demo.feature",
+            "tests/Behat/DemoContext.php"
+        ]
     },
     "friendsofphp/php-cs-fixer": {
         "version": "2.2",
@@ -350,6 +356,9 @@
     },
     "symfony/property-access": {
         "version": "v4.2.3"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v4.2.8"
     },
     "symfony/requirements-checker": {
         "version": "1.0",

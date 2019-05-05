@@ -1,43 +1,29 @@
 integration:
     extensions:
-        FriendsOfBehat\ContextServiceExtension:
-            imports:
-                - 'tests/integration/Resources/config/contexts.yml'
-        FriendsOfBehat\CrossContainerExtension: ~
         FriendsOfBehat\SymfonyExtension:
-            env_file: '.env'
             kernel:
-                bootstrap: 'vendor/autoload.php'
                 class: 'Carcel\Kernel'
-                path: 'src/Kernel.php'
-                debug: true
+                environment: 'integration'
     suites:
         user:
             paths:
                 - '%paths.base%/tests/integration/features'
-            contexts_services:
+            contexts:
                 - 'Carcel\Tests\Integration\Context\FixtureContext'
                 - 'Carcel\Tests\Integration\Context\UserRepositoryContext'
                 - 'Carcel\Tests\Integration\Context\GetUserListQueryContext'
 
 acceptance:
     extensions:
-        FriendsOfBehat\ContextServiceExtension:
-            imports:
-            - 'tests/acceptance/Resources/config/contexts.yml'
-        FriendsOfBehat\CrossContainerExtension: ~
         FriendsOfBehat\SymfonyExtension:
-            env_file: '.env'
             kernel:
-                bootstrap: 'vendor/autoload.php'
                 class: 'Carcel\Kernel'
-                path: 'src/Kernel.php'
-                debug: true
+                environment: 'acceptance'
     suites:
         user:
             paths:
                 - '%paths.base%/tests/features'
-            contexts_services:
+            contexts:
                 - 'Carcel\Tests\Acceptance\Context\FixtureContext'
                 - 'Carcel\Tests\Acceptance\Context\ManageUsersContext'
                 - 'Carcel\Tests\Acceptance\Context\AuthenticationContext'
@@ -47,24 +33,17 @@ end-to-end:
         Behat\MinkExtension:
             base_url: 'localhost'
             sessions:
-                default:
+                symfony:
                     symfony: ~
-        FriendsOfBehat\ContextServiceExtension:
-            imports:
-            - 'tests/end-to-end/Resources/config/contexts.yml'
-        FriendsOfBehat\CrossContainerExtension: ~
         FriendsOfBehat\SymfonyExtension:
-            env_file: '.env'
             kernel:
-                bootstrap: 'vendor/autoload.php'
                 class: 'Carcel\Kernel'
-                path: 'src/Kernel.php'
-                debug: true
+                environment: 'e2e'
     suites:
         user:
             paths:
                 - '%paths.base%/tests/features'
-            contexts_services:
+            contexts:
                 - 'Carcel\Tests\EndToEnd\Context\FixtureContext'
                 - 'Carcel\Tests\EndToEnd\Context\ManageUsersContext'
                 - 'Carcel\Tests\EndToEnd\Context\AuthenticationContext'
