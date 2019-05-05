@@ -1,0 +1,29 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    #- Application services overrides -#
+
+    #Carcel\Tests\EndToEnd\Acme: ~
+
+    #- Tests only services -#
+
+    Carcel\Tests\Fixtures\:
+        resource: '../tests/fixtures'
+        tags: ['doctrine.fixture.orm']
+
+    #- Behat contexts -#
+
+    Carcel\Tests\EndToEnd\Context\FixtureContext:
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Carcel\Tests\EndToEnd\Context\ManageUsersContext:
+        public: true
+        arguments:
+            - '@router'
+
+    Carcel\Tests\EndToEnd\Context\AuthenticationContext:
+        public: true
