@@ -4,11 +4,6 @@
 
 You need the latest versions of [Docker engine](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/) installed.
 
-You also need to export the following environment variable:
-```bash
-export CURRENT_IDS="$(id -u):$(id -g)" 
-```
-
 ## Build the Docker images
 
 ```bash
@@ -18,7 +13,7 @@ $ docker-compose build --pull
 ## Install the dependencies
 
 ```bash
-$ docker-compose run --rm php composer update --prefer-dist --optimize-autoloader
+$ docker-compose run --rm php composer install --prefer-dist --optimize-autoloader
 ```
 
 ## Setup the database
@@ -47,7 +42,8 @@ Or you can launch the `nginx-back` container, that will launch automatically the
 $ docker-compose up -d nginx-back
 ```
 
-You can now access the API on [localhost:8000](http://localhost:8000).
+You can now access the API on [localhost:8000](http://localhost:8000) if you are using the Symfony server,
+or [api.skeleton.docker.local](http://api.skeleton.docker.local) if you're using nginx+fpm alongside Traefik.
 
 ## Debugging the application
 

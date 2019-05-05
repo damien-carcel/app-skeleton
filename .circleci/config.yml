@@ -10,6 +10,9 @@ jobs:
         steps:
             - checkout
             - run:
+                name: Create "proxy" Docker network (ignore if it already exists)
+                command: docker network create proxy || true
+            - run:
                 name: Build front-end docker images
                 command: |
                     cd ~/project/front
@@ -70,13 +73,16 @@ jobs:
                 root: ~/
                 paths:
                     - project
-    static_unit_and_acceptance_tests:
+    test:
         machine:
             enabled: true
             docker_layer_caching: true
         environment:
             CURRENT_IDS: "1001:1002"
         steps:
+            - run:
+                name: Create "proxy" Docker network (ignore if it already exists)
+                command: docker network create proxy || true
             - attach_workspace:
                 at: ~/
             - run:
@@ -108,23 +114,6 @@ jobs:
             - run:
                 name: Run acceptance tests of the back-end application
                 command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"
-            - store_test_results:
-                path: front/var/tests
-            - store_test_results:
-                path: front/var/tests
-            - store_artifacts:
-                path: back/var/tests
-            - store_artifacts:
-                path: back/var/tests
-    integration_tests:
-        machine:
-            enabled: true
-            docker_layer_caching: true
-        environment:
-            CURRENT_IDS: "1001:1002"
-        steps:
-            - attach_workspace:
-                at: ~/
             - run:
                 name: start MySQL container
                 command: cd ~/project/back && docker-compose up -d mysql
@@ -136,31 +125,14 @@ jobs:
             - run:
                 name: Run integration tests on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p integration -f junit -o var/tests/behat -f pretty -o std --colors"
-            - store_test_results:
-                path: back/var/tests
-            - store_artifacts:
-                path: back/var/tests
-    e2e_tests:
-        machine:
-            enabled: true
-            docker_layer_caching: true
-        environment:
-            CURRENT_IDS: "1001:1002"
-        steps:
-            - attach_workspace:
-                at: ~/
-            - run:
-                name: start MySQL container
-                command: cd ~/project/back && docker-compose up -d mysql
-            - run:
-                name: Update database schema
-                command: |
-                    cd ~/project && sh .circleci/back/wait_for_mysql.sh
-                    cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
             - run:
                 name: Run end to end tests on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors"
             - store_test_results:
+                path: front/var/tests
+            - store_test_results:
+                path: front/var/tests
+            - store_artifacts:
                 path: back/var/tests
             - store_artifacts:
                 path: back/var/tests
@@ -178,16 +150,9 @@ workflows:
             - build:
                 requires:
                     - wait_for_user_approval
-            - static_unit_and_acceptance_tests:
+            - test:
                 requires:
                     - build
-            - integration_tests:
-                requires:
-                    - build
-            - e2e_tests:
-                requires:
-                    - static_unit_and_acceptance_tests
-                    - integration_tests
     weekly:
         triggers:
             - schedule:
@@ -198,13 +163,6 @@ workflows:
                             - master
         jobs:
             - build
-            - static_unit_and_acceptance_tests:
+            - test:
                 requires:
                     - build
-            - integration_tests:
-                requires:
-                    - build
-            - e2e_tests:
-                requires:
-                    - static_unit_and_acceptance_tests
-                    - integration_tests

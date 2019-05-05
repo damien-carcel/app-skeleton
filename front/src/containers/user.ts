@@ -11,6 +11,7 @@ export function listUsers() {
   return fetch(url, {
     headers: createHeaders(),
     method: 'GET',
+    mode: 'cors',
   }).then((response) => response.json());
 }
 
@@ -20,6 +21,7 @@ export function getUser(userId: string) {
   return fetch(url, {
     headers: createHeaders(),
     method: 'GET',
+    mode: 'cors',
   }).then((response) => response.json());
 }
 
@@ -30,6 +32,7 @@ export function createUser(data: UserData) {
     body: JSON.stringify(data),
     headers: createHeaders(),
     method: 'POST',
+    mode: 'cors',
   }).then((response) => response.json());
 }
 
@@ -40,6 +43,7 @@ export function updateUser(userId: string, data: UserData) {
     body: JSON.stringify(data),
     headers: createHeaders(),
     method: 'PATCH',
+    mode: 'cors',
   }).then((response) => response.json());
 }
 
@@ -49,6 +53,7 @@ export function deleteUser(userId: string) {
   return fetch(url, {
     headers: createHeaders(),
     method: 'DELETE',
+    mode: 'cors',
   }).then((response) => response.json());
 }
 

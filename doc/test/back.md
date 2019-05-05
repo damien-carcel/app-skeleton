@@ -2,11 +2,6 @@
 
 ## Requirements
 
-You need to export the following environment variable:
-```bash
-export CURRENT_IDS="$(id -u):$(id -g)" 
-```
-
 There is no need to fully install the application, you only need to [setup the database](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md#setup-the-database) for integration and end-to-end tests.
 
 ## Introduction

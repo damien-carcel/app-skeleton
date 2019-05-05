@@ -4,11 +4,6 @@
 
 You need the latest versions of [Docker engine](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/) installed.
 
-You also need to export the following environment variable:
-```bash
-export CURRENT_IDS="$(id -u):$(id -g)" 
-```
-
 ## Build the Docker images
 
 ```bash

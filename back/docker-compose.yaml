@@ -5,10 +5,17 @@ services:
         image: 'nginx:alpine'
         depends_on:
             - 'fpm'
+        labels:
+            - 'traefik.docker.network=proxy'
+            - 'traefik.frontend.rule=Host:api.skeleton.docker.local'
+            - 'traefik.enable=true'
         volumes:
             - './:/srv/app:ro'
             - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
             - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
+        networks:
+            - 'proxy'
+            - 'skeleton-back'
 
     fpm:
         build: './docker/fpm/'
@@ -17,12 +24,14 @@ services:
             APP_ENV: 'prod'
             APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
             DATABASE_URL: 'mysql://app_skeleton:app_skeleton@mysql:3306/app_skeleton'
-            CORS_ALLOW_ORIGIN: '^https?://localhost(:[0-9]+)?$$'
+            CORS_ALLOW_ORIGIN: '^https?://skeleton.docker.local(:[0-9]+)?$$'
         user: 'www-data:www-data'
         volumes:
             - './:/srv/app:ro'
             - 'var-data:/srv/app/var:rw'
         working_dir: '/srv/app'
+        networks:
+            - 'skeleton-back'
 
     php:
         build: './docker/php/'
@@ -32,20 +41,35 @@ services:
             COMPOSER_HOME: '/home/composer/.config/composer'
             PHP_IDE_CONFIG: 'serverName=app-skeleton'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-        user: '${CURRENT_IDS}'
+            XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+        ports:
+            - '${PHP_OUTPUT:-8000}:8000'
+        user: '${CURRENT_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
             - '~/.cache/composer:/home/composer/.cache/composer'
             - '~/.config/composer:/home/composer/.config/composer'
         working_dir: '/srv/app'
+        networks:
+            - 'skeleton-back'
 
     mysql:
-        image: 'mysql:5.7'
+        image: 'mysql:8'
+        command: '--default-authentication-plugin=mysql_native_password'
         environment:
             MYSQL_ROOT_PASSWORD: 'root'
             MYSQL_USER: 'app_skeleton'
             MYSQL_PASSWORD: 'app_skeleton'
             MYSQL_DATABASE: 'app_skeleton'
+        ports:
+            - '${MYSQ_PORTS:-33006}:3306'
+        networks:
+            - 'skeleton-back'
+
+networks:
+    proxy:
+        external: true
+    skeleton-back:
 
 volumes:
     var-data:

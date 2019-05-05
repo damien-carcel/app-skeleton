@@ -13,6 +13,9 @@ It is composed of two distinct applications:
 The front-end application is made to consume an API, the real implementation being provided by the back-end application.
 But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) (for development and testing purpose only).
 
+To be able to run the full application (both back-end and front-end), you'll first need to setup Traefik as a local reverse proxy.
+Please follow [this documentation](https://github.com/AymericPlanche/local-reverse-proxy) to achieve that.
+
 Follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front.md) to run the front-end application (with either the JSON server or the back-end application),
 and follow [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md) run the back-end application.
 
