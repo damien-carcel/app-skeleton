@@ -22,8 +22,12 @@ use PHPUnit\Framework\TestCase;
  */
 class UserTest extends TestCase
 {
+    /** @var array */
     private $userData;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         $this->userData = UserFixtures::getNormalizedUsers()[0];
