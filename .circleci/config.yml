@@ -109,11 +109,14 @@ jobs:
                 name: Run static analysis on the unit tests of the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.phpspec.php
             - run:
+                name: Run PHPUnit tests
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit
+            - run:
                 name: Run unit tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run --format=junit > var/tests/phpspec/specs.xml
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run --format=junit > var/tests/phpspec/specs.xml && docker-compose run --rm php vendor/bin/phpunit
             - run:
                 name: Run acceptance tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=acceptance vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"
             - run:
                 name: start MySQL container
                 command: cd ~/project/back && docker-compose up -d mysql
@@ -124,10 +127,10 @@ jobs:
                     cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
             - run:
                 name: Run integration tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p integration -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p integration -f junit -o var/tests/behat -f pretty -o std --colors"
             - run:
                 name: Run end to end tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "APP_ENV=test vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors"
             - store_test_results:
                 path: front/var/tests
             - store_test_results:
