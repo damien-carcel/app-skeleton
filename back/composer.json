@@ -30,6 +30,7 @@
     "friendsofphp/php-cs-fixer": "^2.14",
     "phpmd/phpmd": "^2.6",
     "phpspec/phpspec": "^5.1",
+    "phpunit/phpunit": "^8.1",
     "symfony/requirements-checker": "^1.1",
     "symfony/thanks": "^1.1",
     "symfony/web-server-bundle": "4.2.*"
@@ -50,7 +51,8 @@
       "Carcel\\Tests\\Acceptance\\": "tests/acceptance/",
       "Carcel\\Tests\\EndToEnd\\": "tests/end-to-end/",
       "Carcel\\Tests\\Fixtures\\": "tests/fixtures/",
-      "Carcel\\Tests\\Integration\\": "tests/integration/"
+      "Carcel\\Tests\\Integration\\": "tests/integration/",
+      "Carcel\\Tests\\Unit\\": "tests/unit/"
     }
   },
   "replace": {
@@ -83,9 +85,10 @@
     "php-cs-fixer": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php && vendor/bin/php-cs-fixer fix -v --dry-run --diff --config=.php_cs.phpspec.php",
     "php-cs-fixer-fix": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php && vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.phpspec.php",
     "phpspec": "vendor/bin/phpspec run",
-    "acceptance": "APP_ENV=acceptance vendor/bin/behat --profile=acceptance",
-    "integration": "APP_ENV=test vendor/bin/behat --profile=integration",
-    "end-to-end": "APP_ENV=test vendor/bin/behat --profile=end-to-end"
+    "unit": "vendor/bin/phpunit --testsuite \"Unit tests\"",
+    "acceptance": "vendor/bin/behat --profile=acceptance",
+    "integration": "vendor/bin/behat --profile=integration",
+    "end-to-end": "vendor/bin/behat --profile=end-to-end"
   },
   "conflict": {
     "symfony/symfony": "*"
