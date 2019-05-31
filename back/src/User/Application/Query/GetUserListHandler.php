@@ -37,7 +37,7 @@ class GetUserListHandler
      *
      * @return UserList
      */
-    public function handle(GetUserList $getUserList): UserList
+    public function __invoke(GetUserList $getUserList): UserList
     {
         return ($this->getUserListQueryFunction)(
             $getUserList->numberOfUsers(),
