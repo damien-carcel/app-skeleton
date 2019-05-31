@@ -21,6 +21,8 @@ use Carcel\User\Domain\Model\Read\UserList;
 interface GetUserList
 {
     /**
+     * @todo Use "__invoke" here and in the handlers.
+     *
      * @param int $numberOfUsers
      * @param int $userPage
      *
