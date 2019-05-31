@@ -45,7 +45,7 @@ class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAListOfUsers(): void
     {
-        $userList = $this->getUserListFromMemory->execute(10, 1);
+        $userList = ($this->getUserListFromMemory)(10, 1);
 
         $this->assertInstanceOf(UserList::class, $userList);
         $this->assertSame(
@@ -57,7 +57,7 @@ class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itGetsALimitedListOfUsers(): void
     {
-        $userList = $this->getUserListFromMemory->execute(2, 1);
+        $userList = ($this->getUserListFromMemory)(2, 1);
 
         $this->assertInstanceOf(UserList::class, $userList);
         $this->assertSame(
@@ -69,7 +69,7 @@ class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAListOfOneUserStartingACertainPage(): void
     {
-        $userList = $this->getUserListFromMemory->execute(1, 2);
+        $userList = ($this->getUserListFromMemory)(1, 2);
 
         $this->assertInstanceOf(UserList::class, $userList);
         $this->assertSame(
@@ -81,7 +81,7 @@ class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAListOfUsersStartingACertainPage(): void
     {
-        $userList = $this->getUserListFromMemory->execute(5, 2);
+        $userList = ($this->getUserListFromMemory)(5, 2);
 
         $this->assertInstanceOf(UserList::class, $userList);
         $this->assertSame(
@@ -93,7 +93,7 @@ class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAnEmptyListOfUsersIfThePageIsTooHigh(): void
     {
-        $userList = $this->getUserListFromMemory->execute(10, 3);
+        $userList = ($this->getUserListFromMemory)(10, 3);
 
         $this->assertInstanceOf(UserList::class, $userList);
         $this->assertSame(

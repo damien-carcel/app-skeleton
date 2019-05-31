@@ -37,7 +37,7 @@ class GetUserListFromMemory implements GetUserList
     /**
      * {@inheritdoc}
      */
-    public function execute(int $numberOfUsers, int $userPage): UserList
+    public function __invoke(int $numberOfUsers, int $userPage): UserList
     {
         $persistedUsers = $this->repository->findAll();
         $usersToReturn = array_slice(

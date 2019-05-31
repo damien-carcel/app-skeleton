@@ -39,7 +39,7 @@ class GetUserListHandler
      */
     public function handle(GetUserList $getUserList): UserList
     {
-        return $this->getUserListQueryFunction->execute(
+        return ($this->getUserListQueryFunction)(
             $getUserList->numberOfUsers(),
             $getUserList->userPage()
         );

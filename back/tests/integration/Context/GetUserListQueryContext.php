@@ -48,7 +48,7 @@ class GetUserListQueryContext implements Context
      */
     public function queryUsers(int $quantity, int $pageNumber): void
     {
-        $this->userList = $this->getUserListQuery->execute($quantity, $pageNumber);
+        $this->userList = ($this->getUserListQuery)($quantity, $pageNumber);
     }
 
     /**

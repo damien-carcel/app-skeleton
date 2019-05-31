@@ -21,12 +21,10 @@ use Carcel\User\Domain\Model\Read\UserList;
 interface GetUserList
 {
     /**
-     * @todo Use "__invoke" here and in the handlers.
-     *
      * @param int $numberOfUsers
      * @param int $userPage
      *
      * @return UserList
      */
-    public function execute(int $numberOfUsers, int $userPage): UserList;
+    public function __invoke(int $numberOfUsers, int $userPage): UserList;
 }
