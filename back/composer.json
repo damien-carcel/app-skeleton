@@ -78,6 +78,7 @@
     "tests": [
       "@php-cs-fixer",
       "@phpspec",
+      "@unit",
       "@acceptance",
       "@integration",
       "@end-to-end"

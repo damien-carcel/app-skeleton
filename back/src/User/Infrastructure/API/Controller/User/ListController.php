@@ -48,7 +48,7 @@ final class ListController
         $limit = null === $request->query->get('limit') ? 10 : (int) $request->query->get('_limit');
         $page = null === $request->query->get('_page') ? 1 : (int) $request->query->get('_page');
 
-        $userList = $this->getUserListHandler->handle(new GetUserList($limit, $page));
+        $userList = ($this->getUserListHandler)(new GetUserList($limit, $page));
 
         return new JsonResponse($userList->normalize());
     }

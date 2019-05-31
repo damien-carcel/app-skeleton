@@ -50,11 +50,10 @@ $ docker-compose run --rm php composer php-cs-fixer-fix
 
 It is used to run unit and integration tests.
 
-
 ### Unit tests
 
-Unit tests are primarily used to tests the domain business. They are also used to test the fake adapters used in
-acceptance tests to replace the production ones.
+Unit tests are primarily used to tests the domain business.
+They are also used to test DTOs and the fake adapters used in acceptance tests to replace the production ones.
 
 To use it, run the following command:
 ```bash
@@ -80,7 +79,7 @@ All the necessary configuration is already present in the `behat.yaml` file.
 
 ### Acceptance tests
 
-These tests focus on entirely on the business (meaning Domain and Application).
+These tests focus entirely on the application business (meaning the Application layer).
 You should find no infrastructure here: no DB, no framework (meaning no requests, no web browser).
 
 They can run only with PHP, there is no need to start MySQL or the Symfony PHP server (or any other web server).

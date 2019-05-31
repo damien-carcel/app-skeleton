@@ -26,5 +26,5 @@ interface GetUserList
      *
      * @return UserList
      */
-    public function execute(int $numberOfUsers, int $userPage): UserList;
+    public function __invoke(int $numberOfUsers, int $userPage): UserList;
 }

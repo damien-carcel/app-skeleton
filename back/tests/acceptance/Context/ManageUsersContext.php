@@ -29,17 +29,17 @@ use Webmozart\Assert\Assert;
 class ManageUsersContext implements Context
 {
     /** @var GetUserListHandler */
-    private $getUserList;
+    private $getUserListHandler;
 
     /** @var UserList */
     private $userList;
 
     /**
-     * @param GetUserListHandler $getUserList
+     * @param GetUserListHandler $getUserListHandler
      */
-    public function __construct(GetUserListHandler $getUserList)
+    public function __construct(GetUserListHandler $getUserListHandler)
     {
-        $this->getUserList = $getUserList;
+        $this->getUserListHandler = $getUserListHandler;
     }
 
     /**
@@ -52,7 +52,7 @@ class ManageUsersContext implements Context
     {
         $pageNumber = (int) substr($position, 0, 1);
 
-        $this->userList = $this->getUserList->handle(new GetUserListQuery($quantity, $pageNumber));
+        $this->userList = ($this->getUserListHandler)(new GetUserListQuery($quantity, $pageNumber));
     }
 
     /**

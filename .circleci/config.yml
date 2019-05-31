@@ -113,7 +113,7 @@ jobs:
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit
             - run:
                 name: Run unit tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run --format=junit > var/tests/phpspec/specs.xml && docker-compose run --rm php vendor/bin/phpunit
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpspec run --format=junit > var/tests/phpspec/specs.xml
             - run:
                 name: Run acceptance tests of the back-end application
                 command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"

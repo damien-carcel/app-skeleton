@@ -36,7 +36,7 @@ class GetUserListFromDatabase implements GetUserList
     /**
      * {@inheritdoc}
      */
-    public function execute(int $numberOfUsers, int $userPage): UserList
+    public function __invoke(int $numberOfUsers, int $userPage): UserList
     {
         $query = <<<SQL
 SELECT id, username, first_name AS firstName, last_name AS lastName FROM user

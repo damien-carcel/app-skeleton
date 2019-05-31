@@ -130,7 +130,7 @@ class User implements UserInterface
      */
     public function eraseCredentials(): void
     {
-        // TODO: Implement eraseCredentials() method.
+        throw new \LogicException('Not implemented yet.');
     }
 
     /**
