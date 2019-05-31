@@ -188,12 +188,6 @@
     "phpmd/phpmd": {
         "version": "2.6.0"
     },
-    "phpspec/php-diff": {
-        "version": "v1.1.0"
-    },
-    "phpspec/phpspec": {
-        "version": "5.1.0"
-    },
     "phpspec/prophecy": {
         "version": "1.8.0"
     },

@@ -29,7 +29,6 @@
     "friends-of-behat/symfony-extension": "^2.0",
     "friendsofphp/php-cs-fixer": "^2.14",
     "phpmd/phpmd": "^2.6",
-    "phpspec/phpspec": "^5.1",
     "phpunit/phpunit": "^8.1",
     "symfony/requirements-checker": "^1.1",
     "symfony/thanks": "^1.1",
@@ -76,16 +75,14 @@
       "@auto-scripts"
     ],
     "tests": [
-      "@php-cs-fixer",
-      "@phpspec",
+      "@heck-style",
       "@unit",
       "@acceptance",
       "@integration",
       "@end-to-end"
     ],
-    "php-cs-fixer": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php && vendor/bin/php-cs-fixer fix -v --dry-run --diff --config=.php_cs.phpspec.php",
-    "php-cs-fixer-fix": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php && vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.phpspec.php",
-    "phpspec": "vendor/bin/phpspec run",
+    "check-style": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php",
+    "fix-style": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
     "unit": "vendor/bin/phpunit --testsuite \"Unit tests\"",
     "acceptance": "vendor/bin/behat --profile=acceptance",
     "integration": "vendor/bin/behat --profile=integration",
