@@ -19,7 +19,7 @@ RUN apk add --no-cache \
         pdo                              \
         pdo_mysql                        \
         zip                              \
-    && pecl install xdebug-2.7.0RC2      \
+    && pecl install xdebug               \
     && docker-php-ext-enable xdebug      \
     && apk del .build-deps
 
