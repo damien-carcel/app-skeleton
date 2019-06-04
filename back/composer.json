@@ -11,15 +11,15 @@
     "ext-pdo": "*",
     "nelmio/cors-bundle": "^1.5",
     "ramsey/uuid-doctrine": "^1.5",
-    "symfony/console": "4.2.*",
-    "symfony/dotenv": "4.2.*",
+    "symfony/console": "4.3.*",
+    "symfony/dotenv": "4.3.*",
     "symfony/flex": "^1.2",
-    "symfony/framework-bundle": "4.2.*",
+    "symfony/framework-bundle": "4.3.*",
     "symfony/monolog-bundle": "^3.3",
     "symfony/orm-pack": "^1.0",
-    "symfony/security-bundle": "4.2.*",
-    "symfony/validator": "4.2.*",
-    "symfony/yaml": "4.2.*",
+    "symfony/security-bundle": "4.3.*",
+    "symfony/validator": "4.3.*",
+    "symfony/yaml": "4.3.*",
     "webmozart/assert": "^1.4"
   },
   "require-dev": {
@@ -32,7 +32,7 @@
     "phpunit/phpunit": "^8.1",
     "symfony/requirements-checker": "^1.1",
     "symfony/thanks": "^1.1",
-    "symfony/web-server-bundle": "4.2.*"
+    "symfony/web-server-bundle": "4.3.*"
   },
   "config": {
     "preferred-install": {
@@ -95,7 +95,7 @@
     "symfony": {
       "id": "01C0Y4X3Q8GCEHX7AH8SJJB02E",
       "allow-contrib": true,
-      "require": "4.2.*"
+      "require": "4.3.*"
     }
   }
 }
