@@ -43,7 +43,7 @@ class GetUserListFromMemory implements GetUserList
         $usersToReturn = array_slice(
             $persistedUsers,
             $numberOfUsers * ($userPage - 1),
-            $numberOfUsers * $userPage
+            $numberOfUsers
         );
 
         return new UserList($this->normalizeUsers($usersToReturn));
