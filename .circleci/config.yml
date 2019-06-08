@@ -107,10 +107,10 @@ jobs:
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
             - run:
                 name: Run unit tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit --log-junit var/tests/phpunit/unit_tests.xml
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit --testsuite="Unit tests" --log-junit var/tests/phpunit/unit_tests.xml
             - run:
                 name: Run acceptance tests of the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors
             - run:
                 name: start MySQL container
                 command: cd ~/project/back && docker-compose up -d mysql
@@ -121,10 +121,10 @@ jobs:
                     cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
             - run:
                 name: Run integration tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p integration -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" --log-junit var/tests/phpunit/integration_tests.xml
             - run:
                 name: Run end to end tests on the back-end application
-                command: cd ~/project/back && docker-compose run --rm php sh -c "vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors"
+                command: cd ~/project/back && docker-compose run --rm php vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors
             - store_test_results:
                 path: front/var/tests
             - store_artifacts:

@@ -1,6 +1,0 @@
-suites:
-    app_suite:
-        namespace: Carcel
-        psr4_prefix: Carcel
-        src_path: src
-        spec_path: tests

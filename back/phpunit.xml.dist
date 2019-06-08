@@ -9,7 +9,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
+        <server name="APP_ENV" value="integration" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
     </php>
 
@@ -18,11 +18,11 @@
         <testsuite name="Unit tests">
             <directory>tests/unit</directory>
         </testsuite>
-<!--
+
         <testsuite name="Integration tests">
-            <directory>tests/integration</directory>
+            <directory suffix="Test.php">tests/integration</directory>
         </testsuite>
--->
+
     </testsuites>
 
     <filter>
