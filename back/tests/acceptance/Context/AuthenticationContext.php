@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class AuthenticationContext implements Context
+final class AuthenticationContext implements Context
 {
     /**
      * @Given I am logged as an administrator

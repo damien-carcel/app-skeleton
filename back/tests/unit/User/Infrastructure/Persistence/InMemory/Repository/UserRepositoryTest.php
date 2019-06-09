@@ -14,19 +14,15 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\Repository;
 
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class UserRepositoryTest extends TestCase
+final class UserRepositoryTest extends TestCase
 {
-    /** @var string[] */
     private $userIDs;
-
-    /** @var User[] */
     private $users;
 
     protected function setUp(): void
@@ -83,9 +79,6 @@ class UserRepositoryTest extends TestCase
         $this->assertNull($repository->find($this->userIDs[0]));
     }
 
-    /**
-     * @return UserRepository
-     */
     private function instantiateRepository(): UserRepository
     {
         return new UserRepository($this->users);

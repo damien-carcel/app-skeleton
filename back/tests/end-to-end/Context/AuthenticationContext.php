@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class AuthenticationContext extends RawMinkContext
+final class AuthenticationContext extends RawMinkContext
 {
     /**
      * @Given I am logged as an administrator

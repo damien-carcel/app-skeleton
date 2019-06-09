@@ -21,14 +21,10 @@ use Webmozart\Assert\Assert;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class ManageUsersContext extends RawMinkContext
+final class ManageUsersContext extends RawMinkContext
 {
-    /** @var RouterInterface */
     private $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;

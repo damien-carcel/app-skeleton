@@ -19,38 +19,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class User implements UserInterface
+final class User implements UserInterface
 {
-    /** @var UuidInterface */
     private $id;
-
-    /** @var string */
     private $username;
-
-    /** @var string */
     private $firstName;
-
-    /** @var string */
     private $lastName;
-
-    /** @var string */
     private $password;
-
-    /** @var string|null */
     private $salt;
-
-    /** @var array */
     private $roles;
 
-    /**
-     * @param UuidInterface $id
-     * @param string        $username
-     * @param string        $firstName
-     * @param string        $lastName
-     * @param string        $password
-     * @param string|null   $salt
-     * @param array         $roles
-     */
     public function __construct(
         UuidInterface $id,
         string $username,
@@ -69,9 +47,6 @@ class User implements UserInterface
         $this->roles = $roles;
     }
 
-    /**
-     * @return UuidInterface
-     */
     public function id(): UuidInterface
     {
         return $this->id;
@@ -85,17 +60,11 @@ class User implements UserInterface
         return $this->username;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): string
     {
         return $this->lastName;
@@ -133,9 +102,6 @@ class User implements UserInterface
         throw new \LogicException('Not implemented yet.');
     }
 
-    /**
-     * @param array $data
-     */
     public function changeName(array $data): void
     {
         if (array_key_exists('firstName', $data)) {

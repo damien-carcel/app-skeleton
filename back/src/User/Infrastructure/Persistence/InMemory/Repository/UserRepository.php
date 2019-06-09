@@ -24,9 +24,6 @@ final class UserRepository implements UserRepositoryInterface
     /** @var User[] */
     private $users;
 
-    /**
-     * @param User[] $users
-     */
     public function __construct(array $users = [])
     {
         foreach ($users as $user) {
@@ -43,9 +40,7 @@ final class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $uuid
-     *
-     * @return User|null
+     * {@inheritdoc}
      */
     public function find(string $uuid): ?User
     {
@@ -57,7 +52,7 @@ final class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param User $user
+     * {@inheritdoc}
      */
     public function save(User $user): void
     {
@@ -65,7 +60,7 @@ final class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param User $user
+     * {@inheritdoc}
      */
     public function delete(User $user): void
     {

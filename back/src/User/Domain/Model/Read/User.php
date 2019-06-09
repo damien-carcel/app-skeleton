@@ -16,26 +16,13 @@ namespace Carcel\User\Domain\Model\Read;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class User
+final class User
 {
-    /** @var string */
     private $id;
-
-    /** @var string */
     private $username;
-
-    /** @var string */
     private $firstName;
-
-    /** @var string */
     private $lastName;
 
-    /**
-     * @param string $id
-     * @param string $username
-     * @param string $firstName
-     * @param string $lastName
-     */
     public function __construct(string $id, string $username, string $firstName, string $lastName)
     {
         $this->id = $id;
@@ -44,9 +31,6 @@ class User
         $this->lastName = $lastName;
     }
 
-    /**
-     * @return array
-     */
     public function normalize(): array
     {
         return [

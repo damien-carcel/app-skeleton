@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserListTest extends TestCase
+final class GetUserListTest extends TestCase
 {
     /** @test */
     public function itIsAGetUserListQuery(): void
@@ -44,9 +44,6 @@ class GetUserListTest extends TestCase
         $this->assertSame(1, $getUserList->userPage());
     }
 
-    /**
-     * @return GetUserList
-     */
     private function instantiateValidGetUserList(): GetUserList
     {
         return new GetUserList(10, 1);

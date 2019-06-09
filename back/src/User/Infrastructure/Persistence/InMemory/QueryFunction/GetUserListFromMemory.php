@@ -21,14 +21,10 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserListFromMemory implements GetUserList
+final class GetUserListFromMemory implements GetUserList
 {
-    /** @var UserRepositoryInterface */
     private $repository;
 
-    /**
-     * @param UserRepositoryInterface $repository
-     */
     public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -49,11 +45,6 @@ class GetUserListFromMemory implements GetUserList
         return new UserList($this->normalizeUsers($usersToReturn));
     }
 
-    /**
-     * @param User[] $users
-     *
-     * @return array
-     */
     private function normalizeUsers(array $users): array
     {
         return array_map(function (User $user) {

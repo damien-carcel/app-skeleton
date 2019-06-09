@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserListFromMemoryTest extends TestCase
+final class GetUserListFromMemoryTest extends TestCase
 {
     /** @var GetUserListFromMemory */
     private $getUserListFromMemory;
@@ -109,10 +109,6 @@ class GetUserListFromMemoryTest extends TestCase
         $this->assertFollowingUserListShouldBeRetrieved($users, []);
     }
 
-    /**
-     * @param UserList $users
-     * @param array    $usersIds
-     */
     private function assertFollowingUserListShouldBeRetrieved(UserList $users, array $usersIds): void
     {
         $normalizedExpectedUsers = [];
@@ -123,9 +119,6 @@ class GetUserListFromMemoryTest extends TestCase
         $this->assertSame($users->normalize(), $normalizedExpectedUsers);
     }
 
-    /**
-     * @return UserRepositoryInterface
-     */
     private function instantiateInMemoryUserRepository(): UserRepositoryInterface
     {
         $repository = new UserRepository();

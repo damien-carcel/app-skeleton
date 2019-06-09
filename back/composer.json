@@ -75,7 +75,7 @@
       "@auto-scripts"
     ],
     "tests": [
-      "@heck-style",
+      "@check-style",
       "@unit",
       "@acceptance",
       "@integration",

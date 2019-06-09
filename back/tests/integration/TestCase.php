@@ -29,7 +29,7 @@ class TestCase extends KernelTestCase
      */
     public function setUp(): void
     {
-        self::bootKernel(['debug' => false, 'environment' => 'integration']);
+        static::bootKernel(['debug' => false, 'environment' => 'integration']);
     }
 
     /**
@@ -38,12 +38,9 @@ class TestCase extends KernelTestCase
      */
     protected function container(): ContainerInterface
     {
-        return self::$container;
+        return static::$container;
     }
 
-    /**
-     * @param array $usersIdsToLoad
-     */
     protected function loadUserFixtures(array $usersIdsToLoad = []): void
     {
         $entityManager = $this->container()->get('doctrine.orm.entity_manager');

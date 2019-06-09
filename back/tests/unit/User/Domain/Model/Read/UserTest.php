@@ -20,9 +20,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
-    /** @var array */
     private $userData;
 
     /**
@@ -47,9 +46,6 @@ class UserTest extends TestCase
         $this->assertSame($this->userData, $user->normalize());
     }
 
-    /**
-     * @return User
-     */
     private function instantiateValidUserReadModel(): User
     {
         list($id, $username, $firstName, $lastName) = array_values($this->userData);

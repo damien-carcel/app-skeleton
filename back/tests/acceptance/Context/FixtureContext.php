@@ -20,14 +20,10 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FixtureContext implements Context
+final class FixtureContext implements Context
 {
-    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @param UserRepositoryInterface $userRepository
-     */
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;

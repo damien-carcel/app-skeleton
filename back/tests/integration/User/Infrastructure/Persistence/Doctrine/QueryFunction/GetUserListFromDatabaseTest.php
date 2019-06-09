@@ -95,12 +95,6 @@ final class GetUserListFromDatabaseTest extends TestCase
         $this->assertFollowingUserListShouldBeRetrieved($users, []);
     }
 
-    /**
-     * @param int $quantity
-     * @param int $pageNumber
-     *
-     * @return UserList
-     */
     private function queryUsersStartingPage(int $quantity, int $pageNumber): UserList
     {
         $queryHandler = $this->container()->get(GetUserList::class);
@@ -108,10 +102,6 @@ final class GetUserListFromDatabaseTest extends TestCase
         return ($queryHandler)($quantity, $pageNumber);
     }
 
-    /**
-     * @param UserList $users
-     * @param array    $usersIds
-     */
     private function assertFollowingUserListShouldBeRetrieved(UserList $users, array $usersIds): void
     {
         $normalizedExpectedUsers = [];

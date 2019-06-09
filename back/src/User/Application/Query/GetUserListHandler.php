@@ -19,24 +19,15 @@ use Carcel\User\Domain\QueryFunction\GetUserList as GetUserListQueryFunction;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserListHandler
+final class GetUserListHandler
 {
-    /** @var GetUserListQueryFunction */
     private $getUserListQueryFunction;
 
-    /**
-     * @param GetUserListQueryFunction $getUserListQueryFunction
-     */
     public function __construct(GetUserListQueryFunction $getUserListQueryFunction)
     {
         $this->getUserListQueryFunction = $getUserListQueryFunction;
     }
 
-    /**
-     * @param GetUserList $getUserList
-     *
-     * @return UserList
-     */
     public function __invoke(GetUserList $getUserList): UserList
     {
         return ($this->getUserListQueryFunction)(

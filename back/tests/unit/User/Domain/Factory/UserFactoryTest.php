@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 final class UserFactoryTest extends TestCase
 {
     /** @test */
-    public function itIsAUserFactory()
+    public function itIsAUserFactory(): void
     {
         $this->assertInstanceOf(UserFactory::class, $this->instantiateUserFactory());
     }
@@ -74,9 +74,6 @@ final class UserFactoryTest extends TestCase
         ));
     }
 
-    /**
-     * @return UserFactory
-     */
     private function instantiateUserFactory(): UserFactory
     {
         return new UserFactory();

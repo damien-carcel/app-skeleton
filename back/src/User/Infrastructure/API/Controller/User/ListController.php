@@ -27,22 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ListController
 {
-    /** @var GetUserListHandler */
     private $getUserListHandler;
 
-    /**
-     * @param GetUserListHandler $getUserListHandler
-     */
     public function __construct(GetUserListHandler $getUserListHandler)
     {
         $this->getUserListHandler = $getUserListHandler;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function __invoke(Request $request): Response
     {
         $limit = null === $request->query->get('limit') ? 10 : (int) $request->query->get('_limit');

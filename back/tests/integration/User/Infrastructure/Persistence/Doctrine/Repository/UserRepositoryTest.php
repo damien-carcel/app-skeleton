@@ -77,9 +77,6 @@ final class UserRepositoryTest extends TestCase
         $this->assertNull($this->repository()->find($this->userIDs[0]));
     }
 
-    /**
-     * @return UserRepositoryInterface
-     */
     private function repository(): UserRepositoryInterface
     {
         return $this->container()->get(UserRepositoryInterface::class);

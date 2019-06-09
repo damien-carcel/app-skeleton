@@ -21,13 +21,6 @@ use Ramsey\Uuid\Uuid;
  */
 final class UserFactory
 {
-    /**
-     * @param array $userData
-     *
-     * @throws \Exception
-     *
-     * @return User
-     */
     public function create(array $userData): User
     {
         if (!isset($userData['id']) || empty($userData['id'])) {

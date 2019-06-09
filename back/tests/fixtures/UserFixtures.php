@@ -17,12 +17,11 @@ use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class UserFixtures extends Fixture
+final class UserFixtures extends Fixture
 {
     public const USERS_DATA = [
         '02432f0b-c33e-4d71-8ba9-a5e3267a45d5' => [
@@ -115,7 +114,6 @@ class UserFixtures extends Fixture
         ],
     ];
 
-    /** @var string[] */
     private $userIdsToLoad;
 
     public function __construct(array $userIdsToLoad = [])
@@ -167,9 +165,6 @@ class UserFixtures extends Fixture
         ));
     }
 
-    /**
-     * @return array
-     */
     public static function getNormalizedUsers(): array
     {
         $normalizedUsers = [];

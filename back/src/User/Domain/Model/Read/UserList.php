@@ -18,12 +18,8 @@ namespace Carcel\User\Domain\Model\Read;
  */
 final class UserList
 {
-    /** @var User[] */
     private $users;
 
-    /**
-     * @param array $usersData
-     */
     public function __construct(array $usersData)
     {
         $this->users = array_map(function (array $userData) {
@@ -36,9 +32,6 @@ final class UserList
         }, $usersData);
     }
 
-    /**
-     * @return array
-     */
     public function normalize(): array
     {
         $normalizedUsers = array_map(function (User $user) {

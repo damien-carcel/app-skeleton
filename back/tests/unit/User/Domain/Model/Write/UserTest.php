@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     /** @test */
     public function itIsAUser(): void
