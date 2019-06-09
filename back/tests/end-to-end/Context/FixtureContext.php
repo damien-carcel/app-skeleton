@@ -22,14 +22,10 @@ use Doctrine\ORM\EntityManager;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FixtureContext implements Context
+final class FixtureContext implements Context
 {
-    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;

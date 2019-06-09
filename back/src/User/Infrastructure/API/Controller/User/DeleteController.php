@@ -26,24 +26,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class DeleteController
 {
-    /** @var UserRepositoryInterface */
     private $repository;
 
-    /**
-     * @param UserRepositoryInterface $repository
-     */
     public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * @param string $uuid
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return Response
-     */
     public function __invoke(string $uuid): Response
     {
         $user = $this->repository->find($uuid);

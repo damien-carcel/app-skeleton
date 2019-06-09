@@ -20,14 +20,10 @@ use Doctrine\DBAL\Connection;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserListFromDatabase implements GetUserList
+final class GetUserListFromDatabase implements GetUserList
 {
-    /** @var Connection */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;

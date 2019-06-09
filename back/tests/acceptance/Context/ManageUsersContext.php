@@ -21,22 +21,15 @@ use Carcel\User\Domain\Model\Read\UserList;
 use Webmozart\Assert\Assert;
 
 /**
- * This is a very bad acceptance test context, as it makes use of the framework
- * (router, request handling), which is not business. This is only for demo.
- *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class ManageUsersContext implements Context
+final class ManageUsersContext implements Context
 {
-    /** @var GetUserListHandler */
     private $getUserListHandler;
 
     /** @var UserList */
     private $userList;
 
-    /**
-     * @param GetUserListHandler $getUserListHandler
-     */
     public function __construct(GetUserListHandler $getUserListHandler)
     {
         $this->getUserListHandler = $getUserListHandler;

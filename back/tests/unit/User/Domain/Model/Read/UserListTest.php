@@ -20,9 +20,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class UserListTest extends TestCase
+final class UserListTest extends TestCase
 {
-    /** @var array */
     private $usersData;
 
     /**
@@ -34,7 +33,7 @@ class UserListTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateAListOfUserReadModels(): void
+    public function itIsAListOfUserReadModels(): void
     {
         $this->assertInstanceOf(UserList::class, $this->instantiateUserList());
     }
@@ -53,9 +52,6 @@ class UserListTest extends TestCase
         $this->assertSame($this->usersData, $userList->normalize());
     }
 
-    /**
-     * @return UserList
-     */
     private function instantiateUserList(): UserList
     {
         return new UserList($this->usersData);

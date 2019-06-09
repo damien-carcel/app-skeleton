@@ -23,35 +23,22 @@ namespace Carcel\User\Application\Query;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class GetUserList
+final class GetUserList
 {
-    /** @var int */
     private $numberOfUsers;
-
-    /** @var int */
     private $userPage;
 
-    /**
-     * @param int $numberOfUsers
-     * @param int $userPage
-     */
     public function __construct(int $numberOfUsers, int $userPage)
     {
         $this->numberOfUsers = $numberOfUsers;
         $this->userPage = $userPage;
     }
 
-    /**
-     * @return int
-     */
     public function numberOfUsers(): int
     {
         return $this->numberOfUsers;
     }
 
-    /**
-     * @return int
-     */
     public function userPage(): int
     {
         return $this->userPage;

@@ -27,23 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class UpdateController
 {
-    /** @var UserRepositoryInterface */
     private $repository;
 
-    /**
-     * @param UserRepositoryInterface $repository
-     */
     public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * @param string  $uuid
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function __invoke(string $uuid, Request $request): Response
     {
         $content = $request->getContent();

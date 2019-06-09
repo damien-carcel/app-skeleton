@@ -23,12 +23,8 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class UserRepository implements UserRepositoryInterface
 {
-    /** @var EntityManagerInterface */
     private $entityManager;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -68,9 +64,6 @@ final class UserRepository implements UserRepositoryInterface
         $this->entityManager->flush();
     }
 
-    /**
-     * @return ObjectRepository
-     */
     private function getDoctrineRepository(): ObjectRepository
     {
         return $this->entityManager->getRepository(User::class);

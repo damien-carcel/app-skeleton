@@ -75,7 +75,7 @@
       "@auto-scripts"
     ],
     "tests": [
-      "@heck-style",
+      "@check-style",
       "@unit",
       "@acceptance",
       "@integration",
@@ -85,7 +85,7 @@
     "fix-style": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
     "unit": "vendor/bin/phpunit --testsuite \"Unit tests\"",
     "acceptance": "vendor/bin/behat --profile=acceptance",
-    "integration": "vendor/bin/behat --profile=integration",
+    "integration": "vendor/bin/phpunit --testsuite=\"Integration tests\"",
     "end-to-end": "vendor/bin/behat --profile=end-to-end"
   },
   "conflict": {

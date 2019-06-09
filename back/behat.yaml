@@ -1,18 +1,3 @@
-integration:
-    extensions:
-        FriendsOfBehat\SymfonyExtension:
-            kernel:
-                class: 'Carcel\Kernel'
-                environment: 'integration'
-    suites:
-        user:
-            paths:
-                - '%paths.base%/tests/integration/features'
-            contexts:
-                - 'Carcel\Tests\Integration\Context\FixtureContext'
-                - 'Carcel\Tests\Integration\Context\UserRepositoryContext'
-                - 'Carcel\Tests\Integration\Context\GetUserListQueryContext'
-
 acceptance:
     extensions:
         FriendsOfBehat\SymfonyExtension:
