@@ -17,20 +17,20 @@ use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\Tests\Integration\TestCase;
 use Carcel\User\Domain\Model\Read\UserList;
 use Carcel\User\Domain\QueryFunction\GetUserList;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use PHPUnit\Framework\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class GetUserListFromDatabaseTest extends TestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->prepareDatabaseWithUsers();
+        $this->loadUserFixtures();
     }
 
     /** @test */
@@ -119,15 +119,6 @@ final class GetUserListFromDatabaseTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        Assert::assertSame($users->normalize(), $normalizedExpectedUsers);
-    }
-
-    private function prepareDatabaseWithUsers(): void
-    {
-        $entityManager = $this->container()->get('doctrine.orm.entity_manager');
-
-        $purger = new ORMPurger($entityManager);
-        $executor = new ORMExecutor($entityManager, $purger);
-        $executor->execute([new UserFixtures()]);
+        $this->assertSame($users->normalize(), $normalizedExpectedUsers);
     }
 }

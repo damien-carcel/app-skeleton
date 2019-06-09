@@ -114,12 +114,29 @@ class UserFixtures extends Fixture
         ],
     ];
 
+    /** @var string[] */
+    private $userIdsToLoad;
+
+    /**
+     * @param array $userIdsToLoad
+     */
+    public function __construct(array $userIdsToLoad = [])
+    {
+        $this->userIdsToLoad = $userIdsToLoad;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $objectManager): void
     {
-        $users = static::instantiateUserEntities();
+        if (empty($this->userIdsToLoad)) {
+            $users = static::instantiateUserEntities();
+        } else {
+            $users = array_map(function (string $userId) {
+                return $this->instantiateUserEntity($userId);
+            }, $this->userIdsToLoad);
+        }
 
         foreach ($users as $user) {
             $objectManager->persist($user);
@@ -147,6 +164,24 @@ class UserFixtures extends Fixture
         }
 
         return $users;
+    }
+
+    /**
+     * @param string $userId
+     *
+     * @return User
+     */
+    public static function instantiateUserEntity(string $userId): User
+    {
+        return new User(
+            Uuid::fromString($userId),
+            static::USERS_DATA[$userId]['username'],
+            static::USERS_DATA[$userId]['firstName'],
+            static::USERS_DATA[$userId]['lastName'],
+            static::USERS_DATA[$userId]['password'],
+            static::USERS_DATA[$userId]['salt'],
+            static::USERS_DATA[$userId]['roles']
+        );
     }
 
     /**

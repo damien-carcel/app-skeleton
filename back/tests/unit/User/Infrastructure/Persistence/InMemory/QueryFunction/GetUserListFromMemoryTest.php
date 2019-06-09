@@ -18,7 +18,6 @@ use Carcel\User\Domain\Model\Read\UserList;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -121,7 +120,7 @@ class GetUserListFromMemoryTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        Assert::assertSame($users->normalize(), $normalizedExpectedUsers);
+        $this->assertSame($users->normalize(), $normalizedExpectedUsers);
     }
 
     /**

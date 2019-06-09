@@ -13,18 +13,17 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\Repository;
 
+use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class UserRepositoryTest extends TestCase
 {
-    /** @var UuidInterface[] */
+    /** @var string[] */
     private $userIDs;
 
     /** @var User[] */
@@ -32,10 +31,10 @@ class UserRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userIDs = [Uuid::uuid4(), Uuid::uuid4()];
+        $this->userIDs = ['02432f0b-c33e-4d71-8ba9-a5e3267a45d5', '08acf31d-2e62-44e9-ba18-fd160ac125ad'];
         $this->users = [
-            new User($this->userIDs[0], 'foobar', 'foo', 'bar', 'pass', 'salt', []),
-            new User($this->userIDs[1], 'barbaz', 'bar', 'baz', 'pass', 'salt', []),
+            UserFixtures::instantiateUserEntity($this->userIDs[0]),
+            UserFixtures::instantiateUserEntity($this->userIDs[1]),
         ];
     }
 
@@ -58,20 +57,19 @@ class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        $this->assertSame($this->users[0], $repository->find((string) $this->userIDs[0]));
+        $this->assertSame($this->users[0], $repository->find($this->userIDs[0]));
     }
 
     /** @test */
     public function itSavesAUser(): void
     {
-        $userId = Uuid::uuid4();
-        $user = new User($userId, 'foobarbaz', 'foobar', 'barbaz', 'pass', 'salt', []);
+        $user = UserFixtures::instantiateUserEntity('1605a575-77e5-4427-bbdb-2ebcb8cc8033');
 
         $repository = $this->instantiateRepository();
         $repository->save($user);
 
         $this->assertCount(3, $repository->findAll());
-        $this->assertSame($user, $repository->find((string) $userId));
+        $this->assertSame($user, $repository->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
     }
 
     /** @test */
@@ -82,7 +80,7 @@ class UserRepositoryTest extends TestCase
         $repository->delete($this->users[0]);
 
         $this->assertCount(1, $repository->findAll());
-        $this->assertNull($repository->find((string) $this->userIDs[0]));
+        $this->assertNull($repository->find($this->userIDs[0]));
     }
 
     /**

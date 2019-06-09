@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Integration;
 
+use Carcel\Tests\Fixtures\UserFixtures;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -21,6 +24,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class TestCase extends KernelTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         self::bootKernel(['debug' => false, 'environment' => 'integration']);
@@ -33,5 +39,18 @@ class TestCase extends KernelTestCase
     protected function container(): ContainerInterface
     {
         return self::$container;
+    }
+
+    /**
+     * @param array $usersIdsToLoad
+     */
+    protected function loadUserFixtures(array $usersIdsToLoad = []): void
+    {
+        $entityManager = $this->container()->get('doctrine.orm.entity_manager');
+
+        $purger = new ORMPurger($entityManager);
+        $executor = new ORMExecutor($entityManager, $purger);
+
+        $executor->execute([new UserFixtures($usersIdsToLoad)]);
     }
 }
