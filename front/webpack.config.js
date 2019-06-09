@@ -1,7 +1,7 @@
 /* eslint-env amd, node */
 
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DotEnv = require('dotenv-webpack');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
