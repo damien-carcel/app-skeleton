@@ -34,7 +34,7 @@ class UserListTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateAListOfUserReadModels(): void
+    public function itIsAListOfUserReadModels(): void
     {
         $this->assertInstanceOf(UserList::class, $this->instantiateUserList());
     }

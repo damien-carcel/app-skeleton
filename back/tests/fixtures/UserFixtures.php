@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Fixtures;
 
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -117,9 +118,6 @@ class UserFixtures extends Fixture
     /** @var string[] */
     private $userIdsToLoad;
 
-    /**
-     * @param array $userIdsToLoad
-     */
     public function __construct(array $userIdsToLoad = [])
     {
         $this->userIdsToLoad = $userIdsToLoad;
@@ -152,36 +150,21 @@ class UserFixtures extends Fixture
     {
         $users = [];
         foreach (static::USERS_DATA as $userId => $userData) {
-            $users[] = new User(
-                Uuid::fromString($userId),
-                $userData['username'],
-                $userData['firstName'],
-                $userData['lastName'],
-                $userData['password'],
-                $userData['salt'],
-                $userData['roles']
-            );
+            $users[] = static::createUser(array_merge(
+                ['id' => $userId],
+                $userData
+            ));
         }
 
         return $users;
     }
 
-    /**
-     * @param string $userId
-     *
-     * @return User
-     */
     public static function instantiateUserEntity(string $userId): User
     {
-        return new User(
-            Uuid::fromString($userId),
-            static::USERS_DATA[$userId]['username'],
-            static::USERS_DATA[$userId]['firstName'],
-            static::USERS_DATA[$userId]['lastName'],
-            static::USERS_DATA[$userId]['password'],
-            static::USERS_DATA[$userId]['salt'],
-            static::USERS_DATA[$userId]['roles']
-        );
+        return static::createUser(array_merge(
+            ['id' => $userId],
+            static::USERS_DATA[$userId]
+        ));
     }
 
     /**
@@ -197,11 +180,6 @@ class UserFixtures extends Fixture
         return $normalizedUsers;
     }
 
-    /**
-     * @param string $userId
-     *
-     * @return array
-     */
     public static function getNormalizedUser(string $userId): array
     {
         return [
@@ -210,5 +188,10 @@ class UserFixtures extends Fixture
             'firstName' => static::USERS_DATA[$userId]['firstName'],
             'lastName' => static::USERS_DATA[$userId]['lastName'],
         ];
+    }
+
+    private static function createUser(array $userData): User
+    {
+        return (new UserFactory())->create($userData);
     }
 }

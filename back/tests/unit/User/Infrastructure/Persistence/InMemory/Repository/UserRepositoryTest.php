@@ -39,7 +39,7 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeInstantiated(): void
+    public function itIsAUserRepository(): void
     {
         $this->assertInstanceOf(UserRepository::class, $this->instantiateRepository());
     }

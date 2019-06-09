@@ -34,7 +34,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateAUserReadModel(): void
+    public function itIsAUserReadModel(): void
     {
         $this->assertInstanceOf(User::class, $this->instantiateValidUserReadModel());
     }

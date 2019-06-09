@@ -13,47 +13,33 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
+use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Model\Write\User;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class UserTest extends TestCase
 {
-    /** @var UuidInterface */
-    private $uuid;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Exception
-     */
-    protected function setup(): void
-    {
-        $this->uuid = Uuid::uuid4();
-    }
-
     /** @test */
-    public function itCanCreateAUser(): void
+    public function itIsAUser(): void
     {
-        $this->assertInstanceOf(User::class, $this->instantiateValidUser());
+        $this->assertInstanceOf(User::class, $this->instantiateTonyStark());
     }
 
     /** @test */
     public function itHasAnUUID(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
-        $this->assertSame($this->uuid, $user->id());
+        $this->assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
     }
 
     /** @test */
     public function itReturnsTheUserName(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame('ironman', $user->getUsername());
     }
@@ -61,7 +47,7 @@ class UserTest extends TestCase
     /** @test */
     public function itReturnsTheFirstName(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame('Tony', $user->getFirstName());
     }
@@ -69,7 +55,7 @@ class UserTest extends TestCase
     /** @test */
     public function itReturnsTheLastName(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame('Stark', $user->getLastName());
     }
@@ -77,7 +63,7 @@ class UserTest extends TestCase
     /** @test */
     public function itReturnTheUserRoles(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame([], $user->getRoles());
     }
@@ -85,7 +71,7 @@ class UserTest extends TestCase
     /** @test */
     public function itReturnTheUserPassword(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame('password', $user->getPassword());
     }
@@ -93,7 +79,7 @@ class UserTest extends TestCase
     /** @test */
     public function itReturnTheSalt(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->assertSame('salt', $user->getSalt());
     }
@@ -101,7 +87,7 @@ class UserTest extends TestCase
     /** @test */
     public function itCanEraseTheCredentials(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $this->expectException(\LogicException::class);
 
@@ -111,7 +97,7 @@ class UserTest extends TestCase
     /** @test */
     public function aUserCanChangeItsName(): void
     {
-        $user = $this->instantiateValidUser();
+        $user = $this->instantiateTonyStark();
 
         $user->changeName(['firstName' => 'Peter', 'lastName' => 'Parker']);
 
@@ -119,11 +105,8 @@ class UserTest extends TestCase
         $this->assertSame('Parker', $user->getLastName());
     }
 
-    /**
-     * @return User
-     */
-    private function instantiateValidUser(): User
+    private function instantiateTonyStark(): User
     {
-        return new User($this->uuid, 'ironman', 'Tony', 'Stark', 'password', 'salt', []);
+        return UserFixtures::instantiateUserEntity('02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
     }
 }
