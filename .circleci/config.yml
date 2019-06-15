@@ -6,7 +6,7 @@ jobs:
             enabled: true
             docker_layer_caching: true
         environment:
-            CURRENT_IDS: "1001:1002"
+            HOST_USER_IDS: "1001:1002"
         steps:
             - checkout
             - run:
@@ -19,16 +19,11 @@ jobs:
                     docker-compose pull --ignore-pull-failures
                     docker-compose build --pull
             - run:
-                name: Copy docker-compose override for front-end
-                command: cp ~/project/.circleci/front/docker-compose.override.yaml.dist ~/project/front/docker-compose.override.yaml
-            - run:
-                name: Create cache directory for front-end dependencies
-                command: mkdir -p ~/.cache/yarn
-            - run:
-                name: Create Yarn configuration file and folder if not already present
+                name: Create Yarn file and folders for configuration and cache
                 command: |
                     touch ~/.yarnrc
                     mkdir ~/.yarn
+                    mkdir -p ~/.cache/yarn
             - restore_cache:
                 keys:
                     - node-v1-{{ checksum "front/yarn.lock" }}
@@ -78,7 +73,7 @@ jobs:
             enabled: true
             docker_layer_caching: true
         environment:
-            CURRENT_IDS: "1001:1002"
+            HOST_USER_IDS: "1001:1002"
         steps:
             - run:
                 name: Create "proxy" Docker network (ignore if it already exists)
@@ -86,16 +81,11 @@ jobs:
             - attach_workspace:
                 at: ~/
             - run:
-                name: Create cache directory for front-end dependencies
-                command: mkdir -p ~/.cache/yarn
-            - run:
-                name: Create yarnrc if not already present
-                command: touch ~/.yarnrc
-            - run:
-                name: Create Yarn configuration file and folder if not already present
+                name: Create Yarn file and folders for configuration and cache
                 command: |
                     touch ~/.yarnrc
                     mkdir ~/.yarn
+                    mkdir -p ~/.cache/yarn
             - run:
                 name: Run static analysis on the front-end application
                 command: cd ~/project/front && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
@@ -138,15 +128,7 @@ workflows:
     version: 2
     pull_request:
         jobs:
-            - wait_for_user_approval:
-                type: approval
-                filters:
-                    branches:
-                        ignore:
-                            - master
-            - build:
-                requires:
-                    - wait_for_user_approval
+            - build
             - test:
                 requires:
                     - build

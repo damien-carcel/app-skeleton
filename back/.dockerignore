@@ -1,0 +1,10 @@
+tests
+var
+.phpspec
+.env.integration
+.gitignore
+.phpunit.result.cache
+.php_cs.cache
+.php_cs.php
+behat.yaml
+phpunit.xml.dist

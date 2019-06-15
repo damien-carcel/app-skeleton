@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
     nginx-back:
@@ -19,7 +19,7 @@ services:
 
     fpm:
         build: './docker/fpm/'
-        image: 'skeleton/php:7.3-fpm'
+        image: 'carcel/skeleton/php:7.3-fpm'
         environment:
             APP_ENV: 'prod'
             APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
@@ -34,8 +34,7 @@ services:
             - 'skeleton-back'
 
     php:
-        build: './docker/php/'
-        image: 'skeleton/php:7.3'
+        image: 'carcel/skeleton/php:7.3'
         environment:
             COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
             COMPOSER_HOME: '/home/composer/.config/composer'
@@ -44,11 +43,11 @@ services:
             XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
         ports:
             - '${PHP_OUTPUT:-8000}:8000'
-        user: '${CURRENT_IDS:-1000:1000}'
+        user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
-            - '~/.cache/composer:/home/composer/.cache/composer'
-            - '~/.config/composer:/home/composer/.config/composer'
+            - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
+            - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
         working_dir: '/srv/app'
         networks:
             - 'skeleton-back'
@@ -62,7 +61,10 @@ services:
             MYSQL_PASSWORD: 'app_skeleton'
             MYSQL_DATABASE: 'app_skeleton'
         ports:
-            - '${MYSQ_PORTS:-33006}:3306'
+            - '${MYSQL_SKELETON_PORT:-33006}:3306'
+        tmpfs:
+            - '/tmp'
+            - '/var/lib/mysql'
         networks:
             - 'skeleton-back'
 

@@ -1,5 +1,4 @@
-FROM php:7.3-alpine
-MAINTAINER Damien Carcel <damien.carcel@gmail.com>
+FROM php:7.3-alpine as dev
 
 # Install needed PHP extensions and related libraries
 RUN apk add --no-cache \
@@ -25,13 +24,13 @@ RUN apk add --no-cache \
 
 # Configure PHP
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY files/app.ini $PHP_INI_DIR/conf.d/
+COPY docker/php/files/app.ini $PHP_INI_DIR/conf.d/
 
 # Configure XDEBUG
-COPY files/xdebug.ini $PHP_INI_DIR/conf.d/
+COPY docker/php/files/xdebug.ini $PHP_INI_DIR/conf.d/
 
 # Make XDEBUG activable at container start
-COPY files/docker-php-entrypoint /usr/local/bin/
+COPY docker/php/files/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint && chmod 666 /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install composer

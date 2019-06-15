@@ -1,15 +1,17 @@
-version: '3'
+version: '3.4'
 
 services:
     node:
         build: './docker/node/'
-        image: 'skeleton/node:lts'
+        image: 'carcel/skeleton/node:lts'
         environment:
             YARN_CACHE_FOLDER: '/home/yarn-cache'
-        user: '${CURRENT_IDS:-1000:1000}'
+        user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
-            - '~/.cache/yarn:/home/yarn-cache'
+            - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
+            - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
+            - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
         working_dir: '/srv/app'
         networks:
             - 'skeleton-front'
