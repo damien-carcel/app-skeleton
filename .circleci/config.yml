@@ -118,7 +118,11 @@ workflows:
     version: 2
     pull_request:
         jobs:
-            - build
+            - build:
+                  filters:
+                      branches:
+                          ignore:
+                              - master
             - test:
                 requires:
                     - build
