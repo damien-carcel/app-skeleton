@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
     build:
@@ -15,6 +15,9 @@ jobs:
             - run:
                 name: Build docker images
                 command: make build-dev
+            - run:
+                name: Archive back-end Docker image
+                command: docker save -o back-end-image.tar carcel/skeleton/php:7.3
             - run:
                 name: Create cache directory for back-end dependencies
                 command: mkdir -p ~/.cache/composer
@@ -53,6 +56,7 @@ jobs:
                 root: ~/
                 paths:
                     - project
+                    - back-end-image.tar
     test:
         machine:
             image: ubuntu-1604:201903-01
@@ -65,6 +69,9 @@ jobs:
                 command: docker network create proxy || true
             - attach_workspace:
                 at: ~/
+            - run:
+                name: Load archived back-end Docker image
+                command: docker load -i back-end-image.tar
             - run:
                 name: Create Yarn file and folders for configuration and cache
                 command: |
