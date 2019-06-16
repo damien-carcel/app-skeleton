@@ -44,7 +44,7 @@ $ docker-compose run --rm node yarn run build:prod
 Copy the file `docker-compose.override.yaml.dist` as `docker-compose.override.yaml`.
 You may configure the nginx output port as you see fit. Then start the nginx container by running:
 ```bash
-$ docker-compose up -d nginx-front
+$ docker-compose up -d front
 ```
 
 ## Run the back-end API
@@ -56,4 +56,4 @@ $ docker-compose run --rm node yarn run serve-api
 
 If you chose to use the real back-end application, follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md) to run it.
 
-You can now access the application on [localhost:8080](http://localhost:8080) (`8080` being the default output of the `nginx-front` container).
+You can now access the application on [localhost:8080](http://localhost:8080) (`8080` being the default output of the `front` container).

@@ -7,6 +7,7 @@ cd ./back
 MAX_COUNTER=45
 COUNTER=1
 
+echo "Waiting for MySQL server…"
 while ! docker-compose exec mysql mysql --protocol TCP -uroot -proot -e "show databases;" > /dev/null 2>&1; do
     sleep 1
     COUNTER=$((${COUNTER} + 1))
@@ -15,3 +16,5 @@ while ! docker-compose exec mysql mysql --protocol TCP -uroot -proot -e "show da
         exit 1
     fi;
 done
+
+echo "MySQL server is running!"

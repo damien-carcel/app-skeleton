@@ -1,41 +1,25 @@
-version: '3'
+version: '3.4'
 
 services:
-    nginx-back:
-        image: 'nginx:alpine'
+    api:
+        image: 'carcel/skeleton/api:latest'
         depends_on:
             - 'fpm'
         labels:
             - 'traefik.docker.network=proxy'
             - 'traefik.frontend.rule=Host:api.skeleton.docker.local'
             - 'traefik.enable=true'
-        volumes:
-            - './:/srv/app:ro'
-            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
-            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
         networks:
             - 'proxy'
             - 'skeleton-back'
 
     fpm:
-        build: './docker/fpm/'
-        image: 'skeleton/php:7.3-fpm'
-        environment:
-            APP_ENV: 'prod'
-            APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
-            DATABASE_URL: 'mysql://app_skeleton:app_skeleton@mysql:3306/app_skeleton'
-            CORS_ALLOW_ORIGIN: '^https?://skeleton.docker.local(:[0-9]+)?$$'
-        user: 'www-data:www-data'
-        volumes:
-            - './:/srv/app:ro'
-            - 'var-data:/srv/app/var:rw'
-        working_dir: '/srv/app'
+        image: 'carcel/skeleton/fpm:7.3'
         networks:
             - 'skeleton-back'
 
     php:
-        build: './docker/php/'
-        image: 'skeleton/php:7.3'
+        image: 'carcel/skeleton/php:7.3'
         environment:
             COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
             COMPOSER_HOME: '/home/composer/.config/composer'
@@ -44,11 +28,11 @@ services:
             XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
         ports:
             - '${PHP_OUTPUT:-8000}:8000'
-        user: '${CURRENT_IDS:-1000:1000}'
+        user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
-            - '~/.cache/composer:/home/composer/.cache/composer'
-            - '~/.config/composer:/home/composer/.config/composer'
+            - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
+            - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
         working_dir: '/srv/app'
         networks:
             - 'skeleton-back'
@@ -62,7 +46,10 @@ services:
             MYSQL_PASSWORD: 'app_skeleton'
             MYSQL_DATABASE: 'app_skeleton'
         ports:
-            - '${MYSQ_PORTS:-33006}:3306'
+            - '${MYSQL_SKELETON_PORT:-33006}:3306'
+        tmpfs:
+            - '/tmp'
+            - '/var/lib/mysql'
         networks:
             - 'skeleton-back'
 
