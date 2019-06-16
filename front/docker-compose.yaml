@@ -16,7 +16,7 @@ services:
         networks:
             - 'skeleton-front'
 
-    nginx-front:
+    front:
         image: 'nginx:alpine'
         labels:
             - 'traefik.docker.network=proxy'

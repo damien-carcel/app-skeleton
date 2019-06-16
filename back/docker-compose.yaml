@@ -1,35 +1,20 @@
 version: '3.4'
 
 services:
-    nginx-back:
-        image: 'nginx:alpine'
+    api:
+        image: 'carcel/skeleton/api:latest'
         depends_on:
             - 'fpm'
         labels:
             - 'traefik.docker.network=proxy'
             - 'traefik.frontend.rule=Host:api.skeleton.docker.local'
             - 'traefik.enable=true'
-        volumes:
-            - './:/srv/app:ro'
-            - './docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
-            - './docker/upload.conf:/etc/nginx/conf.d/upload.conf:ro'
         networks:
             - 'proxy'
             - 'skeleton-back'
 
     fpm:
-        build: './docker/fpm/'
-        image: 'carcel/skeleton/php:7.3-fpm'
-        environment:
-            APP_ENV: 'prod'
-            APP_SECRET: '9a1424cc2734b94f17f8374f97e50a3b'
-            DATABASE_URL: 'mysql://app_skeleton:app_skeleton@mysql:3306/app_skeleton'
-            CORS_ALLOW_ORIGIN: '^https?://skeleton.docker.local(:[0-9]+)?$$'
-        user: 'www-data:www-data'
-        volumes:
-            - './:/srv/app:ro'
-            - 'var-data:/srv/app/var:rw'
-        working_dir: '/srv/app'
+        image: 'carcel/skeleton/fpm:7.3'
         networks:
             - 'skeleton-back'
 

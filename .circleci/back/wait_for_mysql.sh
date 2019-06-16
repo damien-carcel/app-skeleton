@@ -8,7 +8,7 @@ MAX_COUNTER=45
 COUNTER=1
 
 echo "Waiting for MySQL server…"
-while ! docker-compose exec mysql-test mysql --protocol TCP -uroot -proot -e "show databases;" > /dev/null 2>&1; do
+while ! docker-compose exec mysql mysql --protocol TCP -uroot -proot -e "show databases;" > /dev/null 2>&1; do
     sleep 1
     COUNTER=$((${COUNTER} + 1))
     if [[ ${COUNTER} -gt ${MAX_COUNTER} ]]; then

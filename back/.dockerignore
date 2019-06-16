@@ -1,7 +1,8 @@
+public/check.php
 tests
 var
 .phpspec
-.env.integration
+.env.*
 .gitignore
 .phpunit.result.cache
 .php_cs.cache

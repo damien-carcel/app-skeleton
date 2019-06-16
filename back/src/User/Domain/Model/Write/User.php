@@ -17,9 +17,11 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * This class cannot be final because of Doctrine ORM…
+ *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class User implements UserInterface
+class User implements UserInterface
 {
     private $id;
     private $username;

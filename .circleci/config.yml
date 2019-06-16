@@ -3,7 +3,7 @@ version: 2
 jobs:
     build:
         machine:
-            enabled: true
+            image: ubuntu-1604:201903-01
             docker_layer_caching: true
         environment:
             HOST_USER_IDS: "1001:1002"
@@ -13,11 +13,18 @@ jobs:
                 name: Create "proxy" Docker network (ignore if it already exists)
                 command: docker network create proxy || true
             - run:
-                name: Build front-end docker images
-                command: |
-                    cd ~/project/front
-                    docker-compose pull --ignore-pull-failures
-                    docker-compose build --pull
+                name: Build docker images
+                command: make build-dev
+            - run:
+                name: Create cache directory for back-end dependencies
+                command: mkdir -p ~/.cache/composer
+            - run:
+                name: Create configuration directory for back-end dependencies
+                command: mkdir -p ~/.config/composer
+            - restore_cache:
+                keys:
+                    - composer-v1-{{ checksum "back/composer.lock" }}
+                    - composer-v1-
             - run:
                 name: Create Yarn file and folders for configuration and cache
                 command: |
@@ -29,38 +36,16 @@ jobs:
                     - node-v1-{{ checksum "front/yarn.lock" }}
                     - node-v1-
             - run:
-                name: Install front-end dependencies
-                command: cd ~/project/front && docker-compose run --rm node yarn install
-            - save_cache:
-                key: node-v1-{{ checksum "front/yarn.lock" }}
-                paths:
-                    - ~/.cache/yarn
-            - restore_cache:
-                keys:
-                    - composer-v1-{{ checksum "back/composer.lock" }}
-                    - composer-v1-
-            - run:
-                name: Build back-end docker images
-                command: |
-                    cd ~/project/back
-                    docker-compose pull --ignore-pull-failures
-                    docker-compose build --pull
-            - run:
-                name: Copy docker-compose override for back-end
-                command: cp ~/project/.circleci/back/docker-compose.override.yaml.dist ~/project/back/docker-compose.override.yaml
-            - run:
-                name: Create cache directory for back-end dependencies
-                command: mkdir -p ~/.cache/composer
-            - run:
-                name: Create configuration directory for back-end dependencies
-                command: mkdir -p ~/.config/composer
-            - run:
-                name: Install back-end dependencies
-                command: cd ~/project/back && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+                name: Install both back-end and front-end dependencies
+                command: make dependencies
             - save_cache:
                 key: composer-v1-{{ checksum "back/composer.lock" }}
                 paths:
                     - ~/.cache/composer
+            - save_cache:
+                key: node-v1-{{ checksum "front/yarn.lock" }}
+                paths:
+                    - ~/.cache/yarn
             - run:
                 name: Create directories for tests results
                 command: mkdir -p back/var/tests/behat back/var/tests/phpunit front/var/tests/tslint
@@ -70,7 +55,7 @@ jobs:
                     - project
     test:
         machine:
-            enabled: true
+            image: ubuntu-1604:201903-01
             docker_layer_caching: true
         environment:
             HOST_USER_IDS: "1001:1002"
@@ -87,12 +72,6 @@ jobs:
                     mkdir ~/.yarn
                     mkdir -p ~/.cache/yarn
             - run:
-                name: Run static analysis on the front-end application
-                command: cd ~/project/front && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
-            - run:
-                name: Type-check the front-end application
-                command: cd ~/project/front && docker-compose run --rm node yarn run type-check
-            - run:
                 name: Run static analysis on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
             - run:
@@ -106,15 +85,19 @@ jobs:
                 command: cd ~/project/back && docker-compose up -d mysql
             - run:
                 name: Update database schema
-                command: |
-                    cd ~/project && sh .circleci/back/wait_for_mysql.sh
-                    cd ~/project/back && docker-compose run --rm php bin/console doctrine:schema:update --force
+                command: make mysql
             - run:
                 name: Run integration tests on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" --log-junit var/tests/phpunit/integration_tests.xml
             - run:
                 name: Run end to end tests on the back-end application
                 command: cd ~/project/back && docker-compose run --rm php vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors
+            - run:
+                name: Run static analysis on the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
+            - run:
+                name: Type-check the front-end application
+                command: cd ~/project/front && docker-compose run --rm node yarn run type-check
             - store_test_results:
                 path: front/var/tests
             - store_artifacts:
