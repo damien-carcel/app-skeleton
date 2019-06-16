@@ -1,6 +1,7 @@
-#####################################
-# PHP CLI image use for development #
-#####################################
+######################################
+# Base image for common dependencies #
+# between development and production #
+######################################
 
 ARG BASE_IMAGE
 
@@ -24,6 +25,10 @@ RUN apk add --no-cache                          \
         pdo_mysql                               \
         zip                                     \
     && apk del .build-deps
+
+######################################
+# PHP CLI image used for development #
+######################################
 
 FROM base as dev
 
@@ -54,10 +59,10 @@ RUN chmod +x /usr/local/bin/composer
 # Expose port for PHP internal server
 EXPOSE 8000
 
-##################################
-# Intermediate image to prepare  #
-# the application for production #
-##################################
+#######################################
+# Intermediate image used to prepare  #
+# the application for production      #
+#######################################
 
 FROM dev as builder
 
@@ -70,10 +75,10 @@ COPY --chown=www-data:www-data . .
 RUN mkdir -p /tmp/composer/cache && \
     composer install --optimize-autoloader --no-interaction --no-scripts --prefer-dist
 
-################################
-# FPM image use for production #
-# It contains the application  #
-################################
+#################################
+# FPM image used for production #
+# It contains the application   #
+#################################
 
 FROM base as fpm
 
@@ -87,9 +92,9 @@ USER www-data
 COPY --from=builder --chown=www-data:www-data /var/www/html /var/www/html
 RUN bin/console ca:c
 
-##################################
-# Nginx image use for production #
-##################################
+###################################
+# Nginx image used for production #
+###################################
 
 FROM nginx:alpine as api
 

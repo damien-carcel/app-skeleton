@@ -1,9 +1,9 @@
 /* eslint-env amd, node */
 
 const path = require('path');
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const DotEnv = require('dotenv-webpack');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -14,7 +14,7 @@ const WebappWebpackPlugin = require('webapp-webpack-plugin');
 module.exports = (env, argv) => ({
   devServer: {
     contentBase: path.join(__dirname, 'public'),
-    port: 8080,
+    port: 8000,
     stats: {
       colors: true,
     },
@@ -76,6 +76,7 @@ module.exports = (env, argv) => ({
     ],
   },
   plugins: [
+    new webpack.EnvironmentPlugin(['API_BASE_URL']),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/*', '!.gitkeep'],
     }),
@@ -83,7 +84,6 @@ module.exports = (env, argv) => ({
       {from: './assets/files/humans.txt'},
       {from: './assets/files/robots.txt'},
     ]),
-    new DotEnv(),
     new FaviconsWebpackPlugin('./assets/images/favicon.png'),
     new HtmlWebpackPlugin({
       inject: false,

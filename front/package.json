@@ -21,12 +21,11 @@
   "license": "MIT",
   "main": "webpack.config.js",
   "scripts": {
-    "build:prod": "webpack --mode production -p --progress",
-    "build:dev": "webpack --mode development --progress",
+    "webpack:build": "webpack --mode production -p --progress",
     "lint": "node ./node_modules/tslint/bin/tslint 'src/**/*.{ts,tsx}'",
     "lint-fix": "node ./node_modules/tslint/bin/tslint 'src/**/*.{ts,tsx}' --fix",
-    "serve": "webpack-dev-server --mode development --open --hot --inline",
-    "serve-api": "json-server --watch db.json",
+    "webpack:serve": "webpack-dev-server --mode development --open --hot --inline",
+    "webpack:serve-api": "json-server --watch db.json",
     "type-check": "tsc --noEmit --pretty"
   },
   "dependencies": {
@@ -51,7 +50,6 @@
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "3.1.4",
     "css-loader": "^3.0.0",
-    "dotenv-webpack": "^1.7.0",
     "favicons-webpack-plugin": "^0.0.9",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.1.0",
