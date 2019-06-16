@@ -16,8 +16,10 @@ jobs:
                 name: Build docker images
                 command: make build-dev
             - run:
-                name: Archive back-end Docker image
-                command: docker save -o back-end-image.tar carcel/skeleton/php:7.3
+                name: Archive Docker images
+                command: |
+                    docker save -o back-end-image.tar carcel/skeleton/php:7.3
+                    docker save -o front-end-image.tar carcel/skeleton/node:lts
             - run:
                 name: Create cache directory for back-end dependencies
                 command: mkdir -p ~/.cache/composer
@@ -57,6 +59,7 @@ jobs:
                 paths:
                     - project
                     - back-end-image.tar
+                    - front-end-image.tar
     test:
         machine:
             image: ubuntu-1604:201903-01
@@ -70,8 +73,10 @@ jobs:
             - attach_workspace:
                 at: ~/
             - run:
-                name: Load archived back-end Docker image
-                command: docker load -i back-end-image.tar
+                name: Load archived Docker images
+                command: |
+                    docker load -i back-end-image.tar
+                    docker load -i front-end-image.tar
             - run:
                 name: Create Yarn file and folders for configuration and cache
                 command: |
@@ -118,7 +123,11 @@ workflows:
     version: 2
     pull_request:
         jobs:
-            - build
+            - build:
+                  filters:
+                      branches:
+                          ignore:
+                              - master
             - test:
                 requires:
                     - build

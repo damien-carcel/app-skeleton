@@ -6,12 +6,12 @@ pull-back:
 
 .PHONY: build-back-dev
 build-back-dev: pull-back
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE=php:7.3-alpine --target dev
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE="php:7.3-alpine" --target dev
 
 .PHONY: build-back
 build-back: build-back-dev
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE=php:7.3-fpm-alpine --target fpm
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE=php:7.3-alpine --target api
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE="php:7.3-fpm-alpine" --target fpm
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE="php:7.3-alpine" --target api
 
 .PHONY: pull-front
 pull-front:
@@ -19,9 +19,11 @@ pull-front:
 
 .PHONY: build-front-dev
 build-front-dev: pull-front
+	cd $(CURDIR)/front && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/node:lts --target dev
 
 .PHONY: build-front
 build-front: build-front-dev
+	cd $(CURDIR)/front && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/front:latest --build-arg API_BASE_URL_FOR_PRODUCTION="http://api.skeleton.docker.local" --target front
 
 .PHONY: build-dev
 build-dev: build-front-dev build-back-dev
@@ -29,7 +31,7 @@ build-dev: build-front-dev build-back-dev
 .PHONY: build
 build: build-front build-back
 
-# Prepare and serve the API
+# Prepare and serve the application
 
 .PHONY: dependencies-front
 dependencies-front:
@@ -59,6 +61,18 @@ develop-back: mysql dependencies-back
 .PHONY: debug-back
 debug-back: mysql dependencies-back
 	cd $(CURDIR)/back && docker-compose run --rm -e XDEBUG_ENABLED=1 php bin/console server:run
+
+.PHONY: fake-api
+fake-api: dependencies-front
+	cd $(CURDIR)/front && docker-compose up -d fake-api
+
+.PHONY: develop-front
+develop-front: fake-api dependencies-front
+	cd $(CURDIR)/front && API_BASE_URL=http://localhost:3000 yarn run webpack:serve
+
+.PHONY: serve-front
+serve-front: dependencies-front serve-back
+	cd $(CURDIR)/front && docker-compose up -d front
 
 # Clean the containers
 
