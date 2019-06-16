@@ -6,12 +6,12 @@ pull-back:
 
 .PHONY: build-back-dev
 build-back-dev: pull-back
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --target dev
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE=php:7.3-alpine --target dev
 
 .PHONY: build-back
 build-back: build-back-dev
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --target fpm
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --target api
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE=php:7.3-fpm-alpine --target fpm
+	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE=php:7.3-alpine --target api
 
 .PHONY: pull-front
 pull-front:

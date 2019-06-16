@@ -2,28 +2,38 @@
 # PHP CLI image use for development #
 #####################################
 
-FROM php:7.3-alpine as dev
+ARG BASE_IMAGE
+
+FROM ${BASE_IMAGE} as base
 
 # Install needed PHP extensions and related libraries
-RUN apk add --no-cache \
-        icu            \
-        git            \
-        libintl        \
-        libzip         \
-        zlib           \
+RUN apk add --no-cache                          \
+        icu                                     \
+        libintl                                 \
+        libzip                                  \
+        zlib                                    \
     && apk add --no-cache --virtual .build-deps \
        icu-dev                                  \
        libzip-dev                               \
        zlib-dev                                 \
        $PHPIZE_DEPS                             \
-    && docker-php-ext-install -j$(nproc) \
-        intl                             \
-        opcache                          \
-        pdo                              \
-        pdo_mysql                        \
-        zip                              \
-    && pecl install xdebug               \
-    && docker-php-ext-enable xdebug      \
+    && docker-php-ext-install -j$(nproc)        \
+        intl                                    \
+        opcache                                 \
+        pdo                                     \
+        pdo_mysql                               \
+        zip                                     \
+    && apk del .build-deps
+
+FROM base as dev
+
+# Install needed PHP extensions and related libraries
+RUN apk add --no-cache                          \
+        git                                     \
+    && apk add --no-cache --virtual .build-deps \
+       $PHPIZE_DEPS                             \
+    && pecl install xdebug                      \
+    && docker-php-ext-enable xdebug             \
     && apk del .build-deps
 
 # Configure PHP
@@ -65,26 +75,7 @@ RUN mkdir -p /tmp/composer/cache && \
 # It contains the application  #
 ################################
 
-FROM php:7.3-fpm-alpine as fpm
-
-# Install needed PHP extensions and related libraries
-RUN apk add --no-cache \
-        icu            \
-        libintl        \
-        libzip         \
-        zlib           \
-    && apk add --no-cache --virtual .build-deps \
-       icu-dev                                  \
-       libzip-dev                               \
-       zlib-dev                                 \
-       $PHPIZE_DEPS                             \
-    && docker-php-ext-install -j$(nproc) \
-        intl                             \
-        opcache                          \
-        pdo                              \
-        pdo_mysql                        \
-        zip                              \
-    && apk del .build-deps
+FROM base as fpm
 
 # Configure PHP
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
