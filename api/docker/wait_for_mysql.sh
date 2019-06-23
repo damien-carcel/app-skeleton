@@ -2,7 +2,7 @@
 
 set -e
 
-cd ./back
+cd api
 
 MAX_COUNTER=45
 COUNTER=1

@@ -1,17 +1,17 @@
 # Build Docker images
 
-.PHONY: pull-back
-pull-back:
-	cd $(CURDIR)/back && docker-compose pull --ignore-pull-failures
+.PHONY: pull-api
+pull-api:
+	cd $(CURDIR)/api && docker-compose pull --ignore-pull-failures
 
-.PHONY: build-back-dev
-build-back-dev: pull-back
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE="php:7.3-alpine" --target dev
+.PHONY: build-api-dev
+build-api-dev: pull-api
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE="php:7.3-alpine" --target dev
 
-.PHONY: build-back
-build-back: build-back-dev
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE="php:7.3-fpm-alpine" --target fpm
-	cd $(CURDIR)/back && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE="php:7.3-alpine" --target api
+.PHONY: build-api
+build-api: build-api-dev
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE="php:7.3-fpm-alpine" --target fpm
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE="php:7.3-alpine" --target api
 
 .PHONY: pull-front
 pull-front:
@@ -26,63 +26,76 @@ build-front: build-front-dev
 	cd $(CURDIR)/front && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/front:latest --build-arg API_BASE_URL_FOR_PRODUCTION="http://api.skeleton.docker.local" --target front
 
 .PHONY: build-dev
-build-dev: build-front-dev build-back-dev
+build-dev: build-api-dev build-front-dev
 
 .PHONY: build
-build: build-front build-back
+build: build-api build-front
 
-# Prepare and serve the application
+# Prepare the application dependencies
 
-.PHONY: dependencies-front
-dependencies-front:
+.PHONY: install-api-dependencies
+install-api-dependencies:  build-api-dev
+	cd $(CURDIR)/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+
+.PHONY: install-front-dependencies
+install-front-dependencies: build-front-dev
 	cd $(CURDIR)/front && docker-compose run --rm node yarn install
 
-.PHONY: dependencies-back
-dependencies-back:
-	cd $(CURDIR)/back && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+.PHONY: install-dependencies
+install-dependencies: install-api-dependencies install-front-dependencies
 
-.PHONY: dependencies
-dependencies: dependencies-back dependencies-front
+.PHONY: update-api-dependencies
+update-api-dependencies: build-api-dev
+	cd $(CURDIR)/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+
+.PHONY: update-front-dependencies
+update-front-dependencies: build-front-dev
+	cd $(CURDIR)/front && docker-compose run --rm node yarn upgrade-interactive --latest
+
+.PHONY: update-dependencies
+update-dependencies: update-api-dependencies update-front-dependencies
+
+# Serve the applications
 
 .PHONY: mysql
-mysql:
-	cd $(CURDIR)/back && docker-compose up -d mysql
-	sh $(CURDIR)/.circleci/back/wait_for_mysql.sh
-	cd $(CURDIR)/back && docker-compose run --rm php bin/console doctrine:schema:update --force
+mysql: install-api-dependencies
+	cd $(CURDIR)/api && docker-compose up -d mysql
+	sh $(CURDIR)/api/docker/wait_for_mysql.sh
+	cd $(CURDIR)/api && docker-compose run --rm php bin/console doctrine:schema:update --force
 
-.PHONY: serve-back
-serve-back: mysql dependencies-back
-	cd $(CURDIR)/back && docker-compose up -d api
+.PHONY: develop-api
+develop-api: mysql
+	cd $(CURDIR)/api && docker-compose run --rm --service-ports php bin/console server:run 0.0.0.0:8000
 
-.PHONY: develop-back
-develop-back: mysql dependencies-back
-	cd $(CURDIR)/back && docker-compose run --rm php bin/console server:run
+.PHONY: debug-api
+debug-api: mysql
+	cd $(CURDIR)/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=1 php bin/console server:run 0.0.0.0:8000
 
-.PHONY: debug-back
-debug-back: mysql dependencies-back
-	cd $(CURDIR)/back && docker-compose run --rm -e XDEBUG_ENABLED=1 php bin/console server:run
+.PHONY: serve-api
+serve-api: mysql
+	cd $(CURDIR)/api && docker-compose up -d api
 
 .PHONY: fake-api
-fake-api: dependencies-front
+fake-api: install-front-dependencies
 	cd $(CURDIR)/front && docker-compose up -d fake-api
 
 .PHONY: develop-front
-develop-front: fake-api dependencies-front
+develop-front: fake-api install-front-dependencies
 	cd $(CURDIR)/front && API_BASE_URL=http://localhost:3000 yarn run webpack:serve
 
-.PHONY: serve-front
-serve-front: dependencies-front serve-back
+.PHONY: install
+install: install-front-dependencies serve-api
 	cd $(CURDIR)/front && docker-compose up -d front
 
 # Clean the containers
 
-.PHONY: down-back
-down-back:
-	cd $(CURDIR)/back && docker-compose down -v
+.PHONY: down-api
+down-api:
+	cd $(CURDIR)/api && docker-compose down -v
 
 .PHONY: down-front
 down-front:
 	cd $(CURDIR)/front && docker-compose down -v
 
 .PHONY: down
-down: down-back down-front
+down: down-api down-front

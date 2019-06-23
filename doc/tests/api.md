@@ -1,12 +1,12 @@
-# Testing the back-end application
+# Testing the API
 
 ## Requirements
 
-There is no need to fully install the application, you only need to [setup the database](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/back.md#setup-the-database) for integration and end-to-end tests.
+There is no need to fully install the application, you only need to [setup the database](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/api.md#setup-the-database) for integration and end-to-end tests.
 
 ## Introduction
 
-The back-end application is extensively tested with various tools.
+The API is tested with various tools.
 
 All the commands below are using `composer` scripts.
 Look at the `composer.json` file to know what command is exactly launched.
@@ -21,7 +21,7 @@ For each of them, configuration is already provided and ready to work.
  
 ## PHP coding style
 
-The back-end coding style is handled by `php-cs-fixer`. It is a tool to bot detect and fix coding standard violations.
+The coding style is handled by `php-cs-fixer`. It is a tool to bot detect and fix coding standard violations.
 Its configuration is defined in  the `.php_cs.php` file.
 
 To use it, run the following command:
@@ -78,7 +78,7 @@ $ docker-compose run --rm php composer integration
 
 ### End to End tests
 
-Those tests use the full back-end application.  They are managed through `Behat`, like the acceptance tests.
+Those tests use the real API.  They are managed through `Behat`, like the acceptance tests.
 
 Like for the integration tests, you'll need a MySQL database ready.
 
