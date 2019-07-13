@@ -15,6 +15,8 @@ RUN apk add --no-cache \
     make               \
     nasm
 
+RUN mkdir /.npm && chmod 777 /.npm
+
 EXPOSE 3000 8000
 
 #######################################
