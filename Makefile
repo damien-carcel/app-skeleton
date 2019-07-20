@@ -81,10 +81,11 @@ fake-api: install-front-dependencies
 
 .PHONY: develop-front
 develop-front: fake-api install-front-dependencies
-	cd $(CURDIR)/front && API_BASE_URL=http://localhost:3000 yarn run webpack:serve
+	cd $(CURDIR)/front && API_BASE_URL=http://localhost:3000 yarn webpack:serve
 
 .PHONY: install
 install: install-front-dependencies serve-api
+	cd $(CURDIR)/front && docker-composer run --rm node yarn webpack:build
 	cd $(CURDIR)/front && docker-compose up -d front
 
 # Clean the containers

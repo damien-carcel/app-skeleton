@@ -3,8 +3,8 @@
     [
       "@babel/preset-env",
       {
-        "corejs": "2",
-        "useBuiltIns": "entry"
+        "corejs": "3",
+        "useBuiltIns": "usage"
       }
     ],
     "@babel/react",
