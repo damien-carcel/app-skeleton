@@ -8,8 +8,8 @@ pull-api:
 build-api-dev: pull-api
 	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE="php:7.3-alpine" --target dev
 
-.PHONY: build-api
-build-api: build-api-dev
+.PHONY: build-api-prod
+build-api-prod: pull-api
 	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE="php:7.3-fpm-alpine" --target fpm
 	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE="php:7.3-alpine" --target api
 
@@ -21,15 +21,18 @@ pull-front:
 build-front-dev: pull-front
 	cd $(CURDIR)/front && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/node:lts --target dev
 
-.PHONY: build-front
-build-front: build-front-dev
+.PHONY: build-front-prod
+build-front-prod: pull-front
 	cd $(CURDIR)/front && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/front:latest --build-arg API_BASE_URL_FOR_PRODUCTION="http://api.skeleton.docker.local" --target front
 
 .PHONY: build-dev
 build-dev: build-api-dev build-front-dev
 
+.PHONY: build-prod
+build-prod: build-api-prod build-front-prod
+
 .PHONY: build
-build: build-api build-front
+build: build-dev build-prod
 
 # Prepare the application dependencies
 
@@ -72,7 +75,7 @@ debug-api: mysql
 	cd $(CURDIR)/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=1 php bin/console server:run 0.0.0.0:8000
 
 .PHONY: serve-api
-serve-api: mysql
+serve-api: build-api-prod mysql
 	cd $(CURDIR)/api && docker-compose up -d api
 
 .PHONY: fake-api
@@ -83,10 +86,13 @@ fake-api: install-front-dependencies
 develop-front: fake-api install-front-dependencies
 	cd $(CURDIR)/front && API_BASE_URL=http://localhost:3000 yarn webpack:serve
 
-.PHONY: install
-install: install-front-dependencies serve-api
-	cd $(CURDIR)/front && docker-composer run --rm node yarn webpack:build
+.PHONY: serve-front
+serve-front: build-front-prod install-front-dependencies
+	cd $(CURDIR)/front && docker-compose run --rm node yarn webpack:build
 	cd $(CURDIR)/front && docker-compose up -d front
+
+.PHONY: install
+install: serve-api serve-front
 
 # Clean the containers
 
