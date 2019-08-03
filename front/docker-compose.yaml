@@ -19,7 +19,7 @@ services:
         command: 'yarn run webpack:serve-api --host 0.0.0.0'
         image: 'carcel/skeleton/node:lts'
         ports:
-          - '3000:3000'
+          - '${FAKE_API_SKELETON_PORT:-3000}:3000'
         user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'

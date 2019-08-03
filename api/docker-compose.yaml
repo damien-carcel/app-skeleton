@@ -27,7 +27,7 @@ services:
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
             XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
         ports:
-            - '${PHP_OUTPUT:-8000}:8000'
+            - '${PHP_SKELETON_OUTPUT:-8000}:8000'
         user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
             - './:/srv/app'
