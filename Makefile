@@ -19,7 +19,7 @@ pull-client:
 
 .PHONY: build-client-dev
 build-client-dev: pull-client
-	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/node:lts --target dev
+	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/node:latest --target dev
 
 .PHONY: build-client-prod
 build-client-prod: pull-client
@@ -60,22 +60,22 @@ update-dependencies: update-api-dependencies update-client-dependencies
 
 # Serve the applications
 
-.PHONY: mysql
-mysql: install-api-dependencies
+.PHONY: mysql	# It should depends on "install-api-dependencies" because it uses PHP dev image, but this make the CI build this image twice
+mysql:
 	cd $(CURDIR)/api && docker-compose up -d mysql
 	sh $(CURDIR)/api/docker/mysql/wait_for_it.sh
 	cd $(CURDIR)/api && docker-compose run --rm php bin/console doctrine:schema:update --force
 
 .PHONY: develop-api
-develop-api: mysql
+develop-api: install-api-dependencies mysql
 	cd $(CURDIR)/api && docker-compose run --rm --service-ports php bin/console server:run 0.0.0.0:8000
 
 .PHONY: debug-api
-debug-api: mysql
+debug-api: install-api-dependencies mysql
 	cd $(CURDIR)/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=1 php bin/console server:run 0.0.0.0:8000
 
 .PHONY: serve-api
-serve-api: build-api-prod mysql
+serve-api: build-api-prod install-api-dependencies mysql
 	cd $(CURDIR)/api && docker-compose up -d api
 
 .PHONY: fake-api
@@ -88,7 +88,6 @@ develop-client: fake-api install-client-dependencies
 
 .PHONY: serve-client
 serve-client: build-client-prod install-client-dependencies
-	cd $(CURDIR)/client && docker-compose run --rm node yarn webpack:build
 	cd $(CURDIR)/client && docker-compose up -d client
 
 .PHONY: install

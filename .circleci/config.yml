@@ -21,7 +21,7 @@ jobs:
                 name: Archive Docker images
                 command: |
                     docker save -o api-image.tar carcel/skeleton/dev:latest
-                    docker save -o client-image.tar carcel/skeleton/node:lts
+                    docker save -o client-image.tar carcel/skeleton/node:latest
             - run:
                 name: Create cache directory for API dependencies
                 command: mkdir -p ~/.cache/composer

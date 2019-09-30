@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
     node:
-        image: 'carcel/skeleton/node:lts'
+        image: 'carcel/skeleton/node:latest'
         environment:
             YARN_CACHE_FOLDER: '/home/yarn-cache'
         user: '${HOST_USER_IDS:-1000:1000}'
@@ -17,7 +17,7 @@ services:
 
     fake-api:
         command: 'yarn run webpack:serve-api --host 0.0.0.0'
-        image: 'carcel/skeleton/node:lts'
+        image: 'carcel/skeleton/node:latest'
         ports:
           - '${FAKE_API_SKELETON_PORT:-3000}:3000'
         user: '${HOST_USER_IDS:-1000:1000}'
