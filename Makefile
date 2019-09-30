@@ -6,12 +6,12 @@ pull-api:
 
 .PHONY: build-api-dev
 build-api-dev: pull-api
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/php:7.3 --build-arg BASE_IMAGE="php:7.3-alpine" --target dev
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:latest --target dev
 
 .PHONY: build-api-prod
 build-api-prod: pull-api
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/fpm:7.3 --build-arg BASE_IMAGE="php:7.3-fpm-alpine" --target fpm
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --build-arg BASE_IMAGE="php:7.3-alpine" --target api
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/prod:latest --target prod
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --target api
 
 .PHONY: pull-front
 pull-front:
@@ -63,7 +63,7 @@ update-dependencies: update-api-dependencies update-front-dependencies
 .PHONY: mysql
 mysql: install-api-dependencies
 	cd $(CURDIR)/api && docker-compose up -d mysql
-	sh $(CURDIR)/api/docker/wait_for_mysql.sh
+	sh $(CURDIR)/api/docker/mysql/wait_for_it.sh
 	cd $(CURDIR)/api && docker-compose run --rm php bin/console doctrine:schema:update --force
 
 .PHONY: develop-api

@@ -4,11 +4,13 @@ jobs:
     build:
         machine:
             image: ubuntu-1604:201903-01
-            docker_layer_caching: true
         environment:
             HOST_USER_IDS: "1001:1002"
         steps:
             - checkout
+            - run:
+                name: Create directories for tests results
+                command: mkdir -p api/var/tests/behat api/var/tests/phpunit front/var/tests/tslint
             - run:
                 name: Create "proxy" Docker network (ignore if it already exists)
                 command: docker network create proxy || true
@@ -18,7 +20,7 @@ jobs:
             - run:
                 name: Archive Docker images
                 command: |
-                    docker save -o api-image.tar carcel/skeleton/php:7.3
+                    docker save -o api-image.tar carcel/skeleton/dev:latest
                     docker save -o front-end-image.tar carcel/skeleton/node:lts
             - run:
                 name: Create cache directory for API dependencies
@@ -51,9 +53,6 @@ jobs:
                 key: node-v1-{{ checksum "front/yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
-            - run:
-                name: Create directories for tests results
-                command: mkdir -p api/var/tests/behat api/var/tests/phpunit front/var/tests/tslint
             - persist_to_workspace:
                 root: ~/
                 paths:
@@ -63,7 +62,6 @@ jobs:
     test:
         machine:
             image: ubuntu-1604:201903-01
-            docker_layer_caching: true
         environment:
             HOST_USER_IDS: "1001:1002"
         steps:
