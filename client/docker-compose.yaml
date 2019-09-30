@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
     node:
-        image: 'carcel/skeleton/node:lts'
+        image: 'carcel/skeleton/node:latest'
         environment:
             YARN_CACHE_FOLDER: '/home/yarn-cache'
         user: '${HOST_USER_IDS:-1000:1000}'
@@ -13,11 +13,11 @@ services:
             - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-front'
+            - 'skeleton-client'
 
     fake-api:
         command: 'yarn run webpack:serve-api --host 0.0.0.0'
-        image: 'carcel/skeleton/node:lts'
+        image: 'carcel/skeleton/node:latest'
         ports:
           - '${FAKE_API_SKELETON_PORT:-3000}:3000'
         user: '${HOST_USER_IDS:-1000:1000}'
@@ -25,19 +25,19 @@ services:
             - './:/srv/app'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-front'
+            - 'skeleton-client'
 
-    front:
-        image: 'carcel/skeleton/front:latest'
+    client:
+        image: 'carcel/skeleton/client:latest'
         labels:
             - 'traefik.docker.network=proxy'
             - 'traefik.frontend.rule=Host:skeleton.docker.local'
             - 'traefik.enable=true'
         networks:
             - 'proxy'
-            - 'skeleton-front'
+            - 'skeleton-client'
 
 networks:
     proxy:
         external: true
-    skeleton-front:
+    skeleton-client:

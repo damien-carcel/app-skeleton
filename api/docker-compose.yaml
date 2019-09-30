@@ -11,18 +11,24 @@ services:
             - 'traefik.enable=true'
         networks:
             - 'proxy'
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     fpm:
-        image: 'carcel/skeleton/fpm:7.3'
+        command: 'php-fpm -F'
+        image: 'carcel/skeleton/prod:latest'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     php:
-        image: 'carcel/skeleton/php:7.3'
+        image: 'carcel/skeleton/dev:latest'
         environment:
             COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
             COMPOSER_HOME: '/home/composer/.config/composer'
+            PHP_CONF_DISPLAY_ERRORS: 1
+            PHP_CONF_DISPLAY_STARTUP_ERRORS: 1
+            PHP_CONF_ERROR_REPORTING: 32767
+            PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
+            PHP_CONF_ZEND_ASSERTIONS: 1
             PHP_IDE_CONFIG: 'serverName=app-skeleton'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
             XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
@@ -30,12 +36,13 @@ services:
             - '${PHP_SKELETON_OUTPUT:-8000}:8000'
         user: '${HOST_USER_IDS:-1000:1000}'
         volumes:
-            - './:/srv/app'
+            - './:/srv/app:rw'
+            - './var:/srv/app/var:rw'
             - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
             - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     mysql:
         image: 'mysql:8'
@@ -51,12 +58,12 @@ services:
             - '/tmp'
             - '/var/lib/mysql'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
 networks:
     proxy:
         external: true
-    skeleton-back:
+    skeleton-api:
 
 volumes:
     var-data:
