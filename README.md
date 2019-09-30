@@ -5,15 +5,15 @@
 This is a skeleton to easily bootstrap a modern web project.
 
 It is composed of two distinct applications:
-- a front-end application, written in TypeScript, using ReactJS, and managed with webpack,
+- a client application, written in TypeScript, using ReactJS, and managed with webpack,
 - a REST API written in PHP using Symfony 4 and managed with Symfony Flex.
 
 ## How to use it?
 
-The front-end application is made to consume an API, the real implementation being the Symfony one.
+The client application is made to consume an API, the real implementation being the Symfony one.
 But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) (for development and testing purpose only).
 
-To be able to run the full application (both the API and the front-end), you'll first need to setup Traefik as a local reverse proxy.
+To be able to run the full application (both the API and the client), you'll first need to setup Traefik as a local reverse proxy.
 Please follow [this documentation](https://github.com/AymericPlanche/local-reverse-proxy) to achieve that.
 
 Then you can start the full application using docker by running:
@@ -23,13 +23,13 @@ $ make install
 
 You can also run the two applications separately.
 Follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/api.md) to run the API
-and [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/front.md) to run the front-end.
+and [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/client.md) to run the client.
 
 ## Testing
 
 The API is fully tested. You can follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/tests/api.md) for a detailed explanation about how running the tests:
 
-The front-end application is not tested for now. This will be [coming soon](https://github.com/damien-carcel/app-skeleton/issues/15).
+The client application is not tested for now. This will be [coming soon](https://github.com/damien-carcel/app-skeleton/issues/15).
 
 ## License
 

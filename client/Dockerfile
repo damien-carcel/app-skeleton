@@ -29,8 +29,8 @@ FROM dev as builder
 ARG API_BASE_URL_FOR_PRODUCTION
 
 USER node
-RUN mkdir /home/node/front
-WORKDIR /home/node/front
+RUN mkdir /home/node/client
+WORKDIR /home/node/client
 
 COPY --chown=node:node . .
 RUN yarn install && \
@@ -40,9 +40,9 @@ RUN yarn install && \
 # Nginx image used for production #
 ###################################
 
-FROM nginx:alpine as front
+FROM nginx:alpine as client
 
 COPY docker/upload.conf /etc/nginx/conf.d/upload.conf
 
 # Copy the application
-COPY --from=builder --chown=root:root /home/node/front/public /usr/share/nginx/html
+COPY --from=builder --chown=root:root /home/node/client/public /usr/share/nginx/html

@@ -10,7 +10,7 @@ jobs:
             - checkout
             - run:
                 name: Create directories for tests results
-                command: mkdir -p api/var/tests/behat api/var/tests/phpunit front/var/tests/tslint
+                command: mkdir -p api/var/tests/behat api/var/tests/phpunit client/var/tests/tslint
             - run:
                 name: Create "proxy" Docker network (ignore if it already exists)
                 command: docker network create proxy || true
@@ -21,7 +21,7 @@ jobs:
                 name: Archive Docker images
                 command: |
                     docker save -o api-image.tar carcel/skeleton/dev:latest
-                    docker save -o front-end-image.tar carcel/skeleton/node:lts
+                    docker save -o client-image.tar carcel/skeleton/node:lts
             - run:
                 name: Create cache directory for API dependencies
                 command: mkdir -p ~/.cache/composer
@@ -40,17 +40,17 @@ jobs:
                     mkdir -p ~/.cache/yarn
             - restore_cache:
                 keys:
-                    - node-v1-{{ checksum "front/yarn.lock" }}
+                    - node-v1-{{ checksum "client/yarn.lock" }}
                     - node-v1-
             - run:
-                name: Install both API and front-end dependencies
+                name: Install both API and client dependencies
                 command: make install-dependencies
             - save_cache:
                 key: composer-v1-{{ checksum "api/composer.lock" }}
                 paths:
                     - ~/.cache/composer
             - save_cache:
-                key: node-v1-{{ checksum "front/yarn.lock" }}
+                key: node-v1-{{ checksum "client/yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
             - persist_to_workspace:
@@ -58,7 +58,7 @@ jobs:
                 paths:
                     - project
                     - api-image.tar
-                    - front-end-image.tar
+                    - client-image.tar
     test:
         machine:
             image: ubuntu-1604:201903-01
@@ -74,7 +74,7 @@ jobs:
                 name: Load archived Docker images
                 command: |
                     docker load -i api-image.tar
-                    docker load -i front-end-image.tar
+                    docker load -i client-image.tar
             - run:
                 name: Create Yarn file and folders for configuration and cache
                 command: |
@@ -103,15 +103,15 @@ jobs:
                 name: Run end to end tests on the API
                 command: cd ~/project/api && docker-compose run --rm php vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors
             - run:
-                name: Run static analysis on the front-end application
-                command: cd ~/project/front && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
+                name: Run static analysis on the client application
+                command: cd ~/project/client && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
             - run:
-                name: Type-check the front-end application
-                command: cd ~/project/front && docker-compose run --rm node yarn run type-check
+                name: Type-check the client application
+                command: cd ~/project/client && docker-compose run --rm node yarn run type-check
             - store_test_results:
-                path: front/var/tests
+                path: client/var/tests
             - store_artifacts:
-                path: front/var/tests
+                path: client/var/tests
             - store_test_results:
                 path: api/var/tests
             - store_artifacts:

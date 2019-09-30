@@ -11,13 +11,13 @@ services:
             - 'traefik.enable=true'
         networks:
             - 'proxy'
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     fpm:
         command: 'php-fpm -F'
         image: 'carcel/skeleton/prod:latest'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     php:
         image: 'carcel/skeleton/dev:latest'
@@ -42,7 +42,7 @@ services:
             - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
     mysql:
         image: 'mysql:8'
@@ -58,12 +58,12 @@ services:
             - '/tmp'
             - '/var/lib/mysql'
         networks:
-            - 'skeleton-back'
+            - 'skeleton-api'
 
 networks:
     proxy:
         external: true
-    skeleton-back:
+    skeleton-api:
 
 volumes:
     var-data:
