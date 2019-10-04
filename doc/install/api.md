@@ -13,7 +13,7 @@ $ make develop-api
 ```
 
 You can also use production like conditions with Nginx + FPM
-and access the API on [api.skeleton.docker.local](http://api.skeleton.docker.local)
+and access the API on [skeleton-api.docker.local](http://skeleton-api.docker.local)
 (you need to setup the URL in your `/etc/hosts` file and have Traefik working):
 ```bash
 $ make serve-api
