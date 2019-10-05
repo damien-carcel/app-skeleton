@@ -2,22 +2,23 @@ version: '3.4'
 
 services:
     api:
+        environment:
+            PHP_IDE_CONFIG: 'serverName=app-skeleton-api'
+            XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
         image: 'carcel/skeleton/api:latest'
         depends_on:
             - 'fpm'
         labels:
-            - 'traefik.docker.network=proxy'
-            - 'traefik.frontend.rule=Host:api.skeleton.docker.local'
-            - 'traefik.enable=true'
+            - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
         networks:
-            - 'proxy'
-            - 'skeleton-api'
+            - proxy
+            - skeleton-api
 
     fpm:
         command: 'php-fpm -F'
         image: 'carcel/skeleton/prod:latest'
         networks:
-            - 'skeleton-api'
+            - skeleton-api
 
     php:
         image: 'carcel/skeleton/dev:latest'
@@ -29,7 +30,7 @@ services:
             PHP_CONF_ERROR_REPORTING: 32767
             PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
             PHP_CONF_ZEND_ASSERTIONS: 1
-            PHP_IDE_CONFIG: 'serverName=app-skeleton'
+            PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
             XDEBUG_CONFIG: 'remote_host=172.17.0.1'
             XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
         ports:
@@ -42,7 +43,7 @@ services:
             - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-api'
+            - skeleton-api
 
     mysql:
         image: 'mysql:8'
@@ -58,7 +59,7 @@ services:
             - '/tmp'
             - '/var/lib/mysql'
         networks:
-            - 'skeleton-api'
+            - skeleton-api
 
 networks:
     proxy:

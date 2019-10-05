@@ -23,7 +23,7 @@ build-client-dev: pull-client
 
 .PHONY: build-client-prod
 build-client-prod: pull-client
-	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/client:latest --build-arg API_BASE_URL_FOR_PRODUCTION="http://api.skeleton.docker.local" --target client
+	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/client:latest --build-arg API_BASE_URL_FOR_PRODUCTION="http://skeleton-api.docker.localhost" --target client
 
 .PHONY: build-dev
 build-dev: build-api-dev build-client-dev

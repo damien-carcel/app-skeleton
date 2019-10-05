@@ -13,7 +13,7 @@ services:
             - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-client'
+            - skeleton-client
 
     fake-api:
         command: 'yarn run webpack:serve-api --host 0.0.0.0'
@@ -25,17 +25,15 @@ services:
             - './:/srv/app'
         working_dir: '/srv/app'
         networks:
-            - 'skeleton-client'
+            - skeleton-client
 
     client:
         image: 'carcel/skeleton/client:latest'
         labels:
-            - 'traefik.docker.network=proxy'
-            - 'traefik.frontend.rule=Host:skeleton.docker.local'
-            - 'traefik.enable=true'
+            - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
         networks:
-            - 'proxy'
-            - 'skeleton-client'
+            - proxy
+            - skeleton-client
 
 networks:
     proxy:
