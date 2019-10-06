@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2017 Damien Carcel <damien.carcel@gmail.com>
  *
@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Application\Query\GetUser;
+use Carcel\User\Application\Query\GetUserHandler;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,16 +28,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class GetController
 {
-    private $repository;
+    private $getUserHandler;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(GetUserHandler $getUserHandler)
     {
-        $this->repository = $repository;
+        $this->getUserHandler = $getUserHandler;
     }
 
     public function __invoke(string $uuid): Response
     {
-        $user = $this->repository->find($uuid);
+        $user = ($this->getUserHandler)(new GetUser(Uuid::fromString($uuid)));
 
         if (null === $user) {
             throw new NotFoundHttpException(sprintf(

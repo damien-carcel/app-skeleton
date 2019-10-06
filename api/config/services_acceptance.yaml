@@ -26,6 +26,7 @@ services:
         public: true
         arguments:
             - '@Carcel\User\Application\Query\GetUserListHandler'
+            - '@Carcel\User\Application\Query\GetUserHandler'
 
     Carcel\Tests\Acceptance\Context\AuthenticationContext:
         public: true
