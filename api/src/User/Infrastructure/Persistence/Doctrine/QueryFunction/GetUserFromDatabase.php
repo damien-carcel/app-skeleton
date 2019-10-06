@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction;
 
-use Carcel\User\Domain\Model\Read\UserList;
-use Carcel\User\Domain\QueryFunction\GetUserList;
+use Carcel\User\Domain\Model\Read\User;
+use Carcel\User\Domain\QueryFunction\GetUser;
 use Doctrine\DBAL\Connection;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserListFromDatabase implements GetUserList
+final class GetUserFromDatabase implements GetUser
 {
     private $connection;
 
@@ -32,18 +33,27 @@ final class GetUserListFromDatabase implements GetUserList
     /**
      * {@inheritdoc}
      */
-    public function __invoke(int $numberOfUsers, int $userPage): UserList
+    public function __invoke(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
 SELECT id, username, first_name AS firstName, last_name AS lastName FROM user
-LIMIT :limit OFFSET :offset;
+WHERE id = :id;
 SQL;
-        $parameters = ['limit' => $numberOfUsers, 'offset' => ($userPage - 1) * $numberOfUsers];
-        $types = ['limit' => \PDO::PARAM_INT, 'offset' => \PDO::PARAM_INT];
+        $parameters = ['id' => $uuid->toString()];
+        $types = ['id' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();
 
-        return new UserList($result);
+        if (empty($result)) {
+            return null;
+        }
+
+        return new User(
+            $result[0]['id'],
+            $result[0]['username'],
+            $result[0]['firstName'],
+            $result[0]['lastName']
+        );
     }
 }

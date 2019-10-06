@@ -14,7 +14,7 @@ The client application is made to consume an API, the real implementation being 
 But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) (for development and testing purpose only).
 
 To be able to run the full application (both the API and the client), you'll first need to setup Traefik as a local reverse proxy.
-Please follow [this documentation](https://github.com/AymericPlanche/local-reverse-proxy) to achieve that.
+Please follow [this documentation](https://github.com/damien-carcel/traefik-as-local-reverse-proxy) to achieve that.
 
 Then you can start the full application using docker by running:
 ```bash

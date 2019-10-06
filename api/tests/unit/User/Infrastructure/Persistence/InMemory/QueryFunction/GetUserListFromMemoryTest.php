@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2019 Damien Carcel <damien.carcel@gmail.com>
  *
@@ -47,7 +47,6 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(10, 1);
 
-        $this->assertInstanceOf(UserList::class, $users);
         $this->assertFollowingUserListShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
@@ -67,7 +66,6 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(2, 1);
 
-        $this->assertInstanceOf(UserList::class, $users);
         $this->assertFollowingUserListShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
@@ -79,7 +77,6 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(1, 2);
 
-        $this->assertInstanceOf(UserList::class, $users);
         $this->assertFollowingUserListShouldBeRetrieved($users, [
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
@@ -90,7 +87,6 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(5, 2);
 
-        $this->assertInstanceOf(UserList::class, $users);
         $this->assertFollowingUserListShouldBeRetrieved($users, [
             '3553b4cf-49ab-4dd6-ba6e-e09b5b96115c',
             '5eefa64f-0800-4fe2-b86f-f3d96bf7d602',
@@ -105,7 +101,6 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(10, 3);
 
-        $this->assertInstanceOf(UserList::class, $users);
         $this->assertFollowingUserListShouldBeRetrieved($users, []);
     }
 

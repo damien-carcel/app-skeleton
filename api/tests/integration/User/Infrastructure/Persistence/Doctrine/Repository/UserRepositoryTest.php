@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2019 Damien Carcel <damien.carcel@gmail.com>
  *

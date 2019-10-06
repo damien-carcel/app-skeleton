@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2018 Damien Carcel <damien.carcel@gmail.com>
  *
@@ -20,11 +20,5 @@ use Carcel\User\Domain\Model\Read\UserList;
  */
 interface GetUserList
 {
-    /**
-     * @param int $numberOfUsers
-     * @param int $userPage
-     *
-     * @return UserList
-     */
     public function __invoke(int $numberOfUsers, int $userPage): UserList;
 }

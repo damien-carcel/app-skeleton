@@ -11,13 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace %namespace%;
+namespace Carcel\User\Domain\QueryFunction;
 
-use PhpSpec\ObjectBehavior;
+use Carcel\User\Domain\Model\Read\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class %name% extends ObjectBehavior
+interface GetUser
 {
+    public function __invoke(UuidInterface $uuid): ?User;
 }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2017 Damien Carcel <damien.carcel@gmail.com>
  *
@@ -113,6 +113,8 @@ final class UserFixtures extends Fixture
             'roles' => [],
         ],
     ];
+
+    public const ID_OF_NON_EXISTENT_USER = 'eba840cf-9317-4735-b03b-6facfa279890';
 
     private $userIdsToLoad;
 

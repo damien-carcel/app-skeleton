@@ -6,12 +6,12 @@ pull-api:
 
 .PHONY: build-api-dev
 build-api-dev: pull-api
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:latest --target dev
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:php --target dev
 
 .PHONY: build-api-prod
 build-api-prod: pull-api
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/prod:latest --target prod
-	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:latest --target api
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:fpm --target prod
+	cd $(CURDIR)/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:nginx --target api
 
 .PHONY: pull-client
 pull-client:
@@ -19,7 +19,7 @@ pull-client:
 
 .PHONY: build-client-dev
 build-client-dev: pull-client
-	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/node:latest --target dev
+	cd $(CURDIR)/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:node --target dev
 
 .PHONY: build-client-prod
 build-client-prod: pull-client

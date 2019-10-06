@@ -1,70 +1,64 @@
 version: '3.4'
 
 services:
-    api:
-        environment:
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-api'
-            XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
-        image: 'carcel/skeleton/api:latest'
-        depends_on:
-            - 'fpm'
-        labels:
-            - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
-        networks:
-            - proxy
-            - skeleton-api
+  api:
+    image: 'carcel/skeleton/api:nginx'
+    depends_on:
+      - 'fpm'
+    labels:
+      - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
+    networks:
+      - proxy
+      - skeleton-api
 
-    fpm:
-        command: 'php-fpm -F'
-        image: 'carcel/skeleton/prod:latest'
-        networks:
-            - skeleton-api
+  fpm:
+    command: 'php-fpm -F'
+    image: 'carcel/skeleton/api:fpm'
+    networks:
+      - skeleton-api
 
-    php:
-        image: 'carcel/skeleton/dev:latest'
-        environment:
-            COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
-            COMPOSER_HOME: '/home/composer/.config/composer'
-            PHP_CONF_DISPLAY_ERRORS: 1
-            PHP_CONF_DISPLAY_STARTUP_ERRORS: 1
-            PHP_CONF_ERROR_REPORTING: 32767
-            PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
-            PHP_CONF_ZEND_ASSERTIONS: 1
-            PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
-            XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-            XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
-        ports:
-            - '${PHP_SKELETON_OUTPUT:-8000}:8000'
-        user: '${HOST_USER_IDS:-1000:1000}'
-        volumes:
-            - './:/srv/app:rw'
-            - './var:/srv/app/var:rw'
-            - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
-            - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
-        working_dir: '/srv/app'
-        networks:
-            - skeleton-api
+  php:
+    image: 'carcel/skeleton/dev:php'
+    environment:
+      COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
+      COMPOSER_HOME: '/home/composer/.config/composer'
+      PHP_CONF_DISPLAY_ERRORS: 1
+      PHP_CONF_DISPLAY_STARTUP_ERRORS: 1
+      PHP_CONF_ERROR_REPORTING: 32767
+      PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
+      PHP_CONF_ZEND_ASSERTIONS: 1
+      PHP_IDE_CONFIG: 'serverName=app-skeleton-cli'
+      XDEBUG_CONFIG: 'remote_host=172.17.0.1'
+      XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+    ports:
+      - '${PHP_SKELETON_OUTPUT:-8000}:8000'
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './:/srv/app:rw'
+      - './var:/srv/app/var:rw'
+      - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
+      - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
+    working_dir: '/srv/app'
+    networks:
+      - skeleton-api
 
-    mysql:
-        image: 'mysql:8'
-        command: ['--default-authentication-plugin=mysql_native_password']
-        environment:
-            MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_USER: 'app_skeleton'
-            MYSQL_PASSWORD: 'app_skeleton'
-            MYSQL_DATABASE: 'app_skeleton'
-        ports:
-            - '${MYSQL_SKELETON_PORT:-33006}:3306'
-        tmpfs:
-            - '/tmp'
-            - '/var/lib/mysql'
-        networks:
-            - skeleton-api
+  mysql:
+    image: 'mysql:8'
+    command: ['--default-authentication-plugin=mysql_native_password']
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'app_skeleton'
+      MYSQL_PASSWORD: 'app_skeleton'
+      MYSQL_DATABASE: 'app_skeleton'
+    ports:
+      - '${MYSQL_SKELETON_PORT:-33006}:3306'
+    tmpfs:
+      - '/tmp'
+      - '/var/lib/mysql'
+    networks:
+      - skeleton-api
 
 networks:
-    proxy:
-        external: true
-    skeleton-api:
-
-volumes:
-    var-data:
+  proxy:
+    external: true
+  skeleton-api:

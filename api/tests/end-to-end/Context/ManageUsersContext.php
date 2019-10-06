@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of AppSkeleton.
+ * This file is part of app-skeleton.
  *
  * Copyright (c) 2017 Damien Carcel <damien.carcel@gmail.com>
  *
@@ -47,6 +47,18 @@ final class ManageUsersContext extends RawMinkContext
     }
 
     /**
+     * @When I ask for a specific user
+     */
+    public function askForASpecificUser(): void
+    {
+        $uuidList = array_keys(UserFixtures::USERS_DATA);
+
+        $this->visitPath($this->router->generate('rest_users_get', [
+            'uuid' => $uuidList[0],
+        ]));
+    }
+
+    /**
      * @param string $position
      * @param int    $quantity
      *
@@ -64,5 +76,18 @@ final class ManageUsersContext extends RawMinkContext
             ($pageNumber - 1) * $quantity,
             $quantity
         ));
+    }
+
+    /**
+     * @Then the specified user should be retrieved
+     */
+    public function specifiedUserShouldBeRetrieved(): void
+    {
+        $uuidList = array_keys(UserFixtures::USERS_DATA);
+
+        $responseContent = $this->getSession()->getPage()->getContent();
+        $decodedContent = json_decode($responseContent, true);
+
+        Assert::same(UserFixtures::getNormalizedUser($uuidList[0]), $decodedContent);
     }
 }
