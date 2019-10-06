@@ -38,11 +38,19 @@ final class GetUserFromMemoryTest extends TestCase
     }
 
     /** @test */
-    public function itGetsAListOfUsers(): void
+    public function itGetsAUser(): void
     {
         $user = ($this->getUserFromMemory)(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
 
         $this->assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+    }
+
+    /** @test */
+    public function itDoesntGetAUserThatDoesNotExist(): void
+    {
+        $user = ($this->getUserFromMemory)(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+
+        $this->assertNull($user);
     }
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void

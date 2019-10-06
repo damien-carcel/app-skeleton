@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Query;
 
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser as GetUserQueryFunction;
 
@@ -30,6 +31,12 @@ final class GetUserHandler
 
     public function __invoke(GetUser $getUser): User
     {
-        return ($this->getUserQueryFunction)($getUser->userIdentifier());
+        $uuid = $getUser->userIdentifier();
+
+        if (null === $user = ($this->getUserQueryFunction)($uuid)) {
+            throw UserDoesNotExist::fromUuid($uuid);
+        }
+
+        return $user;
     }
 }

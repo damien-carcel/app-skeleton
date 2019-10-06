@@ -114,6 +114,8 @@ final class UserFixtures extends Fixture
         ],
     ];
 
+    public const ID_OF_NON_EXISTENT_USER = 'eba840cf-9317-4735-b03b-6facfa279890';
+
     private $userIdsToLoad;
 
     public function __construct(array $userIdsToLoad = [])

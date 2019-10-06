@@ -30,9 +30,13 @@ final class GetUserFromMemory implements GetUser
         $this->repository = $repository;
     }
 
-    public function __invoke(UuidInterface $uuid): User
+    public function __invoke(UuidInterface $uuid): ?User
     {
         $user = $this->repository->find($uuid->toString());
+
+        if (null === $user) {
+            return null;
+        }
 
         return new User(
             $user->id()->toString(),

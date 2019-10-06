@@ -19,6 +19,7 @@ use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Application\Query\GetUserHandler;
 use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
 use Carcel\User\Application\Query\GetUserListHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\Model\Read\UserList;
 use Ramsey\Uuid\Uuid;
@@ -37,6 +38,9 @@ final class ManageUsersContext implements Context
 
     /** @var User */
     private $user;
+
+    /** @var UserDoesNotExist */
+    private $caughtException;
 
     public function __construct(
         GetUserListHandler $getUserListHandler,
@@ -68,6 +72,20 @@ final class ManageUsersContext implements Context
     }
 
     /**
+     * @When I ask for a user that does not exist
+     */
+    public function askForAUserThatDoesNotExist(): void
+    {
+        $uuid = Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER);
+
+        try {
+            $this->user = ($this->getUserHandler)(new GetUser($uuid));
+        } catch (\Exception $exception) {
+            $this->caughtException = $exception;
+        }
+    }
+
+    /**
      * @Then the :position :quantity users should be retrieved
      */
     public function allUsersShouldBeRetrieved(string $position, int $quantity): void
@@ -92,5 +110,13 @@ final class ManageUsersContext implements Context
             UserFixtures::getNormalizedUser($uuidList[0]),
             $this->user->normalize()
         );
+    }
+
+    /**
+     * @Then I got no user
+     */
+    public function gotNoUser(): void
+    {
+        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
     }
 }

@@ -15,6 +15,7 @@ namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Application\Query\GetUserHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,13 +38,10 @@ final class GetController
 
     public function __invoke(string $uuid): Response
     {
-        $user = ($this->getUserHandler)(new GetUser(Uuid::fromString($uuid)));
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf(
-                'There is no user with identifier "%s"',
-                $uuid
-            ));
+        try {
+            $user = ($this->getUserHandler)(new GetUser(Uuid::fromString($uuid)));
+        } catch (UserDoesNotExist $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
 
         return new JsonResponse($user->normalize());

@@ -35,11 +35,24 @@ final class GetUserFromDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itGetsAListOfUsers(): void
+    public function itGetsAUser(): void
     {
-        $user = ($this->container()->get(GetUser::class))(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
+        $user = ($this->getUserFromDatabase())(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
 
         $this->assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+    }
+
+    /** @test */
+    public function itDoesntGetAUserThatDoesNotExist(): void
+    {
+        $user = ($this->getUserFromDatabase())(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+
+        $this->assertNull($user);
+    }
+
+    private function getUserFromDatabase(): GetUser
+    {
+        return $this->container()->get(GetUser::class);
     }
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void

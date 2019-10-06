@@ -33,7 +33,7 @@ final class GetUserFromDatabase implements GetUser
     /**
      * {@inheritdoc}
      */
-    public function __invoke(UuidInterface $uuid): User
+    public function __invoke(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
 SELECT id, username, first_name AS firstName, last_name AS lastName FROM user
@@ -44,6 +44,10 @@ SQL;
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();
+
+        if (empty($result)) {
+            return null;
+        }
 
         return new User(
             $result[0]['id'],

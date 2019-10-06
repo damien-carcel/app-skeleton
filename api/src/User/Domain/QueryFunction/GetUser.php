@@ -21,5 +21,5 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface GetUser
 {
-    public function __invoke(UuidInterface $uuid): User;
+    public function __invoke(UuidInterface $uuid): ?User;
 }
