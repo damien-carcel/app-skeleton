@@ -1,41 +1,41 @@
 version: '3.4'
 
 services:
-    node:
-        image: 'carcel/skeleton/node:latest'
-        environment:
-            YARN_CACHE_FOLDER: '/home/yarn-cache'
-        user: '${HOST_USER_IDS:-1000:1000}'
-        volumes:
-            - './:/srv/app'
-            - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
-            - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
-            - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
-        working_dir: '/srv/app'
-        networks:
-            - skeleton-client
+  node:
+    image: 'carcel/skeleton/node:latest'
+    environment:
+      YARN_CACHE_FOLDER: '/home/yarn-cache'
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './:/srv/app'
+      - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
+      - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
+      - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
+    working_dir: '/srv/app'
+    networks:
+      - skeleton-client
 
-    fake-api:
-        command: 'yarn run webpack:serve-api --host 0.0.0.0'
-        image: 'carcel/skeleton/node:latest'
-        ports:
-          - '${FAKE_API_SKELETON_PORT:-3000}:3000'
-        user: '${HOST_USER_IDS:-1000:1000}'
-        volumes:
-            - './:/srv/app'
-        working_dir: '/srv/app'
-        networks:
-            - skeleton-client
+  fake-api:
+    command: 'yarn run webpack:serve-api --host 0.0.0.0'
+    image: 'carcel/skeleton/node:latest'
+    ports:
+      - '${FAKE_API_SKELETON_PORT:-3000}:3000'
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './:/srv/app'
+    working_dir: '/srv/app'
+    networks:
+      - skeleton-client
 
-    client:
-        image: 'carcel/skeleton/client:latest'
-        labels:
-            - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
-        networks:
-            - proxy
-            - skeleton-client
+  client:
+    image: 'carcel/skeleton/client:latest'
+    labels:
+      - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
+    networks:
+      - proxy
+      - skeleton-client
 
 networks:
-    proxy:
-        external: true
-    skeleton-client:
+  proxy:
+    external: true
+  skeleton-client:
