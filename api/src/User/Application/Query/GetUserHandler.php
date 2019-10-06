@@ -13,23 +13,23 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Query;
 
-use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Model\Read\User;
+use Carcel\User\Domain\QueryFunction\GetUser as GetUserQueryFunction;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class GetUserHandler
 {
-    private $repository;
+    private $getUserQueryFunction;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(GetUserQueryFunction $getUserQueryFunction)
     {
-        $this->repository = $repository;
+        $this->getUserQueryFunction = $getUserQueryFunction;
     }
 
     public function __invoke(GetUser $getUser): User
     {
-        return $this->repository->find($getUser->userIdentifier()->toString());
+        return ($this->getUserQueryFunction)($getUser->userIdentifier());
     }
 }

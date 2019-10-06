@@ -19,8 +19,8 @@ use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Application\Query\GetUserHandler;
 use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
 use Carcel\User\Application\Query\GetUserListHandler;
+use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\Model\Read\UserList;
-use Carcel\User\Domain\Model\Write\User;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -90,12 +90,7 @@ final class ManageUsersContext implements Context
 
         Assert::same(
             UserFixtures::getNormalizedUser($uuidList[0]),
-            [
-                'id' => $this->user->id()->toString(),
-                'username' => $this->user->getUsername(),
-                'firstName' => $this->user->getFirstName(),
-                'lastName' => $this->user->getLastName(),
-            ]
+            $this->user->normalize()
         );
     }
 }

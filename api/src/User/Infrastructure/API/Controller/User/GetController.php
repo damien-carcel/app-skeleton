@@ -46,13 +46,6 @@ final class GetController
             ));
         }
 
-        $normalizedUser = [
-            'id' => $user->id(),
-            'username' => $user->getUsername(),
-            'firstName' => $user->getFirstName(),
-            'lastName' => $user->getLastName(),
-        ];
-
-        return new JsonResponse($normalizedUser);
+        return new JsonResponse($user->normalize());
     }
 }

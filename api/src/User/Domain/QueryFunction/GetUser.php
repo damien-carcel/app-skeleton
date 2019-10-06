@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Carcel\User\Domain\QueryFunction;
 
-use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Domain\Model\Read\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-interface GetUserList
+interface GetUser
 {
-    public function __invoke(int $numberOfUsers, int $userPage): UserList;
+    public function __invoke(UuidInterface $uuid): User;
 }
