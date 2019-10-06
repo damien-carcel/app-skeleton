@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   api:
-    image: 'carcel/skeleton/api:latest'
+    image: 'carcel/skeleton/api:nginx'
     depends_on:
       - 'fpm'
     labels:
@@ -13,12 +13,12 @@ services:
 
   fpm:
     command: 'php-fpm -F'
-    image: 'carcel/skeleton/prod:latest'
+    image: 'carcel/skeleton/api:fpm'
     networks:
       - skeleton-api
 
   php:
-    image: 'carcel/skeleton/dev:latest'
+    image: 'carcel/skeleton/dev:php'
     environment:
       COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
       COMPOSER_HOME: '/home/composer/.config/composer'
