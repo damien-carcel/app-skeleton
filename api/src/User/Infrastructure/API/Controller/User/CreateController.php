@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Domain\Factory\UserFactory;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Application\Command\CreateUser;
+use Carcel\User\Application\Command\CreateUserHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +27,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class CreateController
 {
-    private $userFactory;
-    private $repository;
+    private $createUserHandler;
 
-    public function __construct(UserFactory $userFactory, UserRepositoryInterface $repository)
+    public function __construct(CreateUserHandler $createUserHandler)
     {
-        $this->userFactory = $userFactory;
-        $this->repository = $repository;
+        $this->createUserHandler = $createUserHandler;
     }
 
     public function __invoke(Request $request): Response
@@ -41,16 +39,12 @@ final class CreateController
         $content = $request->getContent();
         $userData = json_decode($content, true);
 
-        $user = $this->userFactory->create(array_merge(
-            [
-                'password' => 'password',
-                'salt' => 'salt',
-                'roles' => [],
-            ],
-            $userData
-        ));
-
-        $this->repository->save($user);
+        $createUser = new CreateUser(
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName']
+        );
+        ($this->createUserHandler)($createUser);
 
         return new JsonResponse();
     }

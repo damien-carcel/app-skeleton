@@ -17,24 +17,17 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Application\Query\GetUserHandler;
-use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
-use Carcel\User\Application\Query\GetUserListHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
-use Carcel\User\Domain\Model\Read\UserList;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ManageUsersContext implements Context
+final class GetUserContext implements Context
 {
-    private $getUserListHandler;
     private $getUserHandler;
-
-    /** @var UserList */
-    private $userList;
 
     /** @var User */
     private $user;
@@ -42,22 +35,9 @@ final class ManageUsersContext implements Context
     /** @var UserDoesNotExist */
     private $caughtException;
 
-    public function __construct(
-        GetUserListHandler $getUserListHandler,
-        GetUserHandler $getUserHandler
-    ) {
-        $this->getUserListHandler = $getUserListHandler;
-        $this->getUserHandler = $getUserHandler;
-    }
-
-    /**
-     * @When I ask for the :position page of :quantity users
-     */
-    public function listUsers(string $position, int $quantity): void
+    public function __construct(GetUserHandler $getUserHandler)
     {
-        $pageNumber = (int) substr($position, 0, 1);
-
-        $this->userList = ($this->getUserListHandler)(new GetUserListQuery($quantity, $pageNumber));
+        $this->getUserHandler = $getUserHandler;
     }
 
     /**
@@ -83,20 +63,6 @@ final class ManageUsersContext implements Context
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
-    }
-
-    /**
-     * @Then the :position :quantity users should be retrieved
-     */
-    public function allUsersShouldBeRetrieved(string $position, int $quantity): void
-    {
-        $pageNumber = (int) substr($position, 0, 1);
-
-        Assert::same($this->userList->normalize(), array_slice(
-            UserFixtures::getNormalizedUsers(),
-            ($pageNumber - 1) * $quantity,
-            $quantity
-        ));
     }
 
     /**
