@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Domain\Factory\UserFactory;
+use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,12 +28,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class CreateController
 {
-    private $userFactory;
     private $repository;
 
-    public function __construct(UserFactory $userFactory, UserRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository)
     {
-        $this->userFactory = $userFactory;
         $this->repository = $repository;
     }
 
@@ -41,14 +40,15 @@ final class CreateController
         $content = $request->getContent();
         $userData = json_decode($content, true);
 
-        $user = $this->userFactory->create(array_merge(
-            [
-                'password' => 'password',
-                'salt' => 'salt',
-                'roles' => [],
-            ],
-            $userData
-        ));
+        $user = new User(
+            Uuid::uuid4(),
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName'],
+            'password',
+            'salt',
+            []
+        );
 
         $this->repository->save($user);
 

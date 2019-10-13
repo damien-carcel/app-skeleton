@@ -15,15 +15,26 @@ services:
 
     #- Behat contexts -#
 
+    Carcel\Tests\EndToEnd\Context\AuthenticationContext:
+        public: true
+
+    Carcel\Tests\EndToEnd\Context\CreateUserContext:
+        public: true
+        arguments:
+            - '@router'
+            - '@database_connection'
+
     Carcel\Tests\EndToEnd\Context\FixtureContext:
         public: true
         arguments:
             - '@doctrine.orm.entity_manager'
 
-    Carcel\Tests\EndToEnd\Context\ManageUsersContext:
+    Carcel\Tests\EndToEnd\Context\GetUserContext:
         public: true
         arguments:
             - '@router'
 
-    Carcel\Tests\EndToEnd\Context\AuthenticationContext:
+    Carcel\Tests\EndToEnd\Context\ListUsersContext:
         public: true
+        arguments:
+            - '@router'

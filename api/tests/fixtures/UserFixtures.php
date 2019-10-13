@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Fixtures;
 
-use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -189,6 +189,14 @@ final class UserFixtures extends Fixture
 
     private static function createUser(array $userData): User
     {
-        return (new UserFactory())->create($userData);
+        return new User(
+            Uuid::fromString($userData['id']),
+            $userData['username'],
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['password'],
+            $userData['salt'],
+            $userData['roles']
+        );
     }
 }
