@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Application\Command\ChangeUserName;
+use Carcel\User\Application\Command\ChangeUserNameHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,11 +30,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class UpdateController
 {
-    private $repository;
+    private $changeUserNameHandler;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(ChangeUserNameHandler $changeUserNameHandler)
     {
-        $this->repository = $repository;
+        $this->changeUserNameHandler = $changeUserNameHandler;
     }
 
     public function __invoke(string $uuid, Request $request): Response
@@ -39,16 +42,16 @@ final class UpdateController
         $content = $request->getContent();
         $userData = json_decode($content, true);
 
-        $user = $this->repository->find($uuid);
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf(
-                'There is no user with identifier "%s"',
-                $uuid
-            ));
+        try {
+            $changeUserName = new ChangeUserName(
+                Uuid::fromString($uuid),
+                $userData['firstName'],
+                $userData['lastName']
+            );
+            ($this->changeUserNameHandler)($changeUserName);
+        } catch (UserDoesNotExist $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
-        $user->changeName($userData);
-
-        $this->repository->save($user);
 
         return new JsonResponse();
     }

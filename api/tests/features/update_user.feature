@@ -10,3 +10,11 @@ Feature:
   Scenario: I can change the name of a user
     When I change the name of an existing user
     Then this user has a new name
+
+  Scenario: I can change the fist name of a user
+    When I change the first name of an existing user
+    Then this user has a new first name
+
+  Scenario: I can change the last name of a user
+    When I change the last name of an existing user
+    Then this user has a new last name

@@ -99,7 +99,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $user->changeName(['firstName' => 'Peter', 'lastName' => 'Parker']);
+        $user->changeName('Peter', 'Parker');
 
         $this->assertSame('Peter', $user->getFirstName());
         $this->assertSame('Parker', $user->getLastName());

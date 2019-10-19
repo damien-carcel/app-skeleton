@@ -104,14 +104,9 @@ class User implements UserInterface
         throw new \LogicException('Not implemented yet.');
     }
 
-    public function changeName(array $data): void
+    public function changeName(string $firstName, string $lastName): void
     {
-        if (array_key_exists('firstName', $data)) {
-            $this->firstName = $data['firstName'];
-        }
-
-        if (array_key_exists('lastName', $data)) {
-            $this->lastName = $data['lastName'];
-        }
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 }
