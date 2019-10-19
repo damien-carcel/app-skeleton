@@ -38,3 +38,8 @@ services:
         public: true
         arguments:
             - '@router'
+
+    Carcel\Tests\EndToEnd\Context\UpdateUserContext:
+        public: true
+        arguments:
+            - '@router'

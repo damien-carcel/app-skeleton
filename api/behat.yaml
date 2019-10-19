@@ -14,6 +14,7 @@ acceptance:
                 - 'Carcel\Tests\Acceptance\Context\FixtureContext'
                 - 'Carcel\Tests\Acceptance\Context\GetUserContext'
                 - 'Carcel\Tests\Acceptance\Context\ListUsersContext'
+                - 'Carcel\Tests\Acceptance\Context\UpdateUserContext'
 
 end-to-end:
     extensions:
@@ -36,5 +37,6 @@ end-to-end:
                 - 'Carcel\Tests\EndToEnd\Context\FixtureContext'
                 - 'Carcel\Tests\EndToEnd\Context\GetUserContext'
                 - 'Carcel\Tests\EndToEnd\Context\ListUsersContext'
+                - 'Carcel\Tests\EndToEnd\Context\UpdateUserContext'
             filters:
                 tags: '@end-to-end'

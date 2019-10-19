@@ -43,3 +43,6 @@ services:
         public: true
         arguments:
             - '@Carcel\User\Application\Query\GetUserListHandler'
+
+    Carcel\Tests\Acceptance\Context\UpdateUserContext:
+        public: true

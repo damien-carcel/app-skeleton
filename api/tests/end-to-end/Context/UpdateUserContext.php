@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\MinkExtension\Context\RawMinkContext;
+use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
@@ -21,16 +22,17 @@ use Webmozart\Assert\Assert;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class CreateUserContext extends RawMinkContext
+final class UpdateUserContext extends RawMinkContext
 {
-    private const NEW_USER = [
-        'username' => 'batman',
-        'firstName' => 'Bruce',
-        'lastName' => 'Wayne',
+    private const USER_DATA_TO_UPDATE = [
+        'firstName' => 'Peter',
+        'lastName' => 'Parker',
     ];
 
     private $router;
     private $connection;
+
+    private $updatedUserUuid;
 
     public function __construct(RouterInterface $router, Connection $connection)
     {
@@ -39,41 +41,45 @@ final class CreateUserContext extends RawMinkContext
     }
 
     /**
-     * @When I create a new user
+     * @When I change the name of an existing user
      */
-    public function createNewUser(): void
+    public function changeTheNameOfAnExistingUser(): void
     {
+        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+
         $this->getSession()->getDriver()->getClient()->request(
-            'POST',
-            $this->router->generate('rest_users_create'),
+            'PATCH',
+            $this->router->generate(
+                'rest_users_update',
+                ['uuid' => $this->updatedUserUuid]
+            ),
             [],
             [],
             [],
-            json_encode(static::NEW_USER)
+            json_encode(static::USER_DATA_TO_UPDATE)
         );
     }
 
     /**
-     * @Then a new user is created
+     * @Then this user has a new name
      */
-    public function newUserIsCreated(): void
+    public function userHasANewName(): void
     {
         $query = <<<SQL
-SELECT * FROM user WHERE username = :username
+SELECT * FROM user WHERE id = :id
 SQL;
 
-        $parameters = ['username' => static::NEW_USER['username']];
-        $types = ['username' => \PDO::PARAM_STR];
+        $parameters = ['id' => $this->updatedUserUuid];
+        $types = ['id' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();
 
         Assert::count($result, 1);
-
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['username'], static::NEW_USER['username']);
-        Assert::same($queriedUser['first_name'], static::NEW_USER['firstName']);
-        Assert::same($queriedUser['last_name'], static::NEW_USER['lastName']);
+        Assert::same($queriedUser['username'], UserFixtures::USERS_DATA[$this->updatedUserUuid]['username']);
+        Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
+        Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
     }
 }
