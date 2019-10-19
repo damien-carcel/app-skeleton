@@ -20,9 +20,9 @@ services:
 
     Carcel\Tests\EndToEnd\Context\CreateUserContext:
         public: true
-        arguments:
-            - '@router'
-            - '@database_connection'
+
+    Carcel\Tests\EndToEnd\Context\DeleteUserContext:
+        public: true
 
     Carcel\Tests\EndToEnd\Context\FixtureContext:
         public: true
@@ -31,15 +31,9 @@ services:
 
     Carcel\Tests\EndToEnd\Context\GetUserContext:
         public: true
-        arguments:
-            - '@router'
 
     Carcel\Tests\EndToEnd\Context\ListUsersContext:
         public: true
-        arguments:
-            - '@router'
 
     Carcel\Tests\EndToEnd\Context\UpdateUserContext:
         public: true
-        arguments:
-            - '@router'

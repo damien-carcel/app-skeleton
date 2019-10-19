@@ -11,6 +11,7 @@ acceptance:
             contexts:
                 - 'Carcel\Tests\Acceptance\Context\AuthenticationContext'
                 - 'Carcel\Tests\Acceptance\Context\CreateUserContext'
+                - 'Carcel\Tests\Acceptance\Context\DeleteUserContext'
                 - 'Carcel\Tests\Acceptance\Context\FixtureContext'
                 - 'Carcel\Tests\Acceptance\Context\GetUserContext'
                 - 'Carcel\Tests\Acceptance\Context\ListUsersContext'
@@ -34,6 +35,7 @@ end-to-end:
             contexts:
                 - 'Carcel\Tests\EndToEnd\Context\AuthenticationContext'
                 - 'Carcel\Tests\EndToEnd\Context\CreateUserContext'
+                - 'Carcel\Tests\EndToEnd\Context\DeleteUserContext'
                 - 'Carcel\Tests\EndToEnd\Context\FixtureContext'
                 - 'Carcel\Tests\EndToEnd\Context\GetUserContext'
                 - 'Carcel\Tests\EndToEnd\Context\ListUsersContext'
