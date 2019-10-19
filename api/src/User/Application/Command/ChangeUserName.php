@@ -20,13 +20,13 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class ChangeUserName
 {
-    private $uuid;
+    private $identifier;
     private $firstName;
     private $lastName;
 
-    public function __construct(UuidInterface $uuid, string $firstName, string $lastName)
+    public function __construct(UuidInterface $identifier, string $firstName, string $lastName)
     {
-        $this->uuid = $uuid;
+        $this->identifier = $identifier;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -34,9 +34,9 @@ final class ChangeUserName
     /**
      * @return UuidInterface
      */
-    public function id(): UuidInterface
+    public function identifier(): UuidInterface
     {
-        return $this->uuid;
+        return $this->identifier;
     }
 
     /**

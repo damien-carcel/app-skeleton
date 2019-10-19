@@ -17,8 +17,6 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
 use Carcel\User\Application\Query\GetUserListHandler;
-use Carcel\User\Domain\Exception\UserDoesNotExist;
-use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\Model\Read\UserList;
 use Webmozart\Assert\Assert;
 
@@ -31,12 +29,6 @@ final class ListUsersContext implements Context
 
     /** @var UserList */
     private $userList;
-
-    /** @var User */
-    private $user;
-
-    /** @var UserDoesNotExist */
-    private $caughtException;
 
     public function __construct(GetUserListHandler $getUserListHandler)
     {

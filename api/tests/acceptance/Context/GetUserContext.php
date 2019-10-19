@@ -27,13 +27,13 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserContext implements Context
 {
-    private $getUserHandler;
-
     /** @var User */
     private $user;
 
     /** @var UserDoesNotExist */
     private $caughtException;
+
+    private $getUserHandler;
 
     public function __construct(GetUserHandler $getUserHandler)
     {
