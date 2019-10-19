@@ -17,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\ChangeUserName;
 use Carcel\User\Application\Command\ChangeUserNameHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
@@ -26,10 +27,14 @@ use Webmozart\Assert\Assert;
  */
 final class UpdateUserContext implements Context
 {
+    /** @var string */
+    private $updatedUserIdentifier;
+
+    /** @var UserDoesNotExist */
+    private $caughtException;
+
     private $changeUserNameHandler;
     private $userRepository;
-
-    private $updatedUserUuid;
 
     public function __construct(ChangeUserNameHandler $changeUserNameHandler, UserRepositoryInterface $userRepository)
     {
@@ -42,10 +47,10 @@ final class UpdateUserContext implements Context
      */
     public function changeTheNameOfAnExistingUser(): void
     {
-        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+        $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new ChangeUserName(
-            Uuid::fromString($this->updatedUserUuid),
+            Uuid::fromString($this->updatedUserIdentifier),
             'Peter',
             'Parker'
         );
@@ -57,12 +62,12 @@ final class UpdateUserContext implements Context
      */
     public function changeTheFirstNameOfAnExistingUser(): void
     {
-        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+        $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new ChangeUserName(
-            Uuid::fromString($this->updatedUserUuid),
+            Uuid::fromString($this->updatedUserIdentifier),
             'Peter',
-            UserFixtures::USERS_DATA[$this->updatedUserUuid]['lastName']
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
         );
         ($this->changeUserNameHandler)($changeUserName);
     }
@@ -72,14 +77,31 @@ final class UpdateUserContext implements Context
      */
     public function changeTheLastNameOfAnExistingUser(): void
     {
-        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+        $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new ChangeUserName(
-            Uuid::fromString($this->updatedUserUuid),
-            UserFixtures::USERS_DATA[$this->updatedUserUuid]['firstName'],
+            Uuid::fromString($this->updatedUserIdentifier),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             'Parker'
         );
         ($this->changeUserNameHandler)($changeUserName);
+    }
+
+    /**
+     * @When I try to change the name of a user that does not exist
+     */
+    public function changeTheNameOfAUserThatDoesNotExist(): void
+    {
+        try {
+            $changeUserName = new ChangeUserName(
+                Uuid::fromString(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)),
+                'Peter',
+                'Parker'
+            );
+            ($this->changeUserNameHandler)($changeUserName);
+        } catch (\Exception $exception) {
+            $this->caughtException = $exception;
+        }
     }
 
     /**
@@ -87,9 +109,9 @@ final class UpdateUserContext implements Context
      */
     public function userHasANewName(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserUuid);
+        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserUuid]['username']);
+        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
         Assert::same($updatedUser->getFirstName(), 'Peter');
         Assert::same($updatedUser->getLastName(), 'Parker');
     }
@@ -99,11 +121,11 @@ final class UpdateUserContext implements Context
      */
     public function userHasANewFirstName(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserUuid);
+        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserUuid]['username']);
+        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
         Assert::same($updatedUser->getFirstName(), 'Peter');
-        Assert::same($updatedUser->getLastName(), UserFixtures::USERS_DATA[$this->updatedUserUuid]['lastName']);
+        Assert::same($updatedUser->getLastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
     }
 
     /**
@@ -111,10 +133,18 @@ final class UpdateUserContext implements Context
      */
     public function userHasANewLastName(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserUuid);
+        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserUuid]['username']);
-        Assert::same($updatedUser->getFirstName(), UserFixtures::USERS_DATA[$this->updatedUserUuid]['firstName']);
+        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
+        Assert::same($updatedUser->getFirstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
         Assert::same($updatedUser->getLastName(), 'Parker');
+    }
+
+    /**
+     * @Then  I got nothing to update
+     */
+    public function gotNothingToUpdate(): void
+    {
+        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
     }
 }

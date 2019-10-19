@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Carcel\User\Application\Query;
+namespace Carcel\User\Application\Command;
 
 use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUser
+final class DeleteUser
 {
     private $identifier;
 
@@ -27,6 +27,9 @@ final class GetUser
         $this->identifier = $identifier;
     }
 
+    /**
+     * @return UuidInterface
+     */
     public function identifier(): UuidInterface
     {
         return $this->identifier;

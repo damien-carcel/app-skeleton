@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Application\Command\DeleteUser;
+use Carcel\User\Application\Command\DeleteUserHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,25 +29,21 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class DeleteController
 {
-    private $repository;
+    private $deleteUserHandler;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(DeleteUserHandler $deleteUserHandler)
     {
-        $this->repository = $repository;
+        $this->deleteUserHandler = $deleteUserHandler;
     }
 
     public function __invoke(string $uuid): Response
     {
-        $user = $this->repository->find($uuid);
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf(
-                'There is no user with identifier "%s"',
-                $uuid
-            ));
+        try {
+            $deleteUser = new DeleteUser(Uuid::fromString($uuid));
+            ($this->deleteUserHandler)($deleteUser);
+        } catch (UserDoesNotExist $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
-
-        $this->repository->delete($user);
 
         return new JsonResponse();
     }

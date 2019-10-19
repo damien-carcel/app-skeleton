@@ -18,3 +18,7 @@ Feature:
   Scenario: I can change the last name of a user
     When I change the last name of an existing user
     Then this user has a new last name
+
+  Scenario: I cannot change the name of a user that does not exist
+    When I try to change the name of a user that does not exist
+    Then I got nothing to update

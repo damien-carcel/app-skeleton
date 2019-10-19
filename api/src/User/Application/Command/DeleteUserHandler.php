@@ -19,7 +19,7 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ChangeUserNameHandler
+final class DeleteUserHandler
 {
     private $userRepository;
 
@@ -28,14 +28,13 @@ final class ChangeUserNameHandler
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(ChangeUserName $changeUserName): void
+    public function __invoke(DeleteUser $deleteUser): void
     {
-        $user = $this->userRepository->find($changeUserName->identifier()->toString());
+        $user = $this->userRepository->find($deleteUser->identifier()->toString());
         if (null === $user) {
-            throw UserDoesNotExist::fromUuid($changeUserName->identifier());
+            throw UserDoesNotExist::fromUuid($deleteUser->identifier());
         }
-        $user->changeName($changeUserName->firstName(), $changeUserName->lastName());
 
-        $this->userRepository->save($user);
+        $this->userRepository->delete($user);
     }
 }

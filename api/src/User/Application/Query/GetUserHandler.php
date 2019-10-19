@@ -31,7 +31,7 @@ final class GetUserHandler
 
     public function __invoke(GetUser $getUser): User
     {
-        $uuid = $getUser->userIdentifier();
+        $uuid = $getUser->identifier();
 
         if (null === $user = ($this->getUserQueryFunction)($uuid)) {
             throw UserDoesNotExist::fromUuid($uuid);

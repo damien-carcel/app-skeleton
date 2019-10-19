@@ -25,24 +25,18 @@ services:
 
     Carcel\Tests\Acceptance\Context\CreateUserContext:
         public: true
-        arguments:
-            - '@Carcel\User\Application\Command\CreateUserHandler'
-            - '@Carcel\User\Domain\Repository\UserRepositoryInterface'
+
+    Carcel\Tests\Acceptance\Context\DeleteUserContext:
+        public: true
 
     Carcel\Tests\Acceptance\Context\FixtureContext:
         public: true
-        arguments:
-            - '@Carcel\User\Domain\Repository\UserRepositoryInterface'
 
     Carcel\Tests\Acceptance\Context\GetUserContext:
         public: true
-        arguments:
-            - '@Carcel\User\Application\Query\GetUserHandler'
 
     Carcel\Tests\Acceptance\Context\ListUsersContext:
         public: true
-        arguments:
-            - '@Carcel\User\Application\Query\GetUserListHandler'
 
     Carcel\Tests\Acceptance\Context\UpdateUserContext:
         public: true
