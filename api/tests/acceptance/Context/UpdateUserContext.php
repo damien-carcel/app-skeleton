@@ -17,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\ChangeUserName;
 use Carcel\User\Application\Command\ChangeUserNameHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
@@ -26,7 +27,11 @@ use Webmozart\Assert\Assert;
  */
 final class UpdateUserContext implements Context
 {
+    /** @var string */
     private $updatedUserIdentifier;
+
+    /** @var UserDoesNotExist */
+    private $caughtException;
 
     private $changeUserNameHandler;
     private $userRepository;
@@ -83,6 +88,23 @@ final class UpdateUserContext implements Context
     }
 
     /**
+     * @When I try to change the name of a user that does not exist
+     */
+    public function changeTheNameOfAUserThatDoesNotExist(): void
+    {
+        try {
+            $changeUserName = new ChangeUserName(
+                Uuid::fromString(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)),
+                'Peter',
+                'Parker'
+            );
+            ($this->changeUserNameHandler)($changeUserName);
+        } catch (\Exception $exception) {
+            $this->caughtException = $exception;
+        }
+    }
+
+    /**
      * @Then this user has a new name
      */
     public function userHasANewName(): void
@@ -116,5 +138,13 @@ final class UpdateUserContext implements Context
         Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
         Assert::same($updatedUser->getFirstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
         Assert::same($updatedUser->getLastName(), 'Parker');
+    }
+
+    /**
+     * @Then  I got nothing to update
+     */
+    public function gotNothingToUpdate(): void
+    {
+        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
     }
 }

@@ -32,7 +32,7 @@ final class UpdateUserContext extends RawMinkContext
     private $router;
     private $connection;
 
-    private $updatedUserUuid;
+    private $updatedUserIdentifier;
 
     public function __construct(RouterInterface $router, Connection $connection)
     {
@@ -45,13 +45,13 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function changeTheNameOfAnExistingUser(): void
     {
-        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+        $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $this->getSession()->getDriver()->getClient()->request(
             'PATCH',
             $this->router->generate(
                 'rest_users_update',
-                ['uuid' => $this->updatedUserUuid]
+                ['uuid' => $this->updatedUserIdentifier]
             ),
             [],
             [],
@@ -69,7 +69,7 @@ final class UpdateUserContext extends RawMinkContext
 SELECT * FROM user WHERE id = :id
 SQL;
 
-        $parameters = ['id' => $this->updatedUserUuid];
+        $parameters = ['id' => $this->updatedUserIdentifier];
         $types = ['id' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
@@ -78,7 +78,7 @@ SQL;
         Assert::count($result, 1);
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['username'], UserFixtures::USERS_DATA[$this->updatedUserUuid]['username']);
+        Assert::same($queriedUser['username'], UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
         Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
         Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
     }

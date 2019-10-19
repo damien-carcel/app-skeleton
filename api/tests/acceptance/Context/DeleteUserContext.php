@@ -17,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\DeleteUser;
 use Carcel\User\Application\Command\DeleteUserHandler;
+use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
@@ -26,7 +27,11 @@ use Webmozart\Assert\Assert;
  */
 final class DeleteUserContext implements Context
 {
+    /** @var string */
     private $deletedUserIdentifier;
+
+    /** @var UserDoesNotExist */
+    private $caughtException;
 
     private $deleteUserHandler;
     private $userRepository;
@@ -49,10 +54,30 @@ final class DeleteUserContext implements Context
     }
 
     /**
+     * @When I try to delete a user that does not exist
+     */
+    public function deleteAUserThatDoesNotExist(): void
+    {
+        try {
+            ($this->deleteUserHandler)(new DeleteUser(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)));
+        } catch (\Exception $exception) {
+            $this->caughtException = $exception;
+        }
+    }
+
+    /**
      * @Then the user is deleted
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
         Assert::null($this->userRepository->find($this->deletedUserIdentifier));
+    }
+
+    /**
+     * @Then I got nothing to delete
+     */
+    public function gotNothingToDelete(): void
+    {
+        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
     }
 }

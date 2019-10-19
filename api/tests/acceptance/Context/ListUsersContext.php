@@ -25,10 +25,10 @@ use Webmozart\Assert\Assert;
  */
 final class ListUsersContext implements Context
 {
-    private $getUserListHandler;
-
     /** @var UserList */
     private $userList;
+
+    private $getUserListHandler;
 
     public function __construct(GetUserListHandler $getUserListHandler)
     {

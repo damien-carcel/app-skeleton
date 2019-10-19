@@ -27,7 +27,7 @@ final class DeleteUserContext extends RawMinkContext
     private $router;
     private $connection;
 
-    private $updatedUserUuid;
+    private $deletedUserIdentifier;
 
     public function __construct(RouterInterface $router, Connection $connection)
     {
@@ -40,12 +40,12 @@ final class DeleteUserContext extends RawMinkContext
      */
     public function askForASpecificUser(): void
     {
-        $this->updatedUserUuid = array_keys(UserFixtures::USERS_DATA)[0];
+        $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $this->getSession()->getDriver()->getClient()->request(
             'DELETE',
             $this->router->generate('rest_users_delete', [
-                'uuid' => $this->updatedUserUuid,
+                'uuid' => $this->deletedUserIdentifier,
             ])
         );
     }
@@ -84,7 +84,7 @@ SQL;
         $normalizedFixtures = UserFixtures::getNormalizedUsers();
 
         return array_values(array_filter($normalizedFixtures, function (array $user) {
-            return $this->updatedUserUuid !== $user['id'];
+            return $this->deletedUserIdentifier !== $user['id'];
         }));
     }
 }
