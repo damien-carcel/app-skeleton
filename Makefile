@@ -106,35 +106,48 @@ down-client:
 .PHONY: down
 down: down-api down-client
 
-# Tests
+# Test the API
 
-.PHONY: check-style
-check-style:
+.PHONY: check-style-api
+check-style-api:
 	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
 
-.PHONY: fix-style
-fix-style:
+.PHONY: fix-style-api
+fix-style-api:
 	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 
-.PHONY: coupling
-coupling:
+.PHONY: coupling-api
+coupling-api:
 	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
 
-.PHONY: unit
-unit:
-	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite "Unit tests"
+.PHONY: unit-api
+unit-api:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite "Unit tests" --log-junit tests/results/unit_tests.xml
 
-.PHONY: acceptance
-acceptance:
-	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=acceptance
+.PHONY: acceptance-api
+acceptance-api:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=acceptance -o std --colors -f pretty -f junit -o tests/results/acceptance
 
-.PHONY: integration
-integration:
-	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests"
+.PHONY: integration-api
+integration-api:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml
 
-.PHONY: end-to-end
-end-to-end:
-	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=end-to-end
+.PHONY: end-to-end-api
+end-to-end-api:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: check-style coupling unit acceptance integration end-to-end
+test-api: check-style-api coupling-api unit-api acceptance-api integration-api end-to-end-api
+
+# Test the client
+
+.PHONY: check-style-client
+check-style-client:
+	cd $(CURDIR)/client && docker-compose run --rm node yarn run lint -t junit -o tests/results/lint.xml
+
+.PHONY: type-check-client
+type-check-client:
+	cd $(CURDIR)/client && docker-compose run --rm node yarn run type-check
+
+.PHONY: test-client
+test-client: check-style-client type-check-client
