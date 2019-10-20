@@ -85,6 +85,9 @@ jobs:
                 name: Run static analysis on the API
                 command: cd ~/project/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
             - run:
+                name: Run coupling detector on the API
+                command: cd ~/project/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
+            - run:
                 name: Run unit tests of the API
                 command: cd ~/project/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Unit tests" --log-junit var/tests/phpunit/unit_tests.xml
             - run:
