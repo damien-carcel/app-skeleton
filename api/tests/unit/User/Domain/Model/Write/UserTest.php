@@ -29,7 +29,7 @@ final class UserTest extends TestCase
     }
 
     /** @test */
-    public function itHasAnUUID(): void
+    public function itHasAnIdentifier(): void
     {
         $user = $this->instantiateTonyStark();
 
@@ -37,11 +37,11 @@ final class UserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUserName(): void
+    public function itReturnsTheUsername(): void
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('ironman', $user->getUsername());
+        $this->assertSame('ironman', $user->username());
     }
 
     /** @test */
@@ -49,7 +49,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Tony', $user->getFirstName());
+        $this->assertSame('Tony', $user->firstName());
     }
 
     /** @test */
@@ -57,41 +57,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Stark', $user->getLastName());
-    }
-
-    /** @test */
-    public function itReturnTheUserRoles(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame([], $user->getRoles());
-    }
-
-    /** @test */
-    public function itReturnTheUserPassword(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame('password', $user->getPassword());
-    }
-
-    /** @test */
-    public function itReturnTheSalt(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame('salt', $user->getSalt());
-    }
-
-    /** @test */
-    public function itCanEraseTheCredentials(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->expectException(\LogicException::class);
-
-        $user->eraseCredentials();
+        $this->assertSame('Stark', $user->lastName());
     }
 
     /** @test */
@@ -101,8 +67,8 @@ final class UserTest extends TestCase
 
         $user->changeName('Peter', 'Parker');
 
-        $this->assertSame('Peter', $user->getFirstName());
-        $this->assertSame('Parker', $user->getLastName());
+        $this->assertSame('Peter', $user->firstName());
+        $this->assertSame('Parker', $user->lastName());
     }
 
     private function instantiateTonyStark(): User

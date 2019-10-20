@@ -12,9 +12,3 @@ Carcel\User\Domain\Model\Write\User:
             type: text
         lastName:
             type: text
-        password:
-            type: text
-        salt:
-            type: text
-        roles:
-            type: json_array

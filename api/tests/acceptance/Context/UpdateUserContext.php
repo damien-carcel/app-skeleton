@@ -111,9 +111,9 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), 'Peter');
-        Assert::same($updatedUser->getLastName(), 'Parker');
+        Assert::same($updatedUser->username(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
+        Assert::same($updatedUser->firstName(), 'Peter');
+        Assert::same($updatedUser->lastName(), 'Parker');
     }
 
     /**
@@ -123,9 +123,9 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), 'Peter');
-        Assert::same($updatedUser->getLastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
+        Assert::same($updatedUser->username(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
+        Assert::same($updatedUser->firstName(), 'Peter');
+        Assert::same($updatedUser->lastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
     }
 
     /**
@@ -135,9 +135,9 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
-        Assert::same($updatedUser->getLastName(), 'Parker');
+        Assert::same($updatedUser->username(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
+        Assert::same($updatedUser->firstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
+        Assert::same($updatedUser->lastName(), 'Parker');
     }
 
     /**

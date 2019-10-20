@@ -15,7 +15,6 @@ $rules = [
     new Rule('Carcel\User\Domain', [
         'Carcel\User\Domain',
         'Ramsey\Uuid\Uuid',
-        'Symfony\Component\Security\Core\User\UserInterface',
     ], RuleInterface::TYPE_ONLY),
     new Rule('Carcel\User\Application', [
         'Carcel\User\Application',
