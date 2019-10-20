@@ -74,21 +74,7 @@
     ],
     "post-update-cmd": [
       "@auto-scripts"
-    ],
-    "tests": [
-      "@check-style",
-      "@unit",
-      "@acceptance",
-      "@integration",
-      "@end-to-end"
-    ],
-    "check-style": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php",
-    "fix-style": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
-    "coupling": "vendor/bin/php-coupling-detector detect --config-file .php_cd.php",
-    "unit": "vendor/bin/phpunit --testsuite \"Unit tests\"",
-    "acceptance": "vendor/bin/behat --profile=acceptance",
-    "integration": "vendor/bin/phpunit --testsuite=\"Integration tests\"",
-    "end-to-end": "vendor/bin/behat --profile=end-to-end"
+    ]
   },
   "conflict": {
     "symfony/symfony": "*"

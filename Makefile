@@ -105,3 +105,36 @@ down-client:
 
 .PHONY: down
 down: down-api down-client
+
+# Tests
+
+.PHONY: check-style
+check-style:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+
+.PHONY: fix-style
+fix-style:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
+
+.PHONY: coupling
+coupling:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
+
+.PHONY: unit
+unit:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite "Unit tests"
+
+.PHONY: acceptance
+acceptance:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=acceptance
+
+.PHONY: integration
+integration:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests"
+
+.PHONY: end-to-end
+end-to-end:
+	cd $(CURDIR)/api && docker-compose run --rm php vendor/bin/behat --profile=end-to-end
+
+.PHONY: test-api
+test-api: check-style coupling unit acceptance integration end-to-end
