@@ -1,3 +1,11 @@
+/tests/results/
+!/tests/results/acceptance/
+!/tests/results/e2e/
+/tests/results/acceptance/*
+/tests/results/e2e/*
+!/tests/results/acceptance/.gitkeep
+!/tests/results/e2e/.gitkeep
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -21,6 +29,6 @@
 ###< friends-of-behat/symfony-extension ###
 
 ###> phpunit/phpunit ###
-/phpunit.xml
+#/phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###

@@ -9,9 +9,6 @@ jobs:
         steps:
             - checkout
             - run:
-                name: Create directories for tests results
-                command: mkdir -p api/var/tests/behat api/var/tests/phpunit client/var/tests/tslint
-            - run:
                 name: Create "proxy" Docker network (ignore if it already exists)
                 command: docker network create proxy || true
             - run:
@@ -83,16 +80,16 @@ jobs:
                     mkdir -p ~/.cache/yarn
             - run:
                 name: Run static analysis on the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+                command: make check-style-api
             - run:
                 name: Run coupling detector on the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
+                command: make coupling-api
             - run:
                 name: Run unit tests of the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Unit tests" --log-junit var/tests/phpunit/unit_tests.xml
+                command: make unit-api
             - run:
                 name: Run acceptance tests of the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/behat -p acceptance -f junit -o var/tests/behat -f pretty -o std --colors
+                command: make acceptance-api
             - run:
                 name: start MySQL container
                 command: cd ~/project/api && docker-compose up -d mysql
@@ -101,24 +98,24 @@ jobs:
                 command: make mysql
             - run:
                 name: Run integration tests on the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" --log-junit var/tests/phpunit/integration_tests.xml
+                command: make integration-api
             - run:
                 name: Run end to end tests on the API
-                command: cd ~/project/api && docker-compose run --rm php vendor/bin/behat -p end-to-end -f junit -o var/tests/behat -f pretty -o std --colors
+                command: make end-to-end-api
             - run:
                 name: Run static analysis on the client application
-                command: cd ~/project/client && docker-compose run --rm node yarn run lint -t junit -o var/tests/tslint/lint.xml
+                command: make check-style-client
             - run:
                 name: Type-check the client application
-                command: cd ~/project/client && docker-compose run --rm node yarn run type-check
+                command: make type-check-client
             - store_test_results:
-                path: client/var/tests
+                path: client/tests/results
             - store_artifacts:
-                path: client/var/tests
+                path: client/tests/results
             - store_test_results:
-                path: api/var/tests
+                path: api/tests/results
             - store_artifacts:
-                path: api/var/tests
+                path: api/tests/results
 
 workflows:
     version: 2

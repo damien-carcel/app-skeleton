@@ -2,5 +2,7 @@
 /public
 !/public/.gitkeep
 /node_modules
+/tests/results
+!/tests/results/.gitkeep
 /db.json
 /package-lock.json
