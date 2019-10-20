@@ -23,6 +23,7 @@
     "webmozart/assert": "^1.4"
   },
   "require-dev": {
+    "akeneo/php-coupling-detector": "^0.3.1",
     "behat/mink-browserkit-driver": "^1.3",
     "behat/mink-extension": "^2.3",
     "doctrine/doctrine-fixtures-bundle": "^3.1",
@@ -73,20 +74,7 @@
     ],
     "post-update-cmd": [
       "@auto-scripts"
-    ],
-    "tests": [
-      "@check-style",
-      "@unit",
-      "@acceptance",
-      "@integration",
-      "@end-to-end"
-    ],
-    "check-style": "vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php",
-    "fix-style": "vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php",
-    "unit": "vendor/bin/phpunit --testsuite \"Unit tests\"",
-    "acceptance": "vendor/bin/behat --profile=acceptance",
-    "integration": "vendor/bin/phpunit --testsuite=\"Integration tests\"",
-    "end-to-end": "vendor/bin/behat --profile=end-to-end"
+    ]
   },
   "conflict": {
     "symfony/symfony": "*"

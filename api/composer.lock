@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2e4b08e5e9b847960263c3e38562f08",
+    "content-hash": "11172875854c36333d2effe19284ebab",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -4414,6 +4414,63 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "akeneo/php-coupling-detector",
+            "version": "0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akeneo/php-coupling-detector.git",
+                "reference": "b7f7217ebc06ab082d3deca6ccb5b6725c069044"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akeneo/php-coupling-detector/zipball/b7f7217ebc06ab082d3deca6ccb5b6725c069044",
+                "reference": "b7f7217ebc06ab082d3deca6ccb5b6725c069044",
+                "shasum": ""
+            },
+            "require": {
+                "friendsofphp/php-cs-fixer": "^2.1",
+                "php": "^7.1",
+                "symfony/console": "^3.0||^4.0",
+                "symfony/event-dispatcher": "^3.0||^4.0",
+                "symfony/filesystem": "^3.0||^4.0",
+                "symfony/finder": "^3.0||^4.0"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "^3.0||^4.0",
+                "phpstan/phpstan": "^0.10.2"
+            },
+            "bin": [
+                "bin/php-coupling-detector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Akeneo\\CouplingDetector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Dupont <nicolas@akeneo.com>",
+                    "homepage": "http://www.akeneo.com"
+                },
+                {
+                    "name": "Julien Janvier <j.janvier@gmail.com>",
+                    "homepage": "http://jjanvier.com"
+                }
+            ],
+            "description": "Detect all the coupling issues of your project with respect to the coupling rules you have defined.",
+            "time": "2018-10-16T20:00:38+00:00"
+        },
         {
             "name": "behat/behat",
             "version": "v3.5.0",
