@@ -14,7 +14,8 @@ const WebappWebpackPlugin = require('webapp-webpack-plugin');
 module.exports = (env, argv) => ({
   devServer: {
     contentBase: path.join(__dirname, 'public'),
-    port: 8080,
+    host: '0.0.0.0',
+    port: parseInt(process.env.CLIENT_PORT || 8080),
     stats: {
       colors: true,
     },

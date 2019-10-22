@@ -20,8 +20,6 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
 
 RUN mkdir /.npm && chmod 777 /.npm
 
-EXPOSE 3000 8000
-
 #######################################
 # Intermediate image used to prepare  #
 # the application for production      #

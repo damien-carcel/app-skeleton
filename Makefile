@@ -84,7 +84,7 @@ fake-api: install-client-dependencies
 
 .PHONY: develop-client
 develop-client: fake-api install-client-dependencies
-	cd $(CURDIR)/client && API_BASE_URL=http://localhost:3000 yarn webpack:serve
+	cd $(CURDIR)/client && docker-compose run --rm --service-ports node yarn webpack:serve
 
 .PHONY: serve-client
 serve-client: build-client-prod install-client-dependencies
