@@ -86,9 +86,6 @@ RUN chmod +x /usr/local/bin/composer
 
 ENTRYPOINT ["/usr/local/bin/docker-php-entrypoint"]
 
-# Expose port for PHP internal server
-EXPOSE 8000
-
 #######################################
 # Intermediate image used to prepare  #
 # the application for production      #

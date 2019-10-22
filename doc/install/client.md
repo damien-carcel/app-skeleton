@@ -11,7 +11,8 @@ You can start the client using the `webpack-dev-server`:
 $ make develop-client
 ```
 
-This command will build the required Docker images, check that `yarn` dependencies are up to date
-and launch a fake API using the [JSON server](https://github.com/typicode/json-server).
+This command will build the required Docker images, check that `yarn` dependencies are up to date, launch a fake API
+using the [JSON server](https://github.com/typicode/json-server), and serve the application using the Webpack dev server
+with hot reloading.
 
 You can access the client application on [localhost:8080](http://localhost:8080).
