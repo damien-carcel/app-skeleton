@@ -59,8 +59,9 @@ class User
         return $this->lastName;
     }
 
-    public function changeName(string $firstName, string $lastName): void
+    public function update(Email $email, string $firstName, string $lastName): void
     {
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }

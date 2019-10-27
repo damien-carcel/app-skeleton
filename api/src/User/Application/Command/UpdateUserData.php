@@ -18,15 +18,17 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ChangeUserName
+final class UpdateUserData
 {
     private $identifier;
+    private $email;
     private $firstName;
     private $lastName;
 
-    public function __construct(UuidInterface $identifier, string $firstName, string $lastName)
+    public function __construct(UuidInterface $identifier, string $email, string $firstName, string $lastName)
     {
         $this->identifier = $identifier;
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -37,6 +39,14 @@ final class ChangeUserName
     public function identifier(): UuidInterface
     {
         return $this->identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function email(): string
+    {
+        return $this->email;
     }
 
     /**

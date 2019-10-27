@@ -25,13 +25,12 @@ use Webmozart\Assert\Assert;
 final class UpdateUserContext extends RawMinkContext
 {
     private const USER_DATA_TO_UPDATE = [
+        'email' => 'new.ironman@avengers.org',
         'firstName' => 'Peter',
         'lastName' => 'Parker',
     ];
-
     private $router;
     private $connection;
-
     private $updatedUserIdentifier;
 
     public function __construct(RouterInterface $router, Connection $connection)
@@ -41,7 +40,7 @@ final class UpdateUserContext extends RawMinkContext
     }
 
     /**
-     * @When I change the name of an existing user
+     * @When I change the data of an existing user
      */
     public function changeTheNameOfAnExistingUser(): void
     {
@@ -61,9 +60,9 @@ final class UpdateUserContext extends RawMinkContext
     }
 
     /**
-     * @Then this user has a new name
+     * @Then this user has new email, first name and last name
      */
-    public function userHasANewName(): void
+    public function userHasNewData(): void
     {
         $query = <<<SQL
 SELECT * FROM user WHERE id = :id
@@ -78,7 +77,7 @@ SQL;
         Assert::count($result, 1);
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['email'], UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
+        Assert::same($queriedUser['email'], static::USER_DATA_TO_UPDATE['email']);
         Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
         Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
     }

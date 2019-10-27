@@ -67,8 +67,9 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $user->changeName('Peter', 'Parker');
+        $user->update(Email::fromString('new.ironman@advengers.org'), 'Peter', 'Parker');
 
+        static::assertSame('new.ironman@advengers.org', (string) $user->email());
         static::assertSame('Peter', $user->firstName());
         static::assertSame('Parker', $user->lastName());
     }
