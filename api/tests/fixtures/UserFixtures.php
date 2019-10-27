@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Fixtures;
 
+use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -99,7 +100,7 @@ final class UserFixtures extends Fixture
             $users = static::instantiateUserEntities();
         } else {
             $users = array_map(function (string $userId) {
-                return $this->instantiateUserEntity($userId);
+                return static::instantiateUserEntity($userId);
             }, $this->userIdsToLoad);
         }
 
@@ -158,7 +159,7 @@ final class UserFixtures extends Fixture
     {
         return new User(
             Uuid::fromString($userData['id']),
-            $userData['email'],
+            Email::fromString($userData['email']),
             $userData['firstName'],
             $userData['lastName'],
         );

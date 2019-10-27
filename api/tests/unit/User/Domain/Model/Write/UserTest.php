@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\User;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +42,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertSame('ironman@avengers.org', $user->email());
+        static::assertInstanceOf(Email::class, $user->email());
+        static::assertSame('ironman@avengers.org', (string) $user->email());
     }
 
     /** @test */

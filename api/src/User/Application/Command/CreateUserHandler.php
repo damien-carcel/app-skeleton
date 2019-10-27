@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Command;
 
+use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -31,14 +32,14 @@ final class CreateUserHandler
 
     public function __invoke(CreateUser $createUser): void
     {
+        $uuid = Uuid::uuid4();
+        $email = Email::fromString($createUser->email());
+
         $user = new User(
-            Uuid::uuid4(),
-            $createUser->email(),
+            $uuid,
+            $email,
             $createUser->firstName(),
-            $createUser->lastName(),
-            'password',
-            'salt',
-            []
+            $createUser->lastName()
         );
 
         $this->userRepository->save($user);

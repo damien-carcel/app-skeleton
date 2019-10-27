@@ -29,7 +29,7 @@ class User
 
     public function __construct(
         UuidInterface $id,
-        string $email,
+        Email $email,
         string $firstName,
         string $lastName
     ) {
@@ -44,7 +44,7 @@ class User
         return $this->id;
     }
 
-    public function email(): string
+    public function email(): Email
     {
         return $this->email;
     }

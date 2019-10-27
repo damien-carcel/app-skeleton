@@ -24,7 +24,7 @@ use Webmozart\Assert\Assert;
 final class CreateUserContext extends RawMinkContext
 {
     private const NEW_USER = [
-        'email' => 'batman',
+        'email' => 'batman@justiceligue.org',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
     ];
