@@ -19,14 +19,14 @@ namespace Carcel\User\Domain\Model\Read;
 final class User
 {
     private $id;
-    private $username;
+    private $email;
     private $firstName;
     private $lastName;
 
-    public function __construct(string $id, string $username, string $firstName, string $lastName)
+    public function __construct(string $id, string $email, string $firstName, string $lastName)
     {
         $this->id = $id;
-        $this->username = $username;
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -35,7 +35,7 @@ final class User
     {
         return [
             'id' => $this->id,
-            'username' => $this->username,
+            'email' => $this->email,
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
         ];

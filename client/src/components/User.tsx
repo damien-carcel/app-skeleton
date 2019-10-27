@@ -18,7 +18,7 @@ export default function User(props: UserProps) {
         <h1>{user.firstName} {user.lastName}</h1>
       </div>
       <div className='content'>
-        <p>User username: {user.username}</p>
+        <p>{user.email}</p>
       </div>
       <Edit userId={user.id} handleSubmit={props.handleSubmit}/>
       <Delete userId={user.id} handleDelete={props.handleDelete}/>

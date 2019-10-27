@@ -30,11 +30,11 @@ final class CreateUserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUsersUsername(): void
+    public function itReturnsTheUsersEmail(): void
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        static::assertSame('ironman', $createUser->username());
+        static::assertSame('ironman', $createUser->email());
     }
 
     /** @test */

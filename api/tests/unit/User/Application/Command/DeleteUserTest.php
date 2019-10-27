@@ -31,7 +31,7 @@ final class DeleteUserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUsersUsername(): void
+    public function itReturnsTheUsersEmail(): void
     {
         $deleteUser = $this->instantiateValidDeleteUser();
 

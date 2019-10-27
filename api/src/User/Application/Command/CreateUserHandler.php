@@ -33,7 +33,7 @@ final class CreateUserHandler
     {
         $user = new User(
             Uuid::uuid4(),
-            $createUser->username(),
+            $createUser->email(),
             $createUser->firstName(),
             $createUser->lastName(),
             'password',

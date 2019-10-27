@@ -25,7 +25,7 @@ final class UserList
         $this->users = array_map(function (array $userData) {
             return new User(
                 $userData['id'],
-                $userData['username'],
+                $userData['email'],
                 $userData['firstName'],
                 $userData['lastName']
             );

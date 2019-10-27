@@ -24,7 +24,7 @@ use Webmozart\Assert\Assert;
 final class CreateUserContext extends RawMinkContext
 {
     private const NEW_USER = [
-        'username' => 'batman',
+        'email' => 'batman',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
     ];
@@ -59,11 +59,11 @@ final class CreateUserContext extends RawMinkContext
     public function newUserIsCreated(): void
     {
         $query = <<<SQL
-SELECT * FROM user WHERE username = :username
+SELECT * FROM user WHERE email = :email
 SQL;
 
-        $parameters = ['username' => static::NEW_USER['username']];
-        $types = ['username' => \PDO::PARAM_STR];
+        $parameters = ['email' => static::NEW_USER['email']];
+        $types = ['email' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();
@@ -72,7 +72,7 @@ SQL;
 
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['username'], static::NEW_USER['username']);
+        Assert::same($queriedUser['email'], static::NEW_USER['email']);
         Assert::same($queriedUser['first_name'], static::NEW_USER['firstName']);
         Assert::same($queriedUser['last_name'], static::NEW_USER['lastName']);
     }

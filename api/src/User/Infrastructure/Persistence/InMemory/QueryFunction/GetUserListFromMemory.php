@@ -50,7 +50,7 @@ final class GetUserListFromMemory implements GetUserList
         return array_map(function (User $user) {
             return [
                 'id' => (string) $user->id(),
-                'username' => $user->username(),
+                'email' => $user->email(),
                 'firstName' => $user->firstName(),
                 'lastName' => $user->lastName(),
             ];

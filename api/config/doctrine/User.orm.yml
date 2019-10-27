@@ -5,7 +5,7 @@ Carcel\User\Domain\Model\Write\User:
         id:
             type: uuid
     fields:
-        username:
+        email:
             type: string
             length: 255
         firstName:

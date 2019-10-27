@@ -8,11 +8,11 @@ interface UserFormProps {
 }
 
 interface UserFormState {
+  email: string;
   error: {[key: string]: any};
   firstName: string;
   isLoaded: boolean;
   lastName: string;
-  username: string;
   [key: string]: any;
 }
 
@@ -22,11 +22,11 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
 
     this.state = {
       content: '',
+      email: '',
       error: {},
       firstName: '',
       isLoaded: false,
       lastName: '',
-      username: '',
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -40,9 +40,9 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
       getUser(userId).then(
         (result) => {
           this.setState({
+            email: result.email,
             firstName: result.firstName,
             lastName: result.lastName,
-            username: result.username,
           });
         },
         (error) => {
@@ -74,17 +74,17 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
 
     const userId: string = this.props.userId;
     const data: UserData = {
+      email: this.state.email,
       firstName: this.state.firstName,
       id: this.props.userId,
       lastName: this.state.lastName,
-      username: this.state.username,
     };
 
     this.props.handleSubmit(userId, data);
   }
 
   public render(): ReactNode {
-    const {error, isLoaded, firstName, lastName, username} = this.state;
+    const {error, isLoaded, firstName, lastName, email} = this.state;
     if (!isEmpty(error)) {
       return <div>Error: {error.message}</div>;
     }
@@ -114,11 +114,11 @@ export default class UserForm extends React.Component<UserFormProps, UserFormSta
         </label>
         <br/>
         <label>
-          username:
+          email:
           <input
-            name='username'
+            name='email'
             type='text'
-            value={username}
+            value={email}
             onChange={this.handleInputChange}
           />
         </label>

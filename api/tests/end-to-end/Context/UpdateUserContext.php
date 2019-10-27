@@ -78,7 +78,7 @@ SQL;
         Assert::count($result, 1);
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['username'], UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
+        Assert::same($queriedUser['email'], UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
         Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
         Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
     }

@@ -23,18 +23,18 @@ use Ramsey\Uuid\UuidInterface;
 class User
 {
     private $id;
-    private $username;
+    private $email;
     private $firstName;
     private $lastName;
 
     public function __construct(
         UuidInterface $id,
-        string $username,
+        string $email,
         string $firstName,
         string $lastName
     ) {
         $this->id = $id;
-        $this->username = $username;
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -44,9 +44,9 @@ class User
         return $this->id;
     }
 
-    public function username(): string
+    public function email(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function firstName(): string

@@ -37,11 +37,11 @@ final class UserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUsername(): void
+    public function itReturnsTheUserEmail(): void
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertSame('ironman', $user->username());
+        static::assertSame('ironman@avengers.org', $user->email());
     }
 
     /** @test */

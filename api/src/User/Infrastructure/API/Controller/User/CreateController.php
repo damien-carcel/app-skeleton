@@ -40,7 +40,7 @@ final class CreateController
         $userData = json_decode($content, true);
 
         $createUser = new CreateUser(
-            $userData['username'],
+            $userData['email'],
             $userData['firstName'],
             $userData['lastName']
         );

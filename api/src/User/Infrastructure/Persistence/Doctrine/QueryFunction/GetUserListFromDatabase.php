@@ -35,7 +35,7 @@ final class GetUserListFromDatabase implements GetUserList
     public function __invoke(int $numberOfUsers, int $userPage): UserList
     {
         $query = <<<SQL
-SELECT id, username, first_name AS firstName, last_name AS lastName FROM user
+SELECT id, email, first_name AS firstName, last_name AS lastName FROM user
 LIMIT :limit OFFSET :offset;
 SQL;
         $parameters = ['limit' => $numberOfUsers, 'offset' => ($userPage - 1) * $numberOfUsers];

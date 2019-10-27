@@ -48,8 +48,8 @@ final class UserTest extends TestCase
 
     private function instantiateValidUserReadModel(): User
     {
-        list($id, $username, $firstName, $lastName) = array_values($this->userData);
+        list($id, $email, $firstName, $lastName) = array_values($this->userData);
 
-        return new User($id, $username, $firstName, $lastName);
+        return new User($id, $email, $firstName, $lastName);
     }
 }

@@ -18,13 +18,13 @@ namespace Carcel\User\Application\Command;
  */
 final class CreateUser
 {
-    private $username;
+    private $email;
     private $firstName;
     private $lastName;
 
-    public function __construct(string $username, string $firstName, string $lastName)
+    public function __construct(string $email, string $firstName, string $lastName)
     {
-        $this->username = $username;
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -32,9 +32,9 @@ final class CreateUser
     /**
      * @return string
      */
-    public function username(): string
+    public function email(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
