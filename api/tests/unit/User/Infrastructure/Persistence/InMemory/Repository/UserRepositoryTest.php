@@ -37,7 +37,7 @@ final class UserRepositoryTest extends TestCase
     /** @test */
     public function itIsAUserRepository(): void
     {
-        $this->assertInstanceOf(UserRepository::class, $this->instantiateRepository());
+        static::assertInstanceOf(UserRepository::class, $this->instantiateRepository());
     }
 
     /** @test */
@@ -45,7 +45,7 @@ final class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        $this->assertSame($this->users, $repository->findAll());
+        static::assertSame($this->users, $repository->findAll());
     }
 
     /** @test */
@@ -53,7 +53,7 @@ final class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        $this->assertSame($this->users[0], $repository->find($this->userIDs[0]));
+        static::assertSame($this->users[0], $repository->find($this->userIDs[0]));
     }
 
     /** @test */
@@ -64,8 +64,8 @@ final class UserRepositoryTest extends TestCase
         $repository = $this->instantiateRepository();
         $repository->save($user);
 
-        $this->assertCount(3, $repository->findAll());
-        $this->assertSame($user, $repository->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
+        static::assertCount(3, $repository->findAll());
+        static::assertSame($user, $repository->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
     }
 
     /** @test */
@@ -75,8 +75,8 @@ final class UserRepositoryTest extends TestCase
 
         $repository->delete($this->users[0]);
 
-        $this->assertCount(1, $repository->findAll());
-        $this->assertNull($repository->find($this->userIDs[0]));
+        static::assertCount(1, $repository->findAll());
+        static::assertNull($repository->find($this->userIDs[0]));
     }
 
     private function instantiateRepository(): UserRepository

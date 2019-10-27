@@ -27,7 +27,7 @@ final class ChangeUserNameTest extends TestCase
     {
         $createUser = $this->instantiateValidChangeUserName();
 
-        $this->assertInstanceOf(ChangeUserName::class, $createUser);
+        static::assertInstanceOf(ChangeUserName::class, $createUser);
     }
 
     /** @test */
@@ -35,7 +35,7 @@ final class ChangeUserNameTest extends TestCase
     {
         $createUser = $this->instantiateValidChangeUserName();
 
-        $this->assertEquals(Uuid::fromString('3d8fbf56-3a34-465b-9776-c3b69c510eef'), $createUser->identifier());
+        static::assertEquals(Uuid::fromString('3d8fbf56-3a34-465b-9776-c3b69c510eef'), $createUser->identifier());
     }
 
     /** @test */
@@ -43,7 +43,7 @@ final class ChangeUserNameTest extends TestCase
     {
         $createUser = $this->instantiateValidChangeUserName();
 
-        $this->assertSame('Bruce', $createUser->firstName());
+        static::assertSame('Bruce', $createUser->firstName());
     }
 
     /** @test */
@@ -51,7 +51,7 @@ final class ChangeUserNameTest extends TestCase
     {
         $createUser = $this->instantiateValidChangeUserName();
 
-        $this->assertSame('Wayne', $createUser->lastName());
+        static::assertSame('Wayne', $createUser->lastName());
     }
 
     private function instantiateValidChangeUserName(): ChangeUserName

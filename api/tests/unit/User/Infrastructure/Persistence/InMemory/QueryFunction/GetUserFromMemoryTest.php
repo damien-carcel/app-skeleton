@@ -42,7 +42,7 @@ final class GetUserFromMemoryTest extends TestCase
     {
         $user = ($this->getUserFromMemory)(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
 
-        $this->assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
     }
 
     /** @test */
@@ -50,12 +50,12 @@ final class GetUserFromMemoryTest extends TestCase
     {
         $user = ($this->getUserFromMemory)(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
 
-        $this->assertNull($user);
+        static::assertNull($user);
     }
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void
     {
-        $this->assertSame($user->normalize(), UserFixtures::getNormalizedUser($usersId));
+        static::assertSame($user->normalize(), UserFixtures::getNormalizedUser($usersId));
     }
 
     private function instantiateInMemoryUserRepository(): UserRepositoryInterface

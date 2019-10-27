@@ -25,7 +25,7 @@ final class UserTest extends TestCase
     /** @test */
     public function itIsAUser(): void
     {
-        $this->assertInstanceOf(User::class, $this->instantiateTonyStark());
+        static::assertInstanceOf(User::class, $this->instantiateTonyStark());
     }
 
     /** @test */
@@ -33,7 +33,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
+        static::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
     }
 
     /** @test */
@@ -41,7 +41,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('ironman', $user->username());
+        static::assertSame('ironman', $user->username());
     }
 
     /** @test */
@@ -49,7 +49,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Tony', $user->firstName());
+        static::assertSame('Tony', $user->firstName());
     }
 
     /** @test */
@@ -57,7 +57,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Stark', $user->lastName());
+        static::assertSame('Stark', $user->lastName());
     }
 
     /** @test */
@@ -67,8 +67,8 @@ final class UserTest extends TestCase
 
         $user->changeName('Peter', 'Parker');
 
-        $this->assertSame('Peter', $user->firstName());
-        $this->assertSame('Parker', $user->lastName());
+        static::assertSame('Peter', $user->firstName());
+        static::assertSame('Parker', $user->lastName());
     }
 
     private function instantiateTonyStark(): User

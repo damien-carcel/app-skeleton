@@ -35,13 +35,13 @@ final class UserListTest extends TestCase
     /** @test */
     public function itIsAListOfUserReadModels(): void
     {
-        $this->assertInstanceOf(UserList::class, $this->instantiateUserList());
+        static::assertInstanceOf(UserList::class, $this->instantiateUserList());
     }
 
     /** @test */
     public function itCanCreateAnEmptyUserList(): void
     {
-        $this->assertInstanceOf(UserList::class, new UserList([]));
+        static::assertInstanceOf(UserList::class, new UserList([]));
     }
 
     /** @test */
@@ -49,7 +49,7 @@ final class UserListTest extends TestCase
     {
         $userList = $this->instantiateUserList();
 
-        $this->assertSame($this->usersData, $userList->normalize());
+        static::assertSame($this->usersData, $userList->normalize());
     }
 
     private function instantiateUserList(): UserList

@@ -39,7 +39,7 @@ final class GetUserFromDatabaseTest extends TestCase
     {
         $user = ($this->getUserFromDatabase())(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
 
-        $this->assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
     }
 
     /** @test */
@@ -47,7 +47,7 @@ final class GetUserFromDatabaseTest extends TestCase
     {
         $user = ($this->getUserFromDatabase())(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
 
-        $this->assertNull($user);
+        static::assertNull($user);
     }
 
     private function getUserFromDatabase(): GetUser
@@ -57,6 +57,6 @@ final class GetUserFromDatabaseTest extends TestCase
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void
     {
-        $this->assertSame($user->normalize(), UserFixtures::getNormalizedUser($usersId));
+        static::assertSame($user->normalize(), UserFixtures::getNormalizedUser($usersId));
     }
 }

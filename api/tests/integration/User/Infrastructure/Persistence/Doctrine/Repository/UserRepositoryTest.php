@@ -41,8 +41,8 @@ final class UserRepositoryTest extends TestCase
     {
         $users = $this->repository()->findAll();
 
-        $this->assertCount(2, $users);
-        $this->assertEquals([
+        static::assertCount(2, $users);
+        static::assertEquals([
             UserFixtures::instantiateUserEntity($this->userIDs[0]),
             UserFixtures::instantiateUserEntity($this->userIDs[1]),
         ], $users);
@@ -51,7 +51,7 @@ final class UserRepositoryTest extends TestCase
     /** @test */
     public function itFindAUserFromItsId(): void
     {
-        $this->assertEquals(
+        static::assertEquals(
             UserFixtures::instantiateUserEntity($this->userIDs[0]),
             $this->repository()->find($this->userIDs[0])
         );
@@ -64,8 +64,8 @@ final class UserRepositoryTest extends TestCase
 
         $this->repository()->save($user);
 
-        $this->assertCount(3, $this->repository()->findAll());
-        $this->assertSame($user, $this->repository()->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
+        static::assertCount(3, $this->repository()->findAll());
+        static::assertSame($user, $this->repository()->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
     }
 
     /** @test */
@@ -73,8 +73,8 @@ final class UserRepositoryTest extends TestCase
     {
         $this->repository()->delete($this->repository()->find($this->userIDs[0]));
 
-        $this->assertCount(1, $this->repository()->findAll());
-        $this->assertNull($this->repository()->find($this->userIDs[0]));
+        static::assertCount(1, $this->repository()->findAll());
+        static::assertNull($this->repository()->find($this->userIDs[0]));
     }
 
     private function repository(): UserRepositoryInterface

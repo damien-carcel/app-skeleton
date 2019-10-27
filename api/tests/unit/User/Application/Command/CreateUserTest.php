@@ -26,7 +26,7 @@ final class CreateUserTest extends TestCase
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        $this->assertInstanceOf(CreateUser::class, $createUser);
+        static::assertInstanceOf(CreateUser::class, $createUser);
     }
 
     /** @test */
@@ -34,7 +34,7 @@ final class CreateUserTest extends TestCase
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        $this->assertSame('ironman', $createUser->username());
+        static::assertSame('ironman', $createUser->username());
     }
 
     /** @test */
@@ -42,7 +42,7 @@ final class CreateUserTest extends TestCase
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        $this->assertSame('Tony', $createUser->firstName());
+        static::assertSame('Tony', $createUser->firstName());
     }
 
     /** @test */
@@ -50,7 +50,7 @@ final class CreateUserTest extends TestCase
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        $this->assertSame('Stark', $createUser->lastName());
+        static::assertSame('Stark', $createUser->lastName());
     }
 
     private function instantiateValidCreateUser(): CreateUser
