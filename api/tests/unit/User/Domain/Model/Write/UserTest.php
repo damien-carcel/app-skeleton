@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\User;
 use PHPUnit\Framework\TestCase;
 
@@ -25,23 +26,24 @@ final class UserTest extends TestCase
     /** @test */
     public function itIsAUser(): void
     {
-        $this->assertInstanceOf(User::class, $this->instantiateTonyStark());
+        static::assertInstanceOf(User::class, $this->instantiateTonyStark());
     }
 
     /** @test */
-    public function itHasAnUUID(): void
+    public function itHasAnIdentifier(): void
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
+        static::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
     }
 
     /** @test */
-    public function itReturnsTheUserName(): void
+    public function itReturnsTheUserEmail(): void
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('ironman', $user->getUsername());
+        static::assertInstanceOf(Email::class, $user->email());
+        static::assertSame('ironman@avengers.org', (string) $user->email());
     }
 
     /** @test */
@@ -49,7 +51,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Tony', $user->getFirstName());
+        static::assertSame('Tony', $user->firstName());
     }
 
     /** @test */
@@ -57,41 +59,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $this->assertSame('Stark', $user->getLastName());
-    }
-
-    /** @test */
-    public function itReturnTheUserRoles(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame([], $user->getRoles());
-    }
-
-    /** @test */
-    public function itReturnTheUserPassword(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame('password', $user->getPassword());
-    }
-
-    /** @test */
-    public function itReturnTheSalt(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->assertSame('salt', $user->getSalt());
-    }
-
-    /** @test */
-    public function itCanEraseTheCredentials(): void
-    {
-        $user = $this->instantiateTonyStark();
-
-        $this->expectException(\LogicException::class);
-
-        $user->eraseCredentials();
+        static::assertSame('Stark', $user->lastName());
     }
 
     /** @test */
@@ -99,10 +67,11 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        $user->changeName('Peter', 'Parker');
+        $user->update(Email::fromString('new.ironman@advengers.org'), 'Peter', 'Parker');
 
-        $this->assertSame('Peter', $user->getFirstName());
-        $this->assertSame('Parker', $user->getLastName());
+        static::assertSame('new.ironman@advengers.org', (string) $user->email());
+        static::assertSame('Peter', $user->firstName());
+        static::assertSame('Parker', $user->lastName());
     }
 
     private function instantiateTonyStark(): User

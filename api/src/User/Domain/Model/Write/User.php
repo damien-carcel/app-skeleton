@@ -14,39 +14,29 @@ declare(strict_types=1);
 namespace Carcel\User\Domain\Model\Write;
 
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * This class cannot be final because of Doctrine ORM….
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class User implements UserInterface
+class User
 {
     private $id;
-    private $username;
+    private $email;
     private $firstName;
     private $lastName;
-    private $password;
-    private $salt;
-    private $roles;
 
     public function __construct(
         UuidInterface $id,
-        string $username,
+        Email $email,
         string $firstName,
-        string $lastName,
-        string $password,
-        ?string $salt,
-        array $roles
+        string $lastName
     ) {
         $this->id = $id;
-        $this->username = $username;
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->password = $password;
-        $this->salt = $salt;
-        $this->roles = $roles;
     }
 
     public function id(): UuidInterface
@@ -54,58 +44,24 @@ class User implements UserInterface
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUsername(): string
+    public function email(): Email
     {
-        return $this->username;
+        return $this->email;
     }
 
-    public function getFirstName(): string
+    public function firstName(): string
     {
         return $this->firstName;
     }
 
-    public function getLastName(): string
+    public function lastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRoles(): array
+    public function update(Email $email, string $firstName, string $lastName): void
     {
-        return $this->roles;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSalt(): ?string
-    {
-        return $this->salt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function eraseCredentials(): void
-    {
-        throw new \LogicException('Not implemented yet.');
-    }
-
-    public function changeName(string $firstName, string $lastName): void
-    {
+        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }

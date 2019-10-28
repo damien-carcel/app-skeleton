@@ -2,7 +2,7 @@
 # Node image used for development #
 ###################################
 
-FROM node:buster-slim as dev
+FROM node:12-buster-slim as dev
 
 RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/apt.conf.d/01-no-recommended && \
     echo 'path-exclude=/usr/share/doc/*' > /etc/dpkg/dpkg.cfg.d/path_exclusions && \

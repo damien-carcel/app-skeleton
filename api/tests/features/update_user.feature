@@ -7,9 +7,13 @@ Feature:
     Given I am logged as an administrator
 
   @end-to-end
-  Scenario: I can change the name of a user
-    When I change the name of an existing user
-    Then this user has a new name
+  Scenario: I can all the data of a user
+    When I change the data of an existing user
+    Then this user has new email, first name and last name
+
+  Scenario: I can change the email of a user
+    When I change the email of an existing user
+    Then this user has a new email
 
   Scenario: I can change the fist name of a user
     When I change the first name of an existing user

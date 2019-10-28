@@ -15,8 +15,8 @@ namespace Carcel\Tests\Acceptance\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\User\Application\Command\ChangeUserName;
-use Carcel\User\Application\Command\ChangeUserNameHandler;
+use Carcel\User\Application\Command\UpdateUserData;
+use Carcel\User\Application\Command\UpdateUserDataHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -36,23 +36,40 @@ final class UpdateUserContext implements Context
     private $changeUserNameHandler;
     private $userRepository;
 
-    public function __construct(ChangeUserNameHandler $changeUserNameHandler, UserRepositoryInterface $userRepository)
+    public function __construct(UpdateUserDataHandler $changeUserNameHandler, UserRepositoryInterface $userRepository)
     {
         $this->changeUserNameHandler = $changeUserNameHandler;
         $this->userRepository = $userRepository;
     }
 
     /**
-     * @When I change the name of an existing user
+     * @When I change the data of an existing user
      */
     public function changeTheNameOfAnExistingUser(): void
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new ChangeUserName(
+        $changeUserName = new UpdateUserData(
             Uuid::fromString($this->updatedUserIdentifier),
+            'new.ironman@avengers.org',
             'Peter',
             'Parker'
+        );
+        ($this->changeUserNameHandler)($changeUserName);
+    }
+
+    /**
+     * @When I change the email of an existing user
+     */
+    public function changeTheEmailOfAnExistingUser(): void
+    {
+        $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
+
+        $changeUserName = new UpdateUserData(
+            Uuid::fromString($this->updatedUserIdentifier),
+            'new.ironman@avengers.org',
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
         );
         ($this->changeUserNameHandler)($changeUserName);
     }
@@ -64,8 +81,9 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new ChangeUserName(
+        $changeUserName = new UpdateUserData(
             Uuid::fromString($this->updatedUserIdentifier),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
             'Peter',
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
         );
@@ -79,8 +97,9 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new ChangeUserName(
+        $changeUserName = new UpdateUserData(
             Uuid::fromString($this->updatedUserIdentifier),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             'Parker'
         );
@@ -93,8 +112,9 @@ final class UpdateUserContext implements Context
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
         try {
-            $changeUserName = new ChangeUserName(
+            $changeUserName = new UpdateUserData(
                 Uuid::fromString(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)),
+                'peter.parker@avengers.org',
                 'Peter',
                 'Parker'
             );
@@ -105,15 +125,27 @@ final class UpdateUserContext implements Context
     }
 
     /**
-     * @Then this user has a new name
+     * @Then this user has new email, first name and last name
      */
-    public function userHasANewName(): void
+    public function userHasNewData(): void
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), 'Peter');
-        Assert::same($updatedUser->getLastName(), 'Parker');
+        Assert::same((string) $updatedUser->email(), 'new.ironman@avengers.org');
+        Assert::same($updatedUser->firstName(), 'Peter');
+        Assert::same($updatedUser->lastName(), 'Parker');
+    }
+
+    /**
+     * @Then this user has a new email
+     */
+    public function userHasNewEmail(): void
+    {
+        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
+
+        Assert::same((string) $updatedUser->email(), 'new.ironman@avengers.org');
+        Assert::same($updatedUser->firstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
+        Assert::same($updatedUser->lastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
     }
 
     /**
@@ -123,9 +155,9 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), 'Peter');
-        Assert::same($updatedUser->getLastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
+        Assert::same((string) $updatedUser->email(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
+        Assert::same($updatedUser->firstName(), 'Peter');
+        Assert::same($updatedUser->lastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
     }
 
     /**
@@ -135,9 +167,9 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same($updatedUser->getUsername(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['username']);
-        Assert::same($updatedUser->getFirstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
-        Assert::same($updatedUser->getLastName(), 'Parker');
+        Assert::same((string) $updatedUser->email(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
+        Assert::same($updatedUser->firstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
+        Assert::same($updatedUser->lastName(), 'Parker');
     }
 
     /**

@@ -2,30 +2,21 @@
   "users": [
     {
       "id": "XIa_H8p",
+      "email": "ironman@avengers.org",
       "firstName": "Tony",
-      "lastName": "Stark",
-      "username": "ironman",
-      "password": "password",
-      "salt": "salt",
-      "roles": []
+      "lastName": "Stark"
     },
     {
       "id": "_D4pvBw",
+      "email": "captain@avengers.org",
       "firstName": "Steve",
-      "lastName": "Rogers",
-      "username": "captain",
-      "password": "password",
-      "salt": "salt",
-      "roles": []
+      "lastName": "Rogers"
     },
     {
       "id": "FeZwhwE",
+      "email": "hulk@avengers.org",
       "firstName": "Bruce",
-      "lastName": "Banner",
-      "username": "hulk",
-      "password": "password",
-      "salt": "salt",
-      "roles": []
+      "lastName": "Banner"
     }
   ]
 }

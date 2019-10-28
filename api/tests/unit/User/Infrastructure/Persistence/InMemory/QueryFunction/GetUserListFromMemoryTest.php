@@ -39,7 +39,7 @@ final class GetUserListFromMemoryTest extends TestCase
     /** @test */
     public function itIsAGetUserListQuery(): void
     {
-        $this->assertInstanceOf(GetUserListFromMemory::class, $this->getUserListFromMemory);
+        static::assertInstanceOf(GetUserListFromMemory::class, $this->getUserListFromMemory);
     }
 
     /** @test */
@@ -47,7 +47,7 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(10, 1);
 
-        $this->assertFollowingUserListShouldBeRetrieved($users, [
+        static::assertFollowingUserListShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
             '1605a575-77e5-4427-bbdb-2ebcb8cc8033',
@@ -66,7 +66,7 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(2, 1);
 
-        $this->assertFollowingUserListShouldBeRetrieved($users, [
+        static::assertFollowingUserListShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
@@ -77,7 +77,7 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(1, 2);
 
-        $this->assertFollowingUserListShouldBeRetrieved($users, [
+        static::assertFollowingUserListShouldBeRetrieved($users, [
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
     }
@@ -87,7 +87,7 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(5, 2);
 
-        $this->assertFollowingUserListShouldBeRetrieved($users, [
+        static::assertFollowingUserListShouldBeRetrieved($users, [
             '3553b4cf-49ab-4dd6-ba6e-e09b5b96115c',
             '5eefa64f-0800-4fe2-b86f-f3d96bf7d602',
             '7f57d041-a612-4a5a-a61a-e0c96b2c576e',
@@ -101,7 +101,7 @@ final class GetUserListFromMemoryTest extends TestCase
     {
         $users = ($this->getUserListFromMemory)(10, 3);
 
-        $this->assertFollowingUserListShouldBeRetrieved($users, []);
+        static::assertFollowingUserListShouldBeRetrieved($users, []);
     }
 
     private function assertFollowingUserListShouldBeRetrieved(UserList $users, array $usersIds): void
@@ -111,7 +111,7 @@ final class GetUserListFromMemoryTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        $this->assertSame($users->normalize(), $normalizedExpectedUsers);
+        static::assertSame($users->normalize(), $normalizedExpectedUsers);
     }
 
     private function instantiateInMemoryUserRepository(): UserRepositoryInterface

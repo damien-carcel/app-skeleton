@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
-use Carcel\User\Application\Command\ChangeUserName;
-use Carcel\User\Application\Command\ChangeUserNameHandler;
+use Carcel\User\Application\Command\UpdateUserData;
+use Carcel\User\Application\Command\UpdateUserDataHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +32,7 @@ final class UpdateController
 {
     private $changeUserNameHandler;
 
-    public function __construct(ChangeUserNameHandler $changeUserNameHandler)
+    public function __construct(UpdateUserDataHandler $changeUserNameHandler)
     {
         $this->changeUserNameHandler = $changeUserNameHandler;
     }
@@ -43,8 +43,9 @@ final class UpdateController
         $userData = json_decode($content, true);
 
         try {
-            $changeUserName = new ChangeUserName(
+            $changeUserName = new UpdateUserData(
                 Uuid::fromString($uuid),
+                $userData['email'],
                 $userData['firstName'],
                 $userData['lastName']
             );

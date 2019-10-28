@@ -72,7 +72,7 @@ SQL;
         return array_map(function (array $queriedUser) {
             return [
                 'id' => $queriedUser['id'],
-                'username' => $queriedUser['username'],
+                'email' => $queriedUser['email'],
                 'firstName' => $queriedUser['first_name'],
                 'lastName' => $queriedUser['last_name'],
             ];

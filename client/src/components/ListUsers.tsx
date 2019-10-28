@@ -62,7 +62,7 @@ export default class ListUsers extends React.Component<{}, ListUsersState> {
             if (user.id === userId) {
               user.firstName = data.firstName;
               user.lastName = data.lastName;
-              user.username = data.username;
+              user.email = data.email;
             }
 
             return user;

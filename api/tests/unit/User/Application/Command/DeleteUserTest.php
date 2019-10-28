@@ -27,15 +27,15 @@ final class DeleteUserTest extends TestCase
     {
         $deleteUser = $this->instantiateValidDeleteUser();
 
-        $this->assertInstanceOf(DeleteUser::class, $deleteUser);
+        static::assertInstanceOf(DeleteUser::class, $deleteUser);
     }
 
     /** @test */
-    public function itReturnsTheUsersUsername(): void
+    public function itReturnsTheUsersEmail(): void
     {
         $deleteUser = $this->instantiateValidDeleteUser();
 
-        $this->assertEquals(Uuid::fromString('df25ad55-126d-4160-89ff-a974725cb183'), $deleteUser->identifier());
+        static::assertEquals(Uuid::fromString('df25ad55-126d-4160-89ff-a974725cb183'), $deleteUser->identifier());
     }
 
     private function instantiateValidDeleteUser(): DeleteUser

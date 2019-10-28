@@ -35,7 +35,7 @@ final class UserTest extends TestCase
     /** @test */
     public function itIsAUserReadModel(): void
     {
-        $this->assertInstanceOf(User::class, $this->instantiateValidUserReadModel());
+        static::assertInstanceOf(User::class, $this->instantiateValidUserReadModel());
     }
 
     /** @test */
@@ -43,13 +43,13 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateValidUserReadModel();
 
-        $this->assertSame($this->userData, $user->normalize());
+        static::assertSame($this->userData, $user->normalize());
     }
 
     private function instantiateValidUserReadModel(): User
     {
-        list($id, $username, $firstName, $lastName) = array_values($this->userData);
+        list($id, $email, $firstName, $lastName) = array_values($this->userData);
 
-        return new User($id, $username, $firstName, $lastName);
+        return new User($id, $email, $firstName, $lastName);
     }
 }

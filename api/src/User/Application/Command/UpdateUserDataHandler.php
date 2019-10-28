@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Exception\UserDoesNotExist;
+use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ChangeUserNameHandler
+final class UpdateUserDataHandler
 {
     private $userRepository;
 
@@ -28,13 +29,16 @@ final class ChangeUserNameHandler
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(ChangeUserName $changeUserName): void
+    public function __invoke(UpdateUserData $changeUserName): void
     {
         $user = $this->userRepository->find($changeUserName->identifier()->toString());
         if (null === $user) {
             throw UserDoesNotExist::fromUuid($changeUserName->identifier());
         }
-        $user->changeName($changeUserName->firstName(), $changeUserName->lastName());
+
+        $email = Email::fromString($changeUserName->email());
+
+        $user->update($email, $changeUserName->firstName(), $changeUserName->lastName());
 
         $this->userRepository->save($user);
     }

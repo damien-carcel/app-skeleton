@@ -27,7 +27,7 @@ use Webmozart\Assert\Assert;
 final class CreateUserContext implements Context
 {
     private const NEW_USER = [
-        'username' => 'batman',
+        'email' => 'batman@justiceligue.org',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
     ];
@@ -47,7 +47,7 @@ final class CreateUserContext implements Context
     public function createNewUser(): void
     {
         $createUser = new CreateUser(
-            static::NEW_USER['username'],
+            static::NEW_USER['email'],
             static::NEW_USER['firstName'],
             static::NEW_USER['lastName']
         );
@@ -72,8 +72,8 @@ final class CreateUserContext implements Context
         Assert::count($newUuidList, 1);
 
         $newUser = $this->userRepository->find(array_shift($newUuidList));
-        Assert::same($newUser->getUsername(), static::NEW_USER['username']);
-        Assert::same($newUser->getFirstName(), static::NEW_USER['firstName']);
-        Assert::same($newUser->getLastName(), static::NEW_USER['lastName']);
+        Assert::same((string) $newUser->email(), static::NEW_USER['email']);
+        Assert::same($newUser->firstName(), static::NEW_USER['firstName']);
+        Assert::same($newUser->lastName(), static::NEW_USER['lastName']);
     }
 }

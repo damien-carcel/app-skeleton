@@ -26,7 +26,7 @@ final class GetUserListTest extends TestCase
     {
         $getUserList = $this->instantiateValidGetUserList();
 
-        $this->assertInstanceOf(GetUserList::class, $getUserList);
+        static::assertInstanceOf(GetUserList::class, $getUserList);
     }
 
     /** @test */
@@ -34,14 +34,14 @@ final class GetUserListTest extends TestCase
     {
         $getUserList = $this->instantiateValidGetUserList();
 
-        $this->assertSame(10, $getUserList->numberOfUsers());
+        static::assertSame(10, $getUserList->numberOfUsers());
     }
 
     /** @test */
     public function itReturnsTheUserPage(): void
     {
         $getUserList = $this->instantiateValidGetUserList();
-        $this->assertSame(1, $getUserList->userPage());
+        static::assertSame(1, $getUserList->userPage());
     }
 
     private function instantiateValidGetUserList(): GetUserList

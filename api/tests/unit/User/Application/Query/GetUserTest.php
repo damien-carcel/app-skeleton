@@ -29,14 +29,14 @@ final class GetUserTest extends TestCase
     {
         $getUser = $this->instantiateValidGetUser();
 
-        $this->assertInstanceOf(GetUser::class, $getUser);
+        static::assertInstanceOf(GetUser::class, $getUser);
     }
 
     /** @test */
     public function itReturnsTheUserIdentifier(): void
     {
         $getUser = $this->instantiateValidGetUser();
-        $this->assertSame(static::USER_IDENTIFIER, $getUser->identifier()->toString());
+        static::assertSame(static::USER_IDENTIFIER, $getUser->identifier()->toString());
     }
 
     private function instantiateValidGetUser(): GetUser

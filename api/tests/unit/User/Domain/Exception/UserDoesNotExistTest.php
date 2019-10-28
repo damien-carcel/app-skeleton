@@ -27,14 +27,14 @@ final class UserDoesNotExistTest extends TestCase
     public function itIsAUserDoesNotExistException(): void
     {
         $exception = $this->instantiateUserDoesNotExist();
-        $this->assertInstanceOf(UserDoesNotExist::class, $exception);
+        static::assertInstanceOf(UserDoesNotExist::class, $exception);
     }
 
     /** @test */
     public function itReturnsAMessage(): void
     {
         $exception = $this->instantiateUserDoesNotExist();
-        $this->assertSame(
+        static::assertSame(
             sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
             $exception->getMessage()
         );
