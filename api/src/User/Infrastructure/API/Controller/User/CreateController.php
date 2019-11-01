@@ -18,6 +18,7 @@ use Carcel\User\Application\Command\CreateUserHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -39,12 +40,16 @@ final class CreateController
         $content = $request->getContent();
         $userData = json_decode($content, true);
 
-        $createUser = new CreateUser(
-            $userData['email'],
-            $userData['firstName'],
-            $userData['lastName']
-        );
-        ($this->createUserHandler)($createUser);
+        try {
+            $createUser = new CreateUser(
+                $userData['email'],
+                $userData['firstName'],
+                $userData['lastName']
+            );
+            ($this->createUserHandler)($createUser);
+        } catch (\InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
 
         return new JsonResponse();
     }
