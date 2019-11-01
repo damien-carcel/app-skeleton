@@ -15,6 +15,7 @@ namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Write\Email;
+use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 
 /**
@@ -37,8 +38,10 @@ final class UpdateUserDataHandler
         }
 
         $email = Email::fromString($changeUserName->email());
+        $firstName = FirstName::fromString($changeUserName->firstName());
+        $lastName = $changeUserName->lastName();
 
-        $user->update($email, $changeUserName->firstName(), $changeUserName->lastName());
+        $user->update($email, $firstName, $lastName);
 
         $this->userRepository->save($user);
     }

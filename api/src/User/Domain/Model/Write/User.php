@@ -30,7 +30,7 @@ class User
     public function __construct(
         UuidInterface $id,
         Email $email,
-        string $firstName,
+        FirstName $firstName,
         string $lastName
     ) {
         $this->id = $id;
@@ -49,7 +49,7 @@ class User
         return $this->email;
     }
 
-    public function firstName(): string
+    public function firstName(): FirstName
     {
         return $this->firstName;
     }
@@ -59,7 +59,7 @@ class User
         return $this->lastName;
     }
 
-    public function update(Email $email, string $firstName, string $lastName): void
+    public function update(Email $email, FirstName $firstName, string $lastName): void
     {
         $this->email = $email;
         $this->firstName = $firstName;

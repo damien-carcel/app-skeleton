@@ -73,7 +73,7 @@ final class CreateUserContext implements Context
 
         $newUser = $this->userRepository->find(array_shift($newUuidList));
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
-        Assert::same($newUser->firstName(), static::NEW_USER['firstName']);
-        Assert::same($newUser->lastName(), static::NEW_USER['lastName']);
+        Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
+        Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
     }
 }

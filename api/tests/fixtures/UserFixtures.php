@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\Fixtures;
 
 use Carcel\User\Domain\Model\Write\Email;
+use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -160,7 +161,7 @@ final class UserFixtures extends Fixture
         return new User(
             Uuid::fromString($userData['id']),
             Email::fromString($userData['email']),
-            $userData['firstName'],
+            FirstName::fromString($userData['firstName']),
             $userData['lastName'],
         );
     }

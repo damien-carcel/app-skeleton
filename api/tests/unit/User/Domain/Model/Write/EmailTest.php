@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
-use Carcel\User\Domain\Exception\EmailCannotBeEmpty;
 use Carcel\User\Domain\Model\Write\Email;
 use PHPUnit\Framework\TestCase;
 
@@ -41,9 +40,27 @@ final class EmailTest extends TestCase
     public function emailCannotBeEmpty(): void
     {
         static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('User email cannot be empty.');
+        static::expectExceptionMessage('The user email cannot be empty.');
 
         Email::fromString('');
+    }
+
+    /** @test */
+    public function emailMustNotBeTooLong(): void
+    {
+        $tooLongEmailAddress = sprintf(
+            '%s.%s@advengers.org',
+            bin2hex(random_bytes(61)),
+            bin2hex(random_bytes(61))
+        );
+
+        static::expectException(\InvalidArgumentException::class);
+        static::expectExceptionMessage(sprintf(
+            'The email address should not be more than 256 characters, "%s" is 259 characters long.',
+            $tooLongEmailAddress
+        ));
+
+        Email::fromString($tooLongEmailAddress);
     }
 
     /** @test */
