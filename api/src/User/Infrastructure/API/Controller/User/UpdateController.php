@@ -14,13 +14,15 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Command\UpdateUserData;
-use Carcel\User\Application\Command\UpdateUserDataHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,14 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class UpdateController
 {
-    private $changeUserNameHandler;
-
-    public function __construct(UpdateUserDataHandler $changeUserNameHandler)
-    {
-        $this->changeUserNameHandler = $changeUserNameHandler;
-    }
-
-    public function __invoke(string $uuid, Request $request): Response
+    public function __invoke(string $uuid, Request $request, MessageBusInterface $bus): Response
     {
         $content = $request->getContent();
         $userData = json_decode($content, true);
@@ -49,9 +44,15 @@ final class UpdateController
                 $userData['firstName'],
                 $userData['lastName']
             );
-            ($this->changeUserNameHandler)($changeUserName);
-        } catch (UserDoesNotExist $exception) {
-            throw new NotFoundHttpException($exception->getMessage(), $exception);
+            $bus->dispatch($changeUserName);
+        } catch (HandlerFailedException $exception) {
+            $handledExceptions = $exception->getNestedExceptions();
+
+            if (current($handledExceptions) instanceof UserDoesNotExist) {
+                throw new NotFoundHttpException($exception->getMessage(), $exception);
+            }
+
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
 
         return new JsonResponse();

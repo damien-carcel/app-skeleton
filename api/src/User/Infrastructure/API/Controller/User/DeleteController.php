@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Command\DeleteUser;
-use Carcel\User\Application\Command\DeleteUserHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,20 +31,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class DeleteController
 {
-    private $deleteUserHandler;
-
-    public function __construct(DeleteUserHandler $deleteUserHandler)
-    {
-        $this->deleteUserHandler = $deleteUserHandler;
-    }
-
-    public function __invoke(string $uuid): Response
+    public function __invoke(string $uuid, MessageBusInterface $bus): Response
     {
         try {
             $deleteUser = new DeleteUser(Uuid::fromString($uuid));
-            ($this->deleteUserHandler)($deleteUser);
-        } catch (UserDoesNotExist $exception) {
-            throw new NotFoundHttpException($exception->getMessage(), $exception);
+            $bus->dispatch($deleteUser);
+        } catch (HandlerFailedException $exception) {
+            $handledExceptions = $exception->getNestedExceptions();
+
+            if (current($handledExceptions) instanceof UserDoesNotExist) {
+                throw new NotFoundHttpException($exception->getMessage(), $exception);
+            }
+
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
 
         return new JsonResponse();

@@ -66,7 +66,8 @@ ENV XDEBUG_ENABLED=0
 RUN apt-get update && \
     apt-get --yes install \
         git \
-        php7.3-xdebug && \
+        php7.3-xdebug \
+        unzip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

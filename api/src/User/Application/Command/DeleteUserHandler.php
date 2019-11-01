@@ -15,11 +15,12 @@ namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class DeleteUserHandler
+final class DeleteUserHandler implements MessageHandlerInterface
 {
     private $userRepository;
 

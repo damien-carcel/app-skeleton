@@ -16,10 +16,11 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\UpdateUserData;
-use Carcel\User\Application\Command\UpdateUserDataHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,15 +31,15 @@ final class UpdateUserContext implements Context
     /** @var string */
     private $updatedUserIdentifier;
 
-    /** @var UserDoesNotExist */
+    /** @var HandlerFailedException */
     private $caughtException;
 
-    private $changeUserNameHandler;
+    private $bus;
     private $userRepository;
 
-    public function __construct(UpdateUserDataHandler $changeUserNameHandler, UserRepositoryInterface $userRepository)
+    public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {
-        $this->changeUserNameHandler = $changeUserNameHandler;
+        $this->bus = $bus;
         $this->userRepository = $userRepository;
     }
 
@@ -55,7 +56,7 @@ final class UpdateUserContext implements Context
             'Peter',
             'Parker'
         );
-        ($this->changeUserNameHandler)($changeUserName);
+        $this->bus->dispatch($changeUserName);
     }
 
     /**
@@ -71,7 +72,7 @@ final class UpdateUserContext implements Context
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
         );
-        ($this->changeUserNameHandler)($changeUserName);
+        $this->bus->dispatch($changeUserName);
     }
 
     /**
@@ -87,7 +88,7 @@ final class UpdateUserContext implements Context
             'Peter',
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
         );
-        ($this->changeUserNameHandler)($changeUserName);
+        $this->bus->dispatch($changeUserName);
     }
 
     /**
@@ -103,7 +104,7 @@ final class UpdateUserContext implements Context
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             'Parker'
         );
-        ($this->changeUserNameHandler)($changeUserName);
+        $this->bus->dispatch($changeUserName);
     }
 
     /**
@@ -118,7 +119,7 @@ final class UpdateUserContext implements Context
                 'Peter',
                 'Parker'
             );
-            ($this->changeUserNameHandler)($changeUserName);
+            $this->bus->dispatch($changeUserName);
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
@@ -204,6 +205,10 @@ final class UpdateUserContext implements Context
      */
     public function gotNothingToUpdate(): void
     {
-        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
+        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
+        $handledExceptions = $this->caughtException->getNestedExceptions();
+
+        Assert::count($handledExceptions, 1);
+        Assert::isInstanceOf(current($handledExceptions), UserDoesNotExist::class);
     }
 }
