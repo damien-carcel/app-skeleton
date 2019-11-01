@@ -15,6 +15,7 @@ namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
+use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -36,7 +37,7 @@ final class CreateUserHandler
         $uuid = Uuid::uuid4();
         $email = Email::fromString($createUser->email());
         $firstName = FirstName::fromString($createUser->firstName());
-        $lastName = $createUser->lastName();
+        $lastName = LastName::fromString($createUser->lastName());
 
         $user = new User($uuid, $email, $firstName, $lastName);
 

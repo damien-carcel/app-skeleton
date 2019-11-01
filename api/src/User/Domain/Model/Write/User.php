@@ -31,7 +31,7 @@ class User
         UuidInterface $id,
         Email $email,
         FirstName $firstName,
-        string $lastName
+        LastName $lastName
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -54,12 +54,12 @@ class User
         return $this->firstName;
     }
 
-    public function lastName(): string
+    public function lastName(): LastName
     {
         return $this->lastName;
     }
 
-    public function update(Email $email, FirstName $firstName, string $lastName): void
+    public function update(Email $email, FirstName $firstName, LastName $lastName): void
     {
         $this->email = $email;
         $this->firstName = $firstName;

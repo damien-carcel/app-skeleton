@@ -16,6 +16,7 @@ namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
+use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Model\Write\User;
 use PHPUnit\Framework\TestCase;
 
@@ -61,7 +62,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertSame('Stark', $user->lastName());
+        static::assertInstanceOf(LastName::class, $user->lastName());
+        static::assertSame('Stark', (string) $user->lastName());
     }
 
     /** @test */
@@ -72,12 +74,12 @@ final class UserTest extends TestCase
         $user->update(
             Email::fromString('new.ironman@advengers.org'),
             FirstName::fromString('Peter'),
-            'Parker'
+            LastName::fromString('Parker')
         );
 
         static::assertSame('new.ironman@advengers.org', (string) $user->email());
         static::assertSame('Peter', (string) $user->firstName());
-        static::assertSame('Parker', $user->lastName());
+        static::assertSame('Parker', (string) $user->lastName());
     }
 
     private function instantiateTonyStark(): User
