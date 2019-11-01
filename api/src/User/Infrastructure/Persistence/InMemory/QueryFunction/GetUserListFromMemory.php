@@ -51,8 +51,8 @@ final class GetUserListFromMemory implements GetUserList
             return [
                 'id' => (string) $user->id(),
                 'email' => (string) $user->email(),
-                'firstName' => $user->firstName(),
-                'lastName' => $user->lastName(),
+                'firstName' => (string) $user->firstName(),
+                'lastName' => (string) $user->lastName(),
             ];
         }, $users);
     }

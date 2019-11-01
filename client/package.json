@@ -35,7 +35,7 @@
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
     "@types/react-modal": "^3.10.0",
-    "core-js": "^3.3.4",
+    "core-js": "^3.3.6",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-modal": "^3.11.1"
@@ -71,7 +71,7 @@
     "typescript": "^3.6.4",
     "webapp-webpack-plugin": "^2.7.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
+    "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
   }
 }

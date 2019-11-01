@@ -132,8 +132,8 @@ final class UpdateUserContext implements Context
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
         Assert::same((string) $updatedUser->email(), 'new.ironman@avengers.org');
-        Assert::same($updatedUser->firstName(), 'Peter');
-        Assert::same($updatedUser->lastName(), 'Parker');
+        Assert::same((string) $updatedUser->firstName(), 'Peter');
+        Assert::same((string) $updatedUser->lastName(), 'Parker');
     }
 
     /**
@@ -143,9 +143,18 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same((string) $updatedUser->email(), 'new.ironman@avengers.org');
-        Assert::same($updatedUser->firstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
-        Assert::same($updatedUser->lastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
+        Assert::same(
+            (string) $updatedUser->email(),
+            'new.ironman@avengers.org'
+        );
+        Assert::same(
+            (string) $updatedUser->firstName(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']
+        );
+        Assert::same(
+            (string) $updatedUser->lastName(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
+        );
     }
 
     /**
@@ -155,9 +164,18 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same((string) $updatedUser->email(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
-        Assert::same($updatedUser->firstName(), 'Peter');
-        Assert::same($updatedUser->lastName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']);
+        Assert::same(
+            (string) $updatedUser->email(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']
+        );
+        Assert::same(
+            (string) $updatedUser->firstName(),
+            'Peter'
+        );
+        Assert::same(
+            (string) $updatedUser->lastName(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
+        );
     }
 
     /**
@@ -167,9 +185,18 @@ final class UpdateUserContext implements Context
     {
         $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
 
-        Assert::same((string) $updatedUser->email(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']);
-        Assert::same($updatedUser->firstName(), UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']);
-        Assert::same($updatedUser->lastName(), 'Parker');
+        Assert::same(
+            (string) $updatedUser->email(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email']
+        );
+        Assert::same(
+            (string) $updatedUser->firstName(),
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName']
+        );
+        Assert::same(
+            (string) $updatedUser->lastName(),
+            'Parker'
+        );
     }
 
     /**

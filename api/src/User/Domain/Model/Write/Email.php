@@ -20,11 +20,18 @@ use Webmozart\Assert\Assert;
  */
 final class Email
 {
+    private const EMAIL_MAX_LENGTH = 256;
     private $email;
 
     private function __construct(string $email)
     {
-        Assert::notEmpty($email, 'User email cannot be empty.');
+        Assert::notEmpty($email, 'The user email cannot be empty.');
+        Assert::maxLength($email, static::EMAIL_MAX_LENGTH, sprintf(
+            'The email address should not be more than %d characters, "%s" is %d characters long.',
+            static::EMAIL_MAX_LENGTH,
+            $email,
+            strlen($email)
+        ));
         Assert::email($email, sprintf('The use email "%s" is not a valid email address.', $email));
 
         $this->email = $email;
