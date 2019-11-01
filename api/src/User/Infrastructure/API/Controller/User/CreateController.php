@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Command\CreateUser;
-use Carcel\User\Application\Command\CreateUserHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,14 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class CreateController
 {
-    private $createUserHandler;
-
-    public function __construct(CreateUserHandler $createUserHandler)
-    {
-        $this->createUserHandler = $createUserHandler;
-    }
-
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, MessageBusInterface $bus): Response
     {
         $content = $request->getContent();
         $userData = json_decode($content, true);
@@ -46,8 +40,8 @@ final class CreateController
                 $userData['firstName'],
                 $userData['lastName']
             );
-            ($this->createUserHandler)($createUser);
-        } catch (\InvalidArgumentException $exception) {
+            $bus->dispatch($createUser);
+        } catch (HandlerFailedException $exception) {
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
 

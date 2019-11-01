@@ -16,9 +16,9 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\CreateUser;
-use Carcel\User\Application\Command\CreateUserHandler;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -32,12 +32,12 @@ final class CreateUserContext implements Context
         'lastName' => 'Wayne',
     ];
 
-    private $createUserHandler;
+    private $bus;
     private $userRepository;
 
-    public function __construct(CreateUserHandler $createUserHandler, UserRepositoryInterface $userRepository)
+    public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {
-        $this->createUserHandler = $createUserHandler;
+        $this->bus = $bus;
         $this->userRepository = $userRepository;
     }
 
@@ -52,7 +52,7 @@ final class CreateUserContext implements Context
             static::NEW_USER['lastName']
         );
 
-        ($this->createUserHandler)($createUser);
+        $this->bus->dispatch($createUser);
     }
 
     /**

@@ -16,11 +16,12 @@ namespace Carcel\User\Application\Query;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser as GetUserQueryFunction;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserHandler
+final class GetUserHandler implements MessageHandlerInterface
 {
     private $getUserQueryFunction;
 

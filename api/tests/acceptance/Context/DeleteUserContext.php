@@ -16,10 +16,11 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\DeleteUser;
-use Carcel\User\Application\Command\DeleteUserHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,15 +31,15 @@ final class DeleteUserContext implements Context
     /** @var string */
     private $deletedUserIdentifier;
 
-    /** @var UserDoesNotExist */
+    /** @var HandlerFailedException */
     private $caughtException;
 
-    private $deleteUserHandler;
+    private $bus;
     private $userRepository;
 
-    public function __construct(DeleteUserHandler $deleteUserHandler, UserRepositoryInterface $userRepository)
+    public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {
-        $this->deleteUserHandler = $deleteUserHandler;
+        $this->bus = $bus;
         $this->userRepository = $userRepository;
     }
 
@@ -50,7 +51,7 @@ final class DeleteUserContext implements Context
         $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $deleteUser = new DeleteUser(Uuid::fromString($this->deletedUserIdentifier));
-        ($this->deleteUserHandler)($deleteUser);
+        $this->bus->dispatch($deleteUser);
     }
 
     /**
@@ -59,7 +60,7 @@ final class DeleteUserContext implements Context
     public function deleteAUserThatDoesNotExist(): void
     {
         try {
-            ($this->deleteUserHandler)(new DeleteUser(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)));
+            $this->bus->dispatch(new DeleteUser(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)));
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
@@ -78,6 +79,10 @@ final class DeleteUserContext implements Context
      */
     public function gotNothingToDelete(): void
     {
-        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
+        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
+        $handledExceptions = $this->caughtException->getNestedExceptions();
+
+        Assert::count($handledExceptions, 1);
+        Assert::isInstanceOf(current($handledExceptions), UserDoesNotExist::class);
     }
 }

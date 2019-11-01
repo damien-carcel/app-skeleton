@@ -18,11 +18,12 @@ use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UpdateUserDataHandler
+final class UpdateUserDataHandler implements MessageHandlerInterface
 {
     private $userRepository;
 
