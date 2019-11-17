@@ -6,7 +6,13 @@ services:
     depends_on:
       - 'fpm'
     labels:
+      - 'traefik.http.middlewares.redirect-skeleton-api-http-to-https.redirectScheme.scheme=https'
+      - 'traefik.http.routers.skeleton-api.entrypoints=web'
+      - 'traefik.http.routers.skeleton-api.middlewares=redirect-skeleton-api-http-to-https'
       - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-api-with-https.entrypoints=websecure'
+      - 'traefik.http.routers.skeleton-api-with-https.rule=Host(`skeleton-api.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-api-with-https.tls=true'
     networks:
       - proxy
       - skeleton-api

@@ -38,7 +38,13 @@ services:
   client:
     image: 'carcel/skeleton/client:latest'
     labels:
+      - 'traefik.http.middlewares.redirect-skeleton-client-http-to-https.redirectScheme.scheme=https'
+      - 'traefik.http.routers.skeleton-client.entrypoints=web'
+      - 'traefik.http.routers.skeleton-client.middlewares=redirect-skeleton-client-http-to-https'
       - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-client-with-https.entrypoints=websecure'
+      - 'traefik.http.routers.skeleton-client-with-https.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-client-with-https.tls=true'
     networks:
       - proxy
       - skeleton-client
