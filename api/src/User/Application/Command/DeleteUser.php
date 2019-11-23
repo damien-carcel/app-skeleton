@@ -27,9 +27,6 @@ final class DeleteUser
         $this->identifier = $identifier;
     }
 
-    /**
-     * @return UuidInterface
-     */
     public function identifier(): UuidInterface
     {
         return $this->identifier;

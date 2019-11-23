@@ -33,33 +33,21 @@ final class UpdateUserData
         $this->lastName = $lastName;
     }
 
-    /**
-     * @return UuidInterface
-     */
     public function identifier(): UuidInterface
     {
         return $this->identifier;
     }
 
-    /**
-     * @return string
-     */
     public function email(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return string
-     */
     public function firstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return string
-     */
     public function lastName(): string
     {
         return $this->lastName;
