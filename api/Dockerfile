@@ -35,6 +35,7 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     apt-get --yes install \
         php7.3-apcu \
         php7.3-cli \
+        php7.3-curl \
         php7.3-dom \
         php7.3-fpm \
         php7.3-intl \
