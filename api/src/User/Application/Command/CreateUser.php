@@ -29,25 +29,16 @@ final class CreateUser
         $this->lastName = $lastName;
     }
 
-    /**
-     * @return string
-     */
     public function email(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return string
-     */
     public function firstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return string
-     */
     public function lastName(): string
     {
         return $this->lastName;

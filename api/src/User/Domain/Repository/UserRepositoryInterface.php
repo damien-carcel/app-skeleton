@@ -26,19 +26,11 @@ interface UserRepositoryInterface
     public function findAll(): array;
 
     /**
-     * @param string $uuid
-     *
      * @return User
      */
     public function find(string $uuid): ?User;
 
-    /**
-     * @param User $user
-     */
     public function save(User $user): void;
 
-    /**
-     * @param User $user
-     */
     public function delete(User $user): void;
 }
