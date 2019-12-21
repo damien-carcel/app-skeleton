@@ -43,7 +43,6 @@ services:
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './:/srv/app:rw'
-      - './var:/srv/app/var:rw'
       - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
       - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
     working_dir: '/srv/app'
