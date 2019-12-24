@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\Persistence\Doctrine\Repository;
 
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -24,11 +24,13 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class UserRepository implements UserRepositoryInterface
 {
-    private $entityManager;
+    private $connection;
+    private $factory;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(Connection $connection, UserFactory $factory)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
+        $this->factory = $factory;
     }
 
     /**
@@ -36,7 +38,17 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function findAll(): array
     {
-        return $this->getDoctrineRepository()->findAll();
+        $statement = $this->connection->executeQuery('SELECT * FROM user');
+        $result = $statement->fetchAll();
+
+        return array_map(function (array $userData) {
+            return $this->factory->create(
+                $userData['id'],
+                $userData['first_name'],
+                $userData['last_name'],
+                $userData['email'],
+            );
+        }, $result);
     }
 
     /**
@@ -44,16 +56,58 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function find(UuidInterface $uuid): ?User
     {
-        return $this->getDoctrineRepository()->find($uuid);
+        $query = <<<SQL
+SELECT id, email, first_name, last_name FROM user
+WHERE id = :id;
+SQL;
+        $parameters = ['id' => (string) $uuid];
+        $types = ['id' => \PDO::PARAM_STR];
+
+        $statement = $this->connection->executeQuery($query, $parameters, $types);
+        $result = $statement->fetchAll();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        return $this->factory->create(
+            $result[0]['id'],
+            $result[0]['first_name'],
+            $result[0]['last_name'],
+            $result[0]['email'],
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save(User $user): void
+    public function create(User $user): void
     {
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->connection->insert(
+            'user',
+            [
+                'id' => (string) $user->id(),
+                'first_name' => (string) $user->firstName(),
+                'last_name' => (string) $user->lastName(),
+                'email' => (string) $user->email(),
+            ],
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(User $user): void
+    {
+        $this->connection->update(
+            'user',
+            [
+                'first_name' => (string) $user->firstName(),
+                'last_name' => (string) $user->lastName(),
+                'email' => (string) $user->email(),
+            ],
+            ['id' => (string) $user->id()],
+        );
     }
 
     /**
@@ -61,12 +115,6 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function delete(User $user): void
     {
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
-    }
-
-    private function getDoctrineRepository(): ObjectRepository
-    {
-        return $this->entityManager->getRepository(User::class);
+        $this->connection->delete('user', ['id' => (string) $user->id()]);
     }
 }

@@ -31,7 +31,9 @@ interface UserRepositoryInterface
      */
     public function find(UuidInterface $uuid): ?User;
 
-    public function save(User $user): void;
+    public function create(User $user): void;
+
+    public function update(User $user): void;
 
     public function delete(User $user): void;
 }

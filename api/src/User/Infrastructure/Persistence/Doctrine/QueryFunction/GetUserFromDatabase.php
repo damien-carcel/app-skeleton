@@ -36,7 +36,7 @@ final class GetUserFromDatabase implements GetUser
     public function __invoke(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
-SELECT id, email, first_name AS firstName, last_name AS lastName FROM user
+SELECT id, email, first_name, last_name FROM user
 WHERE id = :id;
 SQL;
         $parameters = ['id' => (string) $uuid];
@@ -52,8 +52,8 @@ SQL;
         return new User(
             $result[0]['id'],
             $result[0]['email'],
-            $result[0]['firstName'],
-            $result[0]['lastName']
+            $result[0]['first_name'],
+            $result[0]['last_name']
         );
     }
 }
