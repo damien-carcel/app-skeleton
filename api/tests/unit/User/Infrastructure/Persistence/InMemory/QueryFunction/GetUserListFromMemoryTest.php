@@ -37,12 +37,6 @@ final class GetUserListFromMemoryTest extends TestCase
     }
 
     /** @test */
-    public function itIsAGetUserListQuery(): void
-    {
-        static::assertInstanceOf(GetUserListFromMemory::class, $this->getUserListFromMemory);
-    }
-
-    /** @test */
     public function itGetsAListOfUsers(): void
     {
         $users = ($this->getUserListFromMemory)(10, 1);

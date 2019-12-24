@@ -22,12 +22,6 @@ use PHPUnit\Framework\TestCase;
 final class EmailTest extends TestCase
 {
     /** @test */
-    public function itInstantiateAEmail(): void
-    {
-        static::assertInstanceOf(Email::class, Email::fromString('ironman@avengers.org'));
-    }
-
-    /** @test */
     public function itReturnsTheEmail(): void
     {
         static::assertSame(

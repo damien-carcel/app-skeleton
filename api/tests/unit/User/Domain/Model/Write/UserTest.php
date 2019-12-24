@@ -26,12 +26,6 @@ use PHPUnit\Framework\TestCase;
 final class UserTest extends TestCase
 {
     /** @test */
-    public function itIsAUser(): void
-    {
-        static::assertInstanceOf(User::class, $this->instantiateTonyStark());
-    }
-
-    /** @test */
     public function itHasAnIdentifier(): void
     {
         $user = $this->instantiateTonyStark();

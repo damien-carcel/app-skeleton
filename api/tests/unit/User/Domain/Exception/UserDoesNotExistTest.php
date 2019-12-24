@@ -24,16 +24,10 @@ use Ramsey\Uuid\Uuid;
 final class UserDoesNotExistTest extends TestCase
 {
     /** @test */
-    public function itIsAUserDoesNotExistException(): void
-    {
-        $exception = $this->instantiateUserDoesNotExist();
-        static::assertInstanceOf(UserDoesNotExist::class, $exception);
-    }
-
-    /** @test */
     public function itReturnsAMessage(): void
     {
         $exception = $this->instantiateUserDoesNotExist();
+
         static::assertSame(
             sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
             $exception->getMessage()

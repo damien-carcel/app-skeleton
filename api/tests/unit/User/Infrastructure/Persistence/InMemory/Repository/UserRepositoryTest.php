@@ -35,12 +35,6 @@ final class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function itIsAUserRepository(): void
-    {
-        static::assertInstanceOf(UserRepository::class, $this->instantiateRepository());
-    }
-
-    /** @test */
     public function itFindAllUsers(): void
     {
         $repository = $this->instantiateRepository();

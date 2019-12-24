@@ -23,14 +23,6 @@ use Ramsey\Uuid\Uuid;
 final class DeleteUserTest extends TestCase
 {
     /** @test */
-    public function itIsACreateUserCommand(): void
-    {
-        $deleteUser = $this->instantiateValidDeleteUser();
-
-        static::assertInstanceOf(DeleteUser::class, $deleteUser);
-    }
-
-    /** @test */
     public function itReturnsTheUsersEmail(): void
     {
         $deleteUser = $this->instantiateValidDeleteUser();

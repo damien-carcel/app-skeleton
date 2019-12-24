@@ -23,14 +23,6 @@ use Ramsey\Uuid\Uuid;
 final class UpdateUserDataTest extends TestCase
 {
     /** @test */
-    public function itIsAChangeUserNameCommand(): void
-    {
-        $createUser = $this->instantiateValidChangeUserName();
-
-        static::assertInstanceOf(UpdateUserData::class, $createUser);
-    }
-
-    /** @test */
     public function itReturnsTheUsersId(): void
     {
         $createUser = $this->instantiateValidChangeUserName();

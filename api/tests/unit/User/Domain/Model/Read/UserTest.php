@@ -33,12 +33,6 @@ final class UserTest extends TestCase
     }
 
     /** @test */
-    public function itIsAUserReadModel(): void
-    {
-        static::assertInstanceOf(User::class, $this->instantiateValidUserReadModel());
-    }
-
-    /** @test */
     public function aUserReadModelCanNormalizeItself(): void
     {
         $user = $this->instantiateValidUserReadModel();

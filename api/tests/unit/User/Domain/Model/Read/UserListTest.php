@@ -33,12 +33,6 @@ final class UserListTest extends TestCase
     }
 
     /** @test */
-    public function itIsAListOfUserReadModels(): void
-    {
-        static::assertInstanceOf(UserList::class, $this->instantiateUserList());
-    }
-
-    /** @test */
     public function itCanCreateAnEmptyUserList(): void
     {
         static::assertInstanceOf(UserList::class, new UserList([]));
