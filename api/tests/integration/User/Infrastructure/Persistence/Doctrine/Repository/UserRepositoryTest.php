@@ -16,6 +16,7 @@ namespace Carcel\Tests\Integration\User\Infrastructure\Persistence\Doctrine\Repo
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\Tests\Integration\TestCase;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -53,7 +54,7 @@ final class UserRepositoryTest extends TestCase
     {
         static::assertEquals(
             UserFixtures::instantiateUserEntity($this->userIDs[0]),
-            $this->repository()->find($this->userIDs[0])
+            $this->repository()->find(Uuid::fromString($this->userIDs[0]))
         );
     }
 
@@ -65,16 +66,16 @@ final class UserRepositoryTest extends TestCase
         $this->repository()->save($user);
 
         static::assertCount(3, $this->repository()->findAll());
-        static::assertSame($user, $this->repository()->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
+        static::assertSame($user, $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
     }
 
     /** @test */
     public function itDeletesAUser(): void
     {
-        $this->repository()->delete($this->repository()->find($this->userIDs[0]));
+        $this->repository()->delete($this->repository()->find(Uuid::fromString($this->userIDs[0])));
 
         static::assertCount(1, $this->repository()->findAll());
-        static::assertNull($this->repository()->find($this->userIDs[0]));
+        static::assertNull($this->repository()->find(Uuid::fromString($this->userIDs[0])));
     }
 
     private function repository(): UserRepositoryInterface

@@ -51,7 +51,7 @@ final class UpdateUserContext implements Context
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new UpdateUserData(
-            Uuid::fromString($this->updatedUserIdentifier),
+            $this->updatedUserIdentifier,
             'new.ironman@avengers.org',
             'Peter',
             'Parker'
@@ -67,7 +67,7 @@ final class UpdateUserContext implements Context
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new UpdateUserData(
-            Uuid::fromString($this->updatedUserIdentifier),
+            $this->updatedUserIdentifier,
             'new.ironman@avengers.org',
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
@@ -83,7 +83,7 @@ final class UpdateUserContext implements Context
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new UpdateUserData(
-            Uuid::fromString($this->updatedUserIdentifier),
+            $this->updatedUserIdentifier,
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
             'Peter',
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName']
@@ -99,7 +99,7 @@ final class UpdateUserContext implements Context
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $changeUserName = new UpdateUserData(
-            Uuid::fromString($this->updatedUserIdentifier),
+            $this->updatedUserIdentifier,
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
             UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
             'Parker'
@@ -114,7 +114,7 @@ final class UpdateUserContext implements Context
     {
         try {
             $changeUserName = new UpdateUserData(
-                Uuid::fromString(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)),
+                UserFixtures::ID_OF_NON_EXISTENT_USER,
                 'peter.parker@avengers.org',
                 'Peter',
                 'Parker'
@@ -130,7 +130,7 @@ final class UpdateUserContext implements Context
      */
     public function userHasNewData(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
+        $updatedUser = $this->userRepository->find(Uuid::fromString($this->updatedUserIdentifier));
 
         Assert::same((string) $updatedUser->email(), 'new.ironman@avengers.org');
         Assert::same((string) $updatedUser->firstName(), 'Peter');
@@ -142,7 +142,7 @@ final class UpdateUserContext implements Context
      */
     public function userHasNewEmail(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
+        $updatedUser = $this->userRepository->find(Uuid::fromString($this->updatedUserIdentifier));
 
         Assert::same(
             (string) $updatedUser->email(),
@@ -163,7 +163,7 @@ final class UpdateUserContext implements Context
      */
     public function userHasANewFirstName(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
+        $updatedUser = $this->userRepository->find(Uuid::fromString($this->updatedUserIdentifier));
 
         Assert::same(
             (string) $updatedUser->email(),
@@ -184,7 +184,7 @@ final class UpdateUserContext implements Context
      */
     public function userHasANewLastName(): void
     {
-        $updatedUser = $this->userRepository->find($this->updatedUserIdentifier);
+        $updatedUser = $this->userRepository->find(Uuid::fromString($this->updatedUserIdentifier));
 
         Assert::same(
             (string) $updatedUser->email(),

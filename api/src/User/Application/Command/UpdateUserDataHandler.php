@@ -18,6 +18,7 @@ use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -34,7 +35,7 @@ final class UpdateUserDataHandler implements MessageHandlerInterface
 
     public function __invoke(UpdateUserData $changeUserName): void
     {
-        $user = $this->userRepository->find((string) $changeUserName->identifier());
+        $user = $this->userRepository->find(Uuid::fromString($changeUserName->identifier()));
         if (null === $user) {
             throw UserDoesNotExist::fromUuid($changeUserName->identifier());
         }

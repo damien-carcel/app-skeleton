@@ -15,8 +15,9 @@ namespace Carcel\User\Infrastructure\Persistence\Doctrine\Repository;
 
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -41,7 +42,7 @@ final class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find(string $uuid): ?User
+    public function find(UuidInterface $uuid): ?User
     {
         return $this->getDoctrineRepository()->find($uuid);
     }

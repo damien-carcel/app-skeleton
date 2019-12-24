@@ -33,6 +33,8 @@ final class GetUserListFromMemoryTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->getUserListFromMemory = new GetUserListFromMemory($this->instantiateInMemoryUserRepository());
     }
 

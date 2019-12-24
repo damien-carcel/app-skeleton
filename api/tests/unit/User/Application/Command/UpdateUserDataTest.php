@@ -15,7 +15,6 @@ namespace Carcel\Tests\Unit\User\Application\Command;
 
 use Carcel\User\Application\Command\UpdateUserData;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -27,11 +26,11 @@ final class UpdateUserDataTest extends TestCase
     {
         $createUser = $this->instantiateValidChangeUserName();
 
-        static::assertEquals(Uuid::fromString('3d8fbf56-3a34-465b-9776-c3b69c510eef'), $createUser->identifier());
+        static::assertEquals('3d8fbf56-3a34-465b-9776-c3b69c510eef', $createUser->identifier());
     }
 
     /** @test */
-    public function itReturnsTheUsersRmail(): void
+    public function itReturnsTheUsersEmail(): void
     {
         $createUser = $this->instantiateValidChangeUserName();
 
@@ -57,7 +56,7 @@ final class UpdateUserDataTest extends TestCase
     private function instantiateValidChangeUserName(): UpdateUserData
     {
         return new UpdateUserData(
-            Uuid::fromString('3d8fbf56-3a34-465b-9776-c3b69c510eef'),
+            '3d8fbf56-3a34-465b-9776-c3b69c510eef',
             'batman@justiceleague.org',
             'Bruce',
             'Wayne'

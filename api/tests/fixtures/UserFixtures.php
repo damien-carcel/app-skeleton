@@ -140,7 +140,9 @@ final class UserFixtures extends Fixture
     public static function getNormalizedUsers(): array
     {
         $normalizedUsers = [];
-        foreach (UserFixtures::USERS_DATA as $userId => $userData) {
+
+        $userIds = array_keys(UserFixtures::USERS_DATA);
+        foreach ($userIds as $userId) {
             $normalizedUsers[] = static::getNormalizedUser($userId);
         }
 

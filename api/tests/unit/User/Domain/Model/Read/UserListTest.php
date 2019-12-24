@@ -29,6 +29,8 @@ final class UserListTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->usersData = UserFixtures::getNormalizedUsers();
     }
 

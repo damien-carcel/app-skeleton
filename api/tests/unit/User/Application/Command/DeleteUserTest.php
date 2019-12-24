@@ -15,7 +15,6 @@ namespace Carcel\Tests\Unit\User\Application\Command;
 
 use Carcel\User\Application\Command\DeleteUser;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -27,11 +26,11 @@ final class DeleteUserTest extends TestCase
     {
         $deleteUser = $this->instantiateValidDeleteUser();
 
-        static::assertEquals(Uuid::fromString('df25ad55-126d-4160-89ff-a974725cb183'), $deleteUser->identifier());
+        static::assertEquals('df25ad55-126d-4160-89ff-a974725cb183', $deleteUser->identifier());
     }
 
     private function instantiateValidDeleteUser(): DeleteUser
     {
-        return new DeleteUser(Uuid::fromString('df25ad55-126d-4160-89ff-a974725cb183'));
+        return new DeleteUser('df25ad55-126d-4160-89ff-a974725cb183');
     }
 }

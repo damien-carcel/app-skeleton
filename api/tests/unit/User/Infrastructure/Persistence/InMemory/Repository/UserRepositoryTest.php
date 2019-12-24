@@ -16,6 +16,7 @@ namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\Repository;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -27,6 +28,8 @@ final class UserRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->userIDs = ['02432f0b-c33e-4d71-8ba9-a5e3267a45d5', '08acf31d-2e62-44e9-ba18-fd160ac125ad'];
         $this->users = [
             UserFixtures::instantiateUserEntity($this->userIDs[0]),
@@ -47,7 +50,7 @@ final class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        static::assertSame($this->users[0], $repository->find($this->userIDs[0]));
+        static::assertSame($this->users[0], $repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
     /** @test */
@@ -59,7 +62,7 @@ final class UserRepositoryTest extends TestCase
         $repository->save($user);
 
         static::assertCount(3, $repository->findAll());
-        static::assertSame($user, $repository->find('1605a575-77e5-4427-bbdb-2ebcb8cc8033'));
+        static::assertSame($user, $repository->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
     }
 
     /** @test */
@@ -70,7 +73,7 @@ final class UserRepositoryTest extends TestCase
         $repository->delete($this->users[0]);
 
         static::assertCount(1, $repository->findAll());
-        static::assertNull($repository->find($this->userIDs[0]));
+        static::assertNull($repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
     private function instantiateRepository(): UserRepository

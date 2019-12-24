@@ -50,7 +50,7 @@ final class DeleteUserContext implements Context
     {
         $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $deleteUser = new DeleteUser(Uuid::fromString($this->deletedUserIdentifier));
+        $deleteUser = new DeleteUser($this->deletedUserIdentifier);
         $this->bus->dispatch($deleteUser);
     }
 
@@ -60,7 +60,7 @@ final class DeleteUserContext implements Context
     public function deleteAUserThatDoesNotExist(): void
     {
         try {
-            $this->bus->dispatch(new DeleteUser(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER)));
+            $this->bus->dispatch(new DeleteUser(UserFixtures::ID_OF_NON_EXISTENT_USER));
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
@@ -71,7 +71,7 @@ final class DeleteUserContext implements Context
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
-        Assert::null($this->userRepository->find($this->deletedUserIdentifier));
+        Assert::null($this->userRepository->find(Uuid::fromString($this->deletedUserIdentifier)));
     }
 
     /**

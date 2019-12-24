@@ -32,7 +32,7 @@ final class GetUserFromMemory implements GetUser
 
     public function __invoke(UuidInterface $uuid): ?User
     {
-        $user = $this->repository->find((string) $uuid);
+        $user = $this->repository->find($uuid);
 
         if (null === $user) {
             return null;

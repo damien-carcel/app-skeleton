@@ -15,6 +15,7 @@ namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -31,7 +32,7 @@ final class DeleteUserHandler implements MessageHandlerInterface
 
     public function __invoke(DeleteUser $deleteUser): void
     {
-        $user = $this->userRepository->find((string) $deleteUser->identifier());
+        $user = $this->userRepository->find(Uuid::fromString($deleteUser->identifier()));
         if (null === $user) {
             throw UserDoesNotExist::fromUuid($deleteUser->identifier());
         }

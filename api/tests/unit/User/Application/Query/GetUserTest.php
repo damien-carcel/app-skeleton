@@ -15,7 +15,6 @@ namespace Carcel\Tests\Unit\User\Application\Query;
 
 use Carcel\User\Application\Query\GetUser;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -29,11 +28,11 @@ final class GetUserTest extends TestCase
     {
         $getUser = $this->instantiateValidGetUser();
 
-        static::assertSame(static::USER_IDENTIFIER, (string) $getUser->identifier());
+        static::assertSame(static::USER_IDENTIFIER, $getUser->identifier());
     }
 
     private function instantiateValidGetUser(): GetUser
     {
-        return new GetUser(Uuid::fromString(static::USER_IDENTIFIER));
+        return new GetUser(static::USER_IDENTIFIER);
     }
 }

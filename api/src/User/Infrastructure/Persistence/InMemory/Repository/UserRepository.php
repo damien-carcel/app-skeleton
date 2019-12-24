@@ -15,6 +15,7 @@ namespace Carcel\User\Infrastructure\Persistence\InMemory\Repository;
 
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -42,13 +43,13 @@ final class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find(string $uuid): ?User
+    public function find(UuidInterface $uuid): ?User
     {
-        if (!array_key_exists($uuid, $this->users)) {
+        if (!array_key_exists((string) $uuid, $this->users)) {
             return null;
         }
 
-        return $this->users[$uuid];
+        return $this->users[(string) $uuid];
     }
 
     /**

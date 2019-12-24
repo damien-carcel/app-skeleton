@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\User\Domain\Repository;
 
 use Carcel\User\Domain\Model\Write\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -28,7 +29,7 @@ interface UserRepositoryInterface
     /**
      * @return User
      */
-    public function find(string $uuid): ?User;
+    public function find(UuidInterface $uuid): ?User;
 
     public function save(User $user): void;
 
