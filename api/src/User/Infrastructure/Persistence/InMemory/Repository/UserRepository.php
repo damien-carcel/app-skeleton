@@ -56,7 +56,7 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function save(User $user): void
     {
-        $this->users[$user->id()->toString()] = $user;
+        $this->users[(string) $user->id()] = $user;
     }
 
     /**
@@ -64,6 +64,6 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function delete(User $user): void
     {
-        unset($this->users[$user->id()->toString()]);
+        unset($this->users[(string) $user->id()]);
     }
 }

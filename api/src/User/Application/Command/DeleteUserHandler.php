@@ -31,7 +31,7 @@ final class DeleteUserHandler implements MessageHandlerInterface
 
     public function __invoke(DeleteUser $deleteUser): void
     {
-        $user = $this->userRepository->find($deleteUser->identifier()->toString());
+        $user = $this->userRepository->find((string) $deleteUser->identifier());
         if (null === $user) {
             throw UserDoesNotExist::fromUuid($deleteUser->identifier());
         }

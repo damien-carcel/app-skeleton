@@ -64,7 +64,7 @@ final class CreateUserContext implements Context
         Assert::count($users, 12);
 
         $fetchedUsersUuidList = array_map(function (User $user) {
-            return $user->id()->toString();
+            return (string) $user->id();
         }, $users);
         $fixtureUsersUuidList = array_keys(UserFixtures::USERS_DATA);
 

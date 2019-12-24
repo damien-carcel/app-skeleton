@@ -27,6 +27,6 @@ final class UserDoesNotExist extends \InvalidArgumentException
 
     public static function fromUuid(UuidInterface $uuid): self
     {
-        return new self($uuid->toString());
+        return new self((string) $uuid);
     }
 }

@@ -29,7 +29,7 @@ final class GetUserTest extends TestCase
     {
         $getUser = $this->instantiateValidGetUser();
 
-        static::assertSame(static::USER_IDENTIFIER, $getUser->identifier()->toString());
+        static::assertSame(static::USER_IDENTIFIER, (string) $getUser->identifier());
     }
 
     private function instantiateValidGetUser(): GetUser

@@ -34,7 +34,7 @@ final class UpdateUserDataHandler implements MessageHandlerInterface
 
     public function __invoke(UpdateUserData $changeUserName): void
     {
-        $user = $this->userRepository->find($changeUserName->identifier()->toString());
+        $user = $this->userRepository->find((string) $changeUserName->identifier());
         if (null === $user) {
             throw UserDoesNotExist::fromUuid($changeUserName->identifier());
         }
