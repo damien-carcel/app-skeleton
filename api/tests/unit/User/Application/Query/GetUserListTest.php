@@ -22,14 +22,6 @@ use PHPUnit\Framework\TestCase;
 final class GetUserListTest extends TestCase
 {
     /** @test */
-    public function itIsAGetUserListQuery(): void
-    {
-        $getUserList = $this->instantiateValidGetUserList();
-
-        static::assertInstanceOf(GetUserList::class, $getUserList);
-    }
-
-    /** @test */
     public function itReturnsTheNumberOfUsersTheListWillContain(): void
     {
         $getUserList = $this->instantiateValidGetUserList();
@@ -41,6 +33,7 @@ final class GetUserListTest extends TestCase
     public function itReturnsTheUserPage(): void
     {
         $getUserList = $this->instantiateValidGetUserList();
+
         static::assertSame(1, $getUserList->userPage());
     }
 

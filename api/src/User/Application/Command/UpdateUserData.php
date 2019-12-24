@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Command;
 
-use Ramsey\Uuid\UuidInterface;
-
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
@@ -25,7 +23,7 @@ final class UpdateUserData
     private $firstName;
     private $lastName;
 
-    public function __construct(UuidInterface $identifier, string $email, string $firstName, string $lastName)
+    public function __construct(string $identifier, string $email, string $firstName, string $lastName)
     {
         $this->identifier = $identifier;
         $this->email = $email;
@@ -33,7 +31,7 @@ final class UpdateUserData
         $this->lastName = $lastName;
     }
 
-    public function identifier(): UuidInterface
+    public function identifier(): string
     {
         return $this->identifier;
     }

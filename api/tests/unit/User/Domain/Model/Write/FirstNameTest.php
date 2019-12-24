@@ -22,12 +22,6 @@ use PHPUnit\Framework\TestCase;
 final class FirstNameTest extends TestCase
 {
     /** @test */
-    public function itInstantiateAFirstName(): void
-    {
-        static::assertInstanceOf(FirstName::class, FirstName::fromString('Tony'));
-    }
-
-    /** @test */
     public function itReturnsTheFirstName(): void
     {
         static::assertSame(

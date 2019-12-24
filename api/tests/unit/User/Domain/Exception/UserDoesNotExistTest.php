@@ -16,7 +16,6 @@ namespace Carcel\Tests\Unit\User\Domain\Exception;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -24,16 +23,10 @@ use Ramsey\Uuid\Uuid;
 final class UserDoesNotExistTest extends TestCase
 {
     /** @test */
-    public function itIsAUserDoesNotExistException(): void
-    {
-        $exception = $this->instantiateUserDoesNotExist();
-        static::assertInstanceOf(UserDoesNotExist::class, $exception);
-    }
-
-    /** @test */
     public function itReturnsAMessage(): void
     {
         $exception = $this->instantiateUserDoesNotExist();
+
         static::assertSame(
             sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
             $exception->getMessage()
@@ -42,6 +35,6 @@ final class UserDoesNotExistTest extends TestCase
 
     private function instantiateUserDoesNotExist(): UserDoesNotExist
     {
-        return UserDoesNotExist::fromUuid(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+        return UserDoesNotExist::fromUuid(UserFixtures::ID_OF_NON_EXISTENT_USER);
     }
 }

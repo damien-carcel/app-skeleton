@@ -39,7 +39,7 @@ final class UpdateController
 
         try {
             $changeUserName = new UpdateUserData(
-                Uuid::fromString($uuid),
+                $uuid,
                 $userData['email'],
                 $userData['firstName'],
                 $userData['lastName']

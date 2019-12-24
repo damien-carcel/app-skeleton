@@ -15,7 +15,6 @@ namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Command\DeleteUser;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -34,7 +33,7 @@ final class DeleteController
     public function __invoke(string $uuid, MessageBusInterface $bus): Response
     {
         try {
-            $deleteUser = new DeleteUser(Uuid::fromString($uuid));
+            $deleteUser = new DeleteUser($uuid);
             $bus->dispatch($deleteUser);
         } catch (HandlerFailedException $exception) {
             $handledExceptions = $exception->getNestedExceptions();

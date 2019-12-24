@@ -16,6 +16,7 @@ namespace Carcel\User\Application\Query;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser as GetUserQueryFunction;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -34,7 +35,7 @@ final class GetUserHandler implements MessageHandlerInterface
     {
         $uuid = $getUser->identifier();
 
-        if (null === $user = ($this->getUserQueryFunction)($uuid)) {
+        if (null === $user = ($this->getUserQueryFunction)(Uuid::fromString($uuid))) {
             throw UserDoesNotExist::fromUuid($uuid);
         }
 

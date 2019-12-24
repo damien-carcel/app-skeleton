@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Query;
 
-use Ramsey\Uuid\UuidInterface;
-
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
@@ -22,12 +20,12 @@ final class GetUser
 {
     private $identifier;
 
-    public function __construct(UuidInterface $identifier)
+    public function __construct(string $identifier)
     {
         $this->identifier = $identifier;
     }
 
-    public function identifier(): UuidInterface
+    public function identifier(): string
     {
         return $this->identifier;
     }

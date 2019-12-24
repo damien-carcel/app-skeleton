@@ -29,13 +29,9 @@ final class UserListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->usersData = UserFixtures::getNormalizedUsers();
-    }
+        parent::setUp();
 
-    /** @test */
-    public function itIsAListOfUserReadModels(): void
-    {
-        static::assertInstanceOf(UserList::class, $this->instantiateUserList());
+        $this->usersData = UserFixtures::getNormalizedUsers();
     }
 
     /** @test */

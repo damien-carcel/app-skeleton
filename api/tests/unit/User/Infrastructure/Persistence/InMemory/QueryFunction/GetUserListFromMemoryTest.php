@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\QueryFunction;
 
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Read\UserList;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory;
@@ -33,13 +34,9 @@ final class GetUserListFromMemoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getUserListFromMemory = new GetUserListFromMemory($this->instantiateInMemoryUserRepository());
-    }
+        parent::setUp();
 
-    /** @test */
-    public function itIsAGetUserListQuery(): void
-    {
-        static::assertInstanceOf(GetUserListFromMemory::class, $this->getUserListFromMemory);
+        $this->getUserListFromMemory = new GetUserListFromMemory($this->instantiateInMemoryUserRepository());
     }
 
     /** @test */
@@ -116,10 +113,19 @@ final class GetUserListFromMemoryTest extends TestCase
 
     private function instantiateInMemoryUserRepository(): UserRepositoryInterface
     {
+        $factory = new UserFactory();
         $repository = new UserRepository();
 
-        $users = UserFixtures::instantiateUserEntities();
-        foreach ($users as $user) {
+        $userIds = array_keys(UserFixtures::USERS_DATA);
+
+        foreach ($userIds as $id) {
+            $user = $factory->create(
+                $id,
+                UserFixtures::USERS_DATA[$id]['firstName'],
+                UserFixtures::USERS_DATA[$id]['lastName'],
+                UserFixtures::USERS_DATA[$id]['email'],
+            );
+
             $repository->save($user);
         }
 

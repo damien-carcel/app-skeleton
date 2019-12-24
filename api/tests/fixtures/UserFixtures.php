@@ -13,13 +13,9 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Fixtures;
 
-use Carcel\User\Domain\Model\Write\Email;
-use Carcel\User\Domain\Model\Write\FirstName;
-use Carcel\User\Domain\Model\Write\LastName;
-use Carcel\User\Domain\Model\Write\User;
+use Carcel\User\Domain\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -98,13 +94,20 @@ final class UserFixtures extends Fixture
      */
     public function load(ObjectManager $objectManager): void
     {
+        $factory = new UserFactory();
+
         if (empty($this->userIdsToLoad)) {
-            $users = static::instantiateUserEntities();
-        } else {
-            $users = array_map(function (string $userId) {
-                return static::instantiateUserEntity($userId);
-            }, $this->userIdsToLoad);
+            $this->userIdsToLoad = array_keys(static::USERS_DATA);
         }
+
+        $users = array_map(function (string $userId) use ($factory) {
+            return $factory->create(
+                $userId,
+                static::USERS_DATA[$userId]['firstName'],
+                static::USERS_DATA[$userId]['lastName'],
+                static::USERS_DATA[$userId]['email'],
+            );
+        }, $this->userIdsToLoad);
 
         foreach ($users as $user) {
             $objectManager->persist($user);
@@ -113,34 +116,12 @@ final class UserFixtures extends Fixture
         $objectManager->flush();
     }
 
-    /**
-     * @return User[]
-     */
-    public static function instantiateUserEntities(): array
-    {
-        $users = [];
-        foreach (static::USERS_DATA as $userId => $userData) {
-            $users[] = static::createUser(array_merge(
-                ['id' => $userId],
-                $userData
-            ));
-        }
-
-        return $users;
-    }
-
-    public static function instantiateUserEntity(string $userId): User
-    {
-        return static::createUser(array_merge(
-            ['id' => $userId],
-            static::USERS_DATA[$userId]
-        ));
-    }
-
     public static function getNormalizedUsers(): array
     {
         $normalizedUsers = [];
-        foreach (UserFixtures::USERS_DATA as $userId => $userData) {
+
+        $userIds = array_keys(UserFixtures::USERS_DATA);
+        foreach ($userIds as $userId) {
             $normalizedUsers[] = static::getNormalizedUser($userId);
         }
 
@@ -155,15 +136,5 @@ final class UserFixtures extends Fixture
             'firstName' => static::USERS_DATA[$userId]['firstName'],
             'lastName' => static::USERS_DATA[$userId]['lastName'],
         ];
-    }
-
-    private static function createUser(array $userData): User
-    {
-        return new User(
-            Uuid::fromString($userData['id']),
-            Email::fromString($userData['email']),
-            FirstName::fromString($userData['firstName']),
-            LastName::fromString($userData['lastName']),
-        );
     }
 }

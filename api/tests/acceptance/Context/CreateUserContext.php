@@ -18,6 +18,7 @@ use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\CreateUser;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
@@ -64,14 +65,14 @@ final class CreateUserContext implements Context
         Assert::count($users, 12);
 
         $fetchedUsersUuidList = array_map(function (User $user) {
-            return $user->id()->toString();
+            return (string) $user->id();
         }, $users);
         $fixtureUsersUuidList = array_keys(UserFixtures::USERS_DATA);
 
         $newUuidList = array_diff($fetchedUsersUuidList, $fixtureUsersUuidList);
         Assert::count($newUuidList, 1);
 
-        $newUser = $this->userRepository->find(array_shift($newUuidList));
+        $newUser = $this->userRepository->find(Uuid::fromString(array_shift($newUuidList)));
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
         Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
         Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);

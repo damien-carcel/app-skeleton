@@ -18,7 +18,6 @@ use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -49,9 +48,8 @@ final class GetUserContext implements Context
     public function askForASpecificUser(): void
     {
         $uuidList = array_keys(UserFixtures::USERS_DATA);
-        $uuid = Uuid::fromString($uuidList[0]);
 
-        $this->userEnvelope = $this->bus->dispatch(new GetUser($uuid));
+        $this->userEnvelope = $this->bus->dispatch(new GetUser($uuidList[0]));
     }
 
     /**
@@ -59,10 +57,8 @@ final class GetUserContext implements Context
      */
     public function askForAUserThatDoesNotExist(): void
     {
-        $uuid = Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER);
-
         try {
-            $this->userEnvelope = $this->bus->dispatch(new GetUser($uuid));
+            $this->userEnvelope = $this->bus->dispatch(new GetUser(UserFixtures::ID_OF_NON_EXISTENT_USER));
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }

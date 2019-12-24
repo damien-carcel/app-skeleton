@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Carcel\User\Domain\Exception;
 
-use Ramsey\Uuid\UuidInterface;
-
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
@@ -25,8 +23,8 @@ final class UserDoesNotExist extends \InvalidArgumentException
         parent::__construct(sprintf('There is no user with identifier "%s"', $identifier));
     }
 
-    public static function fromUuid(UuidInterface $uuid): self
+    public static function fromUuid(string $uuid): self
     {
-        return new self($uuid->toString());
+        return new self($uuid);
     }
 }

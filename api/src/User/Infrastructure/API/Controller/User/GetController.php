@@ -16,7 +16,6 @@ namespace Carcel\User\Infrastructure\API\Controller\User;
 use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -37,7 +36,7 @@ final class GetController
     public function __invoke(string $uuid, MessageBusInterface $bus): Response
     {
         try {
-            $envelope = $bus->dispatch(new GetUser(Uuid::fromString($uuid)));
+            $envelope = $bus->dispatch(new GetUser($uuid));
         } catch (HandlerFailedException $exception) {
             $handledExceptions = $exception->getNestedExceptions();
 

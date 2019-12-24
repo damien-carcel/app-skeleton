@@ -15,7 +15,6 @@ namespace Carcel\Tests\Unit\User\Application\Query;
 
 use Carcel\User\Application\Query\GetUser;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -25,22 +24,15 @@ final class GetUserTest extends TestCase
     private const USER_IDENTIFIER = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
 
     /** @test */
-    public function itIsAGetUserQuery(): void
-    {
-        $getUser = $this->instantiateValidGetUser();
-
-        static::assertInstanceOf(GetUser::class, $getUser);
-    }
-
-    /** @test */
     public function itReturnsTheUserIdentifier(): void
     {
         $getUser = $this->instantiateValidGetUser();
-        static::assertSame(static::USER_IDENTIFIER, $getUser->identifier()->toString());
+
+        static::assertSame(static::USER_IDENTIFIER, $getUser->identifier());
     }
 
     private function instantiateValidGetUser(): GetUser
     {
-        return new GetUser(Uuid::fromString(static::USER_IDENTIFIER));
+        return new GetUser(static::USER_IDENTIFIER);
     }
 }

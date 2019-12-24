@@ -15,6 +15,7 @@ namespace Carcel\Tests\Acceptance\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 
 /**
@@ -22,11 +23,13 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
  */
 final class FixtureContext implements Context
 {
-    private $userRepository;
+    private $factory;
+    private $repository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserFactory $factory, UserRepositoryInterface $repository)
     {
-        $this->userRepository = $userRepository;
+        $this->factory = $factory;
+        $this->repository = $repository;
     }
 
     /**
@@ -34,10 +37,17 @@ final class FixtureContext implements Context
      */
     public function loadUsers(): void
     {
-        $users = UserFixtures::instantiateUserEntities();
+        $userIds = array_keys(UserFixtures::USERS_DATA);
 
-        foreach ($users as $user) {
-            $this->userRepository->save($user);
+        foreach ($userIds as $id) {
+            $user = $this->factory->create(
+                $id,
+                UserFixtures::USERS_DATA[$id]['firstName'],
+                UserFixtures::USERS_DATA[$id]['lastName'],
+                UserFixtures::USERS_DATA[$id]['email'],
+            );
+
+            $this->repository->save($user);
         }
     }
 }

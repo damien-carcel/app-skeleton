@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
@@ -25,12 +26,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserTest extends TestCase
 {
-    /** @test */
-    public function itIsAUser(): void
-    {
-        static::assertInstanceOf(User::class, $this->instantiateTonyStark());
-    }
-
     /** @test */
     public function itHasAnIdentifier(): void
     {
@@ -72,9 +67,9 @@ final class UserTest extends TestCase
         $user = $this->instantiateTonyStark();
 
         $user->update(
-            Email::fromString('new.ironman@advengers.org'),
             FirstName::fromString('Peter'),
-            LastName::fromString('Parker')
+            LastName::fromString('Parker'),
+            Email::fromString('new.ironman@advengers.org'),
         );
 
         static::assertSame('new.ironman@advengers.org', (string) $user->email());
@@ -84,6 +79,13 @@ final class UserTest extends TestCase
 
     private function instantiateTonyStark(): User
     {
-        return UserFixtures::instantiateUserEntity('02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        $factory = new UserFactory();
+
+        return $factory->create(
+            '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['firstName'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['lastName'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email'],
+        );
     }
 }

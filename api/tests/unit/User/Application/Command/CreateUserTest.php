@@ -22,14 +22,6 @@ use PHPUnit\Framework\TestCase;
 final class CreateUserTest extends TestCase
 {
     /** @test */
-    public function itIsACreateUserCommand(): void
-    {
-        $createUser = $this->instantiateValidCreateUser();
-
-        static::assertInstanceOf(CreateUser::class, $createUser);
-    }
-
-    /** @test */
     public function itReturnsTheUsersEmail(): void
     {
         $createUser = $this->instantiateValidCreateUser();
@@ -38,7 +30,7 @@ final class CreateUserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUsersFirstname(): void
+    public function itReturnsTheUsersFirstName(): void
     {
         $createUser = $this->instantiateValidCreateUser();
 
@@ -46,7 +38,7 @@ final class CreateUserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheUsersLastname(): void
+    public function itReturnsTheUsersLastName(): void
     {
         $createUser = $this->instantiateValidCreateUser();
 
