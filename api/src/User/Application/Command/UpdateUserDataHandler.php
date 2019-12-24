@@ -40,11 +40,11 @@ final class UpdateUserDataHandler implements MessageHandlerInterface
             throw UserDoesNotExist::fromUuid($changeUserName->identifier());
         }
 
-        $email = Email::fromString($changeUserName->email());
         $firstName = FirstName::fromString($changeUserName->firstName());
         $lastName = LastName::fromString($changeUserName->lastName());
+        $email = Email::fromString($changeUserName->email());
 
-        $user->update($email, $firstName, $lastName);
+        $user->update($firstName, $lastName, $email);
 
         $this->userRepository->save($user);
     }

@@ -34,10 +34,8 @@ final class UserList
 
     public function normalize(): array
     {
-        $normalizedUsers = array_map(function (User $user) {
+        return array_map(function (User $user) {
             return $user->normalize();
         }, $this->users);
-
-        return $normalizedUsers;
     }
 }

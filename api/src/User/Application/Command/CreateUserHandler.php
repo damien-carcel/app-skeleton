@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Command;
 
-use Carcel\User\Domain\Model\Write\Email;
-use Carcel\User\Domain\Model\Write\FirstName;
-use Carcel\User\Domain\Model\Write\LastName;
-use Carcel\User\Domain\Model\Write\User;
+use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -26,21 +23,23 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class CreateUserHandler implements MessageHandlerInterface
 {
+    private $userFactory;
     private $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserFactory $userFactory, UserRepositoryInterface $userRepository)
     {
+        $this->userFactory = $userFactory;
         $this->userRepository = $userRepository;
     }
 
     public function __invoke(CreateUser $createUser): void
     {
-        $uuid = Uuid::uuid4();
-        $email = Email::fromString($createUser->email());
-        $firstName = FirstName::fromString($createUser->firstName());
-        $lastName = LastName::fromString($createUser->lastName());
-
-        $user = new User($uuid, $email, $firstName, $lastName);
+        $user = $this->userFactory->create(
+            (string) Uuid::uuid4(),
+            $createUser->firstName(),
+            $createUser->lastName(),
+            $createUser->email(),
+        );
 
         $this->userRepository->save($user);
     }

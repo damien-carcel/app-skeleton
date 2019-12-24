@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\Repository;
 
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Factory\UserFactory;
+use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -32,8 +34,8 @@ final class UserRepositoryTest extends TestCase
 
         $this->userIDs = ['02432f0b-c33e-4d71-8ba9-a5e3267a45d5', '08acf31d-2e62-44e9-ba18-fd160ac125ad'];
         $this->users = [
-            UserFixtures::instantiateUserEntity($this->userIDs[0]),
-            UserFixtures::instantiateUserEntity($this->userIDs[1]),
+            $this->instantiateUser($this->userIDs[0]),
+            $this->instantiateUser($this->userIDs[1]),
         ];
     }
 
@@ -56,7 +58,7 @@ final class UserRepositoryTest extends TestCase
     /** @test */
     public function itSavesAUser(): void
     {
-        $user = UserFixtures::instantiateUserEntity('1605a575-77e5-4427-bbdb-2ebcb8cc8033');
+        $user = $this->instantiateUser('1605a575-77e5-4427-bbdb-2ebcb8cc8033');
 
         $repository = $this->instantiateRepository();
         $repository->save($user);
@@ -79,5 +81,17 @@ final class UserRepositoryTest extends TestCase
     private function instantiateRepository(): UserRepository
     {
         return new UserRepository($this->users);
+    }
+
+    private function instantiateUser(string $userId): User
+    {
+        $factory = new UserFactory();
+
+        return $factory->create(
+            $userId,
+            UserFixtures::USERS_DATA[$userId]['firstName'],
+            UserFixtures::USERS_DATA[$userId]['lastName'],
+            UserFixtures::USERS_DATA[$userId]['email'],
+        );
     }
 }
