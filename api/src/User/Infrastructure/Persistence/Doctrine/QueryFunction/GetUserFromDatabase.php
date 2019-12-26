@@ -36,9 +36,9 @@ final class GetUserFromDatabase implements GetUser
     public function __invoke(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
-SELECT id, email, first_name, last_name FROM user
-WHERE id = :id;
-SQL;
+            SELECT id, email, first_name, last_name FROM user
+            WHERE id = :id;
+            SQL;
         $parameters = ['id' => (string) $uuid];
         $types = ['id' => \PDO::PARAM_STR];
 

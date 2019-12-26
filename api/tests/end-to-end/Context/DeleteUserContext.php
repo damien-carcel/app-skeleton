@@ -56,8 +56,8 @@ final class DeleteUserContext extends RawMinkContext
     public function specifiedUserShouldBeRetrieved(): void
     {
         $query = <<<SQL
-SELECT * FROM user
-SQL;
+            SELECT * FROM user
+            SQL;
 
         $statement = $this->connection->executeQuery($query);
         $results = $statement->fetchAll();

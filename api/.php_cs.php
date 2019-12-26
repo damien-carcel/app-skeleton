@@ -15,17 +15,16 @@ $configuration = PhpCsFixer\Config::create()
             '@Symfony' => true,
             '@PHP71Migration' => true,
             '@PHP71Migration:risky' => true,
-            'array_syntax' => ['syntax' => 'short'],
-            'concat_space' => ['spacing' => 'none'],
+            '@PHP73Migration' => true,
+            'concat_space' => ['spacing' => 'one'],
             'linebreak_after_opening_tag' => true,
             'no_unreachable_default_argument_value' => true,
             'no_useless_else' => true,
             'no_useless_return' => true,
             'ordered_class_elements' => true,
-            'ordered_imports' => true,
             'phpdoc_add_missing_param_annotation' => true,
-            'phpdoc_order' => true,
             'psr4' => true,
+            'self_accessor' => true,
         ]
     );
 

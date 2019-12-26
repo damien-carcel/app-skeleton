@@ -89,7 +89,7 @@ final class UserFixtures
     {
         $normalizedUsers = [];
 
-        $userIds = array_keys(UserFixtures::USERS_DATA);
+        $userIds = array_keys(self::USERS_DATA);
         foreach ($userIds as $userId) {
             $normalizedUsers[] = static::getNormalizedUser($userId);
         }

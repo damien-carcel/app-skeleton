@@ -65,8 +65,8 @@ final class UpdateUserContext extends RawMinkContext
     public function userHasNewData(): void
     {
         $query = <<<SQL
-SELECT * FROM user WHERE id = :id
-SQL;
+            SELECT * FROM user WHERE id = :id
+            SQL;
 
         $parameters = ['id' => $this->updatedUserIdentifier];
         $types = ['id' => \PDO::PARAM_STR];
