@@ -13,14 +13,10 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Fixtures;
 
-use Carcel\User\Domain\Factory\UserFactory;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
-
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UserFixtures extends Fixture
+final class UserFixtures
 {
     public const USERS_DATA = [
         '02432f0b-c33e-4d71-8ba9-a5e3267a45d5' => [
@@ -87,33 +83,6 @@ final class UserFixtures extends Fixture
     public function __construct(array $userIdsToLoad = [])
     {
         $this->userIdsToLoad = $userIdsToLoad;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $objectManager): void
-    {
-        $factory = new UserFactory();
-
-        if (empty($this->userIdsToLoad)) {
-            $this->userIdsToLoad = array_keys(static::USERS_DATA);
-        }
-
-        $users = array_map(function (string $userId) use ($factory) {
-            return $factory->create(
-                $userId,
-                static::USERS_DATA[$userId]['firstName'],
-                static::USERS_DATA[$userId]['lastName'],
-                static::USERS_DATA[$userId]['email'],
-            );
-        }, $this->userIdsToLoad);
-
-        foreach ($users as $user) {
-            $objectManager->persist($user);
-        }
-
-        $objectManager->flush();
     }
 
     public static function getNormalizedUsers(): array

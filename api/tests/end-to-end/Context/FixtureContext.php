@@ -15,20 +15,18 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Connection;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class FixtureContext implements Context
 {
-    private $entityManager;
+    private $connection;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(Connection $connection)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
     }
 
     /**
@@ -36,8 +34,15 @@ final class FixtureContext implements Context
      */
     public function loadUsers(): void
     {
-        $purger = new ORMPurger($this->entityManager);
-        $executor = new ORMExecutor($this->entityManager, $purger);
-        $executor->execute([new UserFixtures()]);
+        $this->connection->executeUpdate('DELETE FROM user');
+
+        foreach (UserFixtures::USERS_DATA as $id => $data) {
+            $this->connection->insert('user', [
+                'id' => $id,
+                'first_name' => $data['firstName'],
+                'last_name' => $data['lastName'],
+                'email' => $data['email'],
+            ]);
+        }
     }
 }

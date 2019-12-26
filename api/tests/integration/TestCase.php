@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Carcel\Tests\Integration;
 
 use Carcel\Tests\Fixtures\UserFixtures;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -29,7 +27,11 @@ class TestCase extends KernelTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         static::bootKernel(['debug' => false, 'environment' => 'integration']);
+
+        $this->container()->get('database_connection')->executeUpdate('DELETE FROM user');
     }
 
     /**
@@ -43,11 +45,18 @@ class TestCase extends KernelTestCase
 
     protected function loadUserFixtures(array $usersIdsToLoad = []): void
     {
-        $entityManager = $this->container()->get('doctrine.orm.entity_manager');
+        if (empty($usersIdsToLoad)) {
+            $usersIdsToLoad = array_keys(UserFixtures::USERS_DATA);
+        }
 
-        $purger = new ORMPurger($entityManager);
-        $executor = new ORMExecutor($entityManager, $purger);
-
-        $executor->execute([new UserFixtures($usersIdsToLoad)]);
+        $connection = $this->container()->get('database_connection');
+        foreach ($usersIdsToLoad as $id) {
+            $connection->insert('user', [
+                'id' => $id,
+                'first_name' => UserFixtures::USERS_DATA[$id]['firstName'],
+                'last_name' => UserFixtures::USERS_DATA[$id]['lastName'],
+                'email' => UserFixtures::USERS_DATA[$id]['email'],
+            ]);
+        }
     }
 }

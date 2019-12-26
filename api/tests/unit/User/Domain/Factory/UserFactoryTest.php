@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Domain\Factory;
 
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\Tests\Integration\TestCase;
 use Carcel\User\Domain\Factory\UserFactory;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
