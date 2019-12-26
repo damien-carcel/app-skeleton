@@ -40,9 +40,9 @@ final class GetUserFromMemory implements GetUser
 
         return new User(
             $user->id()->toString(),
-            (string) $user->email(),
             (string) $user->firstName(),
             (string) $user->lastName(),
+            (string) $user->email(),
         );
     }
 }

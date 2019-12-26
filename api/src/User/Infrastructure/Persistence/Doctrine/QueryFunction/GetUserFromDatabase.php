@@ -51,9 +51,9 @@ SQL;
 
         return new User(
             $result[0]['id'],
-            $result[0]['email'],
             $result[0]['first_name'],
-            $result[0]['last_name']
+            $result[0]['last_name'],
+            $result[0]['email'],
         );
     }
 }
