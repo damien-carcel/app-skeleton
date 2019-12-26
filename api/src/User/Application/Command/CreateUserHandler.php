@@ -41,6 +41,6 @@ final class CreateUserHandler implements MessageHandlerInterface
             $createUser->email(),
         );
 
-        $this->userRepository->save($user);
+        $this->userRepository->create($user);
     }
 }

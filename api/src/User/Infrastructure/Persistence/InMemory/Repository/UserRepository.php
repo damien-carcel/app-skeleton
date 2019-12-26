@@ -55,9 +55,17 @@ final class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(User $user): void
+    public function create(User $user): void
     {
-        $this->users[(string) $user->id()] = $user;
+        $this->save($user);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(User $user): void
+    {
+        $this->save($user);
     }
 
     /**
@@ -66,5 +74,10 @@ final class UserRepository implements UserRepositoryInterface
     public function delete(User $user): void
     {
         unset($this->users[(string) $user->id()]);
+    }
+
+    private function save(User $user): void
+    {
+        $this->users[(string) $user->id()] = $user;
     }
 }

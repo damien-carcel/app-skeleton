@@ -16,6 +16,9 @@ namespace Carcel\Tests\Integration\User\Infrastructure\Persistence\Doctrine\Repo
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\Tests\Integration\TestCase;
 use Carcel\User\Domain\Factory\UserFactory;
+use Carcel\User\Domain\Model\Write\Email;
+use Carcel\User\Domain\Model\Write\FirstName;
+use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -61,14 +64,30 @@ final class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function itSavesAUser(): void
+    public function itCreatesAUser(): void
     {
         $user = $this->instantiateUser('1605a575-77e5-4427-bbdb-2ebcb8cc8033');
 
-        $this->repository()->save($user);
+        $this->repository()->create($user);
 
         static::assertCount(3, $this->repository()->findAll());
-        static::assertSame($user, $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
+        static::assertEquals($user, $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
+    }
+
+    /** @test */
+    public function itUpdatesAUser(): void
+    {
+        $user = $this->repository()->find(Uuid::fromString($this->userIDs[0]));
+
+        $user->update(
+            FirstName::fromString('New first name'),
+            LastName::fromString('New last name'),
+            Email::fromString('new.email@avengers.org'),
+        );
+        $this->repository()->update($user);
+
+        static::assertCount(2, $this->repository()->findAll());
+        static::assertEquals($user, $this->repository()->find(Uuid::fromString($this->userIDs[0])));
     }
 
     /** @test */

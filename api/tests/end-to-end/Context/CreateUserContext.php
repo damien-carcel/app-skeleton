@@ -59,8 +59,8 @@ final class CreateUserContext extends RawMinkContext
     public function newUserIsCreated(): void
     {
         $query = <<<SQL
-SELECT * FROM user WHERE email = :email
-SQL;
+            SELECT * FROM user WHERE email = :email
+            SQL;
 
         $parameters = ['email' => static::NEW_USER['email']];
         $types = ['email' => \PDO::PARAM_STR];

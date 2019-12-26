@@ -27,7 +27,7 @@ The `carcel/skeleton/php` image comes with XDebug installed and configured. It i
 
 You can debug the API by running:
 ```bash
-$ make debug-api
+$ make develop-api DEBUG=1
 ```
 
-This will launch the API through the Symfony web server, with Xdebug activated.
+This will launch the API through the Symfony web server, with XDebug activated.

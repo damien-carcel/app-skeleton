@@ -1,3 +1,5 @@
+DEBUG=0
+
 # Build Docker images
 
 .PHONY: pull-api
@@ -64,15 +66,11 @@ update-dependencies: update-api-dependencies update-client-dependencies
 mysql: install-api-dependencies
 	cd ${CURDIR}/api && docker-compose up -d mysql
 	sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
-	cd ${CURDIR}/api && docker-compose run --rm php bin/console doctrine:schema:update --force
+	cd ${CURDIR}/api && docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
 develop-api: mysql
-	cd ${CURDIR}/api && docker-compose run --rm --service-ports php bin/console server:run 0.0.0.0:8000
-
-.PHONY: debug-api
-debug-api: mysql
-	cd ${CURDIR}/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=1 php bin/console server:run 0.0.0.0:8000
+	cd ${CURDIR}/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=${DEBUG} php bin/console server:run 0.0.0.0:8000
 
 .PHONY: serve-api
 serve-api: build-api-prod mysql
@@ -123,19 +121,19 @@ coupling-api:
 
 .PHONY: unit-api
 unit-api:
-	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpunit --testsuite "Unit tests" --log-junit tests/results/unit_tests.xml
+	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite "Unit tests" --log-junit tests/results/unit_tests.xml
 
 .PHONY: acceptance-api
 acceptance-api:
-	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/behat --profile=acceptance -o std --colors -f pretty -f junit -o tests/results/acceptance
+	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=acceptance -o std --colors -f pretty -f junit -o tests/results/acceptance
 
 .PHONY: integration-api
 integration-api:
-	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml
+	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml
 
 .PHONY: end-to-end-api
 end-to-end-api:
-	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
+	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
 test-api: check-style-api coupling-api unit-api acceptance-api integration-api end-to-end-api

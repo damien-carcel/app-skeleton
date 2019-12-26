@@ -26,8 +26,6 @@ services:
 
     Carcel\Tests\EndToEnd\Context\FixtureContext:
         public: true
-        arguments:
-            - '@doctrine.orm.entity_manager'
 
     Carcel\Tests\EndToEnd\Context\GetUserContext:
         public: true

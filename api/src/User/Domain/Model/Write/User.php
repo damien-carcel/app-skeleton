@@ -16,11 +16,9 @@ namespace Carcel\User\Domain\Model\Write;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * This class cannot be final because of Doctrine ORM….
- *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class User
+final class User
 {
     private $id;
     private $firstName;

@@ -126,7 +126,7 @@ final class GetUserListFromMemoryTest extends TestCase
                 UserFixtures::USERS_DATA[$id]['email'],
             );
 
-            $repository->save($user);
+            $repository->create($user);
         }
 
         return $repository;

@@ -19,25 +19,25 @@ namespace Carcel\User\Domain\Model\Read;
 final class User
 {
     private $id;
-    private $email;
     private $firstName;
     private $lastName;
+    private $email;
 
-    public function __construct(string $id, string $email, string $firstName, string $lastName)
+    public function __construct(string $id, string $firstName, string $lastName, string $email)
     {
         $this->id = $id;
-        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->email = $email;
     }
 
     public function normalize(): array
     {
         return [
             'id' => $this->id,
-            'email' => $this->email,
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
+            'email' => $this->email,
         ];
     }
 }

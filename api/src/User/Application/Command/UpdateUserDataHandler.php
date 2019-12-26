@@ -46,6 +46,6 @@ final class UpdateUserDataHandler implements MessageHandlerInterface
 
         $user->update($firstName, $lastName, $email);
 
-        $this->userRepository->save($user);
+        $this->userRepository->update($user);
     }
 }
