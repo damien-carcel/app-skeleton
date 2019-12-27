@@ -14,8 +14,7 @@ commands:
     proxy-network:
         description: Create "proxy" Docker network (ignore if it already exists)
         steps:
-            -
-                run:
+            -   run:
                     name: Create "proxy" Docker network (ignore if it already exists)
                     command: docker network create proxy || true
 
@@ -27,70 +26,57 @@ jobs:
         steps:
             - checkout
             - proxy-network
-            -
-                run:
+            -   run:
                     name: Build the API Docker images
                     command: make build-api-dev
-            -
-                run:
+            -   run:
                     name: Create cache and configuration directories for the API dependencies
                     command: |
                         mkdir -p ~/.cache/composer
                         mkdir -p ~/.config/composer
-            -
-                restore_cache:
+            -   restore_cache:
                     keys:
                         - composer-v1-{{ checksum "api/composer.lock" }}
                         - composer-v1-
-            -
-                run:
+            -   run:
                     name: Install API dependencies
                     command: make install-api-dependencies
-            -
-                save_cache:
+            -   save_cache:
                     key: composer-v1-{{ checksum "api/composer.lock" }}
                     paths:
                         - ~/.cache/composer
-            -
-                run:
-                    name: Run static analysis
-                    command: make check-style-api
-            -
-                run:
+            -   run:
+                    name: Run static analysis - PHP Coding Standards Fixer
+                    command: make check-coding-standard-api
+            -   run:
+                    name: Run static analysis - PHP Coding Sniffer
+                    command: make sniff-code-api
+            -   run:
                     name: Run coupling detector
                     command: make coupling-api
-            -
-                run:
+            -   run:
                     name: Run unit tests
                     command: make unit-api
-            -
-                run:
+            -   run:
                     name: Run acceptance tests
                     command: make acceptance-api
-            -
-                run:
+            -   run:
                     name: start MySQL container
                     command: cd ~/project/api && docker-compose up -d mysql
-            -
-                run:
+            -   run:
                     name: Update database schema
                     command: make mysql
-            -
-                run:
+            -   run:
                     name: Run integration tests
                     command: make integration-api
-            -
-                run:
+            -   run:
                     name: Run end to end tests
                     command: make end-to-end-api
-            -
-                store_test_results:
+            -   store_test_results:
                     path: api/tests/results
-            -
-                store_artifacts:
+            -   store_artifacts:
                     path: api/tests/results
-            -
-                store_artifacts:
+            -   store_artifacts:
                     path: api/var/log
 
     test-client:
@@ -98,70 +84,57 @@ jobs:
         steps:
             - checkout
             - proxy-network
-            -
-                run:
+            -   run:
                     name: Build the client Docker images
                     command: make build-client-dev
-            -
-                run:
+            -   run:
                     name: Create cache and configuration directories for the client dependencies
                     command: |
                         touch ~/.yarnrc
                         mkdir ~/.yarn
                         mkdir -p ~/.cache/yarn
-            -
-                restore_cache:
+            -   restore_cache:
                     keys:
                         - node-v1-{{ checksum "client/yarn.lock" }}
                         - node-v1-
-            -
-                run:
+            -   run:
                     name: Install client dependencies
                     command: make install-client-dependencies
-            -
-                save_cache:
+            -   save_cache:
                     key: node-v1-{{ checksum "client/yarn.lock" }}
                     paths:
                         - ~/.cache/yarn
-            -
-                run:
+            -   run:
                     name: Run static analysis
                     command: make check-style-client
-            -
-                run:
+            -   run:
                     name: Run type checking
                     command: make type-check-client
-            -
-                run: # This will eventually be replace by a full production build + deployment
+            -   run: # This will eventually be replace by a full production build + deployment
                     name: Test the client production build
                     command: cd client && docker-compose run --rm node yarn run webpack:build
-            -
-                store_test_results:
+            -   store_test_results:
                     path: client/tests/results
-            -
-                store_artifacts:
+            -   store_artifacts:
                     path: client/tests/results
 
 workflows:
     version: 2
     pull_request:
         jobs:
-            -
-                test-api:
+            -   test-api:
                     filters:
                         branches:
                             ignore:
                                 - master
-            -
-                test-client:
+            -   test-client:
                     filters:
                         branches:
                             ignore:
                                 - master
     weekly:
         triggers:
-            -
-                schedule:
+            -   schedule:
                     cron: "0 0 * * 1"
                     filters:
                         branches:

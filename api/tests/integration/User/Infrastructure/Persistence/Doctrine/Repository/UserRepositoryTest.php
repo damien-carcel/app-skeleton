@@ -71,7 +71,10 @@ final class UserRepositoryTest extends TestCase
         $this->repository()->create($user);
 
         static::assertCount(3, $this->repository()->findAll());
-        static::assertEquals($user, $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
+        static::assertEquals(
+            $user,
+            $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')),
+        );
     }
 
     /** @test */

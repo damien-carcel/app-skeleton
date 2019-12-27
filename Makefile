@@ -107,13 +107,21 @@ down: down-api down-client
 
 # Test the API
 
-.PHONY: check-style-api
-check-style-api:
+.PHONY: check-coding-standard-api
+check-coding-standard-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+
+.PHONY: sniff-code-api
+sniff-code-api:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcs
+
+.PHONY: check-style-api
+check-style-api: check-coding-standard-api sniff-code-api
 
 .PHONY: fix-style-api
 fix-style-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
 .PHONY: coupling-api
 coupling-api:
