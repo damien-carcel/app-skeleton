@@ -144,7 +144,7 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: check-style-api coupling-api unit-api acceptance-api integration-api end-to-end-api
+test-api: check-style-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
 
 # Test the client
 
