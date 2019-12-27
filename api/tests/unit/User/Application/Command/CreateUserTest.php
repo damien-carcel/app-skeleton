@@ -26,7 +26,7 @@ final class CreateUserTest extends TestCase
     {
         $createUser = $this->instantiateValidCreateUser();
 
-        static::assertSame('ironman', $createUser->email());
+        static::assertSame('ironman@avengers.org', $createUser->email());
     }
 
     /** @test */
@@ -47,6 +47,6 @@ final class CreateUserTest extends TestCase
 
     private function instantiateValidCreateUser(): CreateUser
     {
-        return new CreateUser('ironman', 'Tony', 'Stark');
+        return new CreateUser('Tony', 'Stark', 'ironman@avengers.org');
     }
 }

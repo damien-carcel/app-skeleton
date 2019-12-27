@@ -54,6 +54,25 @@ final class CreateUserContext extends RawMinkContext
     }
 
     /**
+     * @When I try to create a user with invalid data
+     */
+    public function tryToCreateUserWithInvalidData(): void
+    {
+        $this->getSession()->getDriver()->getClient()->request(
+            'POST',
+            $this->router->generate('rest_users_create'),
+            [],
+            [],
+            [],
+            json_encode([
+                'firstName' => '',
+                'lastName' => '',
+                'email' => 'not an email',
+            ])
+        );
+    }
+
+    /**
      * @Then a new user is created
      */
     public function newUserIsCreated(): void
@@ -75,5 +94,23 @@ final class CreateUserContext extends RawMinkContext
         Assert::same($queriedUser['email'], static::NEW_USER['email']);
         Assert::same($queriedUser['first_name'], static::NEW_USER['firstName']);
         Assert::same($queriedUser['last_name'], static::NEW_USER['lastName']);
+    }
+
+    /**
+     * @Then I cannot create this invalid user
+     */
+    public function iCannotCreateAnInvalidUser(): void
+    {
+        $session = $this->getSession();
+
+        Assert::same($session->getStatusCode(), 422);
+        Assert::contains(
+            $session->getPage()->getContent(),
+            'This value should not be blank.'
+        );
+        Assert::contains(
+            $session->getPage()->getContent(),
+            'This value is not a valid email address.'
+        );
     }
 }

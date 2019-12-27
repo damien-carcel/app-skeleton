@@ -10,3 +10,8 @@ Feature:
   Scenario: I can create a new user
     When I create a new user
     Then a new user is created
+
+  @end-to-end
+  Scenario: I cannot create a user with invalid data
+    When I try to create a user with invalid data
+    Then I cannot create this invalid user

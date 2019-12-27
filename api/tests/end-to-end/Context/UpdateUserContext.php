@@ -60,6 +60,46 @@ final class UpdateUserContext extends RawMinkContext
     }
 
     /**
+     * @When I try to change the data of an existing user with invalid ones
+     */
+    public function updateUserWithInvalidData(): void
+    {
+        $this->getSession()->getDriver()->getClient()->request(
+            'PATCH',
+            $this->router->generate(
+                'rest_users_update',
+                ['uuid' => array_keys(UserFixtures::USERS_DATA)[0]]
+            ),
+            [],
+            [],
+            [],
+            json_encode([
+                'firstName' => '',
+                'lastName' => '',
+                'email' => 'not an email',
+            ]),
+        );
+    }
+
+    /**
+     * @When I try to change the name of a user that does not exist
+     */
+    public function changeTheNameOfAUserThatDoesNotExist(): void
+    {
+        $this->getSession()->getDriver()->getClient()->request(
+            'PATCH',
+            $this->router->generate(
+                'rest_users_update',
+                ['uuid' => UserFixtures::ID_OF_NON_EXISTENT_USER]
+            ),
+            [],
+            [],
+            [],
+            json_encode(static::USER_DATA_TO_UPDATE),
+        );
+    }
+
+    /**
      * @Then this user has new email, first name and last name
      */
     public function userHasNewData(): void
@@ -80,5 +120,37 @@ final class UpdateUserContext extends RawMinkContext
         Assert::same($queriedUser['email'], static::USER_DATA_TO_UPDATE['email']);
         Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
         Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
+    }
+
+    /**
+     * @Then I cannot change the user data
+     */
+    public function iCannotChangeTheUserData(): void
+    {
+        $session = $this->getSession();
+
+        Assert::same($session->getStatusCode(), 422);
+        Assert::contains(
+            $session->getPage()->getContent(),
+            'This value should not be blank.'
+        );
+        Assert::contains(
+            $session->getPage()->getContent(),
+            'This value is not a valid email address.'
+        );
+    }
+
+    /**
+     * @Then  I got nothing to update
+     */
+    public function gotNothingToUpdate(): void
+    {
+        $session = $this->getSession();
+
+        Assert::same($session->getStatusCode(), 404);
+        Assert::contains(
+            $session->getPage()->getContent(),
+            sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
+        );
     }
 }

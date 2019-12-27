@@ -57,9 +57,9 @@ final class UpdateUserDataTest extends TestCase
     {
         return new UpdateUserData(
             '3d8fbf56-3a34-465b-9776-c3b69c510eef',
-            'batman@justiceleague.org',
             'Bruce',
-            'Wayne'
+            'Wayne',
+            'batman@justiceleague.org',
         );
     }
 }

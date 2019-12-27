@@ -19,6 +19,7 @@ use Carcel\User\Application\Command\CreateUser;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
@@ -32,6 +33,9 @@ final class CreateUserContext implements Context
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
     ];
+
+    /** @var \Exception */
+    private $caughtException;
 
     private $bus;
     private $userRepository;
@@ -48,12 +52,24 @@ final class CreateUserContext implements Context
     public function createNewUser(): void
     {
         $createUser = new CreateUser(
-            static::NEW_USER['email'],
             static::NEW_USER['firstName'],
-            static::NEW_USER['lastName']
+            static::NEW_USER['lastName'],
+            static::NEW_USER['email'],
         );
 
         $this->bus->dispatch($createUser);
+    }
+
+    /**
+     * @When I try to create a user with invalid data
+     */
+    public function tryToCreateUserWithInvalidData(): void
+    {
+        try {
+            $this->bus->dispatch(new CreateUser('', '', 'not an email'));
+        } catch (\Exception $exception) {
+            $this->caughtException = $exception;
+        }
     }
 
     /**
@@ -76,5 +92,17 @@ final class CreateUserContext implements Context
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
         Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
         Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
+    }
+
+    /**
+     * @Then I cannot create this invalid user
+     */
+    public function iCannotCreateAnInvalidUser(): void
+    {
+        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
+        $handledExceptions = $this->caughtException->getNestedExceptions();
+
+        Assert::count($handledExceptions, 1);
+        Assert::isInstanceOf(current($handledExceptions), \InvalidArgumentException::class);
     }
 }
