@@ -19,26 +19,21 @@ namespace Carcel\User\Application\Command;
 final class UpdateUserData
 {
     private $identifier;
-    private $email;
     private $firstName;
     private $lastName;
+    private $email;
 
-    public function __construct(string $identifier, string $email, string $firstName, string $lastName)
+    public function __construct(string $identifier, string $firstName, string $lastName, string $email)
     {
         $this->identifier = $identifier;
-        $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->email = $email;
     }
 
     public function identifier(): string
     {
         return $this->identifier;
-    }
-
-    public function email(): string
-    {
-        return $this->email;
     }
 
     public function firstName(): string
@@ -49,5 +44,10 @@ final class UpdateUserData
     public function lastName(): string
     {
         return $this->lastName;
+    }
+
+    public function email(): string
+    {
+        return $this->email;
     }
 }

@@ -1,0 +1,35 @@
+Carcel\User\Application\Command\CreateUser:
+    properties:
+        firstName:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+        lastName:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+        email:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+            -   Email: ~
+
+Carcel\User\Application\Command\UpdateUserData:
+    properties:
+        identifier:
+            -   NotBlank: ~
+            -   Uuid:
+                    versions: [4]
+        firstName:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+        lastName:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+        email:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
+            -   Email: ~

@@ -7,7 +7,7 @@ Feature:
     Given I am logged as an administrator
 
   @end-to-end
-  Scenario: I can all the data of a user
+  Scenario: I can change all the data of a user
     When I change the data of an existing user
     Then this user has new email, first name and last name
 
@@ -23,6 +23,12 @@ Feature:
     When I change the last name of an existing user
     Then this user has a new last name
 
+  @end-to-end
+  Scenario: I cannot change the data of a user with invalid ones
+    When I try to change the data of an existing user with invalid ones
+    Then I cannot change the user data
+
+  @end-to-end
   Scenario: I cannot change the name of a user that does not exist
     When I try to change the name of a user that does not exist
     Then I got nothing to update

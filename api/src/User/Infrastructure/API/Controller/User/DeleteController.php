@@ -33,8 +33,7 @@ final class DeleteController
     public function __invoke(string $uuid, MessageBusInterface $bus): Response
     {
         try {
-            $deleteUser = new DeleteUser($uuid);
-            $bus->dispatch($deleteUser);
+            $bus->dispatch(new DeleteUser($uuid));
         } catch (HandlerFailedException $exception) {
             $handledExceptions = $exception->getNestedExceptions();
 
