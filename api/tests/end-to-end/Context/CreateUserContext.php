@@ -13,27 +13,40 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Driver\Connection;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class CreateUserContext extends RawMinkContext
+final class CreateUserContext implements Context
 {
-    private const NEW_USER = [
+    private const NEW_VALID_USER = [
         'email' => 'batman@justiceligue.org',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
     ];
 
+    private const NEW_INVALID_USER = [
+        'email' => 'not an email',
+        'firstName' => '',
+        'lastName' => '',
+    ];
+
+    /** @var ResponseInterface */
+    private $response;
+
+    private $kernel;
     private $router;
     private $connection;
 
-    public function __construct(RouterInterface $router, Connection $connection)
+    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
     {
+        $this->kernel = $kernel;
         $this->router = $router;
         $this->connection = $connection;
     }
@@ -43,13 +56,12 @@ final class CreateUserContext extends RawMinkContext
      */
     public function createNewUser(): void
     {
-        $this->getSession()->getDriver()->getClient()->request(
+        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
             'POST',
-            $this->router->generate('rest_users_create'),
-            [],
-            [],
-            [],
-            json_encode(static::NEW_USER)
+            $this->router->generate('api_create_users_post_collection'),
+            [
+                'json' => static::NEW_VALID_USER,
+            ],
         );
     }
 
@@ -58,17 +70,12 @@ final class CreateUserContext extends RawMinkContext
      */
     public function tryToCreateUserWithInvalidData(): void
     {
-        $this->getSession()->getDriver()->getClient()->request(
+        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
             'POST',
-            $this->router->generate('rest_users_create'),
-            [],
-            [],
-            [],
-            json_encode([
-                'firstName' => '',
-                'lastName' => '',
-                'email' => 'not an email',
-            ])
+            $this->router->generate('api_create_users_post_collection'),
+            [
+                'json' => static::NEW_INVALID_USER,
+            ],
         );
     }
 
@@ -77,11 +84,13 @@ final class CreateUserContext extends RawMinkContext
      */
     public function newUserIsCreated(): void
     {
+        Assert::same($this->response->getStatusCode(), 201);
+
         $query = <<<SQL
             SELECT * FROM user WHERE email = :email
             SQL;
 
-        $parameters = ['email' => static::NEW_USER['email']];
+        $parameters = ['email' => static::NEW_VALID_USER['email']];
         $types = ['email' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
@@ -91,9 +100,9 @@ final class CreateUserContext extends RawMinkContext
 
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['email'], static::NEW_USER['email']);
-        Assert::same($queriedUser['first_name'], static::NEW_USER['firstName']);
-        Assert::same($queriedUser['last_name'], static::NEW_USER['lastName']);
+        Assert::same($queriedUser['email'], static::NEW_VALID_USER['email']);
+        Assert::same($queriedUser['first_name'], static::NEW_VALID_USER['firstName']);
+        Assert::same($queriedUser['last_name'], static::NEW_VALID_USER['lastName']);
     }
 
     /**
@@ -101,15 +110,14 @@ final class CreateUserContext extends RawMinkContext
      */
     public function iCannotCreateAnInvalidUser(): void
     {
-        $session = $this->getSession();
+        Assert::same($this->response->getStatusCode(), 400);
 
-        Assert::same($session->getStatusCode(), 422);
         Assert::contains(
-            $session->getPage()->getContent(),
+            $this->response->getContent(false),
             'This value should not be blank.'
         );
         Assert::contains(
-            $session->getPage()->getContent(),
+            $this->response->getContent(false),
             'This value is not a valid email address.'
         );
     }

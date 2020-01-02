@@ -40,7 +40,7 @@ build: build-dev build-prod
 
 .PHONY: install-api-dependencies
 install-api-dependencies:  build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: install-client-dependencies
 install-client-dependencies: build-client-dev
@@ -51,7 +51,7 @@ install-dependencies: install-api-dependencies install-client-dependencies
 
 .PHONY: update-api-dependencies
 update-api-dependencies: build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: update-client-dependencies
 update-client-dependencies: build-client-dev
