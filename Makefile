@@ -70,7 +70,7 @@ mysql: install-api-dependencies
 
 .PHONY: develop-api
 develop-api: mysql
-	cd ${CURDIR}/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=${DEBUG} php bin/console server:run 0.0.0.0:8000
+	cd ${CURDIR}/api && docker-compose run --rm -w /srv/app/public --service-ports -e XDEBUG_ENABLED=${DEBUG} php php -S 0.0.0.0:8000
 
 .PHONY: serve-api
 serve-api: build-api-prod mysql
