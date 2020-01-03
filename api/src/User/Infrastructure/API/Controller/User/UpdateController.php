@@ -78,12 +78,11 @@ final class UpdateController
         string $lastName,
         string $email
     ): UpdateUserData {
-        $updateUserData = new UpdateUserData(
-            $uuid,
-            $firstName,
-            $lastName,
-            $email,
-        );
+        $updateUserData = new UpdateUserData();
+        $updateUserData->identifier = $uuid;
+        $updateUserData->firstName = $firstName;
+        $updateUserData->lastName = $lastName;
+        $updateUserData->email = $email;
 
         $violations = $this->validator->validate($updateUserData);
         if (count($violations) > 0) {
