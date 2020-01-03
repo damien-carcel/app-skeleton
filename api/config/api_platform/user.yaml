@@ -1,0 +1,10 @@
+resources:
+    Carcel\User\Application\Command\CreateUser:
+        attributes:
+            messenger: true
+            output: false
+        collectionOperations:
+            post:
+                path: '/users'
+                status: 201
+        itemOperations: {}

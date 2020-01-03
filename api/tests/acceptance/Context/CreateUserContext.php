@@ -51,11 +51,10 @@ final class CreateUserContext implements Context
      */
     public function createNewUser(): void
     {
-        $createUser = new CreateUser(
-            static::NEW_USER['firstName'],
-            static::NEW_USER['lastName'],
-            static::NEW_USER['email'],
-        );
+        $createUser = new CreateUser();
+        $createUser->firstName = static::NEW_USER['firstName'];
+        $createUser->lastName = static::NEW_USER['lastName'];
+        $createUser->email = static::NEW_USER['email'];
 
         $this->bus->dispatch($createUser);
     }
@@ -65,8 +64,13 @@ final class CreateUserContext implements Context
      */
     public function tryToCreateUserWithInvalidData(): void
     {
+        $createUser = new CreateUser();
+        $createUser->firstName = '';
+        $createUser->lastName = '';
+        $createUser->email = 'not an email';
+
         try {
-            $this->bus->dispatch(new CreateUser('', '', 'not an email'));
+            $this->bus->dispatch($createUser);
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }

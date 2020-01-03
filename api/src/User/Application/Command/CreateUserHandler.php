@@ -36,9 +36,9 @@ final class CreateUserHandler implements MessageHandlerInterface
     {
         $user = $this->userFactory->create(
             (string) Uuid::uuid4(),
-            $createUser->firstName(),
-            $createUser->lastName(),
-            $createUser->email(),
+            $createUser->firstName,
+            $createUser->lastName,
+            $createUser->email,
         );
 
         $this->userRepository->create($user);

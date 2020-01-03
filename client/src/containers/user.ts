@@ -26,14 +26,18 @@ export function getUser(userId: string) {
 }
 
 export function createUser(data: UserData) {
-  const url = getApiUrl('/users');
+  const url = getApiUrl('/api/users');
 
   return fetch(url, {
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    }),
     headers: createHeaders(),
     method: 'POST',
     mode: 'cors',
-  }).then((response) => response.json());
+  });
 }
 
 export function updateUser(userId: string, data: UserData) {
@@ -44,7 +48,7 @@ export function updateUser(userId: string, data: UserData) {
     headers: createHeaders(),
     method: 'PATCH',
     mode: 'cors',
-  }).then((response) => response.json());
+  });
 }
 
 export function deleteUser(userId: string) {
@@ -54,7 +58,7 @@ export function deleteUser(userId: string) {
     headers: createHeaders(),
     method: 'DELETE',
     mode: 'cors',
-  }).then((response) => response.json());
+  });
 }
 
 function getApiUrl(route: string, userId?: string) {

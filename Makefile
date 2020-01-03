@@ -40,7 +40,7 @@ build: build-dev build-prod
 
 .PHONY: install-api-dependencies
 install-api-dependencies:  build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: install-client-dependencies
 install-client-dependencies: build-client-dev
@@ -51,7 +51,7 @@ install-dependencies: install-api-dependencies install-client-dependencies
 
 .PHONY: update-api-dependencies
 update-api-dependencies: build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: update-client-dependencies
 update-client-dependencies: build-client-dev
@@ -70,7 +70,7 @@ mysql: install-api-dependencies
 
 .PHONY: develop-api
 develop-api: mysql
-	cd ${CURDIR}/api && docker-compose run --rm --service-ports -e XDEBUG_ENABLED=${DEBUG} php bin/console server:run 0.0.0.0:8000
+	cd ${CURDIR}/api && docker-compose run --rm -w /srv/app/public --service-ports -e XDEBUG_ENABLED=${DEBUG} php php -S 0.0.0.0:8000
 
 .PHONY: serve-api
 serve-api: build-api-prod mysql
@@ -144,7 +144,7 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: check-style-api coupling-api unit-api acceptance-api integration-api end-to-end-api
+test-api: check-style-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
 
 # Test the client
 
