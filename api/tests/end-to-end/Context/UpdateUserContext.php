@@ -151,7 +151,7 @@ final class UpdateUserContext implements Context
      */
     public function gotNothingToUpdate(): void
     {
-        Assert::same($this->response->getStatusCode(), 500);
+        Assert::same($this->response->getStatusCode(), 404);
         Assert::contains(
             $this->response->getContent(false),
             sprintf('There is no user with identifier \u0022%s\u0022', UserFixtures::ID_OF_NON_EXISTENT_USER),
