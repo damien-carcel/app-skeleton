@@ -13,28 +13,37 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Driver\Connection;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UpdateUserContext extends RawMinkContext
+final class UpdateUserContext implements Context
 {
     private const USER_DATA_TO_UPDATE = [
         'email' => 'new.ironman@avengers.org',
         'firstName' => 'Peter',
         'lastName' => 'Parker',
     ];
-    private $router;
-    private $connection;
+
     private $updatedUserIdentifier;
 
-    public function __construct(RouterInterface $router, Connection $connection)
+    /** @var ResponseInterface */
+    private $response;
+
+    private $kernel;
+    private $router;
+    private $connection;
+
+    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
     {
+        $this->kernel = $kernel;
         $this->router = $router;
         $this->connection = $connection;
     }
@@ -46,16 +55,15 @@ final class UpdateUserContext extends RawMinkContext
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->getSession()->getDriver()->getClient()->request(
-            'PATCH',
+        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => $this->updatedUserIdentifier]
+                'api_update_users_put_item',
+                ['id' => $this->updatedUserIdentifier]
             ),
-            [],
-            [],
-            [],
-            json_encode(static::USER_DATA_TO_UPDATE)
+            [
+                'json' => static::USER_DATA_TO_UPDATE,
+            ],
         );
     }
 
@@ -64,20 +72,19 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function updateUserWithInvalidData(): void
     {
-        $this->getSession()->getDriver()->getClient()->request(
-            'PATCH',
+        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => array_keys(UserFixtures::USERS_DATA)[0]]
+                'api_update_users_put_item',
+                ['id' => array_keys(UserFixtures::USERS_DATA)[0]]
             ),
-            [],
-            [],
-            [],
-            json_encode([
-                'firstName' => '',
-                'lastName' => '',
-                'email' => 'not an email',
-            ]),
+            [
+                'json' => [
+                    'firstName' => '',
+                    'lastName' => '',
+                    'email' => 'not an email',
+                ],
+            ],
         );
     }
 
@@ -86,16 +93,15 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
-        $this->getSession()->getDriver()->getClient()->request(
-            'PATCH',
+        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => UserFixtures::ID_OF_NON_EXISTENT_USER]
+                'api_update_users_put_item',
+                ['id' => UserFixtures::ID_OF_NON_EXISTENT_USER]
             ),
-            [],
-            [],
-            [],
-            json_encode(static::USER_DATA_TO_UPDATE),
+            [
+                'json' => static::USER_DATA_TO_UPDATE,
+            ],
         );
     }
 
@@ -104,6 +110,8 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function userHasNewData(): void
     {
+        Assert::same($this->response->getStatusCode(), 202);
+
         $query = <<<SQL
             SELECT * FROM user WHERE id = :id
             SQL;
@@ -127,15 +135,13 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function iCannotChangeTheUserData(): void
     {
-        $session = $this->getSession();
-
-        Assert::same($session->getStatusCode(), 422);
+        Assert::same($this->response->getStatusCode(), 400);
         Assert::contains(
-            $session->getPage()->getContent(),
+            $this->response->getContent(false),
             'This value should not be blank.'
         );
         Assert::contains(
-            $session->getPage()->getContent(),
+            $this->response->getContent(false),
             'This value is not a valid email address.'
         );
     }
@@ -145,12 +151,10 @@ final class UpdateUserContext extends RawMinkContext
      */
     public function gotNothingToUpdate(): void
     {
-        $session = $this->getSession();
-
-        Assert::same($session->getStatusCode(), 404);
+        Assert::same($this->response->getStatusCode(), 404);
         Assert::contains(
-            $session->getPage()->getContent(),
-            sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
+            $this->response->getContent(false),
+            sprintf('There is no user with identifier \u0022%s\u0022', UserFixtures::ID_OF_NON_EXISTENT_USER),
         );
     }
 }

@@ -6,5 +6,19 @@ resources:
         collectionOperations:
             post:
                 path: '/users'
-                status: 201
+                status: 202
         itemOperations: {}
+
+    Carcel\User\Application\Command\UpdateUser:
+        attributes:
+            identifier:
+            messenger: true
+            output: false
+        properties:
+            identifier:
+                identifier: true
+        collectionOperations: {}
+        itemOperations:
+            put:
+                path: '/users/{id}'
+                status: 202

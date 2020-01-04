@@ -14,7 +14,7 @@ Carcel\User\Application\Command\CreateUser:
                     max: 256
             -   Email: ~
 
-Carcel\User\Application\Command\UpdateUserData:
+Carcel\User\Application\Command\UpdateUser:
     properties:
         identifier:
             -   NotBlank: ~
