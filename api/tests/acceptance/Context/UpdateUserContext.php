@@ -15,7 +15,7 @@ namespace Carcel\Tests\Acceptance\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\User\Application\Command\UpdateUserData;
+use Carcel\User\Application\Command\UpdateUser;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -50,7 +50,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = $this->updatedUserIdentifier;
         $changeUserName->firstName = 'Peter';
         $changeUserName->lastName = 'Parker';
@@ -66,7 +66,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = $this->updatedUserIdentifier;
         $changeUserName->firstName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'];
         $changeUserName->lastName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'];
@@ -82,7 +82,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = $this->updatedUserIdentifier;
         $changeUserName->firstName = 'Peter';
         $changeUserName->lastName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'];
@@ -98,7 +98,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = $this->updatedUserIdentifier;
         $changeUserName->firstName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'];
         $changeUserName->lastName = 'Parker';
@@ -112,7 +112,7 @@ final class UpdateUserContext implements Context
      */
     public function updateUserWithInvalidData(): void
     {
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = array_keys(UserFixtures::USERS_DATA)[0];
         $changeUserName->firstName = '';
         $changeUserName->lastName = '';
@@ -130,7 +130,7 @@ final class UpdateUserContext implements Context
      */
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
-        $changeUserName = new UpdateUserData();
+        $changeUserName = new UpdateUser();
         $changeUserName->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
         $changeUserName->firstName = 'Peter';
         $changeUserName->lastName = 'Parker';

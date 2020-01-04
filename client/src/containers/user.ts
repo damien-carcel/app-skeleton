@@ -41,12 +41,12 @@ export function createUser(data: UserData) {
 }
 
 export function updateUser(userId: string, data: UserData) {
-  const url = getApiUrl('/users/{id}', userId);
+  const url = getApiUrl('/api/users/{id}', userId);
 
   return fetch(url, {
     body: JSON.stringify(data),
     headers: createHeaders(),
-    method: 'PATCH',
+    method: 'PUT',
     mode: 'cors',
   });
 }

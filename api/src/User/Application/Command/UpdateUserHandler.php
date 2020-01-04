@@ -24,7 +24,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UpdateUserDataHandler implements MessageHandlerInterface
+final class UpdateUserHandler implements MessageHandlerInterface
 {
     private $userRepository;
 
@@ -33,7 +33,7 @@ final class UpdateUserDataHandler implements MessageHandlerInterface
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(UpdateUserData $changeUserName): void
+    public function __invoke(UpdateUser $changeUserName): void
     {
         $user = $this->userRepository->find(Uuid::fromString($changeUserName->identifier));
         if (null === $user) {

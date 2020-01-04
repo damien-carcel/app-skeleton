@@ -16,7 +16,7 @@ namespace Carcel\User\Application\Command;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UpdateUserData
+final class UpdateUser
 {
     public $identifier;
     public $firstName;

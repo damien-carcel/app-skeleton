@@ -84,7 +84,7 @@ final class CreateUserContext implements Context
      */
     public function newUserIsCreated(): void
     {
-        Assert::same($this->response->getStatusCode(), 201);
+        Assert::same($this->response->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user WHERE email = :email

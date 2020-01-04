@@ -56,10 +56,10 @@ final class UpdateUserContext implements Context
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
         $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
-            'PATCH',
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => $this->updatedUserIdentifier]
+                'api_update_users_put_item',
+                ['id' => $this->updatedUserIdentifier]
             ),
             [
                 'json' => static::USER_DATA_TO_UPDATE,
@@ -73,10 +73,10 @@ final class UpdateUserContext implements Context
     public function updateUserWithInvalidData(): void
     {
         $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
-            'PATCH',
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => array_keys(UserFixtures::USERS_DATA)[0]]
+                'api_update_users_put_item',
+                ['id' => array_keys(UserFixtures::USERS_DATA)[0]]
             ),
             [
                 'json' => [
@@ -94,10 +94,10 @@ final class UpdateUserContext implements Context
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
         $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
-            'PATCH',
+            'PUT',
             $this->router->generate(
-                'rest_users_update',
-                ['uuid' => UserFixtures::ID_OF_NON_EXISTENT_USER]
+                'api_update_users_put_item',
+                ['id' => UserFixtures::ID_OF_NON_EXISTENT_USER]
             ),
             [
                 'json' => static::USER_DATA_TO_UPDATE,
@@ -110,6 +110,8 @@ final class UpdateUserContext implements Context
      */
     public function userHasNewData(): void
     {
+        Assert::same($this->response->getStatusCode(), 202);
+
         $query = <<<SQL
             SELECT * FROM user WHERE id = :id
             SQL;
@@ -133,7 +135,7 @@ final class UpdateUserContext implements Context
      */
     public function iCannotChangeTheUserData(): void
     {
-        Assert::same($this->response->getStatusCode(), 422);
+        Assert::same($this->response->getStatusCode(), 400);
         Assert::contains(
             $this->response->getContent(false),
             'This value should not be blank.'
@@ -149,10 +151,10 @@ final class UpdateUserContext implements Context
      */
     public function gotNothingToUpdate(): void
     {
-        Assert::same($this->response->getStatusCode(), 404);
-//        Assert::contains(
-//            $this->response->getContent(false),
-//            sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
-//        );
+        Assert::same($this->response->getStatusCode(), 500);
+        Assert::contains(
+            $this->response->getContent(false),
+            sprintf('There is no user with identifier \u0022%s\u0022', UserFixtures::ID_OF_NON_EXISTENT_USER),
+        );
     }
 }
