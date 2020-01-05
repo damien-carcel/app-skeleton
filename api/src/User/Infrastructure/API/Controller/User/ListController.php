@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users", name="rest_users_list", methods={"GET"})
+ * @Route("/api/users", name="rest_users_list", methods={"GET"})
  */
 final class ListController
 {

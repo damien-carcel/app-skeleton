@@ -6,7 +6,7 @@ export interface UserData {
 }
 
 export function listUsers() {
-  const url = getApiUrl('/users');
+  const url = getApiUrl('/api/users');
 
   return fetch(url, {
     headers: createHeaders(),
@@ -16,7 +16,7 @@ export function listUsers() {
 }
 
 export function getUser(userId: string) {
-  const url = getApiUrl('/users/{id}', userId);
+  const url = getApiUrl('/api/users/{id}', userId);
 
   return fetch(url, {
     headers: createHeaders(),
@@ -52,7 +52,7 @@ export function updateUser(userId: string, data: UserData) {
 }
 
 export function deleteUser(userId: string) {
-  const url = getApiUrl('/users/{id}', userId);
+  const url = getApiUrl('/api/users/{id}', userId);
 
   return fetch(url, {
     headers: createHeaders(),
