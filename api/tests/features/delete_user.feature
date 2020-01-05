@@ -9,7 +9,7 @@ Feature:
   @end-to-end
   Scenario: I can delete a user
     When I delete a user
-    Then the user is deleted
+    Then the user should be deleted
 
   Scenario: I cannot delete a user that does not exist
     When I try to delete a user that does not exist

@@ -13,20 +13,28 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ListUsersContext extends RawMinkContext
+final class ListUsersContext implements Context
 {
+    /** @var ResponseInterface */
+    private $response;
+
+    private $kernel;
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(KernelInterface $kernel, RouterInterface $router)
     {
+        $this->kernel = $kernel;
         $this->router = $router;
     }
 
@@ -37,10 +45,13 @@ final class ListUsersContext extends RawMinkContext
     {
         $pageNumber = (int) substr($position, 0, 1);
 
-        $this->visitPath($this->router->generate('rest_users_list', [
-            '_page' => $pageNumber,
-            '_limit' => $quantity,
-        ]));
+        $this->response = $this->client()->request(
+            'GET',
+            $this->router->generate('rest_users_list', [
+                '_page' => $pageNumber,
+                '_limit' => $quantity,
+            ]),
+        );
     }
 
     /**
@@ -48,7 +59,9 @@ final class ListUsersContext extends RawMinkContext
      */
     public function allUsersShouldBeRetrieved(string $position, int $quantity): void
     {
-        $responseContent = $this->getSession()->getPage()->getContent();
+        Assert::same($this->response->getStatusCode(), 200);
+
+        $responseContent = $this->response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         $pageNumber = (int) substr($position, 0, 1);
@@ -56,7 +69,12 @@ final class ListUsersContext extends RawMinkContext
         Assert::same($decodedContent, array_slice(
             UserFixtures::getNormalizedUsers(),
             ($pageNumber - 1) * $quantity,
-            $quantity
+            $quantity,
         ));
+    }
+
+    private function client(): HttpClientInterface
+    {
+        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

@@ -28,7 +28,7 @@
     "lint": "node ./node_modules/tslint/bin/tslint 'src/**/*.{ts,tsx}'",
     "lint-fix": "node ./node_modules/tslint/bin/tslint 'src/**/*.{ts,tsx}' --fix",
     "webpack:serve": "webpack-dev-server --mode development --open --hot --inline",
-    "webpack:serve-api": "json-server --watch db.json",
+    "webpack:serve-api": "json-server --watch db.json --routes routes.json",
     "type-check": "tsc --noEmit --pretty"
   },
   "dependencies": {

@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_delete", methods={"DELETE"})
+ * @Route("/api/users/{uuid}", name="rest_users_delete", methods={"DELETE"})
  */
 final class DeleteController
 {

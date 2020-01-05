@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  *
- * @Route("/users/{uuid}", name="rest_users_get", methods={"GET"})
+ * @Route("/api/users/{uuid}", name="rest_users_get", methods={"GET"})
  */
 final class GetController
 {

@@ -5,7 +5,7 @@ services:
 
     #- Application services overrides -#
 
-    #Carcel\Tests\Integration\Acme: ~
+    #Carcel\User\Acme: ~
 
     #- Tests only services -#
 

@@ -67,9 +67,9 @@ final class DeleteUserContext implements Context
     }
 
     /**
-     * @Then the user is deleted
+     * @Then the user should be deleted
      */
-    public function specifiedUserShouldBeRetrieved(): void
+    public function userShouldBeDeleted(): void
     {
         Assert::null($this->userRepository->find(Uuid::fromString($this->deletedUserIdentifier)));
     }

@@ -17,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
@@ -56,7 +57,7 @@ final class CreateUserContext implements Context
      */
     public function createNewUser(): void
     {
-        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+        $this->response = $this->client()->request(
             'POST',
             $this->router->generate('api_create_users_post_collection'),
             [
@@ -70,7 +71,7 @@ final class CreateUserContext implements Context
      */
     public function tryToCreateUserWithInvalidData(): void
     {
-        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+        $this->response = $this->client()->request(
             'POST',
             $this->router->generate('api_create_users_post_collection'),
             [
@@ -120,5 +121,10 @@ final class CreateUserContext implements Context
             $this->response->getContent(false),
             'This value is not a valid email address.'
         );
+    }
+
+    private function client(): HttpClientInterface
+    {
+        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

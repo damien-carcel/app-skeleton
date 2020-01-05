@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Webmozart\Assert\Assert;
 
 /**
@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class AuthenticationContext extends RawMinkContext
+final class AuthenticationContext implements Context
 {
     /**
      * @Given I am logged as an administrator
