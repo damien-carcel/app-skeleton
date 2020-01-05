@@ -46,11 +46,10 @@ final class DeleteUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-
         $this->response = $this->client()->request(
             'DELETE',
-            $this->router->generate('rest_users_delete', [
-                'uuid' => array_keys(UserFixtures::USERS_DATA)[0],
+            $this->router->generate('api_delete_users_delete_item', [
+                'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
         );
     }
@@ -60,7 +59,7 @@ final class DeleteUserContext implements Context
      */
     public function userShouldBeDeleted(): void
     {
-        Assert::same($this->response->getStatusCode(), 200);
+        Assert::same($this->response->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user
