@@ -13,20 +13,28 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserContext extends RawMinkContext
+final class GetUserContext implements Context
 {
+    /** @var ResponseInterface */
+    private $response;
+
+    private $kernel;
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(KernelInterface $kernel, RouterInterface $router)
     {
+        $this->kernel = $kernel;
         $this->router = $router;
     }
 
@@ -37,9 +45,12 @@ final class GetUserContext extends RawMinkContext
     {
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        $this->visitPath($this->router->generate('rest_users_get', [
-            'uuid' => $uuidList[0],
-        ]));
+        $this->response = $this->client()->request(
+            'GET',
+            $this->router->generate('rest_users_get', [
+                'uuid' => $uuidList[0],
+            ]),
+        );
     }
 
     /**
@@ -47,11 +58,18 @@ final class GetUserContext extends RawMinkContext
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
+        Assert::same($this->response->getStatusCode(), 200);
+
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        $responseContent = $this->getSession()->getPage()->getContent();
+        $responseContent = $this->response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         Assert::same(UserFixtures::getNormalizedUser($uuidList[0]), $decodedContent);
+    }
+
+    private function client(): HttpClientInterface
+    {
+        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

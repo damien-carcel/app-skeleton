@@ -13,24 +13,32 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\EndToEnd\Context;
 
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Driver\Connection;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class DeleteUserContext extends RawMinkContext
+final class DeleteUserContext implements Context
 {
+    /** @var ResponseInterface */
+    private $response;
+
+    private $kernel;
     private $router;
     private $connection;
 
     private $deletedUserIdentifier;
 
-    public function __construct(RouterInterface $router, Connection $connection)
+    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
     {
+        $this->kernel = $kernel;
         $this->router = $router;
         $this->connection = $connection;
     }
@@ -42,19 +50,21 @@ final class DeleteUserContext extends RawMinkContext
     {
         $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->getSession()->getDriver()->getClient()->request(
+        $this->response = $this->client()->request(
             'DELETE',
             $this->router->generate('rest_users_delete', [
                 'uuid' => $this->deletedUserIdentifier,
-            ])
+            ]),
         );
     }
 
     /**
-     * @Then the user is deleted
+     * @Then the user should be deleted
      */
-    public function specifiedUserShouldBeRetrieved(): void
+    public function userShouldBeDeleted(): void
     {
+        Assert::same($this->response->getStatusCode(), 200);
+
         $query = <<<SQL
             SELECT * FROM user
             SQL;
@@ -86,5 +96,10 @@ final class DeleteUserContext extends RawMinkContext
         return array_values(array_filter($normalizedFixtures, function (array $user) {
             return $this->deletedUserIdentifier !== $user['id'];
         }));
+    }
+
+    private function client(): HttpClientInterface
+    {
+        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

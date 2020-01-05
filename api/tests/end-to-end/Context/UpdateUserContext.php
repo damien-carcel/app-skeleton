@@ -18,6 +18,7 @@ use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
@@ -55,7 +56,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+        $this->response = $this->client()->request(
             'PUT',
             $this->router->generate(
                 'api_update_users_put_item',
@@ -72,7 +73,7 @@ final class UpdateUserContext implements Context
      */
     public function updateUserWithInvalidData(): void
     {
-        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+        $this->response = $this->client()->request(
             'PUT',
             $this->router->generate(
                 'api_update_users_put_item',
@@ -93,7 +94,7 @@ final class UpdateUserContext implements Context
      */
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
-        $this->response = $this->kernel->getContainer()->get('test.api_platform.client')->request(
+        $this->response = $this->client()->request(
             'PUT',
             $this->router->generate(
                 'api_update_users_put_item',
@@ -156,5 +157,10 @@ final class UpdateUserContext implements Context
             $this->response->getContent(false),
             sprintf('There is no user with identifier \u0022%s\u0022', UserFixtures::ID_OF_NON_EXISTENT_USER),
         );
+    }
+
+    private function client(): HttpClientInterface
+    {
+        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

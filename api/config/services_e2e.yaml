@@ -5,13 +5,11 @@ services:
 
     #- Application services overrides -#
 
-    #Carcel\Tests\EndToEnd\Acme: ~
+    #Carcel\User\Acme: ~
 
     #- Tests only services -#
 
-    Carcel\Tests\Fixtures\:
-        resource: '../tests/fixtures'
-        tags: ['doctrine.fixture.orm']
+    #Carcel\Tests\EndToEnd\Acme: ~
 
     #- Behat contexts -#
 
