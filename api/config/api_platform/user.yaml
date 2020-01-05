@@ -11,7 +11,6 @@ resources:
 
     Carcel\User\Application\Command\UpdateUser:
         attributes:
-            identifier:
             messenger: true
             output: false
         properties:
@@ -20,5 +19,18 @@ resources:
         collectionOperations: {}
         itemOperations:
             put:
+                path: '/users/{id}'
+                status: 202
+
+    Carcel\User\Application\Command\DeleteUser:
+        attributes:
+            messenger: true
+            output: false
+        properties:
+            identifier:
+                identifier: true
+        collectionOperations: {}
+        itemOperations:
+            delete:
                 path: '/users/{id}'
                 status: 202

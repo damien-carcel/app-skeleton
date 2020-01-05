@@ -34,8 +34,6 @@ final class DeleteUserContext implements Context
     private $router;
     private $connection;
 
-    private $deletedUserIdentifier;
-
     public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
     {
         $this->kernel = $kernel;
@@ -48,12 +46,10 @@ final class DeleteUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
-
         $this->response = $this->client()->request(
             'DELETE',
-            $this->router->generate('rest_users_delete', [
-                'uuid' => $this->deletedUserIdentifier,
+            $this->router->generate('api_delete_users_delete_item', [
+                'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
         );
     }
@@ -63,7 +59,7 @@ final class DeleteUserContext implements Context
      */
     public function userShouldBeDeleted(): void
     {
-        Assert::same($this->response->getStatusCode(), 200);
+        Assert::same($this->response->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user
@@ -94,7 +90,7 @@ final class DeleteUserContext implements Context
         $normalizedFixtures = UserFixtures::getNormalizedUsers();
 
         return array_values(array_filter($normalizedFixtures, function (array $user) {
-            return $this->deletedUserIdentifier !== $user['id'];
+            return array_keys(UserFixtures::USERS_DATA)[0] !== $user['id'];
         }));
     }
 
