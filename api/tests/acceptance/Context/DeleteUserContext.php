@@ -28,9 +28,6 @@ use Webmozart\Assert\Assert;
  */
 final class DeleteUserContext implements Context
 {
-    /** @var string */
-    private $deletedUserIdentifier;
-
     /** @var HandlerFailedException */
     private $caughtException;
 
@@ -48,9 +45,9 @@ final class DeleteUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $this->deletedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
+        $deleteUser = new DeleteUser();
+        $deleteUser->identifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $deleteUser = new DeleteUser($this->deletedUserIdentifier);
         $this->bus->dispatch($deleteUser);
     }
 
@@ -59,8 +56,11 @@ final class DeleteUserContext implements Context
      */
     public function deleteAUserThatDoesNotExist(): void
     {
+        $deleteUser = new DeleteUser();
+        $deleteUser->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
+
         try {
-            $this->bus->dispatch(new DeleteUser(UserFixtures::ID_OF_NON_EXISTENT_USER));
+            $this->bus->dispatch($deleteUser);
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
@@ -71,7 +71,7 @@ final class DeleteUserContext implements Context
      */
     public function userShouldBeDeleted(): void
     {
-        Assert::null($this->userRepository->find(Uuid::fromString($this->deletedUserIdentifier)));
+        Assert::null($this->userRepository->find(Uuid::fromString(array_keys(UserFixtures::USERS_DATA)[0])));
     }
 
     /**
