@@ -33,27 +33,27 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg && \
     apt-get update && \
     apt-get --yes install \
-        php7.3-apcu \
-        php7.3-cli \
-        php7.3-curl \
-        php7.3-dom \
-        php7.3-fpm \
-        php7.3-intl \
-        php7.3-json \
-        php7.3-mbstring \
-        php7.3-mysql \
-        php7.3-opcache \
-        php7.3-pdo \
-        php7.3-zip && \
+        php7.4-apcu \
+        php7.4-cli \
+        php7.4-curl \
+        php7.4-dom \
+        php7.4-fpm \
+        php7.4-intl \
+        php7.4-json \
+        php7.4-mbstring \
+        php7.4-mysql \
+        php7.4-opcache \
+        php7.4-pdo \
+        php7.4-zip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    ln -s /usr/sbin/php-fpm7.3 /usr/local/sbin/php-fpm && \
+    ln -s /usr/sbin/php-fpm7.4 /usr/local/sbin/php-fpm && \
     mkdir /run/php/
 
-COPY docker/php/skeleton.ini /etc/php/7.3/cli/conf.d/99-skeleton.ini
-COPY docker/php/skeleton.ini /etc/php/7.3/fpm/conf.d/99-skeleton.ini
-COPY docker/php/fpm.conf /etc/php/7.3/fpm/pool.d/zzz-skeleton.conf
+COPY docker/php/skeleton.ini /etc/php/7.4/cli/conf.d/99-skeleton.ini
+COPY docker/php/skeleton.ini /etc/php/7.4/fpm/conf.d/99-skeleton.ini
+COPY docker/php/fpm.conf /etc/php/7.4/fpm/pool.d/zzz-skeleton.conf
 
 ######################################
 # PHP CLI image used for development #
@@ -67,18 +67,18 @@ ENV XDEBUG_ENABLED=0
 RUN apt-get update && \
     apt-get --yes install \
         git \
-        php7.3-xdebug \
+        php7.4-xdebug \
         unzip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     phpdismod xdebug && \
-    mkdir /etc/php/7.3/enable-xdebug && \
-    ln -s /etc/php/7.3/mods-available/xdebug.ini /etc/php/7.3/enable-xdebug/xdebug.ini
+    mkdir /etc/php/7.4/enable-xdebug && \
+    ln -s /etc/php/7.4/mods-available/xdebug.ini /etc/php/7.4/enable-xdebug/xdebug.ini
 
 # Configure XDEBUG and make XDEBUG activable at container start
-COPY docker/php/xdebug.ini /etc/php/7.3/cli/conf.d/99-skeleton-xdebug.ini
-COPY docker/php/xdebug.ini /etc/php/7.3/fpm/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/7.4/cli/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/7.4/fpm/conf.d/99-skeleton-xdebug.ini
 COPY docker/php/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
