@@ -22,7 +22,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class GetUserListHandler implements MessageHandlerInterface
 {
-    private $getUserListQueryFunction;
+    private GetUserListQueryFunction $getUserListQueryFunction;
 
     public function __construct(GetUserListQueryFunction $getUserListQueryFunction)
     {

@@ -29,13 +29,10 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserContext implements Context
 {
-    /** @var Envelope */
-    private $userEnvelope;
+    private Envelope $userEnvelope;
+    private HandlerFailedException $caughtException;
 
-    /** @var HandlerFailedException */
-    private $caughtException;
-
-    private $bus;
+    private MessageBusInterface $bus;
 
     public function __construct(MessageBusInterface $bus)
     {

@@ -78,7 +78,7 @@ final class UserFixtures
 
     public const ID_OF_NON_EXISTENT_USER = 'eba840cf-9317-4735-b03b-6facfa279890';
 
-    private $userIdsToLoad;
+    private array $userIdsToLoad;
 
     public function __construct(array $userIdsToLoad = [])
     {

@@ -26,7 +26,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class UpdateUserHandler implements MessageHandlerInterface
 {
-    private $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(UserRepositoryInterface $userRepository)
     {

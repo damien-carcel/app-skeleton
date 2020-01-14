@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserListTest extends TestCase
 {
-    private $usersData;
+    private array $usersData;
 
     /**
      * {@inheritdoc}

@@ -18,8 +18,8 @@ namespace Carcel\User\Application\Command;
  */
 final class UpdateUser
 {
-    public $identifier;
-    public $firstName;
-    public $lastName;
-    public $email;
+    public string $identifier;
+    public string $firstName;
+    public string $lastName;
+    public string $email;
 }

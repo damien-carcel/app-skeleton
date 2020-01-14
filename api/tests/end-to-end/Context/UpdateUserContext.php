@@ -33,14 +33,13 @@ final class UpdateUserContext implements Context
         'lastName' => 'Parker',
     ];
 
-    private $updatedUserIdentifier;
+    private string $updatedUserIdentifier;
 
-    /** @var ResponseInterface */
-    private $response;
+    private ResponseInterface $response;
 
-    private $kernel;
-    private $router;
-    private $connection;
+    private KernelInterface $kernel;
+    private RouterInterface $router;
+    private Connection $connection;
 
     public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
     {

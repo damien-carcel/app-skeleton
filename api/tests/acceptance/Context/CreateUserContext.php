@@ -34,11 +34,10 @@ final class CreateUserContext implements Context
         'lastName' => 'Wayne',
     ];
 
-    /** @var \Exception */
-    private $caughtException;
+    private \Exception $caughtException;
 
-    private $bus;
-    private $userRepository;
+    private MessageBusInterface $bus;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {

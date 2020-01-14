@@ -23,8 +23,8 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
  */
 final class FixtureContext implements Context
 {
-    private $factory;
-    private $repository;
+    private UserFactory $factory;
+    private UserRepositoryInterface $repository;
 
     public function __construct(UserFactory $factory, UserRepositoryInterface $repository)
     {

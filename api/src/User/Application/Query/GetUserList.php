@@ -25,8 +25,8 @@ namespace Carcel\User\Application\Query;
  */
 final class GetUserList
 {
-    private $numberOfUsers;
-    private $userPage;
+    private int $numberOfUsers;
+    private int $userPage;
 
     public function __construct(int $numberOfUsers, int $userPage)
     {

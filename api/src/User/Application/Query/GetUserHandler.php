@@ -24,7 +24,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class GetUserHandler implements MessageHandlerInterface
 {
-    private $getUserQueryFunction;
+    private GetUserQueryFunction $getUserQueryFunction;
 
     public function __construct(GetUserQueryFunction $getUserQueryFunction)
     {

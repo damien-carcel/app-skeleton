@@ -22,7 +22,7 @@ use Doctrine\DBAL\Connection;
  */
 final class FixtureContext implements Context
 {
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {

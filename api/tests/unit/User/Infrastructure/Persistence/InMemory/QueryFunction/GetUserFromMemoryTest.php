@@ -27,8 +27,7 @@ use Ramsey\Uuid\Uuid;
  */
 final class GetUserFromMemoryTest extends TestCase
 {
-    /** @var GetUserFromMemory */
-    private $getUserFromMemory;
+    private GetUserFromMemory $getUserFromMemory;
 
     /**
      * {@inheritdoc}

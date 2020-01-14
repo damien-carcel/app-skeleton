@@ -23,7 +23,7 @@ use Carcel\User\Domain\Repository\UserRepositoryInterface;
  */
 final class GetUserListFromMemory implements GetUserList
 {
-    private $repository;
+    private UserRepositoryInterface $repository;
 
     public function __construct(UserRepositoryInterface $repository)
     {

@@ -28,11 +28,10 @@ use Webmozart\Assert\Assert;
  */
 final class DeleteUserContext implements Context
 {
-    /** @var HandlerFailedException */
-    private $caughtException;
+    private \Exception $caughtException;
 
-    private $bus;
-    private $userRepository;
+    private MessageBusInterface $bus;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {

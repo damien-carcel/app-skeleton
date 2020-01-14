@@ -27,10 +27,9 @@ use Webmozart\Assert\Assert;
  */
 final class ListUsersContext implements Context
 {
-    /** @var Envelope */
-    private $userListEnvelope;
+    private Envelope $userListEnvelope;
 
-    private $bus;
+    private MessageBusInterface $bus;
 
     public function __construct(MessageBusInterface $bus)
     {

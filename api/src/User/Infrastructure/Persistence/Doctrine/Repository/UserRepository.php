@@ -24,8 +24,8 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class UserRepository implements UserRepositoryInterface
 {
-    private $connection;
-    private $factory;
+    private Connection $connection;
+    private UserFactory $factory;
 
     public function __construct(Connection $connection, UserFactory $factory)
     {

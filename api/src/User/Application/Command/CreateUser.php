@@ -18,7 +18,7 @@ namespace Carcel\User\Application\Command;
  */
 final class CreateUser
 {
-    public $firstName;
-    public $lastName;
-    public $email;
+    public string $firstName;
+    public string $lastName;
+    public string $email;
 }

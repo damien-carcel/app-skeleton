@@ -23,7 +23,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class GetUserFromDatabase implements GetUser
 {
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {

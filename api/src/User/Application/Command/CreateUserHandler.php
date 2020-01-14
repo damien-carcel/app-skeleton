@@ -23,8 +23,8 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class CreateUserHandler implements MessageHandlerInterface
 {
-    private $userFactory;
-    private $userRepository;
+    private UserFactory $userFactory;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(UserFactory $userFactory, UserRepositoryInterface $userRepository)
     {

@@ -21,7 +21,8 @@ use Webmozart\Assert\Assert;
 final class Email
 {
     private const EMAIL_MAX_LENGTH = 256;
-    private $email;
+
+    private string $email;
 
     private function __construct(string $email)
     {
