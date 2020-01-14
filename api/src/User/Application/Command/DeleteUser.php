@@ -18,5 +18,5 @@ namespace Carcel\User\Application\Command;
  */
 final class DeleteUser
 {
-    public $identifier;
+    public string $identifier;
 }

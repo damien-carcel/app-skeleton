@@ -21,7 +21,8 @@ use Webmozart\Assert\Assert;
 final class FirstName
 {
     private const FIRST_NAME_MAX_LENGTH = 256;
-    private $firstName;
+
+    private string $firstName;
 
     private function __construct(string $firstName)
     {

@@ -18,7 +18,7 @@ namespace Carcel\User\Application\Query;
  */
 final class GetUser
 {
-    private $identifier;
+    private string $identifier;
 
     public function __construct(string $identifier)
     {

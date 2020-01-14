@@ -28,14 +28,11 @@ use Webmozart\Assert\Assert;
  */
 final class UpdateUserContext implements Context
 {
-    /** @var string */
-    private $updatedUserIdentifier;
+    private string $updatedUserIdentifier;
+    private \Exception $caughtException;
 
-    /** @var \Exception */
-    private $caughtException;
-
-    private $bus;
-    private $userRepository;
+    private MessageBusInterface $bus;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
     {

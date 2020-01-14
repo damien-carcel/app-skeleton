@@ -26,8 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class GetUserListFromMemoryTest extends TestCase
 {
-    /** @var GetUserListFromMemory */
-    private $getUserListFromMemory;
+    private GetUserListFromMemory $getUserListFromMemory;
 
     /**
      * {@inheritdoc}

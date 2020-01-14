@@ -28,8 +28,7 @@ use Ramsey\Uuid\Uuid;
  */
 final class UserRepositoryTest extends TestCase
 {
-    /** @var string[] */
-    private $userIDs;
+    private array $userIDs;
 
     /**
      * {@inheritdoc}

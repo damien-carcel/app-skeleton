@@ -26,11 +26,10 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserContext implements Context
 {
-    /** @var ResponseInterface */
-    private $response;
+    private ResponseInterface $response;
 
-    private $kernel;
-    private $router;
+    private KernelInterface $kernel;
+    private RouterInterface $router;
 
     public function __construct(KernelInterface $kernel, RouterInterface $router)
     {

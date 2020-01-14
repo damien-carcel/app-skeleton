@@ -22,7 +22,7 @@ use Doctrine\DBAL\Connection;
  */
 final class GetUserListFromDatabase implements GetUserList
 {
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {

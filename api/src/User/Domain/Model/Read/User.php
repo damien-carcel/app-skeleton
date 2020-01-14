@@ -18,10 +18,10 @@ namespace Carcel\User\Domain\Model\Read;
  */
 final class User
 {
-    private $id;
-    private $firstName;
-    private $lastName;
-    private $email;
+    private string $id;
+    private string $firstName;
+    private string $lastName;
+    private string $email;
 
     public function __construct(string $id, string $firstName, string $lastName, string $email)
     {

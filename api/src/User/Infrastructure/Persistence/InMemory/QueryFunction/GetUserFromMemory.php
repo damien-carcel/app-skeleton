@@ -23,7 +23,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class GetUserFromMemory implements GetUser
 {
-    private $repository;
+    private UserRepositoryInterface $repository;
 
     public function __construct(UserRepositoryInterface $repository)
     {

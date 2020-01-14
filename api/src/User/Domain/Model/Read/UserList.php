@@ -18,7 +18,7 @@ namespace Carcel\User\Domain\Model\Read;
  */
 final class UserList
 {
-    private $users;
+    private array $users;
 
     public function __construct(array $usersData)
     {

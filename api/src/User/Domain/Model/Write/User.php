@@ -20,10 +20,10 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class User
 {
-    private $id;
-    private $firstName;
-    private $lastName;
-    private $email;
+    private UuidInterface $id;
+    private FirstName $firstName;
+    private LastName $lastName;
+    private Email $email;
 
     public function __construct(
         UuidInterface $id,
