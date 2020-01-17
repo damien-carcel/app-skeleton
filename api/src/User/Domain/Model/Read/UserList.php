@@ -35,7 +35,12 @@ final class UserList
     public function normalize(): array
     {
         return array_map(function (User $user) {
-            return $user->normalize();
+            return [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+            ];
         }, $this->users);
     }
 }

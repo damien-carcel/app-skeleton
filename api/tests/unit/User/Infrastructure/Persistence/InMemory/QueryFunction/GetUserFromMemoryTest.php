@@ -57,7 +57,10 @@ final class GetUserFromMemoryTest extends TestCase
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void
     {
-        static::assertSame($user->normalize(), UserFixtures::getNormalizedUser($usersId));
+        static::assertSame(UserFixtures::getNormalizedUser($usersId)['id'], $user->getId());
+        static::assertSame(UserFixtures::getNormalizedUser($usersId)['email'], $user->getEmail());
+        static::assertSame(UserFixtures::getNormalizedUser($usersId)['firstName'], $user->getFirstName());
+        static::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $user->getLastName());
     }
 
     private function instantiateInMemoryUserRepository(): UserRepositoryInterface

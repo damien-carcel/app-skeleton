@@ -69,10 +69,10 @@ final class GetUserContext implements Context
     {
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        Assert::same(
-            UserFixtures::getNormalizedUser($uuidList[0]),
-            $this->user->normalize()
-        );
+        Assert::same($this->user->getId(), UserFixtures::getNormalizedUser($uuidList[0])['id']);
+        Assert::same($this->user->getEmail(), UserFixtures::getNormalizedUser($uuidList[0])['email']);
+        Assert::same($this->user->getFirstName(), UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
+        Assert::same($this->user->getLastName(), UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
     }
 
     /**
