@@ -14,16 +14,11 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Query\GetUser;
+use Carcel\User\Application\Query\GetUserHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
-use Carcel\User\Domain\Model\Read\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,30 +28,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class GetController
 {
-    public function __invoke(string $uuid, MessageBusInterface $bus): Response
+    public function __invoke(string $uuid, GetUserHandler $handler): Response
     {
         $getUser = new GetUser();
         $getUser->identifier = $uuid;
 
         try {
-            $envelope = $bus->dispatch($getUser);
-        } catch (HandlerFailedException $exception) {
-            $handledExceptions = $exception->getNestedExceptions();
-
-            if (current($handledExceptions) instanceof UserDoesNotExist) {
-                throw new NotFoundHttpException($exception->getMessage(), $exception);
-            }
-
-            throw new BadRequestHttpException($exception->getMessage(), $exception);
+            $user = ($handler)($getUser);
+        } catch (UserDoesNotExist $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
         }
 
-        return new JsonResponse($this->getQueriedUser($envelope)->normalize());
-    }
-
-    private function getQueriedUser(Envelope $envelope): User
-    {
-        $handledStamp = $envelope->last(HandledStamp::class);
-
-        return $handledStamp->getResult();
+        return new JsonResponse($user->normalize());
     }
 }
