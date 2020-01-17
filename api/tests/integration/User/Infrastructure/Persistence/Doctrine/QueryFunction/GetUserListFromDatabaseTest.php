@@ -109,6 +109,6 @@ final class GetUserListFromDatabaseTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        static::assertSame($users->normalize(), $normalizedExpectedUsers);
+        static::assertSame($normalizedExpectedUsers, $users->normalize());
     }
 }

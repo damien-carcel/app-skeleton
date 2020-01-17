@@ -16,12 +16,9 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Query\GetUser;
+use Carcel\User\Application\Query\GetUserHandler;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Webmozart\Assert\Assert;
 
 /**
@@ -29,14 +26,14 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserContext implements Context
 {
-    private Envelope $userEnvelope;
-    private HandlerFailedException $caughtException;
+    private \Exception $caughtException;
+    private User $user;
 
-    private MessageBusInterface $bus;
+    private GetUserHandler $handler;
 
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(GetUserHandler $handler)
     {
-        $this->bus = $bus;
+        $this->handler = $handler;
     }
 
     /**
@@ -44,9 +41,10 @@ final class GetUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $uuidList = array_keys(UserFixtures::USERS_DATA);
+        $getUser = new GetUser();
+        $getUser->identifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->userEnvelope = $this->bus->dispatch(new GetUser($uuidList[0]));
+        $this->user = ($this->handler)($getUser);
     }
 
     /**
@@ -54,8 +52,11 @@ final class GetUserContext implements Context
      */
     public function askForAUserThatDoesNotExist(): void
     {
+        $getUser = new GetUser();
+        $getUser->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
+
         try {
-            $this->userEnvelope = $this->bus->dispatch(new GetUser(UserFixtures::ID_OF_NON_EXISTENT_USER));
+            ($this->handler)($getUser);
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
@@ -68,10 +69,10 @@ final class GetUserContext implements Context
     {
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        Assert::same(
-            UserFixtures::getNormalizedUser($uuidList[0]),
-            $this->getQueriedUserList()->normalize()
-        );
+        Assert::same($this->user->getId(), UserFixtures::getNormalizedUser($uuidList[0])['id']);
+        Assert::same($this->user->getEmail(), UserFixtures::getNormalizedUser($uuidList[0])['email']);
+        Assert::same($this->user->getFirstName(), UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
+        Assert::same($this->user->getLastName(), UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
     }
 
     /**
@@ -79,17 +80,6 @@ final class GetUserContext implements Context
      */
     public function gotNoUser(): void
     {
-        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
-        $handledExceptions = $this->caughtException->getNestedExceptions();
-
-        Assert::count($handledExceptions, 1);
-        Assert::isInstanceOf(current($handledExceptions), UserDoesNotExist::class);
-    }
-
-    private function getQueriedUserList(): User
-    {
-        $handledStamp = $this->userEnvelope->last(HandledStamp::class);
-
-        return $handledStamp->getResult();
+        Assert::isInstanceOf($this->caughtException, UserDoesNotExist::class);
     }
 }

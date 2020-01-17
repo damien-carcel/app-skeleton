@@ -16,10 +16,8 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
+use Carcel\User\Application\Query\GetUserListHandler;
 use Carcel\User\Domain\Model\Read\UserList;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,13 +25,13 @@ use Webmozart\Assert\Assert;
  */
 final class ListUsersContext implements Context
 {
-    private Envelope $userListEnvelope;
+    private UserList $userList;
 
-    private MessageBusInterface $bus;
+    private GetUserListHandler $handler;
 
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(GetUserListHandler $handler)
     {
-        $this->bus = $bus;
+        $this->handler = $handler;
     }
 
     /**
@@ -41,9 +39,11 @@ final class ListUsersContext implements Context
      */
     public function listUsers(string $position, int $quantity): void
     {
-        $pageNumber = (int) substr($position, 0, 1);
+        $getUserList = new GetUserListQuery();
+        $getUserList->numberOfUsers = $quantity;
+        $getUserList->userPage = (int) substr($position, 0, 1);
 
-        $this->userListEnvelope = $this->bus->dispatch(new GetUserListQuery($quantity, $pageNumber));
+        $this->userList = ($this->handler)($getUserList);
     }
 
     /**
@@ -53,17 +53,10 @@ final class ListUsersContext implements Context
     {
         $pageNumber = (int) substr($position, 0, 1);
 
-        Assert::same($this->getQueriedUserList()->normalize(), array_slice(
+        Assert::same($this->userList->normalize(), array_slice(
             UserFixtures::getNormalizedUsers(),
             ($pageNumber - 1) * $quantity,
             $quantity
         ));
-    }
-
-    private function getQueriedUserList(): UserList
-    {
-        $handledStamp = $this->userListEnvelope->last(HandledStamp::class);
-
-        return $handledStamp->getResult();
     }
 }

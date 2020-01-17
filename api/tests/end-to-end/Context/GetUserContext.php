@@ -42,12 +42,10 @@ final class GetUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $uuidList = array_keys(UserFixtures::USERS_DATA);
-
         $this->response = $this->client()->request(
             'GET',
-            $this->router->generate('rest_users_get', [
-                'uuid' => $uuidList[0],
+            $this->router->generate('api_get_users_get_item', [
+                'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
         );
     }
@@ -57,14 +55,21 @@ final class GetUserContext implements Context
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
-        Assert::same($this->response->getStatusCode(), 200);
+        Assert::same($this->response->getStatusCode(), 201);
 
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
         $responseContent = $this->response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
-        Assert::same(UserFixtures::getNormalizedUser($uuidList[0]), $decodedContent);
+        Assert::keyExists($decodedContent, 'id');
+        Assert::same($decodedContent['id'], UserFixtures::getNormalizedUser($uuidList[0])['id']);
+        Assert::keyExists($decodedContent, 'email');
+        Assert::same($decodedContent['email'], UserFixtures::getNormalizedUser($uuidList[0])['email']);
+        Assert::keyExists($decodedContent, 'firstName');
+        Assert::same($decodedContent['firstName'], UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
+        Assert::keyExists($decodedContent, 'lastName');
+        Assert::same($decodedContent['lastName'], UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
     }
 
     private function client(): HttpClientInterface

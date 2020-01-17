@@ -14,15 +14,10 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\API\Controller\User;
 
 use Carcel\User\Application\Query\GetUserList;
-use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Application\Query\GetUserListHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,24 +27,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ListController
 {
-    public function __invoke(Request $request, MessageBusInterface $bus): Response
+    public function __invoke(Request $request, GetUserListHandler $handler): Response
     {
         $limit = null === $request->query->get('limit') ? 10 : (int) $request->query->get('_limit');
         $page = null === $request->query->get('_page') ? 1 : (int) $request->query->get('_page');
 
-        try {
-            $envelope = $bus->dispatch(new GetUserList($limit, $page));
-        } catch (HandlerFailedException $exception) {
-            throw new BadRequestHttpException($exception->getMessage(), $exception);
-        }
+        $getUserList = new GetUserList();
+        $getUserList->numberOfUsers = $limit;
+        $getUserList->userPage = $page;
 
-        return new JsonResponse($this->getQueriedUserList($envelope)->normalize());
-    }
+        $userList = ($handler)($getUserList);
 
-    private function getQueriedUserList(Envelope $envelope): UserList
-    {
-        $handledStamp = $envelope->last(HandledStamp::class);
-
-        return $handledStamp->getResult();
+        return new JsonResponse($userList->normalize());
     }
 }

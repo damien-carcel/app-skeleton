@@ -15,12 +15,11 @@ namespace Carcel\User\Application\Query;
 
 use Carcel\User\Domain\Model\Read\UserList;
 use Carcel\User\Domain\QueryFunction\GetUserList as GetUserListQueryFunction;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserListHandler implements MessageHandlerInterface
+final class GetUserListHandler
 {
     private GetUserListQueryFunction $getUserListQueryFunction;
 
@@ -32,8 +31,8 @@ final class GetUserListHandler implements MessageHandlerInterface
     public function __invoke(GetUserList $getUserList): UserList
     {
         return ($this->getUserListQueryFunction)(
-            $getUserList->numberOfUsers(),
-            $getUserList->userPage()
+            $getUserList->numberOfUsers,
+            $getUserList->userPage
         );
     }
 }

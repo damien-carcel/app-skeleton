@@ -9,6 +9,16 @@ resources:
                 status: 202
         itemOperations: {}
 
+    Carcel\User\Application\Query\GetUser:
+        properties:
+            identifier:
+                identifier: true
+        collectionOperations: {}
+        itemOperations:
+            get:
+                path: '/users/{id}'
+                status: 201
+
     Carcel\User\Application\Command\UpdateUser:
         attributes:
             messenger: true
