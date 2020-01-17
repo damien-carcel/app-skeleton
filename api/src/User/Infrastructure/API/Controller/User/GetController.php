@@ -35,8 +35,11 @@ final class GetController
 {
     public function __invoke(string $uuid, MessageBusInterface $bus): Response
     {
+        $getUser = new GetUser();
+        $getUser->identifier = $uuid;
+
         try {
-            $envelope = $bus->dispatch(new GetUser($uuid));
+            $envelope = $bus->dispatch($getUser);
         } catch (HandlerFailedException $exception) {
             $handledExceptions = $exception->getNestedExceptions();
 

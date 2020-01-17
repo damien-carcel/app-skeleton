@@ -25,22 +25,6 @@ namespace Carcel\User\Application\Query;
  */
 final class GetUserList
 {
-    private int $numberOfUsers;
-    private int $userPage;
-
-    public function __construct(int $numberOfUsers, int $userPage)
-    {
-        $this->numberOfUsers = $numberOfUsers;
-        $this->userPage = $userPage;
-    }
-
-    public function numberOfUsers(): int
-    {
-        return $this->numberOfUsers;
-    }
-
-    public function userPage(): int
-    {
-        return $this->userPage;
-    }
+    public int $numberOfUsers;
+    public int $userPage;
 }

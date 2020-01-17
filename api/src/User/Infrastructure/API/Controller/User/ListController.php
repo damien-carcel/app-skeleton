@@ -37,8 +37,12 @@ final class ListController
         $limit = null === $request->query->get('limit') ? 10 : (int) $request->query->get('_limit');
         $page = null === $request->query->get('_page') ? 1 : (int) $request->query->get('_page');
 
+        $getUserList = new GetUserList();
+        $getUserList->numberOfUsers = $limit;
+        $getUserList->userPage = $page;
+
         try {
-            $envelope = $bus->dispatch(new GetUserList($limit, $page));
+            $envelope = $bus->dispatch($getUserList);
         } catch (HandlerFailedException $exception) {
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }

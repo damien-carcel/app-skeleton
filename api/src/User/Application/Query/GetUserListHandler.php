@@ -32,8 +32,8 @@ final class GetUserListHandler implements MessageHandlerInterface
     public function __invoke(GetUserList $getUserList): UserList
     {
         return ($this->getUserListQueryFunction)(
-            $getUserList->numberOfUsers(),
-            $getUserList->userPage()
+            $getUserList->numberOfUsers,
+            $getUserList->userPage
         );
     }
 }

@@ -41,9 +41,11 @@ final class ListUsersContext implements Context
      */
     public function listUsers(string $position, int $quantity): void
     {
-        $pageNumber = (int) substr($position, 0, 1);
+        $getUserList = new GetUserListQuery();
+        $getUserList->numberOfUsers = $quantity;
+        $getUserList->userPage = (int) substr($position, 0, 1);
 
-        $this->userListEnvelope = $this->bus->dispatch(new GetUserListQuery($quantity, $pageNumber));
+        $this->userListEnvelope = $this->bus->dispatch($getUserList);
     }
 
     /**

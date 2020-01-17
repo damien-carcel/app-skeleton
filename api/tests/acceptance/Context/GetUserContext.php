@@ -30,7 +30,7 @@ use Webmozart\Assert\Assert;
 final class GetUserContext implements Context
 {
     private Envelope $userEnvelope;
-    private HandlerFailedException $caughtException;
+    private \Exception $caughtException;
 
     private MessageBusInterface $bus;
 
@@ -44,9 +44,10 @@ final class GetUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $uuidList = array_keys(UserFixtures::USERS_DATA);
+        $getUser = new GetUser();
+        $getUser->identifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->userEnvelope = $this->bus->dispatch(new GetUser($uuidList[0]));
+        $this->userEnvelope = $this->bus->dispatch($getUser);
     }
 
     /**
@@ -54,8 +55,11 @@ final class GetUserContext implements Context
      */
     public function askForAUserThatDoesNotExist(): void
     {
+        $getUser = new GetUser();
+        $getUser->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
+
         try {
-            $this->userEnvelope = $this->bus->dispatch(new GetUser(UserFixtures::ID_OF_NON_EXISTENT_USER));
+            $this->userEnvelope = $this->bus->dispatch($getUser);
         } catch (\Exception $exception) {
             $this->caughtException = $exception;
         }
