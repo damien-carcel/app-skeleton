@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Carcel\Tests\Unit\User\Domain\Model\Read;
 
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Domain\Model\Read\UserCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UserListTest extends TestCase
+final class UserCollectionTest extends TestCase
 {
     private array $usersData;
 
@@ -35,21 +35,21 @@ final class UserListTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateAnEmptyUserList(): void
+    public function itCanCreateAnEmptyUserCollection(): void
     {
-        static::assertInstanceOf(UserList::class, new UserList([]));
+        static::assertInstanceOf(UserCollection::class, new UserCollection([]));
     }
 
     /** @test */
-    public function aUserListCanNormalizeItself(): void
+    public function aUserCollectionCanNormalizeItself(): void
     {
-        $userList = $this->instantiateUserList();
+        $userCollection = $this->instantiateUserCollection();
 
-        static::assertSame($this->usersData, $userList->normalize());
+        static::assertSame($this->usersData, $userCollection->normalize());
     }
 
-    private function instantiateUserList(): UserList
+    private function instantiateUserCollection(): UserCollection
     {
-        return new UserList($this->usersData);
+        return new UserCollection($this->usersData);
     }
 }

@@ -15,21 +15,21 @@ namespace Carcel\Tests\Acceptance\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Carcel\User\Application\Query\GetUserList as GetUserListQuery;
-use Carcel\User\Application\Query\GetUserListHandler;
-use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Application\Query\GetUserCollection as GetUserCollectionQuery;
+use Carcel\User\Application\Query\GetUserCollectionHandler;
+use Carcel\User\Domain\Model\Read\UserCollection;
 use Webmozart\Assert\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ListUsersContext implements Context
+final class GetUserCollectionContext implements Context
 {
-    private UserList $userList;
+    private UserCollection $userCollection;
 
-    private GetUserListHandler $handler;
+    private GetUserCollectionHandler $handler;
 
-    public function __construct(GetUserListHandler $handler)
+    public function __construct(GetUserCollectionHandler $handler)
     {
         $this->handler = $handler;
     }
@@ -39,11 +39,11 @@ final class ListUsersContext implements Context
      */
     public function listUsers(string $position, int $quantity): void
     {
-        $getUserList = new GetUserListQuery();
-        $getUserList->numberOfUsers = $quantity;
-        $getUserList->userPage = (int) substr($position, 0, 1);
+        $getUserCollection = new GetUserCollectionQuery();
+        $getUserCollection->numberOfUsers = $quantity;
+        $getUserCollection->userPage = (int) substr($position, 0, 1);
 
-        $this->userList = ($this->handler)($getUserList);
+        $this->userCollection = ($this->handler)($getUserCollection);
     }
 
     /**
@@ -53,7 +53,7 @@ final class ListUsersContext implements Context
     {
         $pageNumber = (int) substr($position, 0, 1);
 
-        Assert::same($this->userList->normalize(), array_slice(
+        Assert::same($this->userCollection->normalize(), array_slice(
             UserFixtures::getNormalizedUsers(),
             ($pageNumber - 1) * $quantity,
             $quantity

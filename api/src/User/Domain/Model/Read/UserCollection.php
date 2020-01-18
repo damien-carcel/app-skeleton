@@ -16,7 +16,7 @@ namespace Carcel\User\Domain\Model\Read;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UserList
+final class UserCollection
 {
     private array $users;
 

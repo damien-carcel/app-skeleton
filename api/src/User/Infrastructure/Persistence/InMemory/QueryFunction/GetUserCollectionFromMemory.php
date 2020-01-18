@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction;
 
-use Carcel\User\Domain\Model\Read\UserList;
+use Carcel\User\Domain\Model\Read\UserCollection;
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\QueryFunction\GetUserList;
+use Carcel\User\Domain\QueryFunction\GetUserCollection;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserListFromMemory implements GetUserList
+final class GetUserCollectionFromMemory implements GetUserCollection
 {
     private UserRepositoryInterface $repository;
 
@@ -33,7 +33,7 @@ final class GetUserListFromMemory implements GetUserList
     /**
      * {@inheritdoc}
      */
-    public function __invoke(int $numberOfUsers, int $userPage): UserList
+    public function __invoke(int $numberOfUsers, int $userPage): UserCollection
     {
         $persistedUsers = $this->repository->findAll();
         $usersToReturn = array_slice(
@@ -42,7 +42,7 @@ final class GetUserListFromMemory implements GetUserList
             $numberOfUsers
         );
 
-        return new UserList($this->normalizeUsers($usersToReturn));
+        return new UserCollection($this->normalizeUsers($usersToReturn));
     }
 
     private function normalizeUsers(array $users): array

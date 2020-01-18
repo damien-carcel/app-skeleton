@@ -23,7 +23,7 @@ namespace Carcel\User\Application\Query;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserList
+final class GetUserCollection
 {
     public int $numberOfUsers;
     public int $userPage;

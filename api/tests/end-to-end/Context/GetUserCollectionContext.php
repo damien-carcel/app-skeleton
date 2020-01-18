@@ -24,7 +24,7 @@ use Webmozart\Assert\Assert;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class ListUsersContext implements Context
+final class GetUserCollectionContext implements Context
 {
     private ResponseInterface $response;
 
@@ -46,7 +46,7 @@ final class ListUsersContext implements Context
 
         $this->response = $this->client()->request(
             'GET',
-            $this->router->generate('rest_users_list', [
+            $this->router->generate('api_get_user_collections_get_collection', [
                 '_page' => $pageNumber,
                 '_limit' => $quantity,
             ]),
@@ -65,7 +65,7 @@ final class ListUsersContext implements Context
 
         $pageNumber = (int) substr($position, 0, 1);
 
-        Assert::same($decodedContent, array_slice(
+        Assert::same($decodedContent['hydra:member'], array_slice(
             UserFixtures::getNormalizedUsers(),
             ($pageNumber - 1) * $quantity,
             $quantity,

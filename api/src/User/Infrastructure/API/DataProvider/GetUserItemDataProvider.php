@@ -17,6 +17,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use Carcel\User\Application\Query\GetUser;
 use Carcel\User\Application\Query\GetUserHandler;
+use Carcel\User\Domain\Model\Read\User;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -33,7 +34,7 @@ final class GetUserItemDataProvider implements ItemDataProviderInterface, Restri
     /**
      * {@inheritdoc}
      */
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
+    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): User
     {
         $getUser = new GetUser();
         $getUser->identifier = $id;

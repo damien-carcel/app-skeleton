@@ -55,7 +55,7 @@ final class GetUserContext implements Context
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
-        Assert::same($this->response->getStatusCode(), 201);
+        Assert::same($this->response->getStatusCode(), 200);
 
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 

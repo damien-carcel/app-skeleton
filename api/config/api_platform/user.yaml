@@ -9,6 +9,12 @@ resources:
                 status: 202
         itemOperations: {}
 
+    Carcel\User\Application\Query\GetUserCollection:
+        collectionOperations:
+            get:
+                path: '/users'
+        itemOperations: {}
+
     Carcel\User\Application\Query\GetUser:
         properties:
             identifier:
@@ -17,7 +23,6 @@ resources:
         itemOperations:
             get:
                 path: '/users/{id}'
-                status: 201
 
     Carcel\User\Application\Command\UpdateUser:
         attributes:
