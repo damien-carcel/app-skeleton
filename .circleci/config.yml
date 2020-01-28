@@ -47,7 +47,7 @@ jobs:
                         - ~/.cache/composer
             -   run:
                     name: Run static analysis - PHP Coding Standards Fixer
-                    command: make check-coding-standard-api
+                    command: make coding-standard-api
             -   run:
                     name: Run static analysis - PHP Coding Sniffer
                     command: make sniff-code-api
@@ -106,7 +106,7 @@ jobs:
                         - ~/.cache/yarn
             -   run:
                     name: Run static analysis
-                    command: make check-style-client
+                    command: make lint-client OUTPUT="-f junit -o tests/results/lint.xml"
             -   run:
                     name: Run type checking
                     command: make type-check-client

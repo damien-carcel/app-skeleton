@@ -6,10 +6,6 @@ interface DeleteProps {
 }
 
 export default class Delete extends React.Component<DeleteProps, {}> {
-  constructor(props: DeleteProps) {
-    super(props);
-  }
-
   public handleDelete(userId: string): void {
     this.props.handleDelete(userId);
   }

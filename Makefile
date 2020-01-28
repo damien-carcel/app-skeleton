@@ -1,4 +1,5 @@
 DEBUG=0
+OUTPUT=
 
 # Build Docker images
 
@@ -106,19 +107,19 @@ down: down-api down-client
 
 # Test the API
 
-.PHONY: check-coding-standard-api
-check-coding-standard-api:
+.PHONY: coding-standard-api
+coding-standard-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
 
 .PHONY: sniff-code-api
 sniff-code-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcs
 
-.PHONY: check-style-api
-check-style-api: check-coding-standard-api sniff-code-api
+.PHONY: lint-api
+lint-api: coding-standard-api sniff-code-api
 
-.PHONY: fix-style-api
-fix-style-api:
+.PHONY: lint-fix-api
+lint-fix-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
@@ -143,17 +144,21 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: check-style-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+test-api: lint-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
 
 # Test the client
 
-.PHONY: check-style-client
-check-style-client:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint -t junit -o tests/results/lint.xml
+.PHONY: lint-client
+lint-client:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint ${OUTPUT}
+
+.PHONY: lint-fix-client
+lint-fix-client:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint-fix
 
 .PHONY: type-check-client
 type-check-client:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn run type-check
 
 .PHONY: test-client
-test-client: check-style-client type-check-client
+test-client: lint-client type-check-client
