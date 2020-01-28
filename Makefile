@@ -81,12 +81,11 @@ fake-api: install-client-dependencies
 	cd ${CURDIR}/client && docker-compose up -d fake-api
 
 .PHONY: develop-client
-develop-client: fake-api install-client-dependencies
-	cp ${CURDIR}/client/db.json.dist ${CURDIR}/client/db.json
+develop-client: develop-api install-client-dependencies
 	cd ${CURDIR}/client && docker-compose run --rm --service-ports node yarn webpack:serve
 
 .PHONY: serve-client
-serve-client: build-client-prod install-client-dependencies
+serve-client: install-client-dependencies build-client-prod
 	cd ${CURDIR}/client && docker-compose up -d client
 
 .PHONY: install

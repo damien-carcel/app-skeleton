@@ -4,7 +4,7 @@ services:
   node:
     image: 'carcel/skeleton/dev:node'
     environment:
-      API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-3000}'
+      API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
       CLIENT_PORT: '${CLIENT_PORT:-8080}'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
@@ -19,20 +19,6 @@ services:
       - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
       - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
       - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
-    working_dir: '/srv/app'
-
-  fake-api:
-    command: 'yarn run webpack:serve-api -H 0.0.0.0 -p ${FAKE_API_PORT:-3000}'
-    expose:
-      - '${FAKE_API_PORT:-3000}'
-    image: 'carcel/skeleton/dev:node'
-    networks:
-      - skeleton-client
-    ports:
-      - '${FAKE_API_PORT:-3000}:${FAKE_API_PORT:-3000}'
-    user: '${HOST_USER_IDS:-1000:1000}'
-    volumes:
-      - './:/srv/app'
     working_dir: '/srv/app'
 
   client:

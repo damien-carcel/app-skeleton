@@ -1,16 +1,16 @@
 import React, {ReactNode} from 'react';
-import {createUser, deleteUser, listUsers, updateUser, UserData} from '../containers/user';
+import {createUser, deleteUser, getUserCollection, updateUser, UserData} from '../containers/user';
 import {isEmpty} from '../tools/isEmpty';
 import Create from './Create';
 import User from './User';
 
-interface ListUsersState {
+interface UserCollectionState {
   error: {[key: string]: any};
   isLoaded: boolean;
   users: UserData[];
 }
 
-export default class ListUsers extends React.Component<{}, ListUsersState> {
+export default class UserCollection extends React.Component<{}, UserCollectionState> {
   constructor(props: {}) {
     super(props);
 
@@ -80,11 +80,11 @@ export default class ListUsers extends React.Component<{}, ListUsersState> {
   }
 
   public getAllUsers(): void {
-    listUsers().then(
+    getUserCollection(1, 10).then(
       (result) => {
         this.setState({
           isLoaded: true,
-          users: result,
+          users: result['hydra:member'],
         });
       },
       (error) => {
