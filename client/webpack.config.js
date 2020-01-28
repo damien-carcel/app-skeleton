@@ -9,7 +9,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
 module.exports = (env, argv) => ({
   devServer: {
@@ -85,7 +84,6 @@ module.exports = (env, argv) => ({
       {from: './assets/files/humans.txt'},
       {from: './assets/files/robots.txt'},
     ]),
-    new FaviconsWebpackPlugin('./assets/images/favicon.png'),
     new HtmlWebpackPlugin({
       inject: false,
       lang: 'en',
@@ -97,34 +95,10 @@ module.exports = (env, argv) => ({
       template: require('html-webpack-template'),
       title: 'My React application skeleton',
     }),
+    new FaviconsWebpackPlugin('./assets/images/favicon.png'),
     new MiniCssExtractPlugin({
       filename: argv.mode === 'development' ? '[name].css' : '[name].[chunkhash].css',
       chunkFilename: argv.mode === 'development' ? '[id].css' : '[id].[chunkhash].css',
-    }),
-    new WebappWebpackPlugin({
-      logo: './assets/images/pingoo.png',
-      inject: true,
-      cache: 'cache/favicons',
-      favicons: {
-        appName: 'app-skeleton',
-        appDescription: 'A basic skeleton for React web applications',
-        developerName: 'Damien Carcel',
-        developerURL: 'https://github.com/damien-carcel/',
-        background: '#3737c8',
-        theme_color: '#373737',
-        icons: {
-          android: true,
-          appleIcon: true,
-          appleStartup: true,
-          coast: false,
-          favicons: true,
-          firefox: true,
-          opengraph: false,
-          twitter: false,
-          yandex: false,
-          windows: true,
-        },
-      },
     }),
   ],
   resolve: {
