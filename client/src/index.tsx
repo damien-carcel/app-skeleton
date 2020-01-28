@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import '../assets/stylesheets/style.less';
-import ListUsers from './components/ListUsers';
+import UserCollection from './components/UserCollection';
 
 /**
  * Creates a "noscript" element and adds it to the body.
@@ -38,6 +38,6 @@ addRootDiv();
 
 Modal.setAppElement('#root');
 ReactDOM.render(
-  <ListUsers/>,
+  <UserCollection/>,
   document.getElementById('root'),
 );

@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction;
 
-use Carcel\User\Domain\Model\Read\UserList;
-use Carcel\User\Domain\QueryFunction\GetUserList;
+use Carcel\User\Domain\Model\Read\UserCollection;
+use Carcel\User\Domain\QueryFunction\GetUserCollection;
 use Doctrine\DBAL\Connection;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserListFromDatabase implements GetUserList
+final class GetUserCollectionFromDatabase implements GetUserCollection
 {
     private Connection $connection;
 
@@ -32,7 +32,7 @@ final class GetUserListFromDatabase implements GetUserList
     /**
      * {@inheritdoc}
      */
-    public function __invoke(int $numberOfUsers, int $userPage): UserList
+    public function __invoke(int $numberOfUsers, int $userPage): UserCollection
     {
         $query = <<<SQL
             SELECT id, email, first_name AS firstName, last_name AS lastName FROM user
@@ -44,6 +44,6 @@ final class GetUserListFromDatabase implements GetUserList
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();
 
-        return new UserList($result);
+        return new UserCollection($result);
     }
 }

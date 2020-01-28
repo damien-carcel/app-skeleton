@@ -5,8 +5,8 @@ export interface UserData {
   lastName: string;
 }
 
-export function listUsers() {
-  const url = getApiUrl('/api/users');
+export function getUserCollection(page: number, limit: number) {
+  const url = getApiUrl('/api/users') + `?_page=${page}&_limit=${limit}`;
 
   return fetch(url, {
     headers: createHeaders(),
@@ -34,7 +34,7 @@ export function createUser(data: UserData) {
       firstName: data.firstName,
       lastName: data.lastName,
     }),
-    headers: createHeaders(),
+    headers: createPostHeaders(),
     method: 'POST',
     mode: 'cors',
   });
@@ -45,7 +45,7 @@ export function updateUser(userId: string, data: UserData) {
 
   return fetch(url, {
     body: JSON.stringify(data),
-    headers: createHeaders(),
+    headers: createPostHeaders(),
     method: 'PUT',
     mode: 'cors',
   });
@@ -55,7 +55,7 @@ export function deleteUser(userId: string) {
   const url = getApiUrl('/api/users/{id}', userId);
 
   return fetch(url, {
-    headers: createHeaders(),
+    headers: createPostHeaders(),
     method: 'DELETE',
     mode: 'cors',
   });
@@ -71,10 +71,16 @@ function getApiUrl(route: string, userId?: string) {
   return baseUrl + route;
 }
 
-function createHeaders() {
+function createPostHeaders(): Headers {
+  const headers = createHeaders();
+  headers.append('Content-Type', 'application/ld+json');
+
+  return headers;
+}
+
+function createHeaders(): Headers {
   const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
+  headers.append('Accept', 'application/ld+json');
 
   return headers;
 }

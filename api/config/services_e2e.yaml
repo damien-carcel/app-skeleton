@@ -25,10 +25,10 @@ services:
     Carcel\Tests\EndToEnd\Context\FixtureContext:
         public: true
 
-    Carcel\Tests\EndToEnd\Context\GetUserContext:
+    Carcel\Tests\EndToEnd\Context\GetUserCollectionContext:
         public: true
 
-    Carcel\Tests\EndToEnd\Context\ListUsersContext:
+    Carcel\Tests\EndToEnd\Context\GetUserContext:
         public: true
 
     Carcel\Tests\EndToEnd\Context\UpdateUserContext:

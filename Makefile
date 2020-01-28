@@ -70,7 +70,7 @@ mysql: install-api-dependencies
 
 .PHONY: develop-api
 develop-api: mysql
-	cd ${CURDIR}/api && docker-compose run --rm -w /srv/app/public --service-ports -e XDEBUG_ENABLED=${DEBUG} php php -S 0.0.0.0:8000
+	cd ${CURDIR}/api && XDEBUG_ENABLED=${DEBUG} docker-compose up -d api-dev
 
 .PHONY: serve-api
 serve-api: build-api-prod mysql
@@ -81,12 +81,11 @@ fake-api: install-client-dependencies
 	cd ${CURDIR}/client && docker-compose up -d fake-api
 
 .PHONY: develop-client
-develop-client: fake-api install-client-dependencies
-	cp ${CURDIR}/client/db.json.dist ${CURDIR}/client/db.json
+develop-client: develop-api install-client-dependencies
 	cd ${CURDIR}/client && docker-compose run --rm --service-ports node yarn webpack:serve
 
 .PHONY: serve-client
-serve-client: build-client-prod install-client-dependencies
+serve-client: install-client-dependencies build-client-prod
 	cd ${CURDIR}/client && docker-compose up -d client
 
 .PHONY: install

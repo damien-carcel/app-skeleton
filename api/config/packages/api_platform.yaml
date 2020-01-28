@@ -1,4 +1,10 @@
 api_platform:
+    collection:
+        pagination:
+            client_items_per_page: true
+            items_per_page_parameter_name: _limit
+            maximum_items_per_page: 50
+            page_parameter_name: _page
     exception_to_status:
         Carcel\User\Domain\Exception\UserDoesNotExist: 404
     mapping:

@@ -69,7 +69,7 @@ final class DeleteUserContext implements Context
 
         Assert::count($results, count(UserFixtures::USERS_DATA) - 1);
 
-        Assert::eq($this->filterQueriedUserData($results), $this->expectedUserListAfterDeletion());
+        Assert::eq($this->filterQueriedUserData($results), $this->expectedUserCollectionAfterDeletion());
     }
 
     private function filterQueriedUserData(array $users): array
@@ -84,7 +84,7 @@ final class DeleteUserContext implements Context
         }, $users);
     }
 
-    private function expectedUserListAfterDeletion(): array
+    private function expectedUserCollectionAfterDeletion(): array
     {
         $normalizedFixtures = UserFixtures::getNormalizedUsers();
 

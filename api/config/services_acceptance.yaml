@@ -8,8 +8,8 @@ services:
     Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
     Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository'
 
-    Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory: ~
-    Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserListFromMemory'
+    Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserCollectionFromMemory: ~
+    Carcel\User\Domain\QueryFunction\GetUserCollection: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserCollectionFromMemory'
 
     Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory: ~
     Carcel\User\Domain\QueryFunction\GetUser: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory'
@@ -32,10 +32,10 @@ services:
     Carcel\Tests\Acceptance\Context\FixtureContext:
         public: true
 
-    Carcel\Tests\Acceptance\Context\GetUserContext:
+    Carcel\Tests\Acceptance\Context\GetUserCollectionContext:
         public: true
 
-    Carcel\Tests\Acceptance\Context\ListUsersContext:
+    Carcel\Tests\Acceptance\Context\GetUserContext:
         public: true
 
     Carcel\Tests\Acceptance\Context\UpdateUserContext:

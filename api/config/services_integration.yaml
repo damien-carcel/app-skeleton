@@ -9,6 +9,4 @@ services:
 
     #- Tests only services -#
 
-    Carcel\Tests\Fixtures\:
-        resource: '../tests/fixtures'
-        tags: ['doctrine.fixture.orm']
+    #Carcel\Tests\Integration\Acme: ~

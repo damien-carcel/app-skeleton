@@ -19,9 +19,9 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    Carcel\User\Infrastructure\API\Controller\:
-        resource: '../src/User/Infrastructure/API/Controller'
-        tags: ['controller.service_arguments']
+#    Carcel\User\Infrastructure\Controller\:
+#        resource: '../src/User/Infrastructure/Controller'
+#        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -29,8 +29,8 @@ services:
     Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
     Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
 
-    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase: ~
-    Carcel\User\Domain\QueryFunction\GetUserList: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserListFromDatabase'
+    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase: ~
+    Carcel\User\Domain\QueryFunction\GetUserCollection: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase'
 
     Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase: ~
     Carcel\User\Domain\QueryFunction\GetUser: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase'

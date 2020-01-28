@@ -36,7 +36,7 @@ final class GetUserFromMemoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->getUserFromMemory = new GetUserFromMemory($this->instantiateInMemoryUserRepository());
+        $this->getUserFromMemory = new GetUserFromMemory($this->userRepository());
     }
 
     /** @test */
@@ -63,7 +63,7 @@ final class GetUserFromMemoryTest extends TestCase
         static::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $user->getLastName());
     }
 
-    private function instantiateInMemoryUserRepository(): UserRepositoryInterface
+    private function userRepository(): UserRepositoryInterface
     {
         $factory = new UserFactory();
         $repository = new UserRepository();
