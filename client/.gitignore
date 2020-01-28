@@ -1,6 +1,7 @@
 /cache
 /public
-!/public/.gitkeep
+!/public/humans.txt
+!/public/robots.txt
 /node_modules
 /tests/results
 !/tests/results/.gitkeep

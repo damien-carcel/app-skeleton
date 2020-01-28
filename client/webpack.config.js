@@ -3,7 +3,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -78,14 +77,9 @@ module.exports = (env, argv) => ({
   plugins: [
     new webpack.EnvironmentPlugin(['API_BASE_URL']),
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!.gitkeep'],
+      cleanOnceBeforeBuildPatterns: ['**/*', '!humans.txt', '!robots.txt'],
     }),
-    new CopyWebpackPlugin([
-      {from: './assets/files/humans.txt'},
-      {from: './assets/files/robots.txt'},
-    ]),
     new HtmlWebpackPlugin({
-      inject: false,
       lang: 'en',
       meta: [{
         name: 'description',
