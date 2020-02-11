@@ -199,6 +199,9 @@
     "phpunit/php-file-iterator": {
         "version": "2.0.2"
     },
+    "phpunit/php-invoker": {
+        "version": "3.0.0"
+    },
     "phpunit/php-text-template": {
         "version": "1.2.1"
     },
@@ -227,6 +230,9 @@
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/link": {
@@ -298,9 +304,6 @@
     "symfony/cache-contracts": {
         "version": "v2.0.0"
     },
-    "symfony/class-loader": {
-        "version": "v3.4.35"
-    },
     "symfony/config": {
         "version": "v4.4.0"
     },
@@ -316,9 +319,6 @@
             "bin/console",
             "config/bootstrap.php"
         ]
-    },
-    "symfony/debug": {
-        "version": "v4.4.0"
     },
     "symfony/dependency-injection": {
         "version": "v4.4.0"
