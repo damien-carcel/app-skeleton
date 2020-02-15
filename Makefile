@@ -1,5 +1,6 @@
 DEBUG=0
 OUTPUT=
+LEVEL=max
 
 # Build Docker images
 
@@ -123,6 +124,10 @@ lint-fix-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
+.PHONY: analyse-api
+analyse-api:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${LEVEL} src tests
+
 .PHONY: coupling-api
 coupling-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
@@ -144,7 +149,7 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: lint-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+test-api: lint-api analyse-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
 
 # Test the client
 

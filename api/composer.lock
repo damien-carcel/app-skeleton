@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dd2a4c605475e13744238641047cf9e",
+    "content-hash": "3fd3c0731e587a27611049467c04c8d2",
     "packages": [
         {
             "name": "api-platform/core",
@@ -6393,6 +6393,45 @@
                 "stub"
             ],
             "time": "2020-01-20T15:57:02+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "0.12.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "39004edc7fc308752f625b89b70ad1710708f45e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/39004edc7fc308752f625b89b70ad1710708f45e",
+                "reference": "39004edc7fc308752f625b89b70ad1710708f45e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "time": "2020-02-12T22:03:42+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
