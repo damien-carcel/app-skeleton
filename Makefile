@@ -159,6 +159,11 @@ end-to-end-api:
 .PHONY: test-api
 test-api: lint-api analyse-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
 
+.PHONY: phpmetrics
+phpmetrics:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpmetrics --report-html=report .
+	cd ${CURDIR}/api && xdg-open report/index.html
+
 # Test the client
 
 .PHONY: lint-client
