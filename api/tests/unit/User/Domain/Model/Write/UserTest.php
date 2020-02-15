@@ -31,7 +31,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', (string) $user->id());
+        static::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', $user->id()->toString());
     }
 
     /** @test */

@@ -29,7 +29,7 @@ use Webmozart\Assert\Assert;
 final class UpdateUserContext implements Context
 {
     private string $updatedUserIdentifier;
-    private \Exception $caughtException;
+    private HandlerFailedException $caughtException;
 
     private MessageBusInterface $bus;
     private UserRepositoryInterface $userRepository;
@@ -117,7 +117,7 @@ final class UpdateUserContext implements Context
 
         try {
             $this->bus->dispatch($changeUserName);
-        } catch (\Exception $exception) {
+        } catch (HandlerFailedException $exception) {
             $this->caughtException = $exception;
         }
     }
@@ -135,7 +135,7 @@ final class UpdateUserContext implements Context
 
         try {
             $this->bus->dispatch($changeUserName);
-        } catch (\Exception $exception) {
+        } catch (HandlerFailedException $exception) {
             $this->caughtException = $exception;
         }
     }
@@ -220,7 +220,6 @@ final class UpdateUserContext implements Context
      */
     public function iCannotChangeTheUserData(): void
     {
-        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
         $handledExceptions = $this->caughtException->getNestedExceptions();
 
         Assert::count($handledExceptions, 1);
@@ -232,7 +231,6 @@ final class UpdateUserContext implements Context
      */
     public function gotNothingToUpdate(): void
     {
-        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
         $handledExceptions = $this->caughtException->getNestedExceptions();
 
         Assert::count($handledExceptions, 1);

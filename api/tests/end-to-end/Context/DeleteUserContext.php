@@ -15,7 +15,7 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

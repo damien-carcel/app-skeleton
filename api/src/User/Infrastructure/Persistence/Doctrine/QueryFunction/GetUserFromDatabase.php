@@ -39,7 +39,7 @@ final class GetUserFromDatabase implements GetUser
             SELECT id, email, first_name, last_name FROM user
             WHERE id = :id;
             SQL;
-        $parameters = ['id' => (string) $uuid];
+        $parameters = ['id' => $uuid->toString()];
         $types = ['id' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);

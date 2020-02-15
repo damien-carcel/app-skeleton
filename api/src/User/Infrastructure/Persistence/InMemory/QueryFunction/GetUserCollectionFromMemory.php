@@ -49,7 +49,7 @@ final class GetUserCollectionFromMemory implements GetUserCollection
     {
         return array_map(function (User $user) {
             return [
-                'id' => (string) $user->id(),
+                'id' => $user->id()->toString(),
                 'email' => (string) $user->email(),
                 'firstName' => (string) $user->firstName(),
                 'lastName' => (string) $user->lastName(),

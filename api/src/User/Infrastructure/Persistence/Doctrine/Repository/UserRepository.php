@@ -60,7 +60,7 @@ final class UserRepository implements UserRepositoryInterface
             SELECT id, email, first_name, last_name FROM user
             WHERE id = :id;
             SQL;
-        $parameters = ['id' => (string) $uuid];
+        $parameters = ['id' => $uuid->toString()];
         $types = ['id' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
@@ -86,7 +86,7 @@ final class UserRepository implements UserRepositoryInterface
         $this->connection->insert(
             'user',
             [
-                'id' => (string) $user->id(),
+                'id' => $user->id()->toString(),
                 'first_name' => (string) $user->firstName(),
                 'last_name' => (string) $user->lastName(),
                 'email' => (string) $user->email(),
@@ -106,7 +106,7 @@ final class UserRepository implements UserRepositoryInterface
                 'last_name' => (string) $user->lastName(),
                 'email' => (string) $user->email(),
             ],
-            ['id' => (string) $user->id()],
+            ['id' => $user->id()->toString()],
         );
     }
 
@@ -115,6 +115,6 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function delete(User $user): void
     {
-        $this->connection->delete('user', ['id' => (string) $user->id()]);
+        $this->connection->delete('user', ['id' => $user->id()->toString()]);
     }
 }

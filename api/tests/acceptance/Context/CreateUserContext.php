@@ -34,7 +34,7 @@ final class CreateUserContext implements Context
         'lastName' => 'Wayne',
     ];
 
-    private \Exception $caughtException;
+    private HandlerFailedException $caughtException;
 
     private MessageBusInterface $bus;
     private UserRepositoryInterface $userRepository;
@@ -70,7 +70,7 @@ final class CreateUserContext implements Context
 
         try {
             $this->bus->dispatch($createUser);
-        } catch (\Exception $exception) {
+        } catch (HandlerFailedException $exception) {
             $this->caughtException = $exception;
         }
     }
@@ -84,7 +84,7 @@ final class CreateUserContext implements Context
         Assert::count($users, 12);
 
         $fetchedUsersUuidList = array_map(function (User $user) {
-            return (string) $user->id();
+            return $user->id()->toString();
         }, $users);
         $fixtureUsersUuidList = array_keys(UserFixtures::USERS_DATA);
 
@@ -102,7 +102,6 @@ final class CreateUserContext implements Context
      */
     public function iCannotCreateAnInvalidUser(): void
     {
-        Assert::isInstanceOf($this->caughtException, HandlerFailedException::class);
         $handledExceptions = $this->caughtException->getNestedExceptions();
 
         Assert::count($handledExceptions, 1);
