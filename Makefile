@@ -2,6 +2,8 @@ DEBUG=0
 OUTPUT=
 L=max
 TL=6
+PHPMD_OUTPUT=ansi
+PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
 # Build Docker images
 
@@ -158,6 +160,10 @@ end-to-end-api:
 
 .PHONY: test-api
 test-api: lint-api analyse-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+
+.PHONY: phpmd
+phpmd:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpmd src,tests ${PHPMD_OUTPUT} ${PHPMD_RULESETS}
 
 .PHONY: phpmetrics
 phpmetrics:
