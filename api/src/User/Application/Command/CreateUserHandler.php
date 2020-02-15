@@ -35,7 +35,7 @@ final class CreateUserHandler implements MessageHandlerInterface
     public function __invoke(CreateUser $createUser): void
     {
         $user = $this->userFactory->create(
-            (string) Uuid::uuid4(),
+            (Uuid::uuid4())->toString(),
             $createUser->firstName,
             $createUser->lastName,
             $createUser->email,

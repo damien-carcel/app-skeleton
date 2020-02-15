@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -90,6 +91,7 @@ module.exports = (env, argv) => ({
       title: 'My React application skeleton',
     }),
     new FaviconsWebpackPlugin('./assets/images/favicon.png'),
+    new ManifestPlugin(),
     new MiniCssExtractPlugin({
       filename: argv.mode === 'development' ? '[name].css' : '[name].[chunkhash].css',
       chunkFilename: argv.mode === 'development' ? '[id].css' : '[id].[chunkhash].css',

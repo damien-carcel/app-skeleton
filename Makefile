@@ -1,5 +1,9 @@
 DEBUG=0
 OUTPUT=
+L=max
+TL=6
+PHPMD_OUTPUT=ansi
+PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
 # Build Docker images
 
@@ -123,6 +127,17 @@ lint-fix-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
+.PHONY: analyse-api-src
+analyse-api-src:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${L} src
+
+.PHONY: analyse-api-tests
+analyse-api-tests:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${TL} tests
+
+.PHONY: analyse-api
+analyse-api: analyse-api-src analyse-api-tests
+
 .PHONY: coupling-api
 coupling-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
@@ -144,7 +159,16 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: lint-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+test-api: lint-api analyse-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+
+.PHONY: phpmd
+phpmd:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpmd src,tests ${PHPMD_OUTPUT} ${PHPMD_RULESETS}
+
+.PHONY: phpmetrics
+phpmetrics:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpmetrics --report-html=report .
+	cd ${CURDIR}/api && xdg-open report/index.html
 
 # Test the client
 

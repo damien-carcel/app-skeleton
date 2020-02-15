@@ -45,11 +45,11 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function find(UuidInterface $uuid): ?User
     {
-        if (!array_key_exists((string) $uuid, $this->users)) {
+        if (!array_key_exists($uuid->toString(), $this->users)) {
             return null;
         }
 
-        return $this->users[(string) $uuid];
+        return $this->users[$uuid->toString()];
     }
 
     /**
@@ -73,11 +73,11 @@ final class UserRepository implements UserRepositoryInterface
      */
     public function delete(User $user): void
     {
-        unset($this->users[(string) $user->id()]);
+        unset($this->users[$user->id()->toString()]);
     }
 
     private function save(User $user): void
     {
-        $this->users[(string) $user->id()] = $user;
+        $this->users[$user->id()->toString()] = $user;
     }
 }
