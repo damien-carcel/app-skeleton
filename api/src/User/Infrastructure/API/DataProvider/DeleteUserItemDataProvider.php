@@ -27,6 +27,13 @@ final class DeleteUserItemDataProvider implements ItemDataProviderInterface, Res
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): DeleteUser
     {
+        if (!is_string($id)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Identifier can only be a string, "%s" provided.',
+                gettype($id)
+            ));
+        }
+
         $updateUser = new DeleteUser();
         $updateUser->identifier = $id;
 

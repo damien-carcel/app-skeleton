@@ -25,6 +25,7 @@ $configuration = PhpCsFixer\Config::create()
             'phpdoc_add_missing_param_annotation' => true,
             'psr4' => true,
             'self_accessor' => true,
+            'single_line_throw' => false,
         ]
     );
 

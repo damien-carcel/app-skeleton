@@ -27,6 +27,13 @@ final class UpdateUserItemDataProvider implements ItemDataProviderInterface, Res
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): UpdateUser
     {
+        if (!is_string($id)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Identifier can only be a string, "%s" provided.',
+                gettype($id)
+            ));
+        }
+
         $updateUser = new UpdateUser();
         $updateUser->identifier = $id;
 

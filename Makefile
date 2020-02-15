@@ -1,6 +1,7 @@
 DEBUG=0
 OUTPUT=
-LEVEL=max
+L=max
+TL=6
 
 # Build Docker images
 
@@ -124,9 +125,16 @@ lint-fix-api:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
+.PHONY: analyse-api-src
+analyse-api-src:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${L} src
+
+.PHONY: analyse-api-tests
+analyse-api-tests:
+	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${TL} tests
+
 .PHONY: analyse-api
-analyse-api:
-	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${LEVEL} src tests
+analyse-api: analyse-api-src analyse-api-tests
 
 .PHONY: coupling-api
 coupling-api:

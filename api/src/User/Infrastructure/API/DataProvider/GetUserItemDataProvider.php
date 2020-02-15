@@ -36,6 +36,13 @@ final class GetUserItemDataProvider implements ItemDataProviderInterface, Restri
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): User
     {
+        if (!is_string($id)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Identifier can only be a string, "%s" provided.',
+                gettype($id)
+            ));
+        }
+
         $getUser = new GetUser();
         $getUser->identifier = $id;
 
