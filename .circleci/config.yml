@@ -53,7 +53,7 @@ jobs:
                 command: make sniff-code-api
             - run:
                 name: Run static analysis - PHPStan
-                command: make analyse-api LEVEL=1
+                command: make analyse-api
             - run:
                 name: Run coupling detector
                 command: make coupling-api
