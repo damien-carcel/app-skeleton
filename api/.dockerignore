@@ -1,3 +1,4 @@
+config/jwt
 public/check.php
 tests
 var
@@ -9,3 +10,4 @@ var
 .php_cs.php
 behat.yaml
 phpunit.xml.dist
+phpunit.xml

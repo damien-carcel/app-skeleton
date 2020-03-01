@@ -81,9 +81,15 @@ develop-api: mysql
 serve-api: build-api-prod mysql
 	cd ${CURDIR}/api && docker-compose up -d api
 
-.PHONY: fake-api
-fake-api: install-client-dependencies
-	cd ${CURDIR}/client && docker-compose up -d fake-api
+api/config/jwt:
+	mkdir -p api/config/jwt
+
+api/config/jwt/public.pem: api/config/jwt
+	cd ${CURDIR}/api && docker-compose run --rm php sh -c ' \
+		jwt_passphrase=$$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''=''); \
+		echo "$$jwt_passphrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096; \
+		echo "$$jwt_passphrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout; \
+	'
 
 .PHONY: develop-client
 develop-client: develop-api install-client-dependencies
