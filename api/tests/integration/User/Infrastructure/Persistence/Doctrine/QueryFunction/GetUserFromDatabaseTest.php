@@ -35,17 +35,35 @@ final class GetUserFromDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itGetsAUser(): void
+    public function itGetsAUserById(): void
     {
-        $user = ($this->getUserFromDatabase())(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
+        $user = $this->getUserFromDatabase()->byId(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
 
         static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
     }
 
     /** @test */
-    public function itDoesntGetAUserThatDoesNotExist(): void
+    public function itGetsAUserByEmail(): void
     {
-        $user = ($this->getUserFromDatabase())(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+        $user = $this
+            ->getUserFromDatabase()
+            ->byEmail(UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email']);
+
+        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+    }
+
+    /** @test */
+    public function itDoesntGetByIdAUserThatDoesNotExist(): void
+    {
+        $user = $this->getUserFromDatabase()->byId(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+
+        static::assertNull($user);
+    }
+
+    /** @test */
+    public function itDoesntGetByEmailAUserThatDoesNotExist(): void
+    {
+        $user = $this->getUserFromDatabase()->byEmail('fake.email@whatever.com');
 
         static::assertNull($user);
     }

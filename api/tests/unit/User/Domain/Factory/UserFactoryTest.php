@@ -15,7 +15,6 @@ namespace Carcel\Tests\Unit\User\Domain\Factory;
 
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,9 +35,9 @@ final class UserFactoryTest extends TestCase
             UserFixtures::USERS_DATA[$userId]['email'],
         );
 
-        Assert::assertSame('Tony', (string) $user->firstName());
-        Assert::assertSame('Stark', (string) $user->lastName());
-        Assert::assertSame('ironman@avengers.org', (string) $user->email());
+        static::assertSame('Tony', (string) $user->firstName());
+        static::assertSame('Stark', (string) $user->lastName());
+        static::assertSame('ironman@avengers.org', (string) $user->email());
     }
 
     private function instantiateUserFactory(): UserFactory

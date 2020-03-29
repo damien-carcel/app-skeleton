@@ -81,6 +81,7 @@ module.exports = (env, argv) => ({
       cleanOnceBeforeBuildPatterns: ['**/*', '!humans.txt', '!robots.txt'],
     }),
     new HtmlWebpackPlugin({
+      appMountId: 'app',
       lang: 'en',
       meta: [{
         name: 'description',
@@ -89,6 +90,7 @@ module.exports = (env, argv) => ({
       mobile: true,
       template: require('html-webpack-template'),
       title: 'My React application skeleton',
+      unsupportedBrowser: true,
     }),
     new FaviconsWebpackPlugin('./assets/images/favicon.png'),
     new ManifestPlugin(),

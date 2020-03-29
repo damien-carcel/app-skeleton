@@ -34,7 +34,7 @@ final class GetUserHandler
     {
         $identifier = $getUser->identifier;
 
-        if (null === $user = ($this->getUserQueryFunction)(Uuid::fromString($identifier))) {
+        if (null === $user = $this->getUserQueryFunction->byId(Uuid::fromString($identifier))) {
             throw UserDoesNotExist::fromUuid($identifier);
         }
 

@@ -21,5 +21,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 interface GetUser
 {
-    public function __invoke(UuidInterface $uuid): ?User;
+    public function byId(UuidInterface $uuid): ?User;
+
+    public function byEmail(string $email): ?User;
 }

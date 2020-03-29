@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of app-skeleton.
  *
@@ -22,9 +24,11 @@ class User implements UserInterface
     private string $password;
     private array $roles;
 
-    public function __construct()
+    public function __construct(string $email, string $password, array $roles)
     {
-        $this->roles = [];
+        $this->email = $email;
+        $this->password = $password;
+        $this->roles = $roles;
     }
 
     /**
@@ -57,17 +61,16 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 }
