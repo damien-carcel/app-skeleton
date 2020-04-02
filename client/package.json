@@ -31,8 +31,8 @@
     "type-check": "tsc --noEmit --pretty"
   },
   "dependencies": {
-    "@types/react": "^16.9.29",
-    "@types/react-dom": "^16.9.5",
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
     "@types/react-modal": "^3.10.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -61,7 +61,7 @@
     "eslint-plugin-react-hooks": "^3.0.0",
     "favicons-webpack-plugin": "^3.0.1",
     "file-loader": "^6.0.0",
-    "html-webpack-plugin": "^4.0.3",
+    "html-webpack-plugin": "^4.0.4",
     "html-webpack-template": "^6.1.0",
     "image-webpack-loader": "^6.0.0",
     "less": "^3.11.1",
