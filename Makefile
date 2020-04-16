@@ -49,7 +49,7 @@ install-api-dependencies:  build-api-dev
 
 .PHONY: install-client-dependencies
 install-client-dependencies: build-client-dev
-	cd ${CURDIR}/client && docker-compose run --rm node yarn install
+	cd ${CURDIR}/client && docker-compose run --rm node yarn install --frozen-lockfile --check-files
 
 .PHONY: install-dependencies
 install-dependencies: install-api-dependencies install-client-dependencies
