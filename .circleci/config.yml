@@ -40,7 +40,7 @@ jobs:
                     - composer-v1-
             - run:
                 name: Install API dependencies
-                command: make install-api-dependencies
+                command: make api/vendor
             - save_cache:
                 key: composer-v1-{{ checksum "api/composer.lock" }}
                 paths:
@@ -102,7 +102,7 @@ jobs:
                     - node-v1-
             - run:
                 name: Install client dependencies
-                command: make install-client-dependencies
+                command: make client/node_modules
             - save_cache:
                 key: node-v1-{{ checksum "client/yarn.lock" }}
                 paths:
