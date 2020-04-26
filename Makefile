@@ -1,7 +1,11 @@
+COMPOSE_DOCKER_CLI_BUILD=1
+DOCKER_BUILDKIT=1
+
 DEBUG=0
-OUTPUT=
 L=max
 TL=6
+OUTPUT=
+
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
@@ -9,28 +13,27 @@ PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
 .PHONY: pull-api
 pull-api:
-	cd ${CURDIR}/api && docker-compose pull --ignore-pull-failures
+	cd ${CURDIR}/api && docker-compose pull
 
 .PHONY: build-api-dev
-build-api-dev: pull-api
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:php --target dev
+build-api-dev: #pull-api
+	cd ${CURDIR}/api && docker-compose build --pull php
 
 .PHONY: build-api-prod
 build-api-prod: pull-api
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:fpm --target prod
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:nginx --target api
+	cd ${CURDIR}/api && docker-compose build --pull api fpm
 
 .PHONY: pull-client
 pull-client:
-	cd ${CURDIR}/client && docker-compose pull --ignore-pull-failures
+	cd ${CURDIR}/client && docker-compose pull
 
 .PHONY: build-client-dev
 build-client-dev: pull-client
-	cd ${CURDIR}/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:node --target dev
+	cd ${CURDIR}/client && docker-compose build --pull node
 
 .PHONY: build-client-prod
 build-client-prod: pull-client
-	cd ${CURDIR}/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/client:latest --build-arg API_BASE_URL_FOR_PRODUCTION="https://skeleton-api.docker.localhost" --target client
+	cd ${CURDIR}/client && docker-compose build --pull client
 
 .PHONY: build-dev
 build-dev: build-api-dev build-client-dev
@@ -43,32 +46,37 @@ build: build-dev build-prod
 
 # Prepare the application dependencies
 
-.PHONY: install-api-dependencies
-install-api-dependencies:  build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
+.PHONY: update-vendor
+update-vendor: build-api-dev
+	cd ${CURDIR}/api && touch composer.json
+	$(MAKE) api/vendor
 
-.PHONY: install-client-dependencies
-install-client-dependencies: build-client-dev
-	cd ${CURDIR}/client && docker-compose run --rm node yarn install --frozen-lockfile --check-files
-
-.PHONY: install-dependencies
-install-dependencies: install-api-dependencies install-client-dependencies
-
-.PHONY: update-api-dependencies
-update-api-dependencies: build-api-dev
-	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
-
-.PHONY: update-client-dependencies
-update-client-dependencies: build-client-dev
+.PHONY: update-node-modules
+update-node-modules: build-client-dev
 	cd ${CURDIR}/client && docker-compose run --rm node yarn upgrade-interactive --latest
 
 .PHONY: update-dependencies
-update-dependencies: update-api-dependencies update-client-dependencies
+update-dependencies: update-vendor update-node-modules
+
+api/composer.lock: build-api-dev api/composer.json
+	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
+
+api/vendor: build-api-dev api/composer.lock
+	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
+
+client/yarn.lock: build-client-dev  client/package.json
+	cd ${CURDIR}/client && docker-compose run --rm node yarn install
+
+client/node_modules: build-client-dev client/yarn.lock
+	cd ${CURDIR}/client && docker-compose run --rm node yarn install --frozen-lockfile --check-files
+
+.PHONY: dependencies
+dependencies: api/vendor client/node_modules
 
 # Serve the applications
 
 .PHONY: mysql
-mysql: install-api-dependencies
+mysql: api/vendor
 	cd ${CURDIR}/api && docker-compose up -d mysql
 	sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	cd ${CURDIR}/api && docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
@@ -81,16 +89,22 @@ develop-api: mysql
 serve-api: build-api-prod mysql
 	cd ${CURDIR}/api && docker-compose up -d api
 
-.PHONY: fake-api
-fake-api: install-client-dependencies
-	cd ${CURDIR}/client && docker-compose up -d fake-api
+api/config/jwt:
+	mkdir -p api/config/jwt
+
+api/config/jwt/public.pem: api/config/jwt
+	cd ${CURDIR}/api && docker-compose run --rm php sh -c ' \
+		jwt_passphrase=$$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''=''); \
+		echo "$$jwt_passphrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096; \
+		echo "$$jwt_passphrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout; \
+	'
 
 .PHONY: develop-client
-develop-client: develop-api install-client-dependencies
+develop-client: develop-api client/node_modules
 	cd ${CURDIR}/client && docker-compose run --rm --service-ports node yarn webpack:serve
 
 .PHONY: serve-client
-serve-client: install-client-dependencies build-client-prod
+serve-client: build-client-prod
 	cd ${CURDIR}/client && docker-compose up -d client
 
 .PHONY: install
@@ -159,7 +173,14 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: lint-api analyse-api coupling-api unit-api acceptance-api mysql integration-api end-to-end-api
+test-api: mysql
+	$(MAKE) lint-api
+	$(MAKE) analyse-api
+	$(MAKE) coupling-api
+	$(MAKE) unit-api
+	$(MAKE) acceptance-api
+	$(MAKE) integration-api
+	$(MAKE) end-to-end-api
 
 .PHONY: phpmd
 phpmd:
@@ -185,4 +206,6 @@ type-check-client:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn run type-check
 
 .PHONY: test-client
-test-client: lint-client type-check-client
+test-client: client/node_modules
+	$(MAKE) lint-client
+	$(MAKE) type-check-client

@@ -33,7 +33,7 @@ final class GetUserFromDatabase implements GetUser
     /**
      * {@inheritdoc}
      */
-    public function __invoke(UuidInterface $uuid): ?User
+    public function byId(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
             SELECT id, email, first_name, last_name FROM user
@@ -41,6 +41,30 @@ final class GetUserFromDatabase implements GetUser
             SQL;
         $parameters = ['id' => $uuid->toString()];
         $types = ['id' => \PDO::PARAM_STR];
+
+        $statement = $this->connection->executeQuery($query, $parameters, $types);
+        $result = $statement->fetchAll();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        return new User(
+            $result[0]['id'],
+            $result[0]['first_name'],
+            $result[0]['last_name'],
+            $result[0]['email'],
+        );
+    }
+
+    public function byEmail(string $email): ?User
+    {
+        $query = <<<SQL
+            SELECT id, email, first_name, last_name FROM user
+            WHERE email = :email;
+            SQL;
+        $parameters = ['email' => $email];
+        $types = ['email' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
         $result = $statement->fetchAll();

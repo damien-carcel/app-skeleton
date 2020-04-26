@@ -2,6 +2,9 @@ version: '3.4'
 
 services:
   node:
+    build:
+      context: './'
+      target: 'dev'
     image: 'carcel/skeleton/dev:node'
     environment:
       API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
@@ -22,6 +25,11 @@ services:
     working_dir: '/srv/app'
 
   client:
+    build:
+      args:
+        API_BASE_URL_FOR_PRODUCTION: 'https://skeleton-api.docker.localhost'
+      context: './'
+      target: 'client'
     image: 'carcel/skeleton/client:latest'
     labels:
       - 'traefik.http.middlewares.redirect-skeleton-client-http-to-https.redirectScheme.scheme=https'

@@ -4,7 +4,7 @@ version: 2.1
 
 executor-config: &executor-config
     machine:
-        image: ubuntu-1604:201903-01
+        image: ubuntu-1604:202004-01
     environment:
         HOST_USER_IDS: "1001:1002"
 
@@ -40,7 +40,7 @@ jobs:
                     - composer-v1-
             - run:
                 name: Install API dependencies
-                command: make install-api-dependencies
+                command: make api/vendor
             - save_cache:
                 key: composer-v1-{{ checksum "api/composer.lock" }}
                 paths:
@@ -102,7 +102,7 @@ jobs:
                     - node-v1-
             - run:
                 name: Install client dependencies
-                command: make install-client-dependencies
+                command: make client/node_modules
             - save_cache:
                 key: node-v1-{{ checksum "client/yarn.lock" }}
                 paths:

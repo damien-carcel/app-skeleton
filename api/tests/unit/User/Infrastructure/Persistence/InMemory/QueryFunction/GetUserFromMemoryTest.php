@@ -27,6 +27,8 @@ use Ramsey\Uuid\Uuid;
  */
 final class GetUserFromMemoryTest extends TestCase
 {
+    private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
+
     private GetUserFromMemory $getUserFromMemory;
 
     /**
@@ -40,17 +42,35 @@ final class GetUserFromMemoryTest extends TestCase
     }
 
     /** @test */
-    public function itGetsAUser(): void
+    public function itGetsAUserById(): void
     {
-        $user = ($this->getUserFromMemory)(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
+        $user = $this->getUserFromMemory->byId(Uuid::fromString(static::TONY_STARK_ID));
 
-        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
     }
 
     /** @test */
-    public function itDoesntGetAUserThatDoesNotExist(): void
+    public function itGetsAUserByEmail(): void
     {
-        $user = ($this->getUserFromMemory)(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+        $user = $this->getUserFromMemory->byEmail(
+            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
+        );
+
+        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
+    }
+
+    /** @test */
+    public function itDoesntGetByEmailAUserThatDoesNotExist(): void
+    {
+        $user = $this->getUserFromMemory->byId(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+
+        static::assertNull($user);
+    }
+
+    /** @test */
+    public function itDoesntGetByIdAUserThatDoesNotExist(): void
+    {
+        $user = $this->getUserFromMemory->byEmail('fake.email@whatever.com');
 
         static::assertNull($user);
     }

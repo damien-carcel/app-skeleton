@@ -109,7 +109,7 @@ RUN mkdir -p /tmp/composer/cache && \
 # It contains the application #
 ###############################
 
-FROM base as prod
+FROM base as api-fpm
 
 ENV APP_ENV=prod
 
@@ -125,7 +125,7 @@ USER root
 # Nginx image used for production #
 ###################################
 
-FROM nginx:alpine as api
+FROM nginx:alpine as api-nginx
 
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/nginx/upload.conf /etc/nginx/conf.d/upload.conf

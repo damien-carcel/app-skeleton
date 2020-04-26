@@ -29,7 +29,7 @@ class TestCase extends KernelTestCase
     {
         parent::setUp();
 
-        static::bootKernel(['debug' => false, 'environment' => 'integration']);
+        static::bootKernel();
 
         $this->container()->get('database_connection')->executeUpdate('DELETE FROM user');
     }
