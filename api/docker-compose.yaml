@@ -2,6 +2,9 @@ version: '3.4'
 
 services:
   api:
+    build:
+      context: './'
+      target: 'api-nginx'
     image: 'carcel/skeleton/api:nginx'
     depends_on:
       - 'fpm'
@@ -18,12 +21,18 @@ services:
       - skeleton-api
 
   fpm:
+    build:
+      context: './'
+      target: 'api-fpm'
     command: 'php-fpm -F'
     image: 'carcel/skeleton/api:fpm'
     networks:
       - skeleton-api
 
   api-dev:
+    build:
+      context: './'
+      target: 'dev'
     command: 'php -S 0.0.0.0:8000'
     image: 'carcel/skeleton/dev:php'
     environment:
@@ -47,6 +56,9 @@ services:
       - skeleton-api
 
   php:
+    build:
+      context: './'
+      target: 'dev'
     image: 'carcel/skeleton/dev:php'
     environment:
       COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'

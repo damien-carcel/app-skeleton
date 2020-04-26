@@ -4,7 +4,7 @@ version: 2.1
 
 executor-config: &executor-config
     machine:
-        image: ubuntu-1604:201903-01
+        image: ubuntu-1604:202004-01
     environment:
         HOST_USER_IDS: "1001:1002"
 

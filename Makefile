@@ -1,7 +1,11 @@
+COMPOSE_DOCKER_CLI_BUILD=1
+DOCKER_BUILDKIT=1
+
 DEBUG=0
-OUTPUT=
 L=max
 TL=6
+OUTPUT=
+
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
@@ -9,28 +13,27 @@ PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
 .PHONY: pull-api
 pull-api:
-	cd ${CURDIR}/api && docker-compose pull --ignore-pull-failures
+	cd ${CURDIR}/api && docker-compose pull
 
 .PHONY: build-api-dev
-build-api-dev: pull-api
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:php --target dev
+build-api-dev: #pull-api
+	cd ${CURDIR}/api && docker-compose build --pull php
 
 .PHONY: build-api-prod
 build-api-prod: pull-api
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:fpm --target api-fpm
-	cd ${CURDIR}/api && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/api:nginx --target api-nginx
+	cd ${CURDIR}/api && docker-compose build --pull api fpm
 
 .PHONY: pull-client
 pull-client:
-	cd ${CURDIR}/client && docker-compose pull --ignore-pull-failures
+	cd ${CURDIR}/client && docker-compose pull
 
 .PHONY: build-client-dev
 build-client-dev: pull-client
-	cd ${CURDIR}/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/dev:node --target dev
+	cd ${CURDIR}/client && docker-compose build --pull node
 
 .PHONY: build-client-prod
 build-client-prod: pull-client
-	cd ${CURDIR}/client && DOCKER_BUILDKIT=1 docker build --pull . --tag carcel/skeleton/client:latest --build-arg API_BASE_URL_FOR_PRODUCTION="https://skeleton-api.docker.localhost" --target client
+	cd ${CURDIR}/client && docker-compose build --pull client
 
 .PHONY: build-dev
 build-dev: build-api-dev build-client-dev
