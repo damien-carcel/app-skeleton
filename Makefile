@@ -4,7 +4,6 @@ DOCKER_BUILDKIT=1
 DEBUG=0
 L=max
 TL=6
-OUTPUT=
 
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
@@ -193,13 +192,17 @@ phpmetrics:
 
 # Test the client
 
+.PHONY: stylelint
+stylelint:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run stylelint
+
 .PHONY: lint-client
 lint-client:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint ${OUTPUT}
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint -f junit -o tests/results/lint-client.xml
 
 .PHONY: lint-fix-client
 lint-fix-client:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint-fix
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint --fix
 
 .PHONY: type-check-client
 type-check-client:
@@ -207,5 +210,6 @@ type-check-client:
 
 .PHONY: test-client
 test-client: client/node_modules
+	$(MAKE) stylelint
 	$(MAKE) lint-client
 	$(MAKE) type-check-client
