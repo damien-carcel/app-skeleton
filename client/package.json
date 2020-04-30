@@ -26,9 +26,9 @@
   "scripts": {
     "webpack:build": "webpack --mode production -p --progress",
     "webpack:serve": "webpack-dev-server --mode development --open --hot --inline",
-    "lint": "eslint --ext .jsx,.js,.tsx,.ts src/",
-    "lint-fix": "eslint --fix --ext .jsx,.js,.tsx,.ts src/",
-    "type-check": "tsc --noEmit --pretty"
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "type-check": "tsc --noEmit --pretty",
+    "stylelint": "stylelint 'assets/**/*.{css,less}'"
   },
   "dependencies": {
     "@types/react": "^16.9.34",

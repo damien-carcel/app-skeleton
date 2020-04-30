@@ -108,8 +108,11 @@ jobs:
                 paths:
                     - ~/.cache/yarn
             - run:
-                name: Run static analysis
-                command: make lint-client OUTPUT="-f junit -o tests/results/lint.xml"
+                name: Lint CSS/LESS code
+                command: make stylelint
+            - run:
+                name: Lint JavaScript/TypeScript code
+                command: make lint-client
             - run:
                 name: Run type checking
                 command: make type-check-client
