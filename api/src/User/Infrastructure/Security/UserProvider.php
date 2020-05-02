@@ -68,6 +68,10 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         // TODO: when encoded passwords are in use, this method should:
         // 1. persist the new password in the user storage
         // 2. update the $user object with $user->setPassword($newEncodedPassword);
+
+        // Does the password need to be encoded at the application level or can API Platform handle it?
+        // If it is to be done by the application, it is to be done here too, and the encoder should be abstracted,
+        // and the fixtures (acceptance, integration, and e2e) should encode too.
     }
 
     private function getSecurityUser(string $email): UserInterface

@@ -46,27 +46,27 @@ build: build-dev build-prod
 # Prepare the application dependencies
 
 .PHONY: update-vendor
-update-vendor: build-api-dev
+update-vendor:
 	cd ${CURDIR}/api && touch composer.json
 	$(MAKE) api/vendor
 
 .PHONY: update-node-modules
-update-node-modules: build-client-dev
+update-node-modules:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn upgrade-interactive --latest
 
 .PHONY: update-dependencies
 update-dependencies: update-vendor update-node-modules
 
-api/composer.lock: build-api-dev api/composer.json
+api/composer.lock: api/composer.json
 	cd ${CURDIR}/api && docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
 
-api/vendor: build-api-dev api/composer.lock
+api/vendor: api/composer.lock
 	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
-client/yarn.lock: build-client-dev client/package.json
+client/yarn.lock: client/package.json
 	cd ${CURDIR}/client && docker-compose run --rm node yarn install
 
-client/node_modules: build-client-dev client/yarn.lock
+client/node_modules: client/yarn.lock
 	cd ${CURDIR}/client && docker-compose run --rm node yarn install --frozen-lockfile --check-files
 
 .PHONY: dependencies
@@ -75,17 +75,18 @@ dependencies: api/vendor client/node_modules
 # Serve the applications
 
 .PHONY: mysql
-mysql: api/vendor
+mysql:
 	cd ${CURDIR}/api && docker-compose up -d mysql
 	sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	cd ${CURDIR}/api && docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
-develop-api: mysql
+develop-api:
+	$(MAKE) mysql
 	cd ${CURDIR}/api && XDEBUG_ENABLED=${DEBUG} docker-compose up -d api-dev
 
 .PHONY: serve-api
-serve-api: build-api-prod mysql
+serve-api: mysql build-api-prod
 	cd ${CURDIR}/api && docker-compose up -d api
 
 api/config/jwt:
@@ -172,12 +173,13 @@ end-to-end-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api
-test-api: mysql
+test-api: api/vendor
 	$(MAKE) lint-api
 	$(MAKE) analyse-api
 	$(MAKE) coupling-api
 	$(MAKE) unit-api
 	$(MAKE) acceptance-api
+	$(MAKE) mysql
 	$(MAKE) integration-api
 	$(MAKE) end-to-end-api
 
