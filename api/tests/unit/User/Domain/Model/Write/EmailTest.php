@@ -50,7 +50,7 @@ final class EmailTest extends TestCase
 
         static::expectException(\InvalidArgumentException::class);
         static::expectExceptionMessage(sprintf(
-            'The email address should not be more than 256 characters, "%s" is 259 characters long.',
+            'The email address should not have more than 256 characters, "%s" is 259 characters long.',
             $tooLongEmailAddress
         ));
 

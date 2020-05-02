@@ -46,7 +46,7 @@ final class LastNameTest extends TestCase
 
         static::expectException(\InvalidArgumentException::class);
         static::expectExceptionMessage(sprintf(
-            'The last name should not be more than 256 characters, "%s" is 260 characters long.',
+            'The last name should not have more than 256 characters, "%s" is 260 characters long.',
             $tooLongLastName
         ));
 

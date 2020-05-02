@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Doctrine\Migrations\Exception\IrreversibleMigration;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -37,6 +38,7 @@ CREATE TABLE user
     email      VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`,
     first_name LONGTEXT CHARACTER SET utf8mb4     NOT NULL COLLATE `utf8mb4_unicode_ci`,
     last_name  LONGTEXT CHARACTER SET utf8mb4     NOT NULL COLLATE `utf8mb4_unicode_ci`,
+    password   LONGTEXT CHARACTER SET utf8mb4     NOT NULL COLLATE `utf8mb4_unicode_ci`,
     PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET utf8
   COLLATE `utf8_unicode_ci`
@@ -56,6 +58,6 @@ SQL;
             'Migration can only be executed safely on "MySQL".'
         );
 
-        $this->addSql('DROP TABLE user');
+        throw new IrreversibleMigration('This migration creates the database schema. It is not meant to be reversed.');
     }
 }

@@ -24,17 +24,20 @@ final class User
     private FirstName $firstName;
     private LastName $lastName;
     private Email $email;
+    private Password $password;
 
     public function __construct(
         UuidInterface $id,
         FirstName $firstName,
         LastName $lastName,
-        Email $email
+        Email $email,
+        Password $password
     ) {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->password = $password;
     }
 
     public function id(): UuidInterface
@@ -55,6 +58,11 @@ final class User
     public function email(): Email
     {
         return $this->email;
+    }
+
+    public function password(): Password
+    {
+        return $this->password;
     }
 
     public function update(FirstName $firstName, LastName $lastName, Email $email): void

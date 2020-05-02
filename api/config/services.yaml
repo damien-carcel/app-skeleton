@@ -34,3 +34,6 @@ services:
 
     Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase: ~
     Carcel\User\Domain\QueryFunction\GetUser: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase'
+
+    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase: ~
+    Carcel\User\Domain\QueryFunction\GetUserPassword: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase'

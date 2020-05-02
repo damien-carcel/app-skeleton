@@ -28,7 +28,7 @@ final class Email
     {
         Assert::notEmpty($email, 'The user email cannot be empty.');
         Assert::maxLength($email, static::EMAIL_MAX_LENGTH, sprintf(
-            'The email address should not be more than %d characters, "%s" is %d characters long.',
+            'The email address should not have more than %d characters, "%s" is %d characters long.',
             static::EMAIL_MAX_LENGTH,
             $email,
             strlen($email)

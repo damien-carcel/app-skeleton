@@ -32,6 +32,7 @@ final class CreateUserContext implements Context
         'email' => 'batman@justiceligue.org',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
+        'password' => 'catwoman',
     ];
 
     private HandlerFailedException $caughtException;
@@ -54,6 +55,7 @@ final class CreateUserContext implements Context
         $createUser->firstName = static::NEW_USER['firstName'];
         $createUser->lastName = static::NEW_USER['lastName'];
         $createUser->email = static::NEW_USER['email'];
+        $createUser->password = static::NEW_USER['password'];
 
         $this->bus->dispatch($createUser);
     }
@@ -67,6 +69,7 @@ final class CreateUserContext implements Context
         $createUser->firstName = '';
         $createUser->lastName = '';
         $createUser->email = 'not an email';
+        $createUser->password = '';
 
         try {
             $this->bus->dispatch($createUser);
@@ -95,6 +98,7 @@ final class CreateUserContext implements Context
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
         Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
         Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
+        Assert::same((string) $newUser->password(), static::NEW_USER['password']);
     }
 
     /**

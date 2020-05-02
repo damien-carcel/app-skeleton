@@ -18,6 +18,7 @@ use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
+use Carcel\User\Domain\Model\Write\Password;
 use Carcel\User\Domain\Model\Write\User;
 use PHPUnit\Framework\TestCase;
 
@@ -62,6 +63,15 @@ final class UserTest extends TestCase
     }
 
     /** @test */
+    public function itReturnsThePassword(): void
+    {
+        $user = $this->instantiateTonyStark();
+
+        static::assertInstanceOf(Password::class, $user->password());
+        static::assertSame('password', (string) $user->password());
+    }
+
+    /** @test */
     public function aUserCanChangeItsName(): void
     {
         $user = $this->instantiateTonyStark();
@@ -86,6 +96,7 @@ final class UserTest extends TestCase
             UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['firstName'],
             UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['lastName'],
             UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['password'],
         );
     }
 }

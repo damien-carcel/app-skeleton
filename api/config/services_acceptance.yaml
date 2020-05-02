@@ -14,6 +14,9 @@ services:
     Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory: ~
     Carcel\User\Domain\QueryFunction\GetUser: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory'
 
+    Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserPasswordFromMemory: ~
+    Carcel\User\Domain\QueryFunction\GetUserPassword: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserPasswordFromMemory'
+
     #- Tests only services -#
 
     #Carcel\Tests\Acceptance\Acme: ~

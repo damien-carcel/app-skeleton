@@ -16,6 +16,7 @@ namespace Carcel\User\Domain\Factory;
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
+use Carcel\User\Domain\Model\Write\Password;
 use Carcel\User\Domain\Model\Write\User;
 use Ramsey\Uuid\Uuid;
 
@@ -24,13 +25,14 @@ use Ramsey\Uuid\Uuid;
  */
 final class UserFactory
 {
-    public function create(string $id, string $firstName, string $lastName, string $email): User
+    public function create(string $id, string $firstName, string $lastName, string $email, string $password): User
     {
         return new User(
             Uuid::fromString($id),
             FirstName::fromString($firstName),
             LastName::fromString($lastName),
             Email::fromString($email),
+            Password::fromString($password),
         );
     }
 }

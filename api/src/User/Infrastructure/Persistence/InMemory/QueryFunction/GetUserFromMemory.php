@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction;
 
-use Carcel\User\Domain\Model\Read;
-use Carcel\User\Domain\Model\Write;
+use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
 use Ramsey\Uuid\UuidInterface;
@@ -31,7 +30,7 @@ final class GetUserFromMemory implements GetUser
         $this->repository = $repository;
     }
 
-    public function byId(UuidInterface $uuid): ?Read\User
+    public function __invoke(UuidInterface $uuid): ?User
     {
         $user = $this->repository->find($uuid);
 
@@ -39,32 +38,7 @@ final class GetUserFromMemory implements GetUser
             return null;
         }
 
-        return new Read\User(
-            $user->id()->toString(),
-            (string) $user->firstName(),
-            (string) $user->lastName(),
-            (string) $user->email(),
-        );
-    }
-
-    /**
-     * As email is unique, the filtering should always return only one user.
-     */
-    public function byEmail(string $email): ?Read\User
-    {
-        $users = $this->repository->findAll();
-
-        $filteredUsers = array_filter($users, function (Write\User $user) use ($email) {
-            return (string) $user->email() === $email;
-        });
-
-        if (empty($filteredUsers)) {
-            return null;
-        }
-
-        $user = reset($filteredUsers);
-
-        return new Read\User(
+        return new User(
             $user->id()->toString(),
             (string) $user->firstName(),
             (string) $user->lastName(),

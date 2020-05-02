@@ -45,6 +45,7 @@ final class FixtureContext implements Context
                 UserFixtures::USERS_DATA[$id]['firstName'],
                 UserFixtures::USERS_DATA[$id]['lastName'],
                 UserFixtures::USERS_DATA[$id]['email'],
+                UserFixtures::USERS_DATA[$id]['password'],
             );
 
             $this->repository->create($user);
