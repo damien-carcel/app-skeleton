@@ -52,11 +52,12 @@ final class GetUserFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAUserByEmail(): void
     {
-        $user = $this->getUserFromMemory->byEmail(
+        $userData = $this->getUserFromMemory->byEmail(
             UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
         );
 
-        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
+        static::assertSame(UserFixtures::getNormalizedUser(static::TONY_STARK_ID)['email'], $userData['email']);
+        static::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $userData['password']);
     }
 
     /** @test */
@@ -96,6 +97,7 @@ final class GetUserFromMemoryTest extends TestCase
                 UserFixtures::USERS_DATA[$id]['firstName'],
                 UserFixtures::USERS_DATA[$id]['lastName'],
                 UserFixtures::USERS_DATA[$id]['email'],
+                UserFixtures::USERS_DATA[$id]['password'],
             );
 
             $repository->create($user);

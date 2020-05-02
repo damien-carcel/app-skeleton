@@ -50,7 +50,7 @@ final class GetUserFromMemory implements GetUser
     /**
      * As email is unique, the filtering should always return only one user.
      */
-    public function byEmail(string $email): ?Read\User
+    public function byEmail(string $email): ?array
     {
         $users = $this->repository->findAll();
 
@@ -64,11 +64,9 @@ final class GetUserFromMemory implements GetUser
 
         $user = reset($filteredUsers);
 
-        return new Read\User(
-            $user->id()->toString(),
-            (string) $user->firstName(),
-            (string) $user->lastName(),
-            (string) $user->email(),
-        );
+        return [
+            'email' => (string) $user->email(),
+            'password' => (string) $user->password(),
+        ];
     }
 }

@@ -23,5 +23,5 @@ interface GetUser
 {
     public function byId(UuidInterface $uuid): ?User;
 
-    public function byEmail(string $email): ?User;
+    public function byEmail(string $email): ?array;
 }

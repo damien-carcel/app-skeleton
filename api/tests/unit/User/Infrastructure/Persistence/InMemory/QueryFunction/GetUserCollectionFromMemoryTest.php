@@ -123,6 +123,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
                 UserFixtures::USERS_DATA[$id]['firstName'],
                 UserFixtures::USERS_DATA[$id]['lastName'],
                 UserFixtures::USERS_DATA[$id]['email'],
+                UserFixtures::USERS_DATA[$id]['password'],
             );
 
             $repository->create($user);

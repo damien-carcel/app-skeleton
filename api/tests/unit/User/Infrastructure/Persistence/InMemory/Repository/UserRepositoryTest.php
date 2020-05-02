@@ -112,6 +112,7 @@ final class UserRepositoryTest extends TestCase
             UserFixtures::USERS_DATA[$userId]['firstName'],
             UserFixtures::USERS_DATA[$userId]['lastName'],
             UserFixtures::USERS_DATA[$userId]['email'],
+            UserFixtures::USERS_DATA[$userId]['password'],
         );
     }
 }

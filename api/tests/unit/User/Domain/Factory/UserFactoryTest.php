@@ -33,11 +33,13 @@ final class UserFactoryTest extends TestCase
             UserFixtures::USERS_DATA[$userId]['firstName'],
             UserFixtures::USERS_DATA[$userId]['lastName'],
             UserFixtures::USERS_DATA[$userId]['email'],
+            UserFixtures::USERS_DATA[$userId]['password'],
         );
 
         static::assertSame('Tony', (string) $user->firstName());
         static::assertSame('Stark', (string) $user->lastName());
         static::assertSame('ironman@avengers.org', (string) $user->email());
+        static::assertSame('password', (string) $user->password());
     }
 
     private function instantiateUserFactory(): UserFactory

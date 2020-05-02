@@ -13,6 +13,10 @@ Carcel\User\Application\Command\CreateUser:
             -   Length:
                     max: 256
             -   Email: ~
+        password:
+            -   NotBlank: ~
+            -   Length:
+                    max: 256
 
 Carcel\User\Application\Command\UpdateUser:
     properties:

@@ -13,43 +13,43 @@ declare(strict_types=1);
 
 namespace Carcel\Tests\Unit\User\Domain\Model\Write;
 
-use Carcel\User\Domain\Model\Write\FirstName;
+use Carcel\User\Domain\Model\Write\Password;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class FirstNameTest extends TestCase
+final class PasswordTest extends TestCase
 {
     /** @test */
-    public function itReturnsTheFirstName(): void
+    public function itReturnsThePassword(): void
     {
         static::assertSame(
-            'Tony',
-            (string) FirstName::fromString('Tony')
+            'Password',
+            (string) Password::fromString('Password')
         );
     }
 
     /** @test */
-    public function firstNameCannotBeEmpty(): void
+    public function passwordCannotBeEmpty(): void
     {
         static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The user first name cannot be empty.');
+        static::expectExceptionMessage('The user password cannot be empty.');
 
-        FirstName::fromString('');
+        Password::fromString('');
     }
 
     /** @test */
-    public function firstNameMustNotBeTooLong(): void
+    public function passwordMustNotBeTooLong(): void
     {
-        $tooLongFirstName = bin2hex(random_bytes(130));
+        $tooLongPassword = bin2hex(random_bytes(130));
 
         static::expectException(\InvalidArgumentException::class);
         static::expectExceptionMessage(sprintf(
-            'The first name should not have more than 256 characters, "%s" is 260 characters long.',
-            $tooLongFirstName
+            'The password should not have more than 256 characters, "%s" is 260 characters long.',
+            $tooLongPassword
         ));
 
-        FirstName::fromString($tooLongFirstName);
+        Password::fromString($tooLongPassword);
     }
 }

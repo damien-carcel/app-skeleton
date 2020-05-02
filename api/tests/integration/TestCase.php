@@ -56,6 +56,7 @@ class TestCase extends KernelTestCase
                 'first_name' => UserFixtures::USERS_DATA[$id]['firstName'],
                 'last_name' => UserFixtures::USERS_DATA[$id]['lastName'],
                 'email' => UserFixtures::USERS_DATA[$id]['email'],
+                'password' => UserFixtures::USERS_DATA[$id]['password'],
             ]);
         }
     }

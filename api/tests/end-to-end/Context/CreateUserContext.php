@@ -30,12 +30,14 @@ final class CreateUserContext implements Context
         'email' => 'batman@justiceligue.org',
         'firstName' => 'Bruce',
         'lastName' => 'Wayne',
+        'password' => 'catwoman',
     ];
 
     private const NEW_INVALID_USER = [
         'email' => 'not an email',
         'firstName' => '',
         'lastName' => '',
+        'password' => '',
     ];
 
     private ResponseInterface $response;
@@ -103,6 +105,7 @@ final class CreateUserContext implements Context
         Assert::same($queriedUser['email'], static::NEW_VALID_USER['email']);
         Assert::same($queriedUser['first_name'], static::NEW_VALID_USER['firstName']);
         Assert::same($queriedUser['last_name'], static::NEW_VALID_USER['lastName']);
+        Assert::same($queriedUser['password'], static::NEW_VALID_USER['password']);
     }
 
     /**

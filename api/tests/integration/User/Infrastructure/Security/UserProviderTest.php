@@ -70,7 +70,7 @@ class UserProviderTest extends TestCase
             UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
             $refreshedUser->getUsername()
         );
-        static::assertSame('', $refreshedUser->getPassword());
+        static::assertSame('password', $refreshedUser->getPassword());
         static::assertSame(['ROLE_USER'], $refreshedUser->getRoles());
     }
 

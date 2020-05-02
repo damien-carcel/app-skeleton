@@ -78,6 +78,6 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UsernameNotFoundException($email);
         }
 
-        return new User($user->getEmail(), '', []);
+        return new User($user['email'], $user['password'], []);
     }
 }

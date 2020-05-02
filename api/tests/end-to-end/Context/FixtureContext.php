@@ -42,6 +42,7 @@ final class FixtureContext implements Context
                 'first_name' => $data['firstName'],
                 'last_name' => $data['lastName'],
                 'email' => $data['email'],
+                'password' => $data['password'],
             ]);
         }
     }

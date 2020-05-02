@@ -47,6 +47,7 @@ final class UserRepository implements UserRepositoryInterface
                 $userData['first_name'],
                 $userData['last_name'],
                 $userData['email'],
+                $userData['password'],
             );
         }, $result);
     }
@@ -57,7 +58,7 @@ final class UserRepository implements UserRepositoryInterface
     public function find(UuidInterface $uuid): ?User
     {
         $query = <<<SQL
-            SELECT id, email, first_name, last_name FROM user
+            SELECT id, email, first_name, last_name, password FROM user
             WHERE id = :id;
             SQL;
         $parameters = ['id' => $uuid->toString()];
@@ -75,6 +76,7 @@ final class UserRepository implements UserRepositoryInterface
             $result[0]['first_name'],
             $result[0]['last_name'],
             $result[0]['email'],
+            $result[0]['password'],
         );
     }
 
@@ -90,6 +92,7 @@ final class UserRepository implements UserRepositoryInterface
                 'first_name' => (string) $user->firstName(),
                 'last_name' => (string) $user->lastName(),
                 'email' => (string) $user->email(),
+                'password' => (string) $user->password(),
             ],
         );
     }

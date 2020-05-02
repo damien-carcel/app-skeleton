@@ -45,11 +45,18 @@ final class GetUserFromDatabaseTest extends TestCase
     /** @test */
     public function itGetsAUserByEmail(): void
     {
-        $user = $this
+        $userData = $this
             ->getUserFromDatabase()
             ->byEmail(UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email']);
 
-        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        static::assertSame(
+            UserFixtures::getNormalizedUser('02432f0b-c33e-4d71-8ba9-a5e3267a45d5')['email'],
+            $userData['email']
+        );
+        static::assertSame(
+            UserFixtures::getPassword('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'),
+            $userData['password']
+        );
     }
 
     /** @test */
