@@ -63,7 +63,7 @@ api/composer.lock: build-api-dev api/composer.json
 api/vendor: build-api-dev api/composer.lock
 	cd ${CURDIR}/api && docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
-client/yarn.lock: build-client-dev  client/package.json
+client/yarn.lock: build-client-dev client/package.json
 	cd ${CURDIR}/client && docker-compose run --rm node yarn install
 
 client/node_modules: build-client-dev client/yarn.lock

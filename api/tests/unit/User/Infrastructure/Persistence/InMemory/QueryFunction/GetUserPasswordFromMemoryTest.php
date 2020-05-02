@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of app-skeleton.
  *
- * Copyright (c) 2019 Damien Carcel <damien.carcel@gmail.com>
+ * Copyright (c) 2020 Damien Carcel <damien.carcel@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,21 +15,19 @@ namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\QueryFuncti
 
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
-use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
-use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory;
+use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserPasswordFromMemory;
 use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserFromMemoryTest extends TestCase
+final class GetUserPasswordFromMemoryTest extends TestCase
 {
     private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
 
-    private GetUserFromMemory $getUser;
+    private GetUserPasswordFromMemory $getUserPassword;
 
     /**
      * {@inheritdoc}
@@ -38,31 +36,25 @@ final class GetUserFromMemoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->getUser = new GetUserFromMemory($this->userRepository());
+        $this->getUserPassword = new GetUserPasswordFromMemory($this->userRepository());
     }
 
     /** @test */
-    public function itGetsAUserById(): void
+    public function itGetsAUserPassword(): void
     {
-        $user = ($this->getUser)(Uuid::fromString(static::TONY_STARK_ID));
+        $password = ($this->getUserPassword)(
+            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
+        );
 
-        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
+        static::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $password);
     }
 
     /** @test */
-    public function itDoesntGetByIdAUserThatDoesNotExist(): void
+    public function itDoesntGetByEmailAUserThatDoesNotExist(): void
     {
-        $user = ($this->getUser)(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
+        $password = ($this->getUserPassword)('fake.email@whatever.com');
 
-        static::assertNull($user);
-    }
-
-    private function assertUserShouldBeRetrieved(User $user, string $usersId): void
-    {
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['id'], $user->getId());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['email'], $user->getEmail());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['firstName'], $user->getFirstName());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $user->getLastName());
+        static::assertNull($password);
     }
 
     private function userRepository(): UserRepositoryInterface
