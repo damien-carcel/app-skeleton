@@ -26,8 +26,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository: ~
-    Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\UserRepository'
+    Carcel\User\Infrastructure\Persistence\Doctrine\Repository\DoctrineUserRepository: ~
+    Carcel\User\Domain\Repository\UserRepository: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\DoctrineUserRepository'
 
     Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase: ~
     Carcel\User\Domain\QueryFunction\GetUserCollection: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase'

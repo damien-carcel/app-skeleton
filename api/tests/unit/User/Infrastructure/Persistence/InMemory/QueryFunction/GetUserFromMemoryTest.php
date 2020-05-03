@@ -16,9 +16,9 @@ namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\QueryFuncti
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Read\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserFromMemory;
-use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
+use Carcel\User\Infrastructure\Persistence\InMemory\Repository\InMemoryUserRepository;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -65,10 +65,10 @@ final class GetUserFromMemoryTest extends TestCase
         static::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $user->getLastName());
     }
 
-    private function userRepository(): UserRepositoryInterface
+    private function userRepository(): UserRepository
     {
         $factory = new UserFactory();
-        $repository = new UserRepository();
+        $repository = new InMemoryUserRepository();
 
         $userIds = array_keys(UserFixtures::USERS_DATA);
 

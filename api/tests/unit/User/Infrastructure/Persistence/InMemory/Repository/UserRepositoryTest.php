@@ -19,7 +19,7 @@ use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
+use Carcel\User\Infrastructure\Persistence\InMemory\Repository\InMemoryUserRepository;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -98,9 +98,9 @@ final class UserRepositoryTest extends TestCase
         static::assertNull($repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
-    private function instantiateRepository(): UserRepository
+    private function instantiateRepository(): InMemoryUserRepository
     {
-        return new UserRepository($this->users);
+        return new InMemoryUserRepository($this->users);
     }
 
     private function instantiateUser(string $userId): User

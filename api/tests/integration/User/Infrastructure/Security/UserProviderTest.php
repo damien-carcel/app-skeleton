@@ -15,11 +15,13 @@ namespace Carcel\Tests\Integration\User\Infrastructure\Security;
 
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\Tests\Integration\TestCase;
+use Carcel\User\Domain\QueryFunction\GetUserPassword;
 use Carcel\User\Infrastructure\Security\User;
 use Carcel\User\Infrastructure\Security\UserProvider;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User as SymfonyTestUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserProviderTest extends TestCase
 {
@@ -58,7 +60,7 @@ class UserProviderTest extends TestCase
     /**
      * @test
      *
-     * TODO: Improve once roles and password are stored in the user database.
+     * TODO: Improve once/if roles are stored in the user database.
      */
     public function itRefreshesAUser(): void
     {
@@ -93,7 +95,18 @@ class UserProviderTest extends TestCase
     /** @test */
     public function itUpgradesTheUserPassword(): void
     {
-        static::assertTrue(true);
+        $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']);
+
+        $this->userProvider()->upgradePassword($user, 'this_is_an_encoded_password');
+
+        $this->assertPasswordWasUpgraded($user, 'this_is_an_encoded_password');
+    }
+
+    private function assertPasswordWasUpgraded(UserInterface $user, string $expectedPassword): void
+    {
+        $passwordStoredInDatabase = ($this->container()->get(GetUserPassword::class))($user->getUsername());
+
+        static::assertSame($expectedPassword, $passwordStoredInDatabase);
     }
 
     private function userProvider(): UserProvider

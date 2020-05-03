@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\Security;
 
 use Carcel\User\Domain\QueryFunction\GetUserPassword;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -26,10 +27,12 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
     private GetUserPassword $getUserPassword;
+    private Connection $connection;
 
-    public function __construct(GetUserPassword $getUserPassword)
+    public function __construct(GetUserPassword $getUserPassword, Connection $connection)
     {
         $this->getUserPassword = $getUserPassword;
+        $this->connection = $connection;
     }
 
     /**
@@ -65,13 +68,11 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
-        // TODO: when encoded passwords are in use, this method should:
-        // 1. persist the new password in the user storage
-        // 2. update the $user object with $user->setPassword($newEncodedPassword);
-
-        // Does the password need to be encoded at the application level or can API Platform handle it?
-        // If it is to be done by the application, it is to be done here too, and the encoder should be abstracted,
-        // and the fixtures (acceptance, integration, and e2e) should encode too.
+        $this->connection->update(
+            'user',
+            ['password' => $newEncodedPassword],
+            ['email' => $user->getUsername()],
+        );
     }
 
     private function getSecurityUser(string $email): UserInterface

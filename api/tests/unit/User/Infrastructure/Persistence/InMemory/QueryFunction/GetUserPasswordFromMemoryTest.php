@@ -15,9 +15,9 @@ namespace Carcel\Tests\Unit\User\Infrastructure\Persistence\InMemory\QueryFuncti
 
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserPasswordFromMemory;
-use Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository;
+use Carcel\User\Infrastructure\Persistence\InMemory\Repository\InMemoryUserRepository;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -57,10 +57,10 @@ final class GetUserPasswordFromMemoryTest extends TestCase
         static::assertNull($password);
     }
 
-    private function userRepository(): UserRepositoryInterface
+    private function userRepository(): UserRepository
     {
         $factory = new UserFactory();
-        $repository = new UserRepository();
+        $repository = new InMemoryUserRepository();
 
         $userIds = array_keys(UserFixtures::USERS_DATA);
 

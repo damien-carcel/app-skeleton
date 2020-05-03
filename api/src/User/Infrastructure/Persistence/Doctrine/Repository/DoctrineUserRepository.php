@@ -15,14 +15,14 @@ namespace Carcel\User\Infrastructure\Persistence\Doctrine\Repository;
 
 use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UserRepository implements UserRepositoryInterface
+final class DoctrineUserRepository implements UserRepository
 {
     private Connection $connection;
     private UserFactory $factory;

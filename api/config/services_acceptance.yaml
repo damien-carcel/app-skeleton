@@ -5,8 +5,8 @@ services:
 
     #- Application services overrides -#
 
-    Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository: ~
-    Carcel\User\Domain\Repository\UserRepositoryInterface: '@Carcel\User\Infrastructure\Persistence\InMemory\Repository\UserRepository'
+    Carcel\User\Infrastructure\Persistence\InMemory\Repository\InMemoryUserRepository: ~
+    Carcel\User\Domain\Repository\UserRepository: '@Carcel\User\Infrastructure\Persistence\InMemory\Repository\InMemoryUserRepository'
 
     Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserCollectionFromMemory: ~
     Carcel\User\Domain\QueryFunction\GetUserCollection: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\GetUserCollectionFromMemory'

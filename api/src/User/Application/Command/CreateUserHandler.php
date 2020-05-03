@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Factory\UserFactory;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Carcel\User\Domain\Service\EncodePassword;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -25,12 +25,12 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 final class CreateUserHandler implements MessageHandlerInterface
 {
     private UserFactory $userFactory;
-    private UserRepositoryInterface $userRepository;
+    private UserRepository $userRepository;
     private EncodePassword $encodePassword;
 
     public function __construct(
         UserFactory $userFactory,
-        UserRepositoryInterface $userRepository,
+        UserRepository $userRepository,
         EncodePassword $encodePassword
     ) {
         $this->userFactory = $userFactory;

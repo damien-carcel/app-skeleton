@@ -16,7 +16,7 @@ namespace Carcel\Tests\Acceptance\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Carcel\User\Domain\Service\EncodePassword;
 
 /**
@@ -25,12 +25,12 @@ use Carcel\User\Domain\Service\EncodePassword;
 final class FixtureContext implements Context
 {
     private UserFactory $factory;
-    private UserRepositoryInterface $repository;
+    private UserRepository $repository;
     private EncodePassword $encodePassword;
 
     public function __construct(
         UserFactory $factory,
-        UserRepositoryInterface $repository,
+        UserRepository $repository,
         EncodePassword $encodePassword
     ) {
         $this->factory = $factory;
