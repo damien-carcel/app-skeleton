@@ -6,7 +6,6 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Doctrine\Migrations\Exception\IrreversibleMigration;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -58,6 +57,6 @@ SQL;
             'Migration can only be executed safely on "MySQL".'
         );
 
-        throw new IrreversibleMigration('This migration creates the database schema. It is not meant to be reversed.');
+        $this->addSql('DROP TABLE user');
     }
 }

@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Carcel\User\Application\Command;
 
+use Carcel\User\Domain\Exception\EmailIsAlreadyUsed;
 use Carcel\User\Domain\Factory\UserFactory;
+use Carcel\User\Domain\QueryFunction\IsEmailAlreadyUsed;
 use Carcel\User\Domain\Repository\UserRepository;
 use Carcel\User\Domain\Service\EncodePassword;
 use Ramsey\Uuid\Uuid;
@@ -24,22 +26,29 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class CreateUserHandler implements MessageHandlerInterface
 {
+    private EncodePassword $encodePassword;
+    private IsEmailAlreadyUsed $isEmailAlreadyUsed;
     private UserFactory $userFactory;
     private UserRepository $userRepository;
-    private EncodePassword $encodePassword;
 
     public function __construct(
+        EncodePassword $encodePassword,
+        IsEmailAlreadyUsed $isEmailAlreadyUsed,
         UserFactory $userFactory,
-        UserRepository $userRepository,
-        EncodePassword $encodePassword
+        UserRepository $userRepository
     ) {
+        $this->encodePassword = $encodePassword;
+        $this->isEmailAlreadyUsed = $isEmailAlreadyUsed;
         $this->userFactory = $userFactory;
         $this->userRepository = $userRepository;
-        $this->encodePassword = $encodePassword;
     }
 
     public function __invoke(CreateUser $createUser): void
     {
+        if (($this->isEmailAlreadyUsed)($createUser->email)) {
+            throw EmailIsAlreadyUsed::fromEmail($createUser->email);
+        }
+
         $user = $this->userFactory->create(
             (Uuid::uuid4())->toString(),
             $createUser->firstName,

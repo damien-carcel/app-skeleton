@@ -40,3 +40,6 @@ services:
 
     Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder: ~
     Carcel\User\Domain\Service\EncodePassword: '@Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder'
+
+    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\IsEmailAlreadyInUseInDatabase: ~
+    Carcel\User\Domain\QueryFunction\IsEmailAlreadyUsed: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\IsEmailAlreadyInUseInDatabase'
