@@ -32,7 +32,7 @@ final class IsEmailAlreadyInUseInDatabaseTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadUserFixtures();
+        $this->loadUserFixtures([static::TONY_STARK_ID]);
     }
 
     /** @test */
