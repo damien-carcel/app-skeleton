@@ -79,6 +79,24 @@ final class CreateUserContext implements Context
     }
 
     /**
+     * @When I try to create a user with an email already used by another user
+     */
+    public function tryToCreateUserWithAnAlreadyUsedEmail(): void
+    {
+        $createUser = new CreateUser();
+        $createUser->firstName = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['firstName'];
+        $createUser->lastName = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['lastName'];
+        $createUser->email = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email'];
+        $createUser->password = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['password'];
+
+        try {
+            $this->bus->dispatch($createUser);
+        } catch (HandlerFailedException $exception) {
+            $this->caughtException = $exception;
+        }
+    }
+
+    /**
      * @Then a new user is created
      */
     public function newUserIsCreated(): void
@@ -102,7 +120,7 @@ final class CreateUserContext implements Context
     }
 
     /**
-     * @Then I cannot create this invalid user
+     * @Then I cannot create this user
      */
     public function iCannotCreateAnInvalidUser(): void
     {

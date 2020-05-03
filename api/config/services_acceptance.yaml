@@ -20,6 +20,9 @@ services:
     Carcel\User\Infrastructure\Security\DummyEncodePassword: ~
     Carcel\User\Domain\Service\EncodePassword: '@Carcel\User\Infrastructure\Security\DummyEncodePassword'
 
+    Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\IsEmailAlreadyUsedInMemory: ~
+    Carcel\User\Domain\QueryFunction\IsEmailAlreadyUsed: '@Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction\IsEmailAlreadyUsedInMemory'
+
     #- Tests only services -#
 
     #Carcel\Tests\Acceptance\Acme: ~

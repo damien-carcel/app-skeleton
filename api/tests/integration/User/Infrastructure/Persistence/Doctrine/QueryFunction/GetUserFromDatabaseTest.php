@@ -24,6 +24,8 @@ use Ramsey\Uuid\Uuid;
  */
 final class GetUserFromDatabaseTest extends TestCase
 {
+    private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
+
     /**
      * {@inheritdoc}
      */
@@ -37,9 +39,9 @@ final class GetUserFromDatabaseTest extends TestCase
     /** @test */
     public function itGetsAUserById(): void
     {
-        $user = ($this->getUser())(Uuid::fromString('02432f0b-c33e-4d71-8ba9-a5e3267a45d5'));
+        $user = ($this->getUser())(Uuid::fromString(static::TONY_STARK_ID));
 
-        static::assertUserShouldBeRetrieved($user, '02432f0b-c33e-4d71-8ba9-a5e3267a45d5');
+        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
     }
 
     /** @test */

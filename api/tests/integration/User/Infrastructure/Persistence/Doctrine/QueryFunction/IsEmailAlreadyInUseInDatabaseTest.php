@@ -15,12 +15,13 @@ namespace Carcel\Tests\Integration\User\Infrastructure\Persistence\Doctrine\Quer
 
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\Tests\Integration\TestCase;
-use Carcel\User\Domain\QueryFunction\GetUserPassword;
+use Carcel\User\Domain\QueryFunction\IsEmailAlreadyUsed;
+use PHPUnit\Framework\Assert;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserPasswordFromDatabaseTest extends TestCase
+final class IsEmailAlreadyInUseInDatabaseTest extends TestCase
 {
     private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
 
@@ -35,25 +36,19 @@ final class GetUserPasswordFromDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itGetsAUserByEmail(): void
+    public function itAnswersIfTheEmailIsAlreadyInUsed(): void
     {
-        $password = ($this->getUserPassword())(
-            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
-        );
-
-        static::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $password);
+        Assert::assertTrue(($this->isEmailAlreadyUsed())(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']));
     }
 
     /** @test */
-    public function itDoesntGetByEmailAUserThatDoesNotExist(): void
+    public function itAnswersIfTheEmailIsNotAlreadyInUsed(): void
     {
-        $password = ($this->getUserPassword())('fake.email@whatever.com');
-
-        static::assertNull($password);
+        Assert::assertFalse(($this->isEmailAlreadyUsed())('batman@justiceligue.org'));
     }
 
-    private function getUserPassword(): GetUserPassword
+    private function isEmailAlreadyUsed(): IsEmailAlreadyUsed
     {
-        return $this->container()->get(GetUserPassword::class);
+        return $this->container()->get(IsEmailAlreadyUsed::class);
     }
 }

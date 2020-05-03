@@ -110,7 +110,7 @@ final class CreateUserContext implements Context
     }
 
     /**
-     * @Then I cannot create this invalid user
+     * @Then I cannot create this user
      */
     public function iCannotCreateAnInvalidUser(): void
     {
