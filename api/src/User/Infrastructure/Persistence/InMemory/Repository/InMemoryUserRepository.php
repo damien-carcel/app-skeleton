@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Carcel\User\Infrastructure\Persistence\InMemory\Repository;
 
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\UuidInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class UserRepository implements UserRepositoryInterface
+final class InMemoryUserRepository implements UserRepository
 {
     /** @var User[] */
     private array $users;

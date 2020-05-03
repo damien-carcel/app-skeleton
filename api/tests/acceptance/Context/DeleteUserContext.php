@@ -17,7 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\DeleteUser;
 use Carcel\User\Domain\Exception\UserDoesNotExist;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -31,9 +31,9 @@ final class DeleteUserContext implements Context
     private HandlerFailedException $caughtException;
 
     private MessageBusInterface $bus;
-    private UserRepositoryInterface $userRepository;
+    private UserRepository $userRepository;
 
-    public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
+    public function __construct(MessageBusInterface $bus, UserRepository $userRepository)
     {
         $this->bus = $bus;
         $this->userRepository = $userRepository;

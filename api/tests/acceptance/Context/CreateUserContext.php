@@ -17,7 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Application\Command\CreateUser;
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -38,9 +38,9 @@ final class CreateUserContext implements Context
     private HandlerFailedException $caughtException;
 
     private MessageBusInterface $bus;
-    private UserRepositoryInterface $userRepository;
+    private UserRepository $userRepository;
 
-    public function __construct(MessageBusInterface $bus, UserRepositoryInterface $userRepository)
+    public function __construct(MessageBusInterface $bus, UserRepository $userRepository)
     {
         $this->bus = $bus;
         $this->userRepository = $userRepository;
@@ -98,7 +98,7 @@ final class CreateUserContext implements Context
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
         Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
         Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
-        Assert::same((string) $newUser->password(), static::NEW_USER['password']);
+        Assert::same((string) $newUser->password(), sprintf('dummy_encoded-<%s>', static::NEW_USER['password']));
     }
 
     /**

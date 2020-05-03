@@ -19,7 +19,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-interface UserRepositoryInterface
+interface UserRepository
 {
     /**
      * @return User[]

@@ -17,7 +17,7 @@ use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -26,9 +26,9 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 final class UpdateUserHandler implements MessageHandlerInterface
 {
-    private UserRepositoryInterface $userRepository;
+    private UserRepository $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }

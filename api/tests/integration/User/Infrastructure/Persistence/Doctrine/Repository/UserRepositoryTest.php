@@ -20,7 +20,7 @@ use Carcel\User\Domain\Model\Write\Email;
 use Carcel\User\Domain\Model\Write\FirstName;
 use Carcel\User\Domain\Model\Write\LastName;
 use Carcel\User\Domain\Model\Write\User;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -101,9 +101,9 @@ final class UserRepositoryTest extends TestCase
         static::assertNull($this->repository()->find(Uuid::fromString($this->userIDs[0])));
     }
 
-    private function repository(): UserRepositoryInterface
+    private function repository(): UserRepository
     {
-        return $this->container()->get(UserRepositoryInterface::class);
+        return $this->container()->get(UserRepository::class);
     }
 
     private function instantiateUser(string $userId): User

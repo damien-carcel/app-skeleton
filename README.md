@@ -25,6 +25,17 @@ You can also run the two applications separately.
 Follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/api.md) to run the API
 and [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/client.md) to run the client.
 
+## Using Docker buildkit
+
+To use the more efficient BuildKit toolkit to build the Docker images, export the following environment variables:
+
+```bash
+COMPOSE_DOCKER_CLI_BUILD=1
+DOCKER_BUILDKIT=1
+```
+
+You can export them directly before running `make install`, or make them permanent by adding them in your shell profile.
+
 ## Testing
 
 The API is fully tested. You can follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/tests/api.md) for a detailed explanation about how running the tests:

@@ -15,16 +15,16 @@ namespace Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction;
 
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\QueryFunction\GetUserPassword;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class GetUserPasswordFromMemory implements GetUserPassword
 {
-    private UserRepositoryInterface $repository;
+    private UserRepository $repository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }

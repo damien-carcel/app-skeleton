@@ -16,16 +16,16 @@ namespace Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction;
 use Carcel\User\Domain\Model\Read\UserCollection;
 use Carcel\User\Domain\Model\Write\User;
 use Carcel\User\Domain\QueryFunction\GetUserCollection;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class GetUserCollectionFromMemory implements GetUserCollection
 {
-    private UserRepositoryInterface $repository;
+    private UserRepository $repository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }

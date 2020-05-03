@@ -15,7 +15,7 @@ namespace Carcel\User\Infrastructure\Persistence\InMemory\QueryFunction;
 
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser;
-use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Repository\UserRepository;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -23,9 +23,9 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class GetUserFromMemory implements GetUser
 {
-    private UserRepositoryInterface $repository;
+    private UserRepository $repository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }

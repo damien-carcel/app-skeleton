@@ -1,6 +1,3 @@
-COMPOSE_DOCKER_CLI_BUILD=1
-DOCKER_BUILDKIT=1
-
 DEBUG=0
 L=max
 TL=6
@@ -75,7 +72,7 @@ dependencies: api/vendor client/node_modules
 # Serve the applications
 
 .PHONY: mysql
-mysql:
+mysql: api/vendor
 	cd ${CURDIR}/api && docker-compose up -d mysql
 	sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	cd ${CURDIR}/api && docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction

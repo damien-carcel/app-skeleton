@@ -15,6 +15,7 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
+use Carcel\User\Domain\Service\EncodePassword;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -23,10 +24,12 @@ use Doctrine\DBAL\Connection;
 final class FixtureContext implements Context
 {
     private Connection $connection;
+    private EncodePassword $encodePassword;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, EncodePassword $encodePassword)
     {
         $this->connection = $connection;
+        $this->encodePassword = $encodePassword;
     }
 
     /**
@@ -42,7 +45,7 @@ final class FixtureContext implements Context
                 'first_name' => $data['firstName'],
                 'last_name' => $data['lastName'],
                 'email' => $data['email'],
-                'password' => $data['password'],
+                'password' => ($this->encodePassword)($data['password']),
             ]);
         }
     }

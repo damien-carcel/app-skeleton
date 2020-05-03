@@ -105,7 +105,8 @@ final class CreateUserContext implements Context
         Assert::same($queriedUser['email'], static::NEW_VALID_USER['email']);
         Assert::same($queriedUser['first_name'], static::NEW_VALID_USER['firstName']);
         Assert::same($queriedUser['last_name'], static::NEW_VALID_USER['lastName']);
-        Assert::same($queriedUser['password'], static::NEW_VALID_USER['password']);
+        Assert::notContains($queriedUser['password'], static::NEW_VALID_USER['password']);
+        Assert::contains($queriedUser['password'], '$argon2id$v=19$m=65536,t=4,p=1$');
     }
 
     /**

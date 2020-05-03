@@ -6,6 +6,8 @@ executor-config: &executor-config
     machine:
         image: ubuntu-1604:202004-01
     environment:
+        COMPOSE_DOCKER_CLI_BUILD: 1
+        DOCKER_BUILDKIT: 1
         HOST_USER_IDS: "1001:1002"
 
 # -----
