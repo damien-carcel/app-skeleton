@@ -1,7 +1,7 @@
 security:
     encoders:
         Carcel\User\Infrastructure\Security\User:
-            algorithm: auto
+            algorithm: sodium
 
     providers:
         app_user_provider:

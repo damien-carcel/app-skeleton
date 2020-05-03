@@ -37,3 +37,7 @@ services:
 
     Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase: ~
     Carcel\User\Domain\QueryFunction\GetUserPassword: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase'
+
+    Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder:
+        public: true
+    Carcel\User\Domain\Service\EncodePassword: '@Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder'
