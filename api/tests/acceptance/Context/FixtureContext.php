@@ -17,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Service\EncodePassword;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
@@ -25,11 +26,16 @@ final class FixtureContext implements Context
 {
     private UserFactory $factory;
     private UserRepositoryInterface $repository;
+    private EncodePassword $encodePassword;
 
-    public function __construct(UserFactory $factory, UserRepositoryInterface $repository)
-    {
+    public function __construct(
+        UserFactory $factory,
+        UserRepositoryInterface $repository,
+        EncodePassword $encodePassword
+    ) {
         $this->factory = $factory;
         $this->repository = $repository;
+        $this->encodePassword = $encodePassword;
     }
 
     /**
@@ -45,7 +51,7 @@ final class FixtureContext implements Context
                 UserFixtures::USERS_DATA[$id]['firstName'],
                 UserFixtures::USERS_DATA[$id]['lastName'],
                 UserFixtures::USERS_DATA[$id]['email'],
-                UserFixtures::USERS_DATA[$id]['password'],
+                ($this->encodePassword)(UserFixtures::USERS_DATA[$id]['password']),
             );
 
             $this->repository->create($user);

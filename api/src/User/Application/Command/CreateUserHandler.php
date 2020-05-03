@@ -15,6 +15,7 @@ namespace Carcel\User\Application\Command;
 
 use Carcel\User\Domain\Factory\UserFactory;
 use Carcel\User\Domain\Repository\UserRepositoryInterface;
+use Carcel\User\Domain\Service\EncodePassword;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -25,11 +26,16 @@ final class CreateUserHandler implements MessageHandlerInterface
 {
     private UserFactory $userFactory;
     private UserRepositoryInterface $userRepository;
+    private EncodePassword $encodePassword;
 
-    public function __construct(UserFactory $userFactory, UserRepositoryInterface $userRepository)
-    {
+    public function __construct(
+        UserFactory $userFactory,
+        UserRepositoryInterface $userRepository,
+        EncodePassword $encodePassword
+    ) {
         $this->userFactory = $userFactory;
         $this->userRepository = $userRepository;
+        $this->encodePassword = $encodePassword;
     }
 
     public function __invoke(CreateUser $createUser): void
@@ -39,7 +45,7 @@ final class CreateUserHandler implements MessageHandlerInterface
             $createUser->firstName,
             $createUser->lastName,
             $createUser->email,
-            $createUser->password,
+            ($this->encodePassword)($createUser->password),
         );
 
         $this->userRepository->create($user);

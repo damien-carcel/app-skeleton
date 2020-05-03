@@ -98,7 +98,7 @@ final class CreateUserContext implements Context
         Assert::same((string) $newUser->email(), static::NEW_USER['email']);
         Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
         Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
-        Assert::same((string) $newUser->password(), static::NEW_USER['password']);
+        Assert::same((string) $newUser->password(), sprintf('dummy_encoded-<%s>', static::NEW_USER['password']));
     }
 
     /**
