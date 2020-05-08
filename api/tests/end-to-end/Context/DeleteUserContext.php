@@ -50,6 +50,11 @@ final class DeleteUserContext implements Context
             $this->router->generate('api_delete_users_delete_item', [
                 'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
+            ],
         );
     }
 

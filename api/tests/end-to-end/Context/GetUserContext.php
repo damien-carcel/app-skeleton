@@ -47,6 +47,11 @@ final class GetUserContext implements Context
             $this->router->generate('api_get_users_get_item', [
                 'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
+            ],
         );
     }
 

@@ -166,7 +166,7 @@ integration-api:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml
 
 .PHONY: end-to-end-api
-end-to-end-api:
+end-to-end-api: api/config/jwt/public.pem
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
 .PHONY: test-api

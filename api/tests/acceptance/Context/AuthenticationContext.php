@@ -17,10 +17,6 @@ use Behat\Behat\Context\Context;
 use Webmozart\Assert\Assert;
 
 /**
- * Manages users authentications.
- *
- * @todo: Those methods are empty for now, and will be used in https://github.com/damien-carcel/app-skeleton/issues/18
- *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class AuthenticationContext implements Context
