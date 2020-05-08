@@ -50,6 +50,11 @@ final class GetUserCollectionContext implements Context
                 '_page' => $pageNumber,
                 '_limit' => $quantity,
             ]),
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
+            ],
         );
     }
 

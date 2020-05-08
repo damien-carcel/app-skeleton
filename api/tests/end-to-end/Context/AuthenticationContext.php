@@ -14,22 +14,40 @@ declare(strict_types=1);
 namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
-use Webmozart\Assert\Assert;
+use Carcel\User\Infrastructure\Security\UserProvider;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 /**
- * Manages users authentications.
- *
- * @todo: Those methods are empty for now, and will be used in https://github.com/damien-carcel/app-skeleton/issues/18
- *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
 final class AuthenticationContext implements Context
 {
+    public static string $TOKEN = '';
+
+    private UserProvider $userProvider;
+    private JWTTokenManagerInterface $jwtManager;
+
+    public function __construct(UserProvider $userProvider, JWTTokenManagerInterface $jwtManager)
+    {
+        $this->jwtManager = $jwtManager;
+        $this->userProvider = $userProvider;
+    }
+
     /**
      * @Given I am logged as an administrator
      */
     public function iAmLoggedAsAnAdministrator(): void
     {
-        Assert::true(true);
+        $user = $this->userProvider->loadUserByUsername('ironman@avengers.org');
+
+        static::$TOKEN = $this->jwtManager->create($user);
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function logout(): void
+    {
+        static::$TOKEN = '';
     }
 }

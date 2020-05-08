@@ -6,25 +6,29 @@ security:
     providers:
         app_user_provider:
             id: Carcel\User\Infrastructure\Security\UserProvider
+
     firewalls:
         dev:
             pattern: ^/_(profiler|wdt)
             security: false
-        main:
+        api:
+            pattern: ^/api/
             stateless: true
             anonymous: true
             provider: app_user_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        main:
+            anonymous: true
             json_login:
                 check_path: /authentication_token
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
-        - { path: ^/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY } # TODO: To replace with "IS_AUTHENTICATED_FULLY" once authentication is in place
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

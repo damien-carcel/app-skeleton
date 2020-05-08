@@ -62,6 +62,9 @@ final class CreateUserContext implements Context
             'POST',
             $this->router->generate('api_create_users_post_collection'),
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
                 'json' => static::NEW_VALID_USER,
             ],
         );
@@ -76,6 +79,9 @@ final class CreateUserContext implements Context
             'POST',
             $this->router->generate('api_create_users_post_collection'),
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
                 'json' => static::NEW_INVALID_USER,
             ],
         );

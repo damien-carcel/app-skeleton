@@ -62,6 +62,9 @@ final class UpdateUserContext implements Context
                 ['id' => $this->updatedUserIdentifier]
             ),
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
                 'json' => static::USER_DATA_TO_UPDATE,
             ],
         );
@@ -79,6 +82,9 @@ final class UpdateUserContext implements Context
                 ['id' => array_keys(UserFixtures::USERS_DATA)[0]]
             ),
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
                 'json' => [
                     'firstName' => '',
                     'lastName' => '',
@@ -100,6 +106,9 @@ final class UpdateUserContext implements Context
                 ['id' => UserFixtures::ID_OF_NON_EXISTENT_USER]
             ),
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
+                ],
                 'json' => static::USER_DATA_TO_UPDATE,
             ],
         );
