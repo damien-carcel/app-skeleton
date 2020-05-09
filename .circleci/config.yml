@@ -48,23 +48,23 @@ jobs:
                 paths:
                     - ~/.cache/composer
             - run:
-                name: Run static analysis - PHP Coding Standards Fixer
-                command: make coding-standard-api
+                name: Run API static analysis - PHP CS Fixer
+                command: make api-coding-standards
             - run:
-                name: Run static analysis - PHP Coding Sniffer
-                command: make sniff-code-api
+                name: Run API static analysis - PHP Coding Sniffer
+                command: make sniff-api-code
             - run:
-                name: Run static analysis - PHPStan
-                command: make analyse-api
+                name: Run API static analysis - PHPStan
+                command: make analyse-api-code
             - run:
                 name: Run coupling detector
-                command: make coupling-api
+                command: make api-coupling
             - run:
-                name: Run unit tests
-                command: make unit-api
+                name: Run API unit tests
+                command: make api-unit-tests
             - run:
-                name: Run acceptance tests
-                command: make acceptance-api
+                name: Run API acceptance tests
+                command: make api-acceptance-tests
             - run:
                 name: start MySQL container
                 command: cd ~/project/api && docker-compose up -d mysql
@@ -72,11 +72,11 @@ jobs:
                 name: Update database schema
                 command: make mysql
             - run:
-                name: Run integration tests
-                command: make integration-api
+                name: Run API integration tests
+                command: make api-integration-tests
             - run:
-                name: Run end to end tests
-                command: make end-to-end-api
+                name: Run API end to end tests
+                command: make api-e2e-tests
             - store_test_results:
                 path: api/tests/results
             - store_artifacts:
@@ -114,13 +114,20 @@ jobs:
                 command: make stylelint
             - run:
                 name: Lint JavaScript/TypeScript code
-                command: make lint-client
+                command: make eslint
             - run:
-                name: Run type checking
+                name: Run TS type checking
                 command: make type-check-client
-            - run: # This will eventually be replace by a full production build + deployment
-                name: Test the client production build
-                command: cd client && docker-compose run --rm node yarn run webpack:build
+            - run:
+                name: Run client unit tests
+                command: make client-unit-tests
+            - run:
+                name: Run client end to end tests with Chrome
+                command: make client-e2e-tests-with-chrome
+# To be added back later, once we understand why Nightwatch with Firefox is failing on CircleCI.
+#            - run:
+#                name: Run client end to end tests with Firefox
+#                command: make client-e2e-tests-with-firefox
             - store_test_results:
                 path: client/tests/results
             - store_artifacts:

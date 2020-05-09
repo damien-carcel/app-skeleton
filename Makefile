@@ -98,7 +98,7 @@ api/config/jwt/public.pem: api/config/jwt
 
 .PHONY: develop-client
 develop-client: develop-api client/node_modules
-	cd ${CURDIR}/client && docker-compose run --rm --service-ports node yarn webpack:serve
+	cd ${CURDIR}/client && docker-compose run --rm --service-ports node yarn serve
 
 .PHONY: serve-client
 serve-client: build-client-prod
@@ -122,19 +122,19 @@ down: down-api down-client
 
 # Test the API
 
-.PHONY: coding-standard-api
-coding-standard-api:
+.PHONY: api-coding-standards
+api-coding-standards:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
 
-.PHONY: sniff-code-api
-sniff-code-api:
+.PHONY: sniff-api-code
+sniff-api-code:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcs
 
-.PHONY: lint-api
-lint-api: coding-standard-api sniff-code-api
+.PHONY: lint-api-code
+lint-api-code: api-coding-standards sniff-api-code
 
-.PHONY: lint-fix-api
-lint-fix-api:
+.PHONY: fix-api-code
+fix-api-code:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpcbf
 
@@ -146,39 +146,39 @@ analyse-api-src:
 analyse-api-tests:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/phpstan analyse -l ${TL} tests
 
-.PHONY: analyse-api
-analyse-api: analyse-api-src analyse-api-tests
+.PHONY: analyse-api-code
+analyse-api-code: analyse-api-src analyse-api-tests
 
-.PHONY: coupling-api
-coupling-api:
+.PHONY: api-coupling
+api-coupling:
 	cd ${CURDIR}/api && docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
 
-.PHONY: unit-api
-unit-api:
+.PHONY: api-unit-tests
+api-unit-tests:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite "Unit tests" --log-junit tests/results/unit_tests.xml
 
-.PHONY: acceptance-api
-acceptance-api:
+.PHONY: api-acceptance-tests
+api-acceptance-tests:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=acceptance -o std --colors -f pretty -f junit -o tests/results/acceptance
 
-.PHONY: integration-api
-integration-api:
+.PHONY: api-integration-tests
+api-integration-tests:
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml
 
-.PHONY: end-to-end-api
-end-to-end-api: api/config/jwt/public.pem
+.PHONY: api-e2e-tests
+api-e2e-tests: api/config/jwt/public.pem
 	cd ${CURDIR}/api && docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e
 
-.PHONY: test-api
-test-api: api/vendor
-	$(MAKE) lint-api
-	$(MAKE) analyse-api
-	$(MAKE) coupling-api
-	$(MAKE) unit-api
-	$(MAKE) acceptance-api
+.PHONY: api-tests
+api-tests: api/vendor
+	$(MAKE) lint-api-code
+	$(MAKE) analyse-api-code
+	$(MAKE) api-coupling
+	$(MAKE) api-unit-tests
+	$(MAKE) api-acceptance-tests
 	$(MAKE) mysql
-	$(MAKE) integration-api
-	$(MAKE) end-to-end-api
+	$(MAKE) api-integration-tests
+	$(MAKE) api-e2e-tests
 
 .PHONY: phpmd
 phpmd:
@@ -195,20 +195,38 @@ phpmetrics:
 stylelint:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn run stylelint
 
-.PHONY: lint-client
-lint-client:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint -f junit -o tests/results/lint-client.xml
+.PHONY: eslint
+eslint:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint -f junit -o tests/results/eslint.xml
 
-.PHONY: lint-fix-client
-lint-fix-client:
+.PHONY: fix-eslint
+fix-eslint:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint --fix
 
 .PHONY: type-check-client
 type-check-client:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn run type-check
 
-.PHONY: test-client
-test-client: client/node_modules
+.PHONY: client-unit-tests
+client-unit-tests:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:unit
+
+.PHONY: client-e2e-tests-with-chrome
+client-e2e-tests-with-chrome:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env chrome
+
+.PHONY: client-e2e-tests-with-firefox
+client-e2e-tests-with-firefox:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env firefox
+
+.PHONY: client-e2e-tests
+client-e2e-tests:
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env chrome,firefox
+
+.PHONY: client-tests
+client-tests: client/node_modules
 	$(MAKE) stylelint
-	$(MAKE) lint-client
+	$(MAKE) eslint
 	$(MAKE) type-check-client
+	$(MAKE) client-unit-tests
+	$(MAKE) client-e2e-tests
