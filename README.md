@@ -10,10 +10,9 @@ It is composed of two distinct applications:
 
 ## How to use it?
 
-The client application is made to consume an API, the real implementation being the Symfony one.
-But you can also use a fake API thanks to the [`json-server` library](https://github.com/typicode/json-server) (for development and testing purpose only).
+### Run the full application
 
-To be able to run the full application (both the API and the client), you'll first need to setup Traefik as a local reverse proxy.
+To be able to run both the API and the client, you'll first need to setup Traefik as a local reverse proxy.
 Please follow [this documentation](https://github.com/damien-carcel/traefik-as-local-reverse-proxy) to achieve that.
 
 Then you can start the full application using docker by running:
@@ -21,11 +20,46 @@ Then you can start the full application using docker by running:
 $ make install
 ```
 
-You can also run the two applications separately.
-Follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/api.md) to run the API
-and [this one](https://github.com/damien-carcel/app-skeleton/blob/master/doc/install/client.md) to run the client.
+### Run the API alone
 
-## Using Docker buildkit
+You can either run the API using the Symfony server (dev env, testing and developing only) and access it on
+[localhost:8000](http://localhost:8000):
+```bash
+$ make develop-api
+```
+
+Or can use production like Nginx + FPM and access the API on [skeleton-api.docker.local](http://skeleton-api.docker.local)
+(you need to set up the URL in your `/etc/hosts` file and have Traefik working):
+```bash
+$ make serve-api
+```
+
+Both commands will build the required Docker images, check that Composer dependencies are up to date, and setup the MySQL database.
+
+### Debugging the API
+
+The `carcel/skeleton/php` image comes with XDebug installed and configured. It is by default deactivated.
+
+You can debug the API by running:
+```bash
+$ make develop-api DEBUG=1
+```
+
+This will launch the API through the Symfony web server, with XDebug activated.
+
+### Serve the application with `webpack-dev-server`
+
+You can start the client using the `webpack-dev-server`:
+```bash
+$ make develop-client
+```
+
+This command will build the required Docker images, check that `yarn` dependencies are up to date, launch the API, and
+serve the application using the Webpack dev server with hot reloading.
+
+You can access the client application on [localhost:8080](http://localhost:8080).
+
+## Using Docker BuildKit
 
 To use the more efficient BuildKit toolkit to build the Docker images, export the following environment variables:
 
@@ -38,12 +72,13 @@ You can export them directly before running `make install`, or make them permane
 
 ## Testing
 
-The API is fully tested. You can follow [this documentation](https://github.com/damien-carcel/app-skeleton/blob/master/doc/tests/api.md) for a detailed explanation about how running the tests:
+You can run the API and the client application tests with the following commands:
 
-The client application is not tested for now. This will be [coming soon](https://github.com/damien-carcel/app-skeleton/issues/15).
+```bash
+$ make api-tests
+$ make client-tests
+```
 
 ## License
 
 This repository is under the MIT license. See the complete license in the [LICENSE](https://github.com/damien-carcel/app-skeleton/blob/master/LICENSE) file.
-
-The "Hack" font provided as asset example is distributed under [the Hack Open Font License v2.0 and the Bitstream Vera License](https://github.com/chrissimpkins/Hack/blob/master/LICENSE.md).

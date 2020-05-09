@@ -13,7 +13,14 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     echo 'path-exclude=/usr/share/locale/*' >> /etc/dpkg/dpkg.cfg.d/path_exclusions && \
     echo 'path-exclude=/usr/share/man/*' >> /etc/dpkg/dpkg.cfg.d/path_exclusions && \
     apt-get update && \
-    apt-get --yes install bzip2 && \
+    apt-get --yes install \
+        bzip2 \
+        ca-certificates \
+        firefox-esr \
+        wget && \
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt install -fy ./google-chrome-stable_current_amd64.deb && \
+    rm -f google-chrome-stable_current_amd64.deb && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -35,7 +42,7 @@ WORKDIR /home/node/client
 
 COPY --chown=node:node . .
 RUN yarn install && \
-    API_BASE_URL=${API_BASE_URL_FOR_PRODUCTION} yarn run webpack:build
+    API_BASE_URL=${API_BASE_URL_FOR_PRODUCTION} yarn run build
 
 ###################################
 # Nginx image used for production #

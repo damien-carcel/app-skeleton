@@ -5,13 +5,13 @@ services:
     build:
       context: './'
       target: 'dev'
-    image: 'carcel/skeleton/dev:node'
     environment:
       API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
       CLIENT_PORT: '${CLIENT_PORT:-8080}'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
+    image: 'carcel/skeleton/dev:node'
     networks:
       - skeleton-client
     ports:
