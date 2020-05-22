@@ -114,16 +114,16 @@ jobs:
                 command: mkdir client/reports
             - run:
                 name: Lint CSS/LESS code
-                command: make stylelint SL_OUT="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
+                command: make stylelint O="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
             - run:
                 name: Lint JavaScript/TypeScript code
-                command: make eslint ESL_OUT="-f junit -o reports/eslint.xml"
+                command: make eslint O="--no-fix -f junit > reports/eslint.xml"
             - run:
                 name: Run TS type checking
                 command: make type-check-client
             - run:
                 name: Run client unit tests
-                command: make client-unit-tests JEST_OUT="--ci --reporters=default --reporters=jest-junit"
+                command: make client-unit-tests O="--ci --reporters=default --reporters=jest-junit"
             - run:
                 name: Run client end to end tests with Chrome
                 command: make client-e2e-tests-with-chrome
