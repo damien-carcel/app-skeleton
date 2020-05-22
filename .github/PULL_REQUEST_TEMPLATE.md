@@ -8,17 +8,6 @@
 - Features and deprecations must be submitted against the master branch.
 -->
 
-## Definition Of Done
+## Related ticket
 
-| Q                 | A
-| ------------------| ---
-| Unit tests        | Todo
-| Acceptance tests  | Todo
-| Integration tests | Todo
-| End to End tests  | Todo
-| Documentation     | -
-| Related tickets   | #... <!-- #-prefixed issue number(s), if any -->
-
-`Todo`: Pending / Work in progress
-`OK`: Done / Validated
-`-`: Not needed
+Relates to #... <!-- #-prefixed issue number, if any, or select the issue in the "Linked issues" menu -->
