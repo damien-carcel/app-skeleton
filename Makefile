@@ -12,7 +12,7 @@ pull-api:
 	cd ${CURDIR}/api && docker-compose pull
 
 .PHONY: build-api-dev
-build-api-dev: #pull-api
+build-api-dev: pull-api
 	cd ${CURDIR}/api && docker-compose build --pull php
 
 .PHONY: build-api-prod
