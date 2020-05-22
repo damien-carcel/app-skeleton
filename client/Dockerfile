@@ -53,4 +53,4 @@ FROM nginx:alpine as client
 COPY docker/upload.conf /etc/nginx/conf.d/upload.conf
 
 # Copy the application
-COPY --from=builder --chown=root:root /home/node/client/public /usr/share/nginx/html
+COPY --from=builder --chown=root:root /home/node/client/dist /usr/share/nginx/html

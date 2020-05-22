@@ -38,13 +38,13 @@ jobs:
                     mkdir -p ~/.config/composer
             - restore_cache:
                 keys:
-                    - composer-v1-{{ checksum "api/composer.lock" }}
-                    - composer-v1-
+                    - composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+                    - composer-{{ .Environment.CACHE_VERSION }}-
             - run:
                 name: Install API dependencies
                 command: make api/vendor
             - save_cache:
-                key: composer-v1-{{ checksum "api/composer.lock" }}
+                key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
                 paths:
                     - ~/.cache/composer
             - run:
@@ -100,27 +100,30 @@ jobs:
                     mkdir -p ~/.cache/yarn
             - restore_cache:
                 keys:
-                    - node-v1-{{ checksum "client/yarn.lock" }}
-                    - node-v1-
+                    - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+                    - node-{{ .Environment.CACHE_VERSION }}-
             - run:
                 name: Install client dependencies
                 command: make client/node_modules
             - save_cache:
-                key: node-v1-{{ checksum "client/yarn.lock" }}
+                key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
             - run:
+                name: Create report directory
+                command: mkdir client/reports
+            - run:
                 name: Lint CSS/LESS code
-                command: make stylelint
+                command: make stylelint SL_OUT="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
             - run:
                 name: Lint JavaScript/TypeScript code
-                command: make eslint
+                command: make eslint ESL_OUT="-f junit -o reports/eslint.xml"
             - run:
                 name: Run TS type checking
                 command: make type-check-client
             - run:
                 name: Run client unit tests
-                command: make client-unit-tests
+                command: make client-unit-tests JEST_OUT="--ci --reporters=default --reporters=jest-junit"
             - run:
                 name: Run client end to end tests with Chrome
                 command: make client-e2e-tests-with-chrome
@@ -129,9 +132,13 @@ jobs:
 #                name: Run client end to end tests with Firefox
 #                command: make client-e2e-tests-with-firefox
             - store_test_results:
-                path: client/tests/results
+                path: client/reports
             - store_artifacts:
-                path: client/tests/results
+                path: client/reports
+            - store_test_results:
+                path: client/tests/e2e/reports
+            - store_artifacts:
+                path: client/tests/e2e/reports
 
 workflows:
     version: 2

@@ -5,7 +5,7 @@ export interface UserData {
   lastName: string;
 }
 
-function getApiUrl(route: string, userId?: string) {
+function getApiUrl(route: string, userId?: string): string {
   const baseUrl = process.env.API_BASE_URL;
 
   if (userId) {
@@ -29,7 +29,10 @@ function createPostHeaders(): Headers {
   return headers;
 }
 
-export function getUserCollection(page: number, limit: number) {
+export function getUserCollection(
+  page: number,
+  limit: number
+): Promise<UserData> {
   const url = getApiUrl("/api/users") + `?_page=${page}&_limit=${limit}`;
 
   return fetch(url, {
@@ -39,7 +42,7 @@ export function getUserCollection(page: number, limit: number) {
   }).then((response) => response.json());
 }
 
-export function getUser(userId: string) {
+export function getUser(userId: string): Promise<UserData> {
   const url = getApiUrl("/api/users/{id}", userId);
 
   return fetch(url, {
@@ -49,7 +52,7 @@ export function getUser(userId: string) {
   }).then((response) => response.json());
 }
 
-export function createUser(data: UserData) {
+export function createUser(data: UserData): Promise<Response> {
   const url = getApiUrl("/api/users");
 
   return fetch(url, {
@@ -64,7 +67,7 @@ export function createUser(data: UserData) {
   });
 }
 
-export function updateUser(userId: string, data: UserData) {
+export function updateUser(userId: string, data: UserData): Promise<Response> {
   const url = getApiUrl("/api/users/{id}", userId);
 
   return fetch(url, {
@@ -75,7 +78,7 @@ export function updateUser(userId: string, data: UserData) {
   });
 }
 
-export function deleteUser(userId: string) {
+export function deleteUser(userId: string): Promise<Response> {
   const url = getApiUrl("/api/users/{id}", userId);
 
   return fetch(url, {
