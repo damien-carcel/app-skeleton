@@ -110,17 +110,20 @@ jobs:
                 paths:
                     - ~/.cache/yarn
             - run:
+                name: Create report directory
+                command: mkdir client/reports
+            - run:
                 name: Lint CSS/LESS code
-                command: make stylelint
+                command: make stylelint SL_OUT="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
             - run:
                 name: Lint JavaScript/TypeScript code
-                command: make eslint
+                command: make eslint ESL_OUT="-f junit -o reports/eslint.xml"
             - run:
                 name: Run TS type checking
                 command: make type-check-client
             - run:
                 name: Run client unit tests
-                command: make client-unit-tests
+                command: make client-unit-tests JEST_OUT="--ci --reporters=default --reporters=jest-junit"
             - run:
                 name: Run client end to end tests with Chrome
                 command: make client-e2e-tests-with-chrome
@@ -129,9 +132,13 @@ jobs:
 #                name: Run client end to end tests with Firefox
 #                command: make client-e2e-tests-with-firefox
             - store_test_results:
-                path: client/tests/results
+                path: client/reports
             - store_artifacts:
-                path: client/tests/results
+                path: client/reports
+            - store_test_results:
+                path: client/tests/e2e/reports
+            - store_artifacts:
+                path: client/tests/e2e/reports
 
 workflows:
     version: 2

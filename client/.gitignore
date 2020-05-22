@@ -1,8 +1,6 @@
 /dist
 /node_modules
 /tests/e2e/reports/
-/tests/results
-!/tests/results/.gitkeep
 
 chromedriver.log
 geckodriver.log

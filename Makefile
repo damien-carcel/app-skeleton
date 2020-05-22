@@ -1,9 +1,22 @@
-DEBUG=0
-L=max
-TL=6
+SHELL = bash
+
+# Environment Variables
+
+DEBUG ?= 0
+L ?= max
+TL ?= 6
 
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
+
+ESL_OUT ?=
+JEST_OUT ?=
+SL_OUT ?=
+
+SILENT =
+ifneq (${SL_OUT},)
+SILENT = -s
+endif
 
 # Build Docker images
 
@@ -193,11 +206,11 @@ phpmetrics:
 
 .PHONY: stylelint
 stylelint:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run stylelint
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run ${SILENT} stylelint ${SL_OUT}
 
 .PHONY: eslint
 eslint:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint -f junit -o tests/results/eslint.xml
+	cd ${CURDIR}/client && docker-compose run --rm node yarn run lint ${ESL_OUT}
 
 .PHONY: fix-eslint
 fix-eslint:
@@ -209,7 +222,7 @@ type-check-client:
 
 .PHONY: client-unit-tests
 client-unit-tests:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:unit
+	cd ${CURDIR}/client && docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn run test:unit ${JEST_OUT}
 
 .PHONY: client-e2e-tests-with-chrome
 client-e2e-tests-with-chrome:
