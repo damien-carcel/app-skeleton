@@ -38,13 +38,13 @@ jobs:
                     mkdir -p ~/.config/composer
             - restore_cache:
                 keys:
-                    - composer-v1-{{ checksum "api/composer.lock" }}
-                    - composer-v1-
+                    - composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+                    - composer-{{ .Environment.CACHE_VERSION }}-
             - run:
                 name: Install API dependencies
                 command: make api/vendor
             - save_cache:
-                key: composer-v1-{{ checksum "api/composer.lock" }}
+                key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
                 paths:
                     - ~/.cache/composer
             - run:
@@ -100,13 +100,13 @@ jobs:
                     mkdir -p ~/.cache/yarn
             - restore_cache:
                 keys:
-                    - node-v1-{{ checksum "client/yarn.lock" }}
-                    - node-v1-
+                    - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+                    - node-{{ .Environment.CACHE_VERSION }}-
             - run:
                 name: Install client dependencies
                 command: make client/node_modules
             - save_cache:
-                key: node-v1-{{ checksum "client/yarn.lock" }}
+                key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
             - run:
