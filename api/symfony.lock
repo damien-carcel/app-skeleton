@@ -103,6 +103,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.1.0"
+    },
     "fig/link-util": {
         "version": "1.1.0"
     },
@@ -132,9 +135,6 @@
         "files": [
             ".php_cs.dist"
         ]
-    },
-    "jdorn/sql-formatter": {
-        "version": "v1.2.17"
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.1"
@@ -322,6 +322,9 @@
             "phpcs.xml.dist"
         ]
     },
+    "symfony/amqp-messenger": {
+        "version": "v5.1.0"
+    },
     "symfony/asset": {
         "version": "v4.4.2"
     },
@@ -353,8 +356,14 @@
     "symfony/dependency-injection": {
         "version": "v4.4.0"
     },
+    "symfony/deprecation-contracts": {
+        "version": "v2.1.2"
+    },
     "symfony/doctrine-bridge": {
         "version": "v4.4.0"
+    },
+    "symfony/doctrine-messenger": {
+        "version": "v5.1.0"
     },
     "symfony/dom-crawler": {
         "version": "v4.4.0"
@@ -440,9 +449,6 @@
             "config/packages/messenger.yaml"
         ]
     },
-    "symfony/mime": {
-        "version": "v4.4.0"
-    },
     "symfony/monolog-bridge": {
         "version": "v4.4.0"
     },
@@ -463,17 +469,20 @@
     "symfony/options-resolver": {
         "version": "v4.4.0"
     },
-    "symfony/polyfill-intl-idn": {
-        "version": "v1.12.0"
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.17.0"
+    },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.17.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.12.0"
     },
-    "symfony/polyfill-php72": {
-        "version": "v1.12.0"
-    },
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.17.0"
     },
     "symfony/process": {
         "version": "v4.4.0"
@@ -487,14 +496,8 @@
     "symfony/proxy-manager-bridge": {
         "version": "v4.4.0"
     },
-    "symfony/requirements-checker": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "93d0ec48679f5e240d265088305c1ad775723f93"
-        }
+    "symfony/redis-messenger": {
+        "version": "v5.1.0"
     },
     "symfony/routing": {
         "version": "4.2",
@@ -542,6 +545,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.4.0"
+    },
+    "symfony/string": {
+        "version": "v5.1.0"
     },
     "symfony/thanks": {
         "version": "v1.1.0"
