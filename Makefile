@@ -2,6 +2,7 @@ SHELL = bash
 
 # Environment Variables
 
+APP_ENV ?= dev
 DEBUG ?= 0
 L ?= max
 O ?=
@@ -75,6 +76,11 @@ client/node_modules: client/yarn.lock
 dependencies: api/vendor client/node_modules
 
 # Serve the applications
+
+.PHONY: cache
+cache: api/vendor
+	cd ${CURDIR}/api && docker-compose run --rm php rm -rf var/cache/*
+	cd ${CURDIR}/api && docker-compose run --rm -e APP_ENV=${APP_ENV} php bin/console cache:clear
 
 .PHONY: mysql
 mysql: api/vendor

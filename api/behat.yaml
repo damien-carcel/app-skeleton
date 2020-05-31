@@ -1,6 +1,7 @@
 acceptance:
     extensions:
         FriendsOfBehat\SymfonyExtension:
+            bootstrap: 'tests/bootstrap.php'
             kernel:
                 class: 'Carcel\Kernel'
                 environment: 'acceptance'
@@ -20,6 +21,7 @@ acceptance:
 end-to-end:
     extensions:
         FriendsOfBehat\SymfonyExtension:
+            bootstrap: 'tests/bootstrap.php'
             kernel:
                 class: 'Carcel\Kernel'
                 environment: 'e2e'
