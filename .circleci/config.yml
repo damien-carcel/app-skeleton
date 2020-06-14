@@ -126,19 +126,15 @@ jobs:
                 command: make client-unit-tests O="--ci --reporters=default --reporters=jest-junit"
             - run:
                 name: Run client end to end tests with Chrome
-                command: make client-e2e-tests-with-chrome
-# To be added back later, once we understand why Nightwatch with Firefox is failing on CircleCI.
-#            - run:
-#                name: Run client end to end tests with Firefox
-#                command: make client-e2e-tests-with-firefox
+                command: make client-e2e O="--reporter mocha-junit-reporter"
             - store_test_results:
                 path: client/reports
             - store_artifacts:
                 path: client/reports
-            - store_test_results:
-                path: client/tests/e2e/reports
             - store_artifacts:
-                path: client/tests/e2e/reports
+                path: client/tests/e2e/screenshots
+            - store_artifacts:
+                path: client/tests/e2e/videos
 
 workflows:
     version: 2
@@ -154,14 +150,3 @@ workflows:
                     branches:
                         ignore:
                             - master
-    weekly:
-        triggers:
-            - schedule:
-                cron: "0 0 * * 1"
-                filters:
-                    branches:
-                        only:
-                            - master
-        jobs:
-            - test-api
-            - test-client

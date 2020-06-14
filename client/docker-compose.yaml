@@ -24,6 +24,17 @@ services:
       - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
     working_dir: '/srv/app'
 
+  cypress:
+    environment:
+      CYPRESS_baseUrl: 'http://client:80'
+    image: 'cypress/included:4.8.0'
+    networks:
+      - proxy
+    user: 'node'
+    volumes:
+      - './:/srv/app'
+    working_dir: '/srv/app'
+
   client:
     build:
       args:

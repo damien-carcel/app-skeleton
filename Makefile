@@ -219,17 +219,13 @@ type-check-client:
 client-unit-tests:
 	cd ${CURDIR}/client && docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn run test:unit ${O}
 
-.PHONY: client-e2e-tests-with-chrome
-client-e2e-tests-with-chrome:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env chrome
-
-.PHONY: client-e2e-tests-with-firefox
-client-e2e-tests-with-firefox:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env firefox
-
 .PHONY: client-e2e-tests
 client-e2e-tests:
-	cd ${CURDIR}/client && docker-compose run --rm node yarn run test:e2e --env chrome,firefox
+	cd ${CURDIR}/client && docker-compose run --rm -e MOCHA_FILE="tests/reports/e2e.xml" cypress yarn run test:e2e --headless ${O}
+
+.PHONY: client-e2e-tests-x11-sharing
+client-e2e-tests-x11-sharing:
+	cd ${CURDIR}/client && docker-compose run --rm --entrypoint="cypress open --project ." -e DISPLAY -v "/tmp/.X11-unix:/tmp/.X11-unix" cypress yarn run test:e2e
 
 .PHONY: client-tests
 client-tests: client/node_modules
@@ -237,4 +233,5 @@ client-tests: client/node_modules
 	$(MAKE) eslint
 	$(MAKE) type-check-client
 	$(MAKE) client-unit-tests
+	$(MAKE) install
 	$(MAKE) client-e2e-tests
