@@ -98,9 +98,8 @@ FROM dev as builder
 ENV COMPOSER_CACHE_DIR=/tmp/composer/cache
 
 WORKDIR /var/www/html
-USER www-data
-COPY --chown=www-data:www-data . .
 
+COPY . .
 RUN mkdir -p /tmp/composer/cache && \
     composer install --optimize-autoloader --no-interaction --no-scripts --prefer-dist
 
@@ -113,13 +112,11 @@ FROM base as api-fpm
 
 ENV APP_ENV=prod
 
+COPY --from=builder /var/www/html /var/www/html
 WORKDIR /var/www/html
-COPY --from=builder --chown=www-data:www-data /var/www/html /var/www/html
-RUN mkdir var && chown www-data: var
-
-USER www-data
-RUN bin/console ca:c
-USER root
+RUN mkdir var && \
+    bin/console ca:c && \
+    chown -R www-data:www-data /var/www/html
 
 ###################################
 # Nginx image used for production #

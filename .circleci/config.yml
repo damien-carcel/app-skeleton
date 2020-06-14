@@ -12,22 +12,11 @@ executor-config: &executor-config
 
 # -----
 
-commands:
-    proxy-network:
-        description: Create "proxy" Docker network (ignore if it already exists)
-        steps:
-            - run:
-                name: Create "proxy" Docker network (ignore if it already exists)
-                command: docker network create proxy || true
-
-# -----
-
 jobs:
     test-api:
         <<: *executor-config
         steps:
             - checkout
-            - proxy-network
             - run:
                 name: Build the API Docker images
                 command: make build-api-dev
@@ -88,7 +77,6 @@ jobs:
         <<: *executor-config
         steps:
             - checkout
-            - proxy-network
             - run:
                 name: Build the client Docker images
                 command: make build-client-dev
@@ -109,6 +97,10 @@ jobs:
                 key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
+            - persist_to_workspace:
+                root: ~/
+                paths:
+                    - project
             - run:
                 name: Create report directory
                 command: mkdir client/reports
@@ -124,9 +116,41 @@ jobs:
             - run:
                 name: Run client unit tests
                 command: make client-unit-tests O="--ci --reporters=default --reporters=jest-junit"
+            - store_test_results:
+                path: client/reports
+            - store_artifacts:
+                path: client/reports
+
+    test-e2e:
+        <<: *executor-config
+        steps:
+            - attach_workspace:
+                at: ~/
             - run:
-                name: Run client end to end tests with Chrome
-                command: make client-e2e O="--reporter mocha-junit-reporter"
+                name: Install mkcert
+                command: |
+                    sudo apt-get update
+                    sudo apt-get install libnss3-tools
+                    sudo curl -Lo /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64
+                    sudo chmod +x /usr/local/bin/mkcert
+                    mkcert -install
+            - run:
+                name: Install the application in production-like conditions
+                command: |
+                    make build-api-dev
+                    make install
+            - run:
+                name: Create report directory
+                command: mkdir client/reports
+            - run:
+                name: Set the project permissions so the "node" user of the Cypress Docker image can access it
+                command: sudo chown -R 1000:1000 ~/project
+            - run:
+                name: Run client end to end tests
+                command: make client-e2e-tests O="--reporter mocha-junit-reporter"
+            - run:
+                name: Set back the project permissions so the CircleCI user so the test results and artefact can be used
+                command: sudo chown -R 1001:1002 ~/project
             - store_test_results:
                 path: client/reports
             - store_artifacts:
@@ -146,6 +170,14 @@ workflows:
                         ignore:
                             - master
             - test-client:
+                filters:
+                    branches:
+                        ignore:
+                            - master
+            - test-e2e:
+                requires:
+                    - test-api
+                    - test-client
                 filters:
                     branches:
                         ignore:

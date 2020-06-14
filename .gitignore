@@ -1,1 +1,3 @@
 docker-compose.override.yaml
+/traefik/ssl/*
+!/traefik/ssl/.gitkeep
