@@ -56,6 +56,7 @@ update-vendor:
 .PHONY: update-node-modules
 update-node-modules:
 	cd ${CURDIR}/client && docker-compose run --rm node yarn upgrade-interactive --latest
+	cd ${CURDIR}/client && docker-compose run --rm node yarn upgrade
 
 .PHONY: update-dependencies
 update-dependencies: update-vendor update-node-modules
