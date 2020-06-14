@@ -1,0 +1,177 @@
+version: '3.4'
+
+services:
+  php:
+    build:
+      context: './api'
+      target: 'dev'
+    environment:
+      COMPOSER_CACHE_DIR: '/home/composer/.cache/composer'
+      COMPOSER_HOME: '/home/composer/.config/composer'
+      PHP_CONF_DISPLAY_ERRORS: 1
+      PHP_CONF_DISPLAY_STARTUP_ERRORS: 1
+      PHP_CONF_ERROR_REPORTING: 32767
+      PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
+      PHP_CONF_ZEND_ASSERTIONS: 1
+      PHP_IDE_CONFIG: 'serverName=app-skeleton-php'
+      XDEBUG_CONFIG: 'remote_host=172.17.0.1'
+      XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+    image: 'carcel/skeleton/dev:php'
+    networks:
+      - skeleton-api
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './api:/srv/app:rw'
+      - '${HOST_COMPOSER_CACHE_DIR:-~/.cache/composer}:/home/composer/.cache/composer'
+      - '${HOST_COMPOSER_HOME:-~/.config/composer}:/home/composer/.config/composer'
+    working_dir: '/srv/app'
+
+  api-dev:
+    build:
+      context: './api'
+      target: 'dev'
+    command: 'php -S 0.0.0.0:8000'
+    environment:
+      PHP_CONF_DISPLAY_ERRORS: 1
+      PHP_CONF_DISPLAY_STARTUP_ERRORS: 1
+      PHP_CONF_ERROR_REPORTING: 32767
+      PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
+      PHP_CONF_ZEND_ASSERTIONS: 1
+      PHP_IDE_CONFIG: 'serverName=app-skeleton-api'
+      XDEBUG_CONFIG: 'remote_host=172.17.0.1'
+      XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+    expose:
+      - '8000'
+    image: 'carcel/skeleton/dev:php'
+    networks:
+      - skeleton-api
+    ports:
+      - '${PHP_SKELETON_OUTPUT:-8000}:8000'
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './api:/srv/app:rw'
+    working_dir: '/srv/app/public'
+
+  fpm:
+    build:
+      context: './api'
+      target: 'api-fpm'
+    command: 'php-fpm -F'
+    image: 'carcel/skeleton/api:fpm'
+    networks:
+      - skeleton-api
+    restart: 'always'
+
+  api:
+    build:
+      context: './api'
+      target: 'api-nginx'
+    depends_on:
+      - 'fpm'
+    image: 'carcel/skeleton/api:nginx'
+    labels:
+      - 'traefik.http.middlewares.redirect-skeleton-api-http-to-https.redirectScheme.scheme=https'
+      - 'traefik.http.routers.skeleton-api.entrypoints=web'
+      - 'traefik.http.routers.skeleton-api.middlewares=redirect-skeleton-api-http-to-https'
+      - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-api-with-https.entrypoints=websecure'
+      - 'traefik.http.routers.skeleton-api-with-https.rule=Host(`skeleton-api.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-api-with-https.tls=true'
+    networks:
+      - proxy
+      - skeleton-api
+    restart: 'always'
+
+  mysql:
+    image: 'mysql:8'
+    command: ['--default-authentication-plugin=mysql_native_password']
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'app_skeleton'
+      MYSQL_PASSWORD: 'app_skeleton'
+      MYSQL_DATABASE: 'app_skeleton'
+    networks:
+      - skeleton-api
+    ports:
+      - '${MYSQL_SKELETON_PORT:-33006}:3306'
+    restart: 'always'
+    tmpfs:
+      - '/tmp'
+      - '/var/lib/mysql'
+
+  node:
+    build:
+      context: './client'
+      target: 'dev'
+    environment:
+      API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
+      CLIENT_PORT: '${CLIENT_PORT:-8080}'
+      CYPRESS_INSTALL_BINARY: 0
+      YARN_CACHE_FOLDER: '/home/yarn-cache'
+    expose:
+      - '${CLIENT_PORT:-8080}'
+    image: 'carcel/skeleton/dev:node'
+    networks:
+      - skeleton-client
+    ports:
+      - '${CLIENT_PORT:-8080}:${CLIENT_PORT:-8080}'
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './client:/srv/app'
+      - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
+      - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
+      - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
+    working_dir: '/srv/app'
+
+  cypress:
+    environment:
+      CYPRESS_baseUrl: 'http://client'
+      #TODO: The following URL should be usable with "host" network_mode, can't figure why it doesn't.
+      #CYPRESS_baseUrl: 'https://skeleton.docker.localhost'
+    image: 'cypress/included:4.8.0'
+    networks:
+      - 'proxy'
+    user: 'node'
+    volumes:
+      - './client:/srv/app'
+    working_dir: '/srv/app'
+
+  client:
+    build:
+      args:
+        API_BASE_URL_FOR_PRODUCTION: 'https://skeleton-api.docker.localhost'
+      context: './client'
+      target: 'client'
+    image: 'carcel/skeleton/client:latest'
+    labels:
+      - 'traefik.http.middlewares.redirect-skeleton-client-http-to-https.redirectScheme.scheme=https'
+      - 'traefik.http.routers.skeleton-client.entrypoints=web'
+      - 'traefik.http.routers.skeleton-client.middlewares=redirect-skeleton-client-http-to-https'
+      - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-client-with-https.entrypoints=websecure'
+      - 'traefik.http.routers.skeleton-client-with-https.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.skeleton-client-with-https.tls=true'
+    networks:
+      - proxy
+      - skeleton-client
+    restart: 'always'
+
+  traefik:
+    image: 'traefik'
+    networks:
+      - proxy
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8888:8080'
+    restart: 'always'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './traefik/dynamic:/etc/traefik/dynamic:ro'
+      - './traefik/ssl:/etc/traefik/ssl:ro'
+      - './traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro'
+
+networks:
+  proxy:
+  skeleton-api:
+  skeleton-client:

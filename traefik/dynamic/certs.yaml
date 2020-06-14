@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: '/etc/traefik/ssl/_wildcard.docker.localhost.pem'
+      keyFile: '/etc/traefik/ssl/_wildcard.docker.localhost-key.pem'

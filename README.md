@@ -12,11 +12,12 @@ It is composed of two distinct applications:
 
 ### Run the full application
 
-To be able to run both the API and the client, you'll first need to setup Traefik as a local reverse proxy.
-Please follow [this documentation](https://github.com/damien-carcel/traefik-as-local-reverse-proxy) to achieve that.
+To be able to run both the API and the client in production-like mode, you'll first need to install
+[mkcert](https://github.com/FiloSottile/mkcert).
 
 Then you can start the full application using docker by running:
 ```bash
+$ mkcert -install
 $ make install
 ```
 
