@@ -126,8 +126,6 @@ services:
   cypress:
     environment:
       CYPRESS_baseUrl: 'http://client'
-      #TODO: The following URL should be usable with "host" network_mode, can't figure why it doesn't.
-      #CYPRESS_baseUrl: 'https://skeleton.docker.localhost'
     image: 'cypress/included:4.8.0'
     networks:
       - 'proxy'
