@@ -106,16 +106,16 @@ jobs:
                 command: mkdir client/reports
             - run:
                 name: Lint CSS/LESS code
-                command: make stylelint O="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
+                command: make stylelint IO="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
             - run:
                 name: Lint JavaScript/TypeScript code
-                command: make eslint O="--no-fix -f junit > reports/eslint.xml"
+                command: make eslint IO="--no-fix -f junit > reports/eslint.xml"
             - run:
                 name: Run TS type checking
                 command: make type-check-client
             - run:
                 name: Run client unit tests
-                command: make client-unit-tests O="--ci --reporters=default --reporters=jest-junit"
+                command: make client-unit-tests IO="--ci --reporters=default --reporters=jest-junit"
             - store_test_results:
                 path: client/reports
             - store_artifacts:
@@ -138,7 +138,7 @@ jobs:
                 name: Install the application in production-like conditions
                 command: |
                     make build-api-dev
-                    make install
+                    make serve
             - run:
                 name: Create report directory
                 command: mkdir client/reports
@@ -147,7 +147,7 @@ jobs:
                 command: sudo chown -R 1000:1000 ~/project
             - run:
                 name: Run client end to end tests
-                command: make client-e2e-tests O="--reporter mocha-junit-reporter"
+                command: make client-e2e-tests IO="--reporter mocha-junit-reporter"
             - run:
                 name: Set back the project permissions so the CircleCI user so the test results and artefact can be used
                 command: sudo chown -R 1001:1002 ~/project

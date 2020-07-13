@@ -10,7 +10,7 @@ It is composed of two distinct applications:
 
 ## How to use it?
 
-### Run the full application
+### Run the application
 
 To be able to run both the API and the client in production-like mode, you'll first need to install
 [mkcert](https://github.com/FiloSottile/mkcert).
@@ -18,24 +18,16 @@ To be able to run both the API and the client in production-like mode, you'll fi
 Then you can start the full application using docker by running:
 ```bash
 $ mkcert -install
-$ make install
+$ make serve
 ```
 
-### Run the API alone
-
-You can either run the API using the Symfony server (dev env, testing and developing only) and access it on
-[localhost:8000](http://localhost:8000):
+The full list of commands is available by running:
 ```bash
-$ make develop-api
+$ make
 ```
 
-Or can use production like Nginx + FPM and access the API on [skeleton-api.docker.local](http://skeleton-api.docker.local)
-(you need to set up the URL in your `/etc/hosts` file and have Traefik working):
-```bash
-$ make serve-api
-```
-
-Both commands will build the required Docker images, check that Composer dependencies are up to date, and setup the MySQL database.
+This will describe how to serve only the API or the client in development mode, how to run the tests, to update the
+dependencies, and more.
 
 ### Debugging the API
 
@@ -46,19 +38,7 @@ You can debug the API by running:
 $ make develop-api DEBUG=1
 ```
 
-This will launch the API through the Symfony web server, with XDebug activated.
-
-### Serve the application with `webpack-dev-server`
-
-You can start the client using the `webpack-dev-server`:
-```bash
-$ make develop-client
-```
-
-This command will build the required Docker images, check that `yarn` dependencies are up to date, launch the API, and
-serve the application using the Webpack dev server with hot reloading.
-
-You can access the client application on [localhost:8080](http://localhost:8080).
+This will launch the API through the PHP development server with XDebug activated.
 
 ## Using Docker BuildKit
 
@@ -69,16 +49,7 @@ COMPOSE_DOCKER_CLI_BUILD=1
 DOCKER_BUILDKIT=1
 ```
 
-You can export them directly before running `make install`, or make them permanent by adding them in your shell profile.
-
-## Testing
-
-You can run the API and the client application tests with the following commands:
-
-```bash
-$ make api-tests
-$ make client-tests
-```
+You can export them directly before running `make serve`, or make them permanent by adding them to your shell profile.
 
 ## License
 
