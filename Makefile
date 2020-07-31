@@ -168,7 +168,7 @@ api-tests: api/vendor ## Execute all the API tests
 	@make mysql
 	@make api-integration-tests
 	@echo "Execute API end to end tests"
-	@make api-e2e-tests
+	@make api-end-to-end-tests
 
 .PHONY: api-coding-standards
 api-coding-standards: ## Check API coding style with PHP CS Fixer
@@ -203,19 +203,19 @@ api-coupling: ## Check coupling violations between API code layers
 
 .PHONY: api-unit-tests
 api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite "Unit tests" --log-junit tests/results/unit_tests.xml ${IO}
+	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite "Unit tests" ${IO}
 
 .PHONY: api-acceptance-tests
 api-acceptance-tests: ## Execute API acceptance tests (use "make api-acceptance-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=acceptance -o std --colors -f pretty -f junit -o tests/results/acceptance ${IO}
+	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=acceptance -o std --colors -f pretty ${IO}
 
 .PHONY: api-integration-tests
 api-integration-tests: ## Execute API integration tests (use "make api-integration-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite="Integration tests" --log-junit tests/results/integration_tests.xml ${IO}
+	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/phpunit --testsuite="Integration tests" ${IO}
 
-.PHONY: api-e2e-tests
-api-e2e-tests: api/config/jwt/public.pem ## Execute API end to end tests (use "make api-e2e-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty -f junit -o tests/results/e2e ${IO}
+.PHONY: api-end-to-end-tests
+api-end-to-end-tests: api/config/jwt/public.pem ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test)
+	@docker-compose run --rm -e XDEBUG_ENABLED=${DEBUG} php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty ${IO}
 
 .PHONY: phpmd
 phpmd: ## Run PHP Mess Detector on the API code
@@ -223,8 +223,8 @@ phpmd: ## Run PHP Mess Detector on the API code
 
 .PHONY: phpmetrics
 phpmetrics: ## Run PHP Metrics on the API code
-	@docker-compose run --rm php vendor/bin/phpmetrics --report-html=report .
-	@xdg-open api/report/index.html
+	@docker-compose run --rm php vendor/bin/phpmetrics --report-html=reports/phpmetrics .
+	@xdg-open api/reports/phpmetrics/index.html
 
 # Test the client
 
@@ -240,7 +240,7 @@ client-tests: client/node_modules ## Execute all the client tests
 	@make client-unit-tests
 	@echo "Execute end-to-end tests"
 	@make serve
-	@make client-e2e-tests
+	@make client-end-to-end-tests
 
 .PHONY: stylelint
 stylelint: ## Lint the LESS stylesheet code
@@ -258,10 +258,6 @@ type-check-client: ## Check for type errors
 client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=path/to/test" to run a specific test)
 	@docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn run test:unit ${IO}
 
-.PHONY: client-e2e-tests
-client-e2e-tests: ## Execute client end-to-end tests in headless mode (use "make client-e2e-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e MOCHA_FILE="tests/reports/e2e.xml" cypress yarn run test:e2e --headless ${IO}
-
-.PHONY: client-e2e-tests-x11-sharing
-client-e2e-tests-x11-sharing: ## Execute client end to end tests with X11 sharing
-	@docker-compose run --rm --entrypoint="cypress open --project ." -e DISPLAY -v "/tmp/.X11-unix:/tmp/.X11-unix" cypress yarn run test:e2e
+.PHONY: client-end-to-end-tests
+client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode)
+	@docker-compose run --rm cypress yarn run test:e2e --url http://client/ ${IO}

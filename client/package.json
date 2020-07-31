@@ -20,15 +20,15 @@
     "core-js": "^3.6.4",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
+    "vue-class-component": "^7.2.5",
     "vue-property-decorator": "^9.0.0",
     "vue-router": "^3.3.4",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.4",
-    "@typescript-eslint/eslint-plugin": "^3.6.0",
-    "@typescript-eslint/parser": "^3.6.0",
+    "@types/jest": "^26.0.8",
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
     "@vue/cli-plugin-babel": "^4.4.6",
     "@vue/cli-plugin-e2e-cypress": "~4.4.6",
     "@vue/cli-plugin-eslint": "^4.4.6",
@@ -41,19 +41,22 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "1.0.3",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
-    "jest-junit": "^11.0.1",
-    "less": "^3.11.3",
+    "jest-junit": "^11.1.0",
+    "less": "^3.12.2",
     "less-loader": "^6.2.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.0",
     "mocha-junit-reporter": "^2.0.0",
     "prettier": "^2.0.5",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "vue-template-compiler": "^2.6.11"
+  },
+  "resolutions": {
+    "cypress": "^4.11.0"
   },
   "bugs": {
     "url": "https://github.com/damien-carcel/app-skeleton/issues"
