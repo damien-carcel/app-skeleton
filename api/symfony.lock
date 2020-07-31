@@ -436,9 +436,6 @@
     "symfony/http-kernel": {
         "version": "v4.4.0"
     },
-    "symfony/inflector": {
-        "version": "v4.4.0"
-    },
     "symfony/messenger": {
         "version": "4.3",
         "recipe": {
