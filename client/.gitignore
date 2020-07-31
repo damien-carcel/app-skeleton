@@ -1,8 +1,8 @@
 /dist
 /node_modules
+/reports
 /tests/e2e/videos/
 /tests/e2e/screenshots/
-/tests/reports
 
 npm-debug.log*
 yarn-debug.log*

@@ -55,6 +55,9 @@
     "typescript": "^3.9.7",
     "vue-template-compiler": "^2.6.11"
   },
+  "resolutions": {
+    "cypress": "^4.11.0"
+  },
   "bugs": {
     "url": "https://github.com/damien-carcel/app-skeleton/issues"
   },

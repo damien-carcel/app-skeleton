@@ -103,7 +103,7 @@ services:
     environment:
       API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
       CLIENT_PORT: '${CLIENT_PORT:-8080}'
-      CYPRESS_INSTALL_BINARY: 0
+      CYPRESS_CACHE_FOLDER: '/home/yarn-cache/cypress'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
@@ -123,12 +123,20 @@ services:
   cypress:
     environment:
       CYPRESS_baseUrl: 'http://client'
-    image: 'cypress/included:4.8.0'
+      CYPRESS_CACHE_FOLDER: '/home/yarn-cache/cypress'
+      DISPLAY: '${DISPLAY}'
+      QT_X11_NO_MITSHM: 1
+      _MITSHM: 0
+      _X11_NO_MITSHM: 1
+    image: 'cypress/browsers:node12.18.0-chrome83-ff77'
     networks:
       - 'proxy'
     user: 'node'
     volumes:
       - './client:/srv/app'
+      - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
+      - '/tmp/.X11-unix:/tmp/.X11-unix'
+      - '/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket'
     working_dir: '/srv/app'
 
   client:

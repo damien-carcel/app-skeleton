@@ -37,6 +37,9 @@ jobs:
                 paths:
                     - ~/.cache/composer
             - run:
+                name: Create report directory
+                command: mkdir api/reports
+            - run:
                 name: Run API static analysis - PHP CS Fixer
                 command: make api-coding-standards
             - run:
@@ -50,10 +53,10 @@ jobs:
                 command: make api-coupling
             - run:
                 name: Run API unit tests
-                command: make api-unit-tests
+                command: make api-unit-tests IO="--log-junit reports/unit_tests.xml"
             - run:
                 name: Run API acceptance tests
-                command: make api-acceptance-tests
+                command: make api-acceptance-tests IO="-f junit -o reports/acceptance"
             - run:
                 name: start MySQL container
                 command: cd ~/project/api && docker-compose up -d mysql
@@ -62,14 +65,14 @@ jobs:
                 command: make mysql
             - run:
                 name: Run API integration tests
-                command: make api-integration-tests
+                command: make api-integration-tests IO="--log-junit reports/integration_tests.xml ${IO}"
             - run:
                 name: Run API end to end tests
-                command: make api-e2e-tests
+                command: make api-end-to-end-tests IO="-f junit -o reports/e2e"
             - store_test_results:
-                path: api/tests/results
+                path: api/reports
             - store_artifacts:
-                path: api/tests/results
+                path: api/reports
             - store_artifacts:
                 path: api/var/log
 
@@ -126,6 +129,10 @@ jobs:
         steps:
             - attach_workspace:
                 at: ~/
+            - restore_cache:
+                keys:
+                    - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+                    - node-{{ .Environment.CACHE_VERSION }}-
             - run:
                 name: Install mkcert
                 command: |
@@ -144,10 +151,12 @@ jobs:
                 command: mkdir client/reports
             - run:
                 name: Set the project permissions so the "node" user of the Cypress Docker image can access it
-                command: sudo chown -R 1000:1000 ~/project
+                command: |
+                    sudo chown -R 1000:1000 ~/project
+                    sudo chown -R 1000:1000 ~/.cache/yarn
             - run:
                 name: Run client end to end tests
-                command: make client-e2e-tests IO="--reporter mocha-junit-reporter"
+                command: make client-end-to-end-tests IO="--headless --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/e2e.xml"
             - run:
                 name: Set back the project permissions so the CircleCI user so the test results and artefact can be used
                 command: sudo chown -R 1001:1002 ~/project
