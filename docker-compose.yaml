@@ -100,9 +100,6 @@ services:
       - '/var/lib/mysql'
 
   node:
-    build:
-      context: './client'
-      target: 'dev'
     environment:
       API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
       CLIENT_PORT: '${CLIENT_PORT:-8080}'
@@ -110,7 +107,7 @@ services:
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
-    image: 'carcel/skeleton/dev:node'
+    image: 'node:slim'
     networks:
       - skeleton-client
     ports:
