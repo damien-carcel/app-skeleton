@@ -29,10 +29,7 @@ function createPostHeaders(): Headers {
   return headers;
 }
 
-export function getUserCollection(
-  page: number,
-  limit: number
-): Promise<UserData> {
+export function getUserCollection(page: number, limit: number): Promise<UserData> {
   const url = getApiUrl("/api/users") + `?_page=${page}&_limit=${limit}`;
 
   return fetch(url, {
