@@ -1,12 +1,6 @@
 {
   "name": "app-skeleton",
-  "version": "0.1.0",
   "private": true,
-  "description": "A basic skeleton for ReactJS front-end application",
-  "author": {
-    "name": "Damien Carcel",
-    "email": "damien.carcel@gmail.com"
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -17,13 +11,10 @@
     "type-check": "tsc --noEmit --pretty"
   },
   "dependencies": {
-    "core-js": "^3.6.4",
+    "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
-    "vue-class-component": "^7.2.5",
-    "vue-property-decorator": "^9.0.0",
-    "vue-router": "^3.3.4",
-    "vuex": "^3.5.1"
+    "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.8",
@@ -36,7 +27,6 @@
     "@vue/cli-plugin-router": "^4.4.6",
     "@vue/cli-plugin-typescript": "^4.4.6",
     "@vue/cli-plugin-unit-jest": "^4.4.6",
-    "@vue/cli-plugin-vuex": "^4.4.6",
     "@vue/cli-service": "^4.4.6",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
@@ -57,14 +47,5 @@
   },
   "resolutions": {
     "cypress": "^4.11.0"
-  },
-  "bugs": {
-    "url": "https://github.com/damien-carcel/app-skeleton/issues"
-  },
-  "homepage": "https://github.com/damien-carcel/app-skeleton#README.md",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/damien-carcel/app-skeleton.git"
   }
 }
