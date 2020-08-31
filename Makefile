@@ -2,6 +2,16 @@ SHELL = bash
 
 .PHONY: help
 help:
+	@echo "-----------------"
+	@echo "- Main commands -"
+	@echo "-----------------"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?#main# .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?#main# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "----------------------"
+	@echo "- Secondary commands -"
+	@echo "----------------------"
+	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
@@ -23,31 +33,31 @@ PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 pull: ## Pull all Docker images used in docker-compose.yaml
 	@docker-compose pull
 
+.PHONY: build
+build: pull ## Build all Docker images at once (API and client, development and production)
+	@docker-compose build --pull
+
+.PHONY: build-dev
+build-dev: build-api-dev build-client-dev ## Build all development images (API and client)
+
 .PHONY: build-api-dev
 build-api-dev: pull ## Build API development image (carcel/skeleton/dev:php)
 	@docker-compose build --pull php
-
-.PHONY: build-api-prod
-build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx)
-	@docker-compose build --pull api fpm
 
 .PHONY: build-client-dev
 build-client-dev: pull ## Build client development image (carcel/skeleton/dev:node)
 	@docker-compose build --pull node
 
-.PHONY: build-client-prod
-build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest)
-	@docker-compose build --pull client
-
-.PHONY: build-dev
-build-dev: build-api-dev build-client-dev ## Build all development images (API and client)
-
 .PHONY: build-prod
 build-prod: build-api-prod build-client-prod ## Build all production images (API and client)
 
-.PHONY: build
-build: pull ## Build all Docker images at once (API and client, development and production)
-	@docker-compose build --pull
+.PHONY: build-api-prod
+build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx)
+	@docker-compose build --pull api fpm
+
+.PHONY: build-client-prod
+build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest)
+	@docker-compose build --pull client
 
 # Prepare the application dependencies
 
@@ -93,13 +103,13 @@ cache: api/vendor ## Clear the API (Symfony) cache
 	@docker-compose run --rm -e APP_ENV=${APP_ENV} php bin/console cache:clear
 
 .PHONY: mysql
-mysql: api/vendor
+mysql: api/vendor ## Setup the API database
 	@docker-compose up -d mysql
 	@sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
-develop-api: api/config/jwt/public.pem ## Run the API using the PHP development server
+develop-api: api/config/jwt/public.pem #main# Run the API using the PHP development server
 	@echo "Starting the API in development mode"
 	@echo "..."
 	@make mysql
@@ -120,13 +130,13 @@ api/config/jwt/public.pem: api/config/jwt
 	'
 
 .PHONY: develop-client
-develop-client: develop-api client/node_modules ## Run the client using Vue CLI development server (hit CTRL+c to stop the server)
+develop-client: develop-api client/node_modules #main# Run the client using Vue CLI development server (hit CTRL+c to stop the server)
 	@echo "Starting the Client in development mode"
 	@echo "..."
 	@docker-compose run --rm --service-ports node yarn serve
 
-.PHONY: serve ## Serve the whole application in production mode
-serve: serve-api serve-client
+.PHONY: serve
+serve: serve-api serve-client #main# Serve the whole application in production mode
 
 .PHONY: serve-api
 serve-api: traefik/ssl/_wildcard.docker.localhost.pem mysql build-api-prod ## Serve the API in production mode (nginx + PHP-FPM)
@@ -147,13 +157,13 @@ serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod ## Se
 	@echo "Client is now running in production mode, you can access it through https://skeleton.docker.localhost"
 
 .PHONY: down
-down: ## Stop the application and remove all containers, networks and volumes
+down: #main# Stop the application and remove all containers, networks and volumes
 	@docker-compose down -v
 
 # Test the API
 
 .PHONY: api-tests
-api-tests: api/vendor ## Execute all the API tests
+api-tests: api/vendor #main# Execute all the API tests
 	@echo "Lint the PHP code"
 	@make lint-api-code
 	@echo "Run PHP static analysis"
@@ -229,7 +239,7 @@ phpmetrics: ## Run PHP Metrics on the API code
 # Test the client
 
 .PHONY: client-tests
-client-tests: client/node_modules ## Execute all the client tests
+client-tests: client/node_modules #main# Execute all the client tests
 	@echo "Lint the stylesheets"
 	@make stylelint
 	@echo "Lint the TypeScript code"
@@ -240,7 +250,7 @@ client-tests: client/node_modules ## Execute all the client tests
 	@make client-unit-tests
 	@echo "Execute end-to-end tests"
 	@make serve
-	@make client-end-to-end-tests
+	@make client-end-to-end-tests IO="--headless"
 
 .PHONY: stylelint
 stylelint: ## Lint the LESS stylesheet code

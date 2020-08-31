@@ -1,7 +1,5 @@
 # A web application skeleton using React and Symfony
 
-[![CircleCI](https://circleci.com/gh/damien-carcel/app-skeleton/tree/master.svg?style=svg)](https://circleci.com/gh/damien-carcel/app-skeleton/tree/master)
-
 This is a skeleton to easily bootstrap a modern web project.
 
 It is composed of two distinct applications:
