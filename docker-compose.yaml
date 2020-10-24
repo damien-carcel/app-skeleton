@@ -107,7 +107,7 @@ services:
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
-    image: 'node:slim'
+    image: 'node'
     networks:
       - skeleton-client
     ports:
