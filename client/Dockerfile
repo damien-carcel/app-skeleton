@@ -12,7 +12,7 @@ RUN mkdir /home/node/client
 WORKDIR /home/node/client
 
 COPY --chown=node:node . .
-RUN yarn install && \
+RUN yarn install --frozen-lockfile --check-files && \
     API_BASE_URL=${API_BASE_URL_FOR_PRODUCTION} yarn run build
 
 ###################################
