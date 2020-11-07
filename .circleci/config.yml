@@ -33,7 +33,7 @@ jobs:
             - composer-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install API dependencies
-          command: make api/vendor
+          command: make install-api-dependencies
       - save_cache:
           key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
           paths:
@@ -99,7 +99,7 @@ jobs:
             - node-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install client dependencies
-          command: make client/node_modules
+          command: make install-client-dependencies
       - save_cache:
           key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
           paths:

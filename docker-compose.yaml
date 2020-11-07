@@ -107,7 +107,7 @@ services:
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
-    image: 'node'
+    image: 'node:slim'
     networks:
       - skeleton-client
     ports:
@@ -128,7 +128,7 @@ services:
       QT_X11_NO_MITSHM: 1
       _MITSHM: 0
       _X11_NO_MITSHM: 1
-    image: 'cypress/browsers:node12.18.0-chrome83-ff77'
+    image: 'cypress/browsers:node12.14.1-chrome85-ff81'
     networks:
       - 'proxy'
     user: 'node'
