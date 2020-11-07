@@ -29,19 +29,11 @@ jobs:
             mkdir -p ~/.config/composer
       - restore_cache:
           keys:
-            - composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
-            - composer-{{ .Environment.CACHE_VERSION }}-
-      - restore_cache:
-          keys:
             - vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
             - vendor-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install API dependencies
           command: make install-api-dependencies
-      - save_cache:
-          key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
-          paths:
-            - ~/.cache/composer
       - save_cache:
           key: vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
           paths:
@@ -101,10 +93,7 @@ jobs:
             touch ~/.yarnrc
             mkdir ~/.yarn
             mkdir -p ~/.cache/yarn
-      - restore_cache:
-          keys:
-            - yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-            - yarn-{{ .Environment.CACHE_VERSION }}-
+            mkdir -p ~/.cache/Cypress
       - restore_cache:
           keys:
             - node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
@@ -112,10 +101,6 @@ jobs:
       - run:
           name: Install client dependencies
           command: make install-client-dependencies
-      - save_cache:
-          key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
       - save_cache:
           key: node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
           paths:
@@ -150,6 +135,16 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Create cache and configuration directories for the client dependencies
+          command: |
+            touch ~/.yarnrc
+            mkdir ~/.yarn
+            mkdir -p ~/.cache/yarn
+            mkdir -p ~/.cache/Cypress
+      - run:
+          name: Install the Cypress binary
+          command: make install-cypress
+      - run:
           name: Install mkcert
           command: |
             sudo apt-get update
@@ -170,6 +165,7 @@ jobs:
           command: |
             sudo chown -R 1000:1000 ~/project
             sudo chown -R 1000:1000 ~/.cache/yarn
+            sudo chown -R 1000:1000 ~/.cache/Cypress
       - run:
           name: Run client end to end tests
           command: make client-end-to-end-tests IO="--headless --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/e2e.xml"

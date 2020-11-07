@@ -62,11 +62,11 @@ build-client-prod: pull ## Build client production image (carcel/skeleton/client
 # Prepare the application dependencies
 
 .PHONY: install-api-dependencies
-install-api-dependencies: ## Install API dependencies
+install-api-dependencies: build-api-dev ## Install API dependencies
 	@docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: install-client-dependencies
-install-client-dependencies: ## Install client dependencies
+install-client-dependencies: build-client-dev ## Install client dependencies
 ifeq ($(wildcard client/yarn.lock),)
 	@echo "Install the Node modules according to package.json"
 	@docker-compose run --rm node yarn install
@@ -78,11 +78,11 @@ endif
 dependencies: install-api-dependencies install-client-dependencies ## Install API and client dependencies
 
 .PHONY: update-api-dependencies
-update-api-dependencies: ## Update API dependencies
+update-api-dependencies: build-api-dev ## Update API dependencies
 	@docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: update-client-dependencies
-update-client-dependencies: ## Update client dependencies
+update-client-dependencies: build-client-dev ## Update client dependencies
 	@docker-compose run --rm node yarn upgrade-interactive --latest
 	@docker-compose run --rm node yarn upgrade
 
@@ -305,3 +305,7 @@ client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=
 .PHONY: client-end-to-end-tests
 client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode)
 	@docker-compose run --rm cypress yarn run test:e2e --url http://client/ ${IO}
+
+.PHONY: install-cypress ## Force the install of the Cypress binary
+install-cypress:
+	@docker-compose run --rm node ./node_modules/.bin/cypress install
