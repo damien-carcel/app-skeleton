@@ -99,12 +99,12 @@ traefik/ssl/_wildcard.docker.localhost.pem:
 	@cd ${CURDIR}/traefik/ssl && mkcert "*.docker.localhost"
 
 .PHONY: cache
-cache: ## Clear the API (Symfony) cache
+cache: install-api-dependencies ## Clear the API (Symfony) cache
 	@docker-compose run --rm php rm -rf var/cache/*
 	@docker-compose run --rm -e APP_ENV=${APP_ENV} php bin/console cache:clear
 
 .PHONY: mysql
-mysql: ## Setup the API database
+mysql: install-api-dependencies ## Setup the API database
 	@docker-compose up -d mysql
 	@sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction

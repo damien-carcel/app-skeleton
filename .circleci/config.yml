@@ -31,6 +31,10 @@ jobs:
           keys:
             - composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
             - composer-{{ .Environment.CACHE_VERSION }}-
+      - restore_cache:
+          keys:
+            - vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+            - vendor-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install API dependencies
           command: make install-api-dependencies
@@ -38,6 +42,10 @@ jobs:
           key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
           paths:
             - ~/.cache/composer
+      - save_cache:
+          key: vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+          paths:
+            - api/vendor
       - run:
           name: Create report directory
           command: mkdir api/reports
@@ -95,15 +103,23 @@ jobs:
             mkdir -p ~/.cache/yarn
       - restore_cache:
           keys:
-            - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-            - node-{{ .Environment.CACHE_VERSION }}-
+            - yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+            - yarn-{{ .Environment.CACHE_VERSION }}-
+      - restore_cache:
+          keys:
+            - node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+            - node_modules-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install client dependencies
           command: make install-client-dependencies
       - save_cache:
-          key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+          key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - save_cache:
+          key: node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+          paths:
+            - client/node_modules
       - persist_to_workspace:
           root: ~/
           paths:
@@ -135,8 +151,16 @@ jobs:
           at: ~/
       - restore_cache:
           keys:
-            - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-            - node-{{ .Environment.CACHE_VERSION }}-
+            - yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+            - yarn-{{ .Environment.CACHE_VERSION }}-
+      - restore_cache:
+          keys:
+            - node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+            - node_modules-{{ .Environment.CACHE_VERSION }}-
+      - restore_cache:
+          keys:
+            - vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+            - vendor-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install mkcert
           command: |
