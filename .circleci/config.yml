@@ -155,4 +155,4 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main

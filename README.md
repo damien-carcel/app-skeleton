@@ -51,4 +51,4 @@ You can export them directly before running `make serve`, or make them permanent
 
 ## License
 
-This repository is under the MIT license. See the complete license in the [LICENSE](https://github.com/damien-carcel/app-skeleton/blob/master/LICENSE) file.
+This repository is under the MIT license. See the complete license in the [LICENSE](https://github.com/damien-carcel/app-skeleton/blob/main/LICENSE) file.
