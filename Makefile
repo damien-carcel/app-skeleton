@@ -35,7 +35,7 @@ pull: ## Pull all Docker images used in docker-compose.yaml
 
 .PHONY: build
 build: pull ## Build all Docker images at once (API and client, development and production)
-	@docker-compose build --pull
+	@docker-compose build --parallel --pull
 
 .PHONY: build-dev
 build-dev: build-api-dev build-client-dev ## Build all development images (API and client)
@@ -53,7 +53,7 @@ build-prod: build-api-prod build-client-prod ## Build all production images (API
 
 .PHONY: build-api-prod
 build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx)
-	@docker-compose build --pull api fpm
+	@docker-compose build --parallel --pull api fpm
 
 .PHONY: build-client-prod
 build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest)
