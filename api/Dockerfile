@@ -101,7 +101,7 @@ WORKDIR /var/www/html
 
 COPY . .
 RUN mkdir -p /tmp/composer/cache && \
-    composer install --optimize-autoloader --no-interaction --no-scripts --prefer-dist
+    composer install --optimize-autoloader --no-interaction --no-scripts --prefer-dist --no-dev
 
 ###############################
 # Image used for production   #

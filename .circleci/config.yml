@@ -13,31 +13,50 @@ executor-config: &executor-config
 # -----
 
 jobs:
-  test-api:
+  tests:
     <<: *executor-config
     steps:
       - checkout
       - run:
-          name: Build the API Docker images
+          name: Build all the Docker images
           command: |
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-            make build-api-dev
+            make -j build-dev
       - run:
           name: Create cache and configuration directories for the API dependencies
           command: |
             mkdir -p ~/.cache/composer
             mkdir -p ~/.config/composer
       - restore_cache:
+          name: Restore the "vendor" directory
           keys:
-            - composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
-            - composer-{{ .Environment.CACHE_VERSION }}-
+            - vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+            - vendor-{{ .Environment.CACHE_VERSION }}-
       - run:
-          name: Install API dependencies
-          command: make api/vendor
+          name: Create cache and configuration directories for the client dependencies
+          command: |
+            touch ~/.yarnrc
+            mkdir ~/.yarn
+            mkdir -p ~/.cache/yarn
+            mkdir -p ~/.cache/Cypress
+      - restore_cache:
+          name: Restore the "node_modules" directory
+          keys:
+            - node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+            - node_modules-{{ .Environment.CACHE_VERSION }}-
+      - run:
+          name: Install all dependencies in parallel
+          command: make -j dependencies
       - save_cache:
-          key: composer-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
+          name: Cache the "vendor" directory
+          key: vendor-{{ .Environment.CACHE_VERSION }}-{{ checksum "api/composer.lock" }}
           paths:
-            - ~/.cache/composer
+            - api/vendor
+      - save_cache:
+          name: Cache the "node_modules" directory
+          key: node_modules-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
+          paths:
+            - client/node_modules
       - run:
           name: Create report directory
           command: mkdir api/reports
@@ -71,43 +90,6 @@ jobs:
       - run:
           name: Run API end to end tests
           command: make api-end-to-end-tests IO="-f junit -o reports/e2e"
-      - store_test_results:
-          path: api/reports
-      - store_artifacts:
-          path: api/reports
-      - store_artifacts:
-          path: api/var/log
-
-  test-client:
-    <<: *executor-config
-    steps:
-      - checkout
-      - run:
-          name: Build the client Docker images
-          command: |
-            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-            make build-client-dev
-      - run:
-          name: Create cache and configuration directories for the client dependencies
-          command: |
-            touch ~/.yarnrc
-            mkdir ~/.yarn
-            mkdir -p ~/.cache/yarn
-      - restore_cache:
-          keys:
-            - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-            - node-{{ .Environment.CACHE_VERSION }}-
-      - run:
-          name: Install client dependencies
-          command: make client/node_modules
-      - save_cache:
-          key: node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project
       - run:
           name: Create report directory
           command: mkdir client/reports
@@ -123,20 +105,6 @@ jobs:
       - run:
           name: Run client unit tests
           command: make client-unit-tests IO="--ci --reporters=default --reporters=jest-junit"
-      - store_test_results:
-          path: client/reports
-      - store_artifacts:
-          path: client/reports
-
-  test-e2e:
-    <<: *executor-config
-    steps:
-      - attach_workspace:
-          at: ~/
-      - restore_cache:
-          keys:
-            - node-{{ .Environment.CACHE_VERSION }}-{{ checksum "client/yarn.lock" }}
-            - node-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: Install mkcert
           command: |
@@ -147,23 +115,28 @@ jobs:
             mkcert -install
       - run:
           name: Install the application in production-like conditions
-          command: |
-            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-            make serve
+          command: make -j serve
       - run:
-          name: Create report directory
-          command: mkdir client/reports
+          name: Install the Cypress binary
+          command: make install-cypress
       - run:
           name: Set the project permissions so the "node" user of the Cypress Docker image can access it
           command: |
             sudo chown -R 1000:1000 ~/project
             sudo chown -R 1000:1000 ~/.cache/yarn
+            sudo chown -R 1000:1000 ~/.cache/Cypress
       - run:
           name: Run client end to end tests
           command: make client-end-to-end-tests IO="--headless --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/e2e.xml"
       - run:
           name: Set back the project permissions so the CircleCI user so the test results and artefact can be used
           command: sudo chown -R 1001:1002 ~/project
+      - store_test_results:
+          path: api/reports
+      - store_artifacts:
+          path: api/reports
+      - store_artifacts:
+          path: api/var/log
       - store_test_results:
           path: client/reports
       - store_artifacts:
@@ -176,26 +149,9 @@ jobs:
 workflows:
   pull_request:
     jobs:
-      - test-api:
+      - tests:
           context:
             - docker-hub-credentials
-          filters:
-            branches:
-              ignore:
-                - master
-      - test-client:
-          context:
-            - docker-hub-credentials
-          filters:
-            branches:
-              ignore:
-                - master
-      - test-e2e:
-          context:
-            - docker-hub-credentials
-          requires:
-            - test-api
-            - test-client
           filters:
             branches:
               ignore:

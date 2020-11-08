@@ -103,11 +103,11 @@ services:
     environment:
       API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
       CLIENT_PORT: '${CLIENT_PORT:-8080}'
-      CYPRESS_CACHE_FOLDER: '/home/yarn-cache/cypress'
+      CYPRESS_CACHE_FOLDER: '/home/cypress-cache'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     expose:
       - '${CLIENT_PORT:-8080}'
-    image: 'node'
+    image: 'node:slim'
     networks:
       - skeleton-client
     ports:
@@ -115,6 +115,7 @@ services:
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
+      - '${HOST_CYPRESS_CACHE_FOLDER:-~/.cache/Cypress}:/home/cypress-cache'
       - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
       - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
       - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
@@ -123,18 +124,18 @@ services:
   cypress:
     environment:
       CYPRESS_baseUrl: 'http://client'
-      CYPRESS_CACHE_FOLDER: '/home/yarn-cache/cypress'
+      CYPRESS_CACHE_FOLDER: '/home/cypress-cache'
       DISPLAY: '${DISPLAY}'
       QT_X11_NO_MITSHM: 1
       _MITSHM: 0
       _X11_NO_MITSHM: 1
-    image: 'cypress/browsers:node12.18.0-chrome83-ff77'
+    image: 'cypress/browsers:node12.14.1-chrome85-ff81'
     networks:
       - 'proxy'
     user: 'node'
     volumes:
       - './client:/srv/app'
-      - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
+      - '${HOST_CYPRESS_CACHE_FOLDER:-~/.cache/Cypress}:/home/cypress-cache'
       - '/tmp/.X11-unix:/tmp/.X11-unix'
       - '/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket'
     working_dir: '/srv/app'

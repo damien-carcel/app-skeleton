@@ -35,7 +35,7 @@ pull: ## Pull all Docker images used in docker-compose.yaml
 
 .PHONY: build
 build: pull ## Build all Docker images at once (API and client, development and production)
-	@docker-compose build --pull
+	@docker-compose build --parallel --pull
 
 .PHONY: build-dev
 build-dev: build-api-dev build-client-dev ## Build all development images (API and client)
@@ -53,7 +53,7 @@ build-prod: build-api-prod build-client-prod ## Build all production images (API
 
 .PHONY: build-api-prod
 build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx)
-	@docker-compose build --pull api fpm
+	@docker-compose build --parallel --pull api fpm
 
 .PHONY: build-client-prod
 build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest)
@@ -61,27 +61,28 @@ build-client-prod: pull ## Build client production image (carcel/skeleton/client
 
 # Prepare the application dependencies
 
-api/composer.lock: api/composer.json
+.PHONY: install-api-dependencies
+install-api-dependencies: build-api-dev ## Install API dependencies
 	@docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
 
-api/vendor: api/composer.lock
-	@docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
-
-client/yarn.lock: client/package.json
+.PHONY: install-client-dependencies
+install-client-dependencies: build-client-dev ## Install client dependencies
+ifeq ($(wildcard client/yarn.lock),)
+	@echo "Install the Node modules according to package.json"
 	@docker-compose run --rm node yarn install
-
-client/node_modules: client/yarn.lock
+endif
+	@echo "Install the Node modules according to yarn.lock"
 	@docker-compose run --rm node yarn install --frozen-lockfile --check-files
 
 .PHONY: dependencies
-dependencies: api/vendor client/node_modules ## Install API and client dependencies
+dependencies: install-api-dependencies install-client-dependencies ## Install API and client dependencies
 
 .PHONY: update-api-dependencies
-update-api-dependencies: ## Update API dependencies
+update-api-dependencies: build-api-dev ## Update API dependencies
 	@docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: update-client-dependencies
-update-client-dependencies: ## Update client dependencies
+update-client-dependencies: build-client-dev ## Update client dependencies
 	@docker-compose run --rm node yarn upgrade-interactive --latest
 	@docker-compose run --rm node yarn upgrade
 
@@ -98,25 +99,27 @@ traefik/ssl/_wildcard.docker.localhost.pem:
 	@cd ${CURDIR}/traefik/ssl && mkcert "*.docker.localhost"
 
 .PHONY: cache
-cache: api/vendor ## Clear the API (Symfony) cache
+cache: install-api-dependencies ## Clear the API (Symfony) cache
 	@docker-compose run --rm php rm -rf var/cache/*
 	@docker-compose run --rm -e APP_ENV=${APP_ENV} php bin/console cache:clear
 
 .PHONY: mysql
-mysql: api/vendor ## Setup the API database
+mysql: install-api-dependencies ## Setup the API database
 	@docker-compose up -d mysql
 	@sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
 	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
-develop-api: api/config/jwt/public.pem #main# Run the API using the PHP development server
+develop-api: api/config/jwt/public.pem install-api-dependencies #main# Run the API using the PHP development server
+	@echo ""
 	@echo "Starting the API in development mode"
-	@echo "..."
+	@echo ""
 	@make mysql
 	@make cache
 	@XDEBUG_ENABLED=${DEBUG} docker-compose up -d api-dev
-	@echo "..."
+	@echo ""
 	@echo "API is now running in development mode, you can access it through http://localhost:8000"
+	@echo ""
 
 api/config/jwt:
 	@mkdir -p api/config/jwt
@@ -130,9 +133,10 @@ api/config/jwt/public.pem: api/config/jwt
 	'
 
 .PHONY: develop-client
-develop-client: develop-api client/node_modules #main# Run the client using Vue CLI development server (hit CTRL+c to stop the server)
+develop-client: develop-api install-client-dependencies #main# Run the client using Vue CLI development server (hit CTRL+c to stop the server)
+	@echo ""
 	@echo "Starting the Client in development mode"
-	@echo "..."
+	@echo ""
 	@docker-compose run --rm --service-ports node yarn serve
 
 .PHONY: serve
@@ -163,22 +167,39 @@ down: #main# Stop the application and remove all containers, networks and volume
 # Test the API
 
 .PHONY: api-tests
-api-tests: api/vendor #main# Execute all the API tests
+api-tests: install-api-dependencies #main# Execute all the API tests
+	@echo ""
 	@echo "Lint the PHP code"
+	@echo ""
 	@make lint-api-code
+	@echo ""
 	@echo "Run PHP static analysis"
+	@echo ""
 	@make analyse-api-code
+	@echo ""
 	@echo "Check coupling violations between API code layers"
+	@echo ""
 	@make api-coupling
+	@echo ""
 	@echo "Execute API unit tests"
+	@echo ""
 	@make api-unit-tests
+	@echo ""
 	@echo "Execute API acceptance tests"
+	@echo ""
 	@make api-acceptance-tests
+	@echo ""
 	@echo "Execute API integration tests"
+	@echo ""
 	@make mysql
 	@make api-integration-tests
+	@echo ""
 	@echo "Execute API end to end tests"
+	@echo ""
 	@make api-end-to-end-tests
+	@echo ""
+	@echo "All API tests were successfully executed"
+	@echo ""
 
 .PHONY: api-coding-standards
 api-coding-standards: ## Check API coding style with PHP CS Fixer
@@ -239,18 +260,31 @@ phpmetrics: ## Run PHP Metrics on the API code
 # Test the client
 
 .PHONY: client-tests
-client-tests: client/node_modules #main# Execute all the client tests
+client-tests: install-client-dependencies #main# Execute all the client tests
+	@echo ""
 	@echo "Lint the stylesheets"
+	@echo ""
 	@make stylelint
+	@echo ""
 	@echo "Lint the TypeScript code"
+	@echo ""
 	@make eslint
+	@echo ""
 	@echo "Check for type errors"
+	@echo ""
 	@make type-check-client
+	@echo ""
 	@echo "Execute unit tests"
+	@echo ""
 	@make client-unit-tests
+	@echo ""
 	@echo "Execute end-to-end tests"
+	@echo ""
 	@make serve
 	@make client-end-to-end-tests IO="--headless"
+	@echo ""
+	@echo "All client tests were successfully executed"
+	@echo ""
 
 .PHONY: stylelint
 stylelint: ## Lint the LESS stylesheet code
@@ -271,3 +305,7 @@ client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=
 .PHONY: client-end-to-end-tests
 client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode)
 	@docker-compose run --rm cypress yarn run test:e2e --url http://client/ ${IO}
+
+.PHONY: install-cypress ## Force the install of the Cypress binary
+install-cypress:
+	@docker-compose run --rm node ./node_modules/.bin/cypress install
