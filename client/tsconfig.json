@@ -2,30 +2,25 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "lib": [
       "dom",
-      "dom.iterable",
-      "esnext",
-      "scripthost"
+      "esnext"
     ],
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
     "types": [
       "jest",
-      "webpack-env"
+      "node"
     ]
   },
   "exclude": [
@@ -34,7 +29,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ]

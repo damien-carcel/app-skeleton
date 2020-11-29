@@ -133,7 +133,7 @@ api/config/jwt/public.pem: api/config/jwt
 	'
 
 .PHONY: develop-client
-develop-client: develop-api install-client-dependencies #main# Run the client using Vue CLI development server (hit CTRL+c to stop the server)
+develop-client: develop-api install-client-dependencies #main# Run the client using Webpack development server (hit CTRL+c to stop the server)
 	@echo ""
 	@echo "Starting the Client in development mode"
 	@echo ""
@@ -288,24 +288,28 @@ client-tests: install-client-dependencies #main# Execute all the client tests
 
 .PHONY: stylelint
 stylelint: ## Lint the LESS stylesheet code
-	@docker-compose run --rm node yarn run -s stylelint
+	@docker-compose run --rm node yarn -s stylelint
 
 .PHONY: eslint
 eslint: ## Lint the TypeScript code
-	@docker-compose run --rm node yarn run -s lint
+	@docker-compose run --rm node yarn -s lint
 
 .PHONY: type-check-client
 type-check-client: ## Check for type errors
-	@docker-compose run --rm node yarn run type-check
+	@docker-compose run --rm node yarn type-check
 
 .PHONY: client-unit-tests
 client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=path/to/test" to run a specific test)
-	@docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn run test:unit ${IO}
+	@docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn jest ${IO}
 
 .PHONY: client-end-to-end-tests
 client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode)
-	@docker-compose run --rm cypress yarn run test:e2e --url http://client/ ${IO}
+	@docker-compose run --rm cypress yarn cypress run ${IO}
+
+.PHONY: open-cypress ## Open the Cypress UI
+open-cypress:
+	@docker-compose run --rm cypress yarn cypress open
 
 .PHONY: install-cypress ## Force the install of the Cypress binary
 install-cypress:
-	@docker-compose run --rm node ./node_modules/.bin/cypress install
+	@docker-compose run --rm node yarn cypress install
