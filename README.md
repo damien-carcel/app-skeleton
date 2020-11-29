@@ -1,10 +1,10 @@
 # A web application skeleton using React and Symfony
 
-This is a skeleton to easily bootstrap a modern web project.
+This is a skeleton to easily bootstrap a modern web application.
 
 It is composed of two distinct applications:
 - a client application, written in TypeScript, using ReactJS, and managed with webpack,
-- a REST API written in PHP using Symfony 4 and managed with Symfony Flex.
+- a REST API written in PHP using Symfony 5 and API Platform.
 
 ## How to use it?
 
