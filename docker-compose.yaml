@@ -14,8 +14,8 @@ services:
       PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
       PHP_CONF_ZEND_ASSERTIONS: 1
       PHP_IDE_CONFIG: 'serverName=app-skeleton-php'
-      XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-      XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+      XDEBUG_CONFIG: 'client_host=172.17.0.1'
+      XDEBUG_MODE: '${XDEBUG_MODE:-off}'
     image: 'carcel/skeleton/dev:php'
     networks:
       - skeleton-api
@@ -38,8 +38,8 @@ services:
       PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
       PHP_CONF_ZEND_ASSERTIONS: 1
       PHP_IDE_CONFIG: 'serverName=app-skeleton-api'
-      XDEBUG_CONFIG: 'remote_host=172.17.0.1'
-      XDEBUG_ENABLED: '${XDEBUG_ENABLED:-0}'
+      XDEBUG_CONFIG: 'client_host=172.17.0.1'
+      XDEBUG_MODE: '${XDEBUG_MODE:-off}'
     expose:
       - '8000'
     image: 'carcel/skeleton/dev:php'

@@ -25,18 +25,7 @@ $ make
 ```
 
 This will describe how to serve only the API or the client in development mode, how to run the tests, to update the
-dependencies, and more.
-
-### Debugging the API
-
-The `carcel/skeleton/php` image comes with XDebug installed and configured. It is by default deactivated.
-
-You can debug the API by running:
-```bash
-$ make develop-api DEBUG=1
-```
-
-This will launch the API through the PHP development server with XDebug activated.
+dependencies, to debug the API with XDebug, and more.
 
 ## Using Docker BuildKit
 

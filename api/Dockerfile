@@ -16,8 +16,7 @@ ENV DEBIAN_FRONTEND=noninteractive\
     PHP_CONF_ERROR_REPORTING=22527 \
     PHP_CONF_UPLOAD_LIMIT=40M \
     PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP=0 \
-    PHP_CONF_ZEND_ASSERTIONS=-1 \
-    XDEBUG_ENABLED=0
+    PHP_CONF_ZEND_ASSERTIONS=-1
 
 RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/apt.conf.d/01-no-recommended && \
     echo 'path-exclude=/usr/share/doc/*' > /etc/dpkg/dpkg.cfg.d/path_exclusions && \
@@ -71,22 +70,15 @@ RUN apt-get update && \
         unzip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    phpdismod xdebug && \
-    mkdir /etc/php/7.4/enable-xdebug && \
-    ln -s /etc/php/7.4/mods-available/xdebug.ini /etc/php/7.4/enable-xdebug/xdebug.ini
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure XDEBUG and make XDEBUG activable at container start
 COPY docker/php/xdebug.ini /etc/php/7.4/cli/conf.d/99-skeleton-xdebug.ini
 COPY docker/php/xdebug.ini /etc/php/7.4/fpm/conf.d/99-skeleton-xdebug.ini
-COPY docker/php/docker-php-entrypoint /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
-
-ENTRYPOINT ["/usr/local/bin/docker-php-entrypoint"]
 
 #######################################
 # Intermediate image used to prepare  #
