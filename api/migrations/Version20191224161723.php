@@ -59,4 +59,12 @@ SQL;
 
         $this->addSql('DROP TABLE user');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

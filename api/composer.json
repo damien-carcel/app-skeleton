@@ -4,11 +4,11 @@
   "type": "project",
   "license": "MIT",
   "require": {
-    "php": "7.4.*",
+    "php": "^8.0",
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-pdo": "*",
-    "api-platform/core": "^2.1",
+    "api-platform/core": "2.5.*",
     "lexik/jwt-authentication-bundle": "^2.6",
     "nelmio/cors-bundle": "^2.0",
     "phpdocumentor/reflection-docblock": "^5.2",
@@ -30,9 +30,9 @@
     "webmozart/assert": "^1.5"
   },
   "require-dev": {
-    "akeneo/php-coupling-detector": "^0.5",
+    "akeneo/php-coupling-detector": "^0.6",
     "behat/behat": "^3.5",
-    "friends-of-behat/symfony-extension": "^2.1",
+    "friends-of-behat/symfony-extension": "2.2.x-dev@dev",
     "friendsofphp/php-cs-fixer": "^2.16",
     "phpmd/phpmd": "^2.7",
     "phpmetrics/phpmetrics": "^2.5",

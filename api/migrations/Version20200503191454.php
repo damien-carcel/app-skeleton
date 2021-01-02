@@ -46,4 +46,12 @@ SQL;
 
         $this->addSql($sql);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

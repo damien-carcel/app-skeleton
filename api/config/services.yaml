@@ -17,8 +17,8 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/User/Domain/Model/'
             - '../src/Kernel.php'
+            - '../src/User/Domain/Model/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
