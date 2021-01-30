@@ -16,36 +16,36 @@ resources:
         itemOperations: {}
 
     Carcel\User\Application\Query\GetUser:
-        properties:
-            identifier:
-                identifier: true
         collectionOperations: {}
         itemOperations:
             get:
                 path: '/users/{id}'
+        properties:
+            identifier:
+                identifier: true
 
     Carcel\User\Application\Command\UpdateUser:
         attributes:
             messenger: true
             output: false
-        properties:
-            identifier:
-                identifier: true
         collectionOperations: {}
         itemOperations:
             put:
                 path: '/users/{id}'
                 status: 202
+        properties:
+            identifier:
+                identifier: true
 
     Carcel\User\Application\Command\DeleteUser:
         attributes:
             messenger: true
             output: false
-        properties:
-            identifier:
-                identifier: true
         collectionOperations: {}
         itemOperations:
             delete:
                 path: '/users/{id}'
                 status: 202
+        properties:
+            identifier:
+                identifier: true

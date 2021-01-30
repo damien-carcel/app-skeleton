@@ -32,27 +32,26 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg && \
     apt-get update && \
     apt-get --yes install \
-        php7.4-apcu \
-        php7.4-cli \
-        php7.4-curl \
-        php7.4-dom \
-        php7.4-fpm \
-        php7.4-intl \
-        php7.4-json \
-        php7.4-mbstring \
-        php7.4-mysql \
-        php7.4-opcache \
-        php7.4-pdo \
-        php7.4-zip && \
+        php8.0-apcu \
+        php8.0-cli \
+        php8.0-curl \
+        php8.0-dom \
+        php8.0-fpm \
+        php8.0-intl \
+        php8.0-mbstring \
+        php8.0-mysql \
+        php8.0-opcache \
+        php8.0-pdo \
+        php8.0-zip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    ln -s /usr/sbin/php-fpm7.4 /usr/local/sbin/php-fpm && \
+    ln -s /usr/sbin/php-fpm8.0 /usr/local/sbin/php-fpm && \
     mkdir /run/php/
 
-COPY docker/php/skeleton.ini /etc/php/7.4/cli/conf.d/99-skeleton.ini
-COPY docker/php/skeleton.ini /etc/php/7.4/fpm/conf.d/99-skeleton.ini
-COPY docker/php/fpm.conf /etc/php/7.4/fpm/pool.d/zzz-skeleton.conf
+COPY docker/php/skeleton.ini /etc/php/8.0/cli/conf.d/99-skeleton.ini
+COPY docker/php/skeleton.ini /etc/php/8.0/fpm/conf.d/99-skeleton.ini
+COPY docker/php/fpm.conf /etc/php/8.0/fpm/pool.d/zzz-skeleton.conf
 
 ######################################
 # PHP CLI image used for development #
@@ -66,15 +65,15 @@ ENV XDEBUG_ENABLED=0
 RUN apt-get update && \
     apt-get --yes install \
         git \
-        php7.4-xdebug \
+        php8.0-xdebug \
         unzip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure XDEBUG and make XDEBUG activable at container start
-COPY docker/php/xdebug.ini /etc/php/7.4/cli/conf.d/99-skeleton-xdebug.ini
-COPY docker/php/xdebug.ini /etc/php/7.4/fpm/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/8.0/cli/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/8.0/fpm/conf.d/99-skeleton-xdebug.ini
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
