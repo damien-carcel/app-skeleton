@@ -32,7 +32,7 @@
   "require-dev": {
     "akeneo/php-coupling-detector": "^0.6",
     "behat/behat": "^3.5",
-    "friends-of-behat/symfony-extension": "2.2.x-dev@dev",
+    "friends-of-behat/symfony-extension": "^2.2",
     "friendsofphp/php-cs-fixer": "^2.16",
     "phpmd/phpmd": "^2.7",
     "phpmetrics/phpmetrics": "^2.5",
