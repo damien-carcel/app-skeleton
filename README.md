@@ -1,5 +1,7 @@
 # A web application skeleton using React and Symfony
 
+A merge test.
+
 This is a skeleton to easily bootstrap a modern web application.
 
 It is composed of two distinct applications:
