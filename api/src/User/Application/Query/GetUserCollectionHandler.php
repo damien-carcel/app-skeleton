@@ -32,8 +32,8 @@ final class GetUserCollectionHandler implements MessageHandlerInterface
     public function __invoke(GetUserCollection $getUserCollection): UserCollection
     {
         return ($this->getUserCollectionQueryFunction)(
-            $getUserCollection->numberOfUsers,
-            $getUserCollection->userPage
+            $getUserCollection->numberOfUsers(),
+            $getUserCollection->userPage(),
         );
     }
 }

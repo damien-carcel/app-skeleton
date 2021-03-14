@@ -18,10 +18,12 @@ namespace Carcel\User\Application\Command;
  */
 final class DeleteUser
 {
-    public string $identifier;
-
-    public function __construct(string $identifier)
+    public function __construct(private string $identifier)
     {
-        $this->identifier = $identifier;
+    }
+
+    public function identifier(): string
+    {
+        return $this->identifier;
     }
 }

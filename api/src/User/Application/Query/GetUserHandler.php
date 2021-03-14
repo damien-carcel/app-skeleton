@@ -33,7 +33,7 @@ final class GetUserHandler implements MessageHandlerInterface
 
     public function __invoke(GetUser $getUser): User
     {
-        $identifier = $getUser->identifier;
+        $identifier = $getUser->identifier();
 
         if (null === $user = ($this->getUserQueryFunction)(Uuid::fromString($identifier))) {
             throw UserDoesNotExist::fromUuid($identifier);

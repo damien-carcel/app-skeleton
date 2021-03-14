@@ -18,7 +18,7 @@ namespace Carcel\User\Domain\Model\Read;
  */
 final class UserCollection
 {
-    /** @var User[]  */
+    /** @var User[] */
     private array $users;
 
     /**
