@@ -109,7 +109,7 @@ mysql: install-api-dependencies ## Setup the API database.
 	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
-develop-api: api/config/jwt/public.pem install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
+develop-api: install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
 	@echo ""
 	@echo "Starting the API in development mode"
 	@echo ""
@@ -119,17 +119,6 @@ develop-api: api/config/jwt/public.pem install-api-dependencies #main# Run the A
 	@echo ""
 	@echo "API is now running in development mode, you can access it through http://localhost:8000"
 	@echo ""
-
-api/config/jwt:
-	@mkdir -p api/config/jwt
-
-api/config/jwt/public.pem: api/config/jwt
-	@echo "Generating public and private keys for JWT tokens"
-	@docker-compose run --rm php sh -c ' \
-		jwt_passphrase=$$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''=''); \
-		echo "$$jwt_passphrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096; \
-		echo "$$jwt_passphrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout; \
-	'
 
 .PHONY: develop-client
 develop-client: develop-api install-client-dependencies #main# Run the client using Webpack development server (hit CTRL+c to stop the server).
@@ -250,7 +239,7 @@ api-integration-tests: ## Execute API integration tests (use "make api-integrati
 	@docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" ${IO}
 
 .PHONY: api-end-to-end-tests
-api-end-to-end-tests: api/config/jwt/public.pem ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
+api-end-to-end-tests: ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
 	@docker-compose run --rm php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty ${IO}
 
 .PHONY: phpmd
