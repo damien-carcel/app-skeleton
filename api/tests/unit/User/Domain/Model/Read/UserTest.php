@@ -33,35 +33,11 @@ final class UserTest extends TestCase
     }
 
     /** @test */
-    public function iCanRetrieveTheIdOfAUser(): void
+    public function aUserCanNormalizeItself(): void
     {
         $user = $this->instantiateValidUserReadModel();
 
-        static::assertSame($this->userData['id'], $user->getId());
-    }
-
-    /** @test */
-    public function iCanRetrieveTheEmailOfAUser(): void
-    {
-        $user = $this->instantiateValidUserReadModel();
-
-        static::assertSame($this->userData['email'], $user->getEmail());
-    }
-
-    /** @test */
-    public function iCanRetrieveTheFirstNameOfAUser(): void
-    {
-        $user = $this->instantiateValidUserReadModel();
-
-        static::assertSame($this->userData['firstName'], $user->getFirstName());
-    }
-
-    /** @test */
-    public function iCanRetrieveTheLastNameOfAUser(): void
-    {
-        $user = $this->instantiateValidUserReadModel();
-
-        static::assertSame($this->userData['lastName'], $user->getLastName());
+        self::assertSame($this->userData, $user->normalize());
     }
 
     private function instantiateValidUserReadModel(): User

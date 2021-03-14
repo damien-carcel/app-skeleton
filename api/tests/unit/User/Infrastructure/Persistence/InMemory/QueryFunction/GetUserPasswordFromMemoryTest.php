@@ -46,7 +46,7 @@ final class GetUserPasswordFromMemoryTest extends TestCase
             UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
         );
 
-        static::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $password);
+        self::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $password);
     }
 
     /** @test */
@@ -54,7 +54,7 @@ final class GetUserPasswordFromMemoryTest extends TestCase
     {
         $password = ($this->getUserPassword)('fake.email@whatever.com');
 
-        static::assertNull($password);
+        self::assertNull($password);
     }
 
     private function userRepository(): UserRepository

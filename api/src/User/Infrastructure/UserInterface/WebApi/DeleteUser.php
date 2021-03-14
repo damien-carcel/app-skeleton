@@ -15,6 +15,7 @@ namespace Carcel\User\Infrastructure\UserInterface\WebApi;
 
 use Carcel\User\Application\Command\DeleteUser as DeleteUserCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -45,11 +46,14 @@ final class DeleteUser
 
         $violations = $this->validator->validate($command);
         if (0 < $violations->count()) {
-            return new JsonResponse($this->serializer->serialize($violations, JsonEncoder::FORMAT), 400);
+            return new JsonResponse(
+                $this->serializer->serialize($violations, JsonEncoder::FORMAT),
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         $this->bus->dispatch($command);
 
-        return new JsonResponse(null, 202);
+        return new JsonResponse(null, Response::HTTP_ACCEPTED);
     }
 }

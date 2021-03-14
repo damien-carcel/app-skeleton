@@ -32,7 +32,7 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', $user->id()->toString());
+        self::assertSame('02432f0b-c33e-4d71-8ba9-a5e3267a45d5', $user->id()->toString());
     }
 
     /** @test */
@@ -40,8 +40,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertInstanceOf(Email::class, $user->email());
-        static::assertSame('ironman@avengers.org', (string) $user->email());
+        self::assertInstanceOf(Email::class, $user->email());
+        self::assertSame('ironman@avengers.org', (string) $user->email());
     }
 
     /** @test */
@@ -49,8 +49,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertInstanceOf(FirstName::class, $user->firstName());
-        static::assertSame('Tony', (string) $user->firstName());
+        self::assertInstanceOf(FirstName::class, $user->firstName());
+        self::assertSame('Tony', (string) $user->firstName());
     }
 
     /** @test */
@@ -58,8 +58,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertInstanceOf(LastName::class, $user->lastName());
-        static::assertSame('Stark', (string) $user->lastName());
+        self::assertInstanceOf(LastName::class, $user->lastName());
+        self::assertSame('Stark', (string) $user->lastName());
     }
 
     /** @test */
@@ -67,8 +67,8 @@ final class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStark();
 
-        static::assertInstanceOf(Password::class, $user->password());
-        static::assertSame('password', (string) $user->password());
+        self::assertInstanceOf(Password::class, $user->password());
+        self::assertSame('password', (string) $user->password());
     }
 
     /** @test */
@@ -82,9 +82,9 @@ final class UserTest extends TestCase
             Email::fromString('new.ironman@advengers.org'),
         );
 
-        static::assertSame('new.ironman@advengers.org', (string) $user->email());
-        static::assertSame('Peter', (string) $user->firstName());
-        static::assertSame('Parker', (string) $user->lastName());
+        self::assertSame('new.ironman@advengers.org', (string) $user->email());
+        self::assertSame('Peter', (string) $user->firstName());
+        self::assertSame('Parker', (string) $user->lastName());
     }
 
     private function instantiateTonyStark(): User

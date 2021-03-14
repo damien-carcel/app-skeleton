@@ -43,7 +43,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
     {
         $users = ($this->getUserCollectionFromMemory)(10, 1);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
             '1605a575-77e5-4427-bbdb-2ebcb8cc8033',
@@ -62,7 +62,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
     {
         $users = ($this->getUserCollectionFromMemory)(2, 1);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
@@ -73,7 +73,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
     {
         $users = ($this->getUserCollectionFromMemory)(1, 2);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
     }
@@ -83,7 +83,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
     {
         $users = ($this->getUserCollectionFromMemory)(5, 2);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '3553b4cf-49ab-4dd6-ba6e-e09b5b96115c',
             '5eefa64f-0800-4fe2-b86f-f3d96bf7d602',
             '7f57d041-a612-4a5a-a61a-e0c96b2c576e',
@@ -97,7 +97,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
     {
         $users = ($this->getUserCollectionFromMemory)(10, 3);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, []);
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, []);
     }
 
     private function assertFollowingUserCollectionShouldBeRetrieved(UserCollection $users, array $usersIds): void
@@ -107,7 +107,7 @@ final class GetUserCollectionFromMemoryTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        static::assertSame($users->normalize(), $normalizedExpectedUsers);
+        self::assertSame($users->normalize(), $normalizedExpectedUsers);
     }
 
     private function userRepository(): UserRepository

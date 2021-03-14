@@ -26,8 +26,8 @@ final class EncodePasswordWithSymfonyEncoderTest extends TestCase
     {
         $encodedPassword = ($this->encodePassword())('password');
 
-        static::assertStringNotContainsStringIgnoringCase('password', $encodedPassword);
-        static::assertStringContainsString('$argon2id$v=19$m=65536,t=4,p=1$', $encodedPassword);
+        self::assertStringNotContainsStringIgnoringCase('password', $encodedPassword);
+        self::assertStringContainsString('$argon2id$v=19$m=65536,t=4,p=1$', $encodedPassword);
     }
 
     private function encodePassword(): EncodePassword

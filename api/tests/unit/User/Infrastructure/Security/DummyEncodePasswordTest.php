@@ -25,7 +25,7 @@ final class DummyEncodePasswordTest extends TestCase
     /** @test */
     public function itEncodesAPassword(): void
     {
-        static::assertSame('dummy_encoded-<password>', ($this->encodePassword())('password'));
+        self::assertSame('dummy_encoded-<password>', ($this->encodePassword())('password'));
     }
 
     private function encodePassword(): EncodePassword

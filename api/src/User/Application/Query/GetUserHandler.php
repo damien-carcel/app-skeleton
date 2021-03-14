@@ -17,11 +17,12 @@ use Carcel\User\Domain\Exception\UserDoesNotExist;
 use Carcel\User\Domain\Model\Read\User;
 use Carcel\User\Domain\QueryFunction\GetUser as GetUserQueryFunction;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserHandler
+final class GetUserHandler implements MessageHandlerInterface
 {
     private GetUserQueryFunction $getUserQueryFunction;
 

@@ -35,12 +35,7 @@ final class UserCollection
     public function normalize(): array
     {
         return array_map(function (User $user) {
-            return [
-                'id' => $user->getId(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'email' => $user->getEmail(),
-            ];
+            return $user->normalize();
         }, $this->users);
     }
 }

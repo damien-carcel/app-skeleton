@@ -9,3 +9,10 @@ api_users_delete:
   path: /api/users/{id}
   requirements:
     id: '.+'
+
+api_users_get:
+  controller: Carcel\User\Infrastructure\UserInterface\WebApi\GetUser
+  methods: GET
+  path: /api/users/{id}
+  requirements:
+    id: '.+'

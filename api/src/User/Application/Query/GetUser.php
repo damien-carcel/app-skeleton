@@ -19,4 +19,9 @@ namespace Carcel\User\Application\Query;
 final class GetUser
 {
     public string $identifier;
+
+    public function __construct(string $identifier)
+    {
+        $this->identifier = $identifier;
+    }
 }

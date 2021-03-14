@@ -24,7 +24,7 @@ final class FirstNameTest extends TestCase
     /** @test */
     public function itReturnsTheFirstName(): void
     {
-        static::assertSame(
+        self::assertSame(
             'Tony',
             (string) FirstName::fromString('Tony')
         );

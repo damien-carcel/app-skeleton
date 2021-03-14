@@ -13,16 +13,20 @@ declare(strict_types=1);
 
 namespace Carcel\User\Infrastructure\UserInterface\WebApi;
 
-use Carcel\User\Application\Command\CreateUser as CreateUserCommand;
+use Carcel\User\Application\Query\GetUser as GetUserQuery;
+use Carcel\User\Domain\Model\Read\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class CreateUser
+/**
+ * @author Damien Carcel <damien.carcel@gmail.com>
+ */
+final class GetUser
 {
     private MessageBusInterface $bus;
     private SerializerInterface $serializer;
@@ -38,26 +42,28 @@ final class CreateUser
         $this->validator = $validator;
     }
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(string $id): JsonResponse
     {
-        $newUserData = json_decode((string) $request->getContent(), true);
-        $command = new CreateUserCommand(
-            $newUserData['firstName'],
-            $newUserData['lastName'],
-            $newUserData['email'],
-            $newUserData['password'],
-        );
+        $query = new GetUserQuery($id);
 
-        $violations = $this->validator->validate($command);
+        $violations = $this->validator->validate($query);
         if (0 < $violations->count()) {
             return new JsonResponse(
                 $this->serializer->serialize($violations, JsonEncoder::FORMAT),
-                Response::HTTP_BAD_REQUEST
+                Response::HTTP_NOT_FOUND
             );
         }
 
-        $this->bus->dispatch($command);
+        $envelope = $this->bus->dispatch($query);
+        /** @var ?HandledStamp $handledStamp */
+        $handledStamp = $envelope->last(HandledStamp::class);
+        if (null === $handledStamp) {
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        }
 
-        return new JsonResponse(null, Response::HTTP_ACCEPTED);
+        /** @var User $user */
+        $user = $handledStamp->getResult();
+
+        return new JsonResponse($user->normalize(), Response::HTTP_OK);
     }
 }

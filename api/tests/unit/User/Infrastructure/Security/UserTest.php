@@ -26,7 +26,7 @@ class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStarkAsSecurityUser();
 
-        static::assertSame(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'], $user->getUsername());
+        self::assertSame(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'], $user->getUsername());
     }
 
     /** @test */
@@ -34,7 +34,7 @@ class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStarkAsSecurityUser();
 
-        static::assertSame('', $user->getPassword());
+        self::assertSame('', $user->getPassword());
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStarkAsSecurityUser();
 
-        static::assertSame(['ROLE_USER'], $user->getRoles());
+        self::assertSame(['ROLE_USER'], $user->getRoles());
     }
 
     private function instantiateTonyStarkAsSecurityUser(): User

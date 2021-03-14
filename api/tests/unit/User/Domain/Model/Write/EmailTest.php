@@ -24,7 +24,7 @@ final class EmailTest extends TestCase
     /** @test */
     public function itReturnsTheEmail(): void
     {
-        static::assertSame(
+        self::assertSame(
             'ironman@avengers.org',
             (string) Email::fromString('ironman@avengers.org')
         );

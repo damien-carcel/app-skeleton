@@ -46,8 +46,8 @@ final class UserRepositoryTest extends TestCase
     {
         $users = $this->repository()->findAll();
 
-        static::assertCount(2, $users);
-        static::assertEquals([
+        self::assertCount(2, $users);
+        self::assertEquals([
             $this->instantiateUser($this->userIDs[0]),
             $this->instantiateUser($this->userIDs[1]),
         ], $users);
@@ -56,7 +56,7 @@ final class UserRepositoryTest extends TestCase
     /** @test */
     public function itFindAUserFromItsId(): void
     {
-        static::assertEquals(
+        self::assertEquals(
             $this->instantiateUser($this->userIDs[0]),
             $this->repository()->find(Uuid::fromString($this->userIDs[0]))
         );
@@ -69,8 +69,8 @@ final class UserRepositoryTest extends TestCase
 
         $this->repository()->create($user);
 
-        static::assertCount(3, $this->repository()->findAll());
-        static::assertEquals(
+        self::assertCount(3, $this->repository()->findAll());
+        self::assertEquals(
             $user,
             $this->repository()->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')),
         );
@@ -88,8 +88,8 @@ final class UserRepositoryTest extends TestCase
         );
         $this->repository()->update($user);
 
-        static::assertCount(2, $this->repository()->findAll());
-        static::assertEquals($user, $this->repository()->find(Uuid::fromString($this->userIDs[0])));
+        self::assertCount(2, $this->repository()->findAll());
+        self::assertEquals($user, $this->repository()->find(Uuid::fromString($this->userIDs[0])));
     }
 
     /** @test */
@@ -97,8 +97,8 @@ final class UserRepositoryTest extends TestCase
     {
         $this->repository()->delete($this->repository()->find(Uuid::fromString($this->userIDs[0])));
 
-        static::assertCount(1, $this->repository()->findAll());
-        static::assertNull($this->repository()->find(Uuid::fromString($this->userIDs[0])));
+        self::assertCount(1, $this->repository()->findAll());
+        self::assertNull($this->repository()->find(Uuid::fromString($this->userIDs[0])));
     }
 
     private function repository(): UserRepository

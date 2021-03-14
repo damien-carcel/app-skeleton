@@ -31,23 +31,16 @@ final class User
         $this->email = $email;
     }
 
-    public function getId(): string
+    /**
+     * @return string[]
+     */
+    public function normalize(): array
     {
-        return $this->id;
-    }
-
-    public function getFirstName(): string
-    {
-        return $this->firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
+        return [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'email' => $this->email,
+        ];
     }
 }

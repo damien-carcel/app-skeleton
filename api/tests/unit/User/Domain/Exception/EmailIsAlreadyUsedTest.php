@@ -26,7 +26,7 @@ final class EmailIsAlreadyUsedTest extends TestCase
     {
         $exception = $this->instantiateEmailIsAlreadyUsed();
 
-        static::assertSame(
+        self::assertSame(
             'The email "batman@justiceligue.org" is already used by another user',
             $exception->getMessage(),
         );

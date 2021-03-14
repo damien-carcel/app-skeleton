@@ -42,8 +42,8 @@ class UserProviderTest extends TestCase
     {
         $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']);
 
-        static::assertInstanceOf(User::class, $user);
-        static::assertSame(
+        self::assertInstanceOf(User::class, $user);
+        self::assertSame(
             UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
             $user->getUsername()
         );
@@ -68,12 +68,12 @@ class UserProviderTest extends TestCase
 
         $refreshedUser = $this->userProvider()->refreshUser($user);
 
-        static::assertSame(
+        self::assertSame(
             UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
             $refreshedUser->getUsername()
         );
-        static::assertSame('password', $refreshedUser->getPassword());
-        static::assertSame(['ROLE_USER'], $refreshedUser->getRoles());
+        self::assertSame('password', $refreshedUser->getPassword());
+        self::assertSame(['ROLE_USER'], $refreshedUser->getRoles());
     }
 
     /** @test */
@@ -106,7 +106,7 @@ class UserProviderTest extends TestCase
     {
         $passwordStoredInDatabase = ($this->container()->get(GetUserPassword::class))($user->getUsername());
 
-        static::assertSame($expectedPassword, $passwordStoredInDatabase);
+        self::assertSame($expectedPassword, $passwordStoredInDatabase);
     }
 
     private function userProvider(): UserProvider

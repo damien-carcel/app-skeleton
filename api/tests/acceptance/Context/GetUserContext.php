@@ -41,8 +41,7 @@ final class GetUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $getUser = new GetUser();
-        $getUser->identifier = array_keys(UserFixtures::USERS_DATA)[0];
+        $getUser = new GetUser(array_keys(UserFixtures::USERS_DATA)[0]);
 
         $this->user = ($this->handler)($getUser);
     }
@@ -52,8 +51,7 @@ final class GetUserContext implements Context
      */
     public function askForAUserThatDoesNotExist(): void
     {
-        $getUser = new GetUser();
-        $getUser->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
+        $getUser = new GetUser(UserFixtures::ID_OF_NON_EXISTENT_USER);
 
         try {
             ($this->handler)($getUser);
@@ -68,11 +66,12 @@ final class GetUserContext implements Context
     public function specifiedUserShouldBeRetrieved(): void
     {
         $uuidList = array_keys(UserFixtures::USERS_DATA);
+        $normalizedUser = $this->user->normalize();
 
-        Assert::same($this->user->getId(), UserFixtures::getNormalizedUser($uuidList[0])['id']);
-        Assert::same($this->user->getEmail(), UserFixtures::getNormalizedUser($uuidList[0])['email']);
-        Assert::same($this->user->getFirstName(), UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
-        Assert::same($this->user->getLastName(), UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
+        Assert::same($normalizedUser['id'], UserFixtures::getNormalizedUser($uuidList[0])['id']);
+        Assert::same($normalizedUser['email'], UserFixtures::getNormalizedUser($uuidList[0])['email']);
+        Assert::same($normalizedUser['firstName'], UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
+        Assert::same($normalizedUser['lastName'], UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
     }
 
     /**

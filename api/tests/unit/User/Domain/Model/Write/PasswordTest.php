@@ -24,7 +24,7 @@ final class PasswordTest extends TestCase
     /** @test */
     public function itReturnsThePassword(): void
     {
-        static::assertSame(
+        self::assertSame(
             'Password',
             (string) Password::fromString('Password')
         );
