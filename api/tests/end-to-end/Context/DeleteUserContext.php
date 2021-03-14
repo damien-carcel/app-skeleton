@@ -16,10 +16,8 @@ namespace Carcel\Tests\EndToEnd\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,17 +25,15 @@ use Webmozart\Assert\Assert;
  */
 final class DeleteUserContext implements Context
 {
-    private ResponseInterface $response;
-
-    private KernelInterface $kernel;
-    private RouterInterface $router;
     private Connection $connection;
+    private KernelBrowser $client;
+    private RouterInterface $router;
 
-    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
+    public function __construct(Connection $connection, KernelBrowser $client, RouterInterface $router)
     {
-        $this->kernel = $kernel;
-        $this->router = $router;
         $this->connection = $connection;
+        $this->client = $client;
+        $this->router = $router;
     }
 
     /**
@@ -45,16 +41,11 @@ final class DeleteUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'DELETE',
-            $this->router->generate('api_delete_users_delete_item', [
+            $this->router->generate('api_users_delete', [
                 'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-            ],
         );
     }
 
@@ -63,7 +54,7 @@ final class DeleteUserContext implements Context
      */
     public function userShouldBeDeleted(): void
     {
-        Assert::same($this->response->getStatusCode(), 202);
+        Assert::same($this->client->getResponse()->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user
@@ -96,10 +87,5 @@ final class DeleteUserContext implements Context
         return array_values(array_filter($normalizedFixtures, function (array $user) {
             return array_keys(UserFixtures::USERS_DATA)[0] !== $user['id'];
         }));
-    }
-
-    private function client(): HttpClientInterface
-    {
-        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

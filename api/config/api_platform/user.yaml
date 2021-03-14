@@ -29,16 +29,3 @@ resources:
         properties:
             identifier:
                 identifier: true
-
-    Carcel\User\Application\Command\DeleteUser:
-        attributes:
-            messenger: true
-            output: false
-        collectionOperations: {}
-        itemOperations:
-            delete:
-                path: '/users/{id}'
-                status: 202
-        properties:
-            identifier:
-                identifier: true

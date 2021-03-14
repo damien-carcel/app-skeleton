@@ -16,7 +16,6 @@ namespace Carcel\Tests\EndToEnd\Context;
 use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
@@ -39,14 +38,14 @@ final class CreateUserContext implements Context
         'password' => '',
     ];
 
-    private KernelBrowser $client;
     private Connection $connection;
+    private KernelBrowser $client;
     private RouterInterface $router;
 
-    public function __construct(KernelBrowser $client, Connection $connection, RouterInterface $router)
+    public function __construct(Connection $connection, KernelBrowser $client, RouterInterface $router)
     {
-        $this->client = $client;
         $this->connection = $connection;
+        $this->client = $client;
         $this->router = $router;
     }
 

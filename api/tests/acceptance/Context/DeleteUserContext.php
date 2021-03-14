@@ -44,8 +44,7 @@ final class DeleteUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $deleteUser = new DeleteUser();
-        $deleteUser->identifier = array_keys(UserFixtures::USERS_DATA)[0];
+        $deleteUser = new DeleteUser(array_keys(UserFixtures::USERS_DATA)[0]);
 
         $this->bus->dispatch($deleteUser);
     }
@@ -55,8 +54,7 @@ final class DeleteUserContext implements Context
      */
     public function deleteAUserThatDoesNotExist(): void
     {
-        $deleteUser = new DeleteUser();
-        $deleteUser->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
+        $deleteUser = new DeleteUser(UserFixtures::ID_OF_NON_EXISTENT_USER);
 
         try {
             $this->bus->dispatch($deleteUser);
