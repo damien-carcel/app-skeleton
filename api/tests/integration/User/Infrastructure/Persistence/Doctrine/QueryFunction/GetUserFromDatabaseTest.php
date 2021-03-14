@@ -39,9 +39,9 @@ final class GetUserFromDatabaseTest extends TestCase
     /** @test */
     public function itGetsAUserById(): void
     {
-        $user = ($this->getUser())(Uuid::fromString(static::TONY_STARK_ID));
+        $user = ($this->getUser())(Uuid::fromString(self::TONY_STARK_ID));
 
-        self::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
+        self::assertUserShouldBeRetrieved($user, self::TONY_STARK_ID);
     }
 
     /** @test */

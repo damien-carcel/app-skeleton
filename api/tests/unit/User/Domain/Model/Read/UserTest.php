@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserTest extends TestCase
 {
+    /** @var array<'id'|'firstName'|'lastName'|'email', string> */
     private array $userData;
 
     /**

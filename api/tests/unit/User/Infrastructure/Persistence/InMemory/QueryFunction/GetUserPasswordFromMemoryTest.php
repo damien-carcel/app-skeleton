@@ -43,10 +43,10 @@ final class GetUserPasswordFromMemoryTest extends TestCase
     public function itGetsAUserPassword(): void
     {
         $password = ($this->getUserPassword)(
-            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']
+            UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email']
         );
 
-        self::assertSame(UserFixtures::getPassword(static::TONY_STARK_ID), $password);
+        self::assertSame(UserFixtures::getPassword(self::TONY_STARK_ID), $password);
     }
 
     /** @test */

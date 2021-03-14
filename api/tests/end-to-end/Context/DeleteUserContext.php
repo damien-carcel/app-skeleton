@@ -68,6 +68,11 @@ final class DeleteUserContext implements Context
         Assert::eq($this->filterQueriedUserData($results), $this->expectedUserCollectionAfterDeletion());
     }
 
+    /**
+     * @param array<array<'id'|'email'|'first_name'|'last_name', string>> $users
+     *
+     * @return array<array<'id'|'email'|'firstName'|'lastName', string>>
+     */
     private function filterQueriedUserData(array $users): array
     {
         return array_map(function (array $queriedUser) {
@@ -80,6 +85,9 @@ final class DeleteUserContext implements Context
         }, $users);
     }
 
+    /**
+     * @return array<array<'id'|'email'|'firstName'|'lastName', string>>
+     */
     private function expectedUserCollectionAfterDeletion(): array
     {
         $normalizedFixtures = UserFixtures::getNormalizedUsers();

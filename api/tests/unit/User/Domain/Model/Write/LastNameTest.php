@@ -33,8 +33,8 @@ final class LastNameTest extends TestCase
     /** @test */
     public function lastNameCannotBeEmpty(): void
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The user last name cannot be empty.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The user last name cannot be empty.');
 
         LastName::fromString('');
     }
@@ -44,8 +44,8 @@ final class LastNameTest extends TestCase
     {
         $tooLongLastName = bin2hex(random_bytes(130));
 
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage(sprintf(
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage(sprintf(
             'The last name should not have more than 256 characters, "%s" is 260 characters long.',
             $tooLongLastName
         ));

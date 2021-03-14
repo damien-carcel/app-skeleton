@@ -45,6 +45,11 @@ final class GetUserCollectionFromMemory implements GetUserCollection
         return new UserCollection($this->normalizeUsers($usersToReturn));
     }
 
+    /**
+     * @param User[] $users
+     *
+     * @return array<array<string>>
+     */
     private function normalizeUsers(array $users): array
     {
         return array_map(function (User $user) {

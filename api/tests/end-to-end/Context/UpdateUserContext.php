@@ -124,9 +124,9 @@ final class UpdateUserContext implements Context
         Assert::count($result, 1);
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['email'], static::USER_DATA_TO_UPDATE['email']);
-        Assert::same($queriedUser['first_name'], static::USER_DATA_TO_UPDATE['firstName']);
-        Assert::same($queriedUser['last_name'], static::USER_DATA_TO_UPDATE['lastName']);
+        Assert::same($queriedUser['email'], self::USER_DATA_TO_UPDATE['email']);
+        Assert::same($queriedUser['first_name'], self::USER_DATA_TO_UPDATE['firstName']);
+        Assert::same($queriedUser['last_name'], self::USER_DATA_TO_UPDATE['lastName']);
     }
 
     /**

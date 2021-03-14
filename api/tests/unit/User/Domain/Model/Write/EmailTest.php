@@ -33,8 +33,8 @@ final class EmailTest extends TestCase
     /** @test */
     public function emailCannotBeEmpty(): void
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The user email cannot be empty.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The user email cannot be empty.');
 
         Email::fromString('');
     }
@@ -48,8 +48,8 @@ final class EmailTest extends TestCase
             bin2hex(random_bytes(61))
         );
 
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage(sprintf(
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage(sprintf(
             'The email address should not have more than 256 characters, "%s" is 259 characters long.',
             $tooLongEmailAddress
         ));
@@ -60,8 +60,8 @@ final class EmailTest extends TestCase
     /** @test */
     public function emailMustBeValid(): void
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The use email "foobar" is not a valid email address.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The use email "foobar" is not a valid email address.');
 
         Email::fromString('foobar');
     }

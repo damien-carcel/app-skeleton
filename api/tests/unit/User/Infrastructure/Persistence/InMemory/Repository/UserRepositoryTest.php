@@ -28,7 +28,9 @@ use Ramsey\Uuid\Uuid;
  */
 final class UserRepositoryTest extends TestCase
 {
+    /** @var string[] */
     private array $userIDs;
+    /** @var User[] */
     private array $users;
 
     protected function setUp(): void

@@ -100,6 +100,9 @@ final class GetUserCollectionFromMemoryTest extends TestCase
         self::assertFollowingUserCollectionShouldBeRetrieved($users, []);
     }
 
+    /**
+     * @param string[] $usersIds
+     */
     private function assertFollowingUserCollectionShouldBeRetrieved(UserCollection $users, array $usersIds): void
     {
         $normalizedExpectedUsers = [];

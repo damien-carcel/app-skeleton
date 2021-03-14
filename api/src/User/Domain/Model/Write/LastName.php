@@ -27,9 +27,9 @@ final class LastName
     private function __construct(string $lastName)
     {
         Assert::notEmpty($lastName, 'The user last name cannot be empty.');
-        Assert::maxLength($lastName, static::LAST_NAME_MAX_LENGTH, sprintf(
+        Assert::maxLength($lastName, self::LAST_NAME_MAX_LENGTH, sprintf(
             'The last name should not have more than %d characters, "%s" is %d characters long.',
-            static::LAST_NAME_MAX_LENGTH,
+            self::LAST_NAME_MAX_LENGTH,
             $lastName,
             strlen($lastName)
         ));

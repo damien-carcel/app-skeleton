@@ -17,7 +17,7 @@ use Carcel\Tests\Fixtures\UserFixtures;
 use Carcel\User\Infrastructure\Security\User;
 use PHPUnit\Framework\TestCase;
 
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
 
@@ -26,7 +26,7 @@ class UserTest extends TestCase
     {
         $user = $this->instantiateTonyStarkAsSecurityUser();
 
-        self::assertSame(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'], $user->getUsername());
+        self::assertSame(UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'], $user->getUsername());
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class UserTest extends TestCase
     private function instantiateTonyStarkAsSecurityUser(): User
     {
         return new User(
-            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
+            UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'],
             '',
             [],
         );

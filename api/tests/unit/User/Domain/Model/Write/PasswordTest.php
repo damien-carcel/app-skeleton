@@ -33,8 +33,8 @@ final class PasswordTest extends TestCase
     /** @test */
     public function passwordCannotBeEmpty(): void
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The user password cannot be empty.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The user password cannot be empty.');
 
         Password::fromString('');
     }
@@ -44,8 +44,8 @@ final class PasswordTest extends TestCase
     {
         $tooLongPassword = bin2hex(random_bytes(130));
 
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage(sprintf(
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage(sprintf(
             'The password should not have more than 256 characters, "%s" is 260 characters long.',
             $tooLongPassword
         ));

@@ -102,6 +102,9 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
         return ($queryHandler)($quantity, $pageNumber);
     }
 
+    /**
+     * @param string[] $usersIds
+     */
     private function assertFollowingUserCollectionShouldBeRetrieved(UserCollection $users, array $usersIds): void
     {
         $normalizedExpectedUsers = [];
