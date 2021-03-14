@@ -32,13 +32,13 @@ final class DatabaseTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadUserFixtures([static::TONY_STARK_ID]);
+        $this->loadUserFixtures([self::TONY_STARK_ID]);
     }
 
     /** @test */
     public function emailUniquenessIsEnsuredByTheDatabase(): void
     {
-        static::expectException(UniqueConstraintViolationException::class);
+        self::expectException(UniqueConstraintViolationException::class);
 
         $this->container()->get('doctrine.dbal.default_connection')->insert(
             'user',
@@ -46,7 +46,7 @@ final class DatabaseTest extends TestCase
                 'id' => Uuid::uuid4()->toString(),
                 'first_name' => 'John',
                 'last_name' => 'Doe',
-                'email' => UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
+                'email' => UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'],
                 'password' => 'password',
             ],
         );

@@ -38,7 +38,7 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
     {
         $users = $this->queryUsersStartingPage(10, 1);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
             '1605a575-77e5-4427-bbdb-2ebcb8cc8033',
@@ -57,7 +57,7 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
     {
         $users = $this->queryUsersStartingPage(2, 1);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '02432f0b-c33e-4d71-8ba9-a5e3267a45d5',
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
@@ -68,7 +68,7 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
     {
         $users = $this->queryUsersStartingPage(1, 2);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '08acf31d-2e62-44e9-ba18-fd160ac125ad',
         ]);
     }
@@ -78,7 +78,7 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
     {
         $users = $this->queryUsersStartingPage(5, 2);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, [
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, [
             '3553b4cf-49ab-4dd6-ba6e-e09b5b96115c',
             '5eefa64f-0800-4fe2-b86f-f3d96bf7d602',
             '7f57d041-a612-4a5a-a61a-e0c96b2c576e',
@@ -92,7 +92,7 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
     {
         $users = $this->queryUsersStartingPage(10, 3);
 
-        static::assertFollowingUserCollectionShouldBeRetrieved($users, []);
+        self::assertFollowingUserCollectionShouldBeRetrieved($users, []);
     }
 
     private function queryUsersStartingPage(int $quantity, int $pageNumber): UserCollection
@@ -102,6 +102,9 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
         return ($queryHandler)($quantity, $pageNumber);
     }
 
+    /**
+     * @param string[] $usersIds
+     */
     private function assertFollowingUserCollectionShouldBeRetrieved(UserCollection $users, array $usersIds): void
     {
         $normalizedExpectedUsers = [];
@@ -109,6 +112,6 @@ final class GetUserCollectionFromDatabaseTest extends TestCase
             $normalizedExpectedUsers[] = UserFixtures::getNormalizedUser($id);
         }
 
-        static::assertSame($normalizedExpectedUsers, $users->normalize());
+        self::assertSame($normalizedExpectedUsers, $users->normalize());
     }
 }

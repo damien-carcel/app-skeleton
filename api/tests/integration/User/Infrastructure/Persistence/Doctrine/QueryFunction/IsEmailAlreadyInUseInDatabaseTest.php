@@ -32,13 +32,13 @@ final class IsEmailAlreadyInUseInDatabaseTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadUserFixtures([static::TONY_STARK_ID]);
+        $this->loadUserFixtures([self::TONY_STARK_ID]);
     }
 
     /** @test */
     public function itAnswersIfTheEmailIsAlreadyInUsed(): void
     {
-        Assert::assertTrue(($this->isEmailAlreadyUsed())(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']));
+        Assert::assertTrue(($this->isEmailAlreadyUsed())(UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email']));
     }
 
     /** @test */

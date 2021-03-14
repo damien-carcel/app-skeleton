@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User as SymfonyTestUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserProviderTest extends TestCase
+final class UserProviderTest extends TestCase
 {
     private const TONY_STARK_ID = '02432f0b-c33e-4d71-8ba9-a5e3267a45d5';
 
@@ -34,17 +34,17 @@ class UserProviderTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadUserFixtures([static::TONY_STARK_ID]);
+        $this->loadUserFixtures([self::TONY_STARK_ID]);
     }
 
     /** @test */
     public function itLoadsAUserByItsUsername(): void
     {
-        $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']);
+        $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email']);
 
-        static::assertInstanceOf(User::class, $user);
-        static::assertSame(
-            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
+        self::assertInstanceOf(User::class, $user);
+        self::assertSame(
+            UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'],
             $user->getUsername()
         );
     }
@@ -52,7 +52,7 @@ class UserProviderTest extends TestCase
     /** @test */
     public function itCannotLoadAUserThatDoesNotExists(): void
     {
-        static::expectException(UsernameNotFoundException::class);
+        self::expectException(UsernameNotFoundException::class);
 
         $this->userProvider()->loadUserByUsername('fake.email@whatever.com');
     }
@@ -64,22 +64,22 @@ class UserProviderTest extends TestCase
      */
     public function itRefreshesAUser(): void
     {
-        $user = new User(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'], 'fake-password', ['FAKE_ROLE']);
+        $user = new User(UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'], 'fake-password', ['FAKE_ROLE']);
 
         $refreshedUser = $this->userProvider()->refreshUser($user);
 
-        static::assertSame(
-            UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email'],
+        self::assertSame(
+            UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email'],
             $refreshedUser->getUsername()
         );
-        static::assertSame('password', $refreshedUser->getPassword());
-        static::assertSame(['ROLE_USER'], $refreshedUser->getRoles());
+        self::assertSame('password', $refreshedUser->getPassword());
+        self::assertSame(['ROLE_USER'], $refreshedUser->getRoles());
     }
 
     /** @test */
     public function itCannotRefreshAnInvalidUserClass(): void
     {
-        static::expectException(UnsupportedUserException::class);
+        self::expectException(UnsupportedUserException::class);
 
         $this->userProvider()->refreshUser(new SymfonyTestUser('fake.email@whatever.com', '', []));
     }
@@ -87,7 +87,7 @@ class UserProviderTest extends TestCase
     /** @test */
     public function itCannotRefreshAUserThatDoesNotExists(): void
     {
-        static::expectException(UsernameNotFoundException::class);
+        self::expectException(UsernameNotFoundException::class);
 
         $this->userProvider()->refreshUser(new User('fake.email@whatever.com', '', []));
     }
@@ -95,7 +95,7 @@ class UserProviderTest extends TestCase
     /** @test */
     public function itUpgradesTheUserPassword(): void
     {
-        $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[static::TONY_STARK_ID]['email']);
+        $user = $this->userProvider()->loadUserByUsername(UserFixtures::USERS_DATA[self::TONY_STARK_ID]['email']);
 
         $this->userProvider()->upgradePassword($user, 'this_is_an_encoded_password');
 
@@ -106,7 +106,7 @@ class UserProviderTest extends TestCase
     {
         $passwordStoredInDatabase = ($this->container()->get(GetUserPassword::class))($user->getUsername());
 
-        static::assertSame($expectedPassword, $passwordStoredInDatabase);
+        self::assertSame($expectedPassword, $passwordStoredInDatabase);
     }
 
     private function userProvider(): UserProvider

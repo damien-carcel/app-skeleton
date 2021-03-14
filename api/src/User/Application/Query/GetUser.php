@@ -18,5 +18,12 @@ namespace Carcel\User\Application\Query;
  */
 final class GetUser
 {
-    public string $identifier;
+    public function __construct(private string $identifier)
+    {
+    }
+
+    public function identifier(): string
+    {
+        return $this->identifier;
+    }
 }

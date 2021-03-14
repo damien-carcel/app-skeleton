@@ -15,10 +15,9 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,14 +25,14 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserContext implements Context
 {
-    private ResponseInterface $response;
-
-    private KernelInterface $kernel;
+    private Connection $connection;
+    private KernelBrowser $client;
     private RouterInterface $router;
 
-    public function __construct(KernelInterface $kernel, RouterInterface $router)
+    public function __construct(Connection $connection, KernelBrowser $client, RouterInterface $router)
     {
-        $this->kernel = $kernel;
+        $this->connection = $connection;
+        $this->client = $client;
         $this->router = $router;
     }
 
@@ -42,16 +41,11 @@ final class GetUserContext implements Context
      */
     public function askForASpecificUser(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'GET',
-            $this->router->generate('api_get_users_get_item', [
+            $this->router->generate('api_users_get', [
                 'id' => array_keys(UserFixtures::USERS_DATA)[0],
             ]),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-            ],
         );
     }
 
@@ -60,11 +54,12 @@ final class GetUserContext implements Context
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
-        Assert::same($this->response->getStatusCode(), 200);
+        $response = $this->client->getResponse();
+        Assert::same($response->getStatusCode(), 200);
 
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        $responseContent = $this->response->getContent();
+        $responseContent = $response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         Assert::keyExists($decodedContent, 'id');
@@ -75,10 +70,5 @@ final class GetUserContext implements Context
         Assert::same($decodedContent['firstName'], UserFixtures::getNormalizedUser($uuidList[0])['firstName']);
         Assert::keyExists($decodedContent, 'lastName');
         Assert::same($decodedContent['lastName'], UserFixtures::getNormalizedUser($uuidList[0])['lastName']);
-    }
-
-    private function client(): HttpClientInterface
-    {
-        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

@@ -22,8 +22,12 @@ class User implements UserInterface
 {
     private string $email;
     private string $password;
+    /** @var string[] */
     private array $roles;
 
+    /**
+     * @param string[] $roles
+     */
     public function __construct(string $email, string $password, array $roles)
     {
         $this->email = $email;

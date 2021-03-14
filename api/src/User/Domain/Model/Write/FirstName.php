@@ -27,9 +27,9 @@ final class FirstName
     private function __construct(string $firstName)
     {
         Assert::notEmpty($firstName, 'The user first name cannot be empty.');
-        Assert::maxLength($firstName, static::FIRST_NAME_MAX_LENGTH, sprintf(
+        Assert::maxLength($firstName, self::FIRST_NAME_MAX_LENGTH, sprintf(
             'The first name should not have more than %d characters, "%s" is %d characters long.',
-            static::FIRST_NAME_MAX_LENGTH,
+            self::FIRST_NAME_MAX_LENGTH,
             $firstName,
             strlen($firstName)
         ));

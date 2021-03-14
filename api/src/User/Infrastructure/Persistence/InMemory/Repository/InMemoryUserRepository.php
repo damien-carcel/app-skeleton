@@ -25,6 +25,9 @@ final class InMemoryUserRepository implements UserRepository
     /** @var User[] */
     private array $users;
 
+    /**
+     * @param User[] $users
+     */
     public function __construct(array $users = [])
     {
         foreach ($users as $user) {

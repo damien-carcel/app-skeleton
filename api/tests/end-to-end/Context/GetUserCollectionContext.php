@@ -15,10 +15,9 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,14 +25,14 @@ use Webmozart\Assert\Assert;
  */
 final class GetUserCollectionContext implements Context
 {
-    private ResponseInterface $response;
-
-    private KernelInterface $kernel;
+    private Connection $connection;
+    private KernelBrowser $client;
     private RouterInterface $router;
 
-    public function __construct(KernelInterface $kernel, RouterInterface $router)
+    public function __construct(Connection $connection, KernelBrowser $client, RouterInterface $router)
     {
-        $this->kernel = $kernel;
+        $this->connection = $connection;
+        $this->client = $client;
         $this->router = $router;
     }
 
@@ -44,17 +43,12 @@ final class GetUserCollectionContext implements Context
     {
         $pageNumber = (int) substr($position, 0, 1);
 
-        $this->response = $this->client()->request(
+        $this->client->request(
             'GET',
-            $this->router->generate('api_get_user_collections_get_collection', [
+            $this->router->generate('api_users_collection_get', [
                 '_page' => $pageNumber,
                 '_limit' => $quantity,
             ]),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-            ],
         );
     }
 
@@ -63,22 +57,18 @@ final class GetUserCollectionContext implements Context
      */
     public function allUsersShouldBeRetrieved(string $position, int $quantity): void
     {
-        Assert::same($this->response->getStatusCode(), 200);
+        $response = $this->client->getResponse();
+        Assert::same($response->getStatusCode(), 200);
 
-        $responseContent = $this->response->getContent();
+        $responseContent = $response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         $pageNumber = (int) substr($position, 0, 1);
 
-        Assert::same($decodedContent['hydra:member'], array_slice(
+        Assert::same($decodedContent, array_slice(
             UserFixtures::getNormalizedUsers(),
             ($pageNumber - 1) * $quantity,
             $quantity,
         ));
-    }
-
-    private function client(): HttpClientInterface
-    {
-        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

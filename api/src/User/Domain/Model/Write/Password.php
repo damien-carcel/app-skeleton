@@ -27,9 +27,9 @@ final class Password
     private function __construct(string $password)
     {
         Assert::notEmpty($password, 'The user password cannot be empty.');
-        Assert::maxLength($password, static::PASSWORD_MAX_LENGTH, sprintf(
+        Assert::maxLength($password, self::PASSWORD_MAX_LENGTH, sprintf(
             'The password should not have more than %d characters, "%s" is %d characters long.',
-            static::PASSWORD_MAX_LENGTH,
+            self::PASSWORD_MAX_LENGTH,
             $password,
             strlen($password)
         ));

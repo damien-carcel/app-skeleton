@@ -24,7 +24,7 @@ final class FirstNameTest extends TestCase
     /** @test */
     public function itReturnsTheFirstName(): void
     {
-        static::assertSame(
+        self::assertSame(
             'Tony',
             (string) FirstName::fromString('Tony')
         );
@@ -33,8 +33,8 @@ final class FirstNameTest extends TestCase
     /** @test */
     public function firstNameCannotBeEmpty(): void
     {
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage('The user first name cannot be empty.');
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage('The user first name cannot be empty.');
 
         FirstName::fromString('');
     }
@@ -44,8 +44,8 @@ final class FirstNameTest extends TestCase
     {
         $tooLongFirstName = bin2hex(random_bytes(130));
 
-        static::expectException(\InvalidArgumentException::class);
-        static::expectExceptionMessage(sprintf(
+        self::expectException(\InvalidArgumentException::class);
+        self::expectExceptionMessage(sprintf(
             'The first name should not have more than 256 characters, "%s" is 260 characters long.',
             $tooLongFirstName
         ));

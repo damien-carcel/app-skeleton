@@ -43,6 +43,9 @@ class TestCase extends KernelTestCase
         return static::$container;
     }
 
+    /**
+     * @param string[] $usersIdsToLoad
+     */
     protected function loadUserFixtures(array $usersIdsToLoad = []): void
     {
         if (empty($usersIdsToLoad)) {

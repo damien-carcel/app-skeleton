@@ -18,8 +18,31 @@ namespace Carcel\User\Application\Command;
  */
 final class UpdateUser
 {
-    public string $identifier;
-    public string $firstName;
-    public string $lastName;
-    public string $email;
+    public function __construct(
+        private string $identifier,
+        private string $firstName,
+        private string $lastName,
+        private string $email
+    ) {
+    }
+
+    public function identifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function firstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function lastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function email(): string
+    {
+        return $this->email;
+    }
 }

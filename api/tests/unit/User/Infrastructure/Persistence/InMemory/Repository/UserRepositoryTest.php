@@ -28,7 +28,9 @@ use Ramsey\Uuid\Uuid;
  */
 final class UserRepositoryTest extends TestCase
 {
+    /** @var string[] */
     private array $userIDs;
+    /** @var User[] */
     private array $users;
 
     protected function setUp(): void
@@ -47,7 +49,7 @@ final class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        static::assertSame($this->users, $repository->findAll());
+        self::assertSame($this->users, $repository->findAll());
     }
 
     /** @test */
@@ -55,7 +57,7 @@ final class UserRepositoryTest extends TestCase
     {
         $repository = $this->instantiateRepository();
 
-        static::assertSame($this->users[0], $repository->find(Uuid::fromString($this->userIDs[0])));
+        self::assertSame($this->users[0], $repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
     /** @test */
@@ -66,8 +68,8 @@ final class UserRepositoryTest extends TestCase
         $user = $this->instantiateUser('1605a575-77e5-4427-bbdb-2ebcb8cc8033');
         $repository->create($user);
 
-        static::assertCount(3, $repository->findAll());
-        static::assertSame($user, $repository->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
+        self::assertCount(3, $repository->findAll());
+        self::assertSame($user, $repository->find(Uuid::fromString('1605a575-77e5-4427-bbdb-2ebcb8cc8033')));
     }
 
     /** @test */
@@ -83,8 +85,8 @@ final class UserRepositoryTest extends TestCase
         );
         $repository->update($user);
 
-        static::assertCount(2, $repository->findAll());
-        static::assertSame($user, $repository->find(Uuid::fromString($this->userIDs[0])));
+        self::assertCount(2, $repository->findAll());
+        self::assertSame($user, $repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
     /** @test */
@@ -94,8 +96,8 @@ final class UserRepositoryTest extends TestCase
 
         $repository->delete($this->users[0]);
 
-        static::assertCount(1, $repository->findAll());
-        static::assertNull($repository->find(Uuid::fromString($this->userIDs[0])));
+        self::assertCount(1, $repository->findAll());
+        self::assertNull($repository->find(Uuid::fromString($this->userIDs[0])));
     }
 
     private function instantiateRepository(): InMemoryUserRepository

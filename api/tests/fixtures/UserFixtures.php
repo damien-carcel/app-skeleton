@@ -89,37 +89,36 @@ final class UserFixtures
 
     public const ID_OF_NON_EXISTENT_USER = 'eba840cf-9317-4735-b03b-6facfa279890';
 
-    private array $userIdsToLoad;
-
-    public function __construct(array $userIdsToLoad = [])
-    {
-        $this->userIdsToLoad = $userIdsToLoad;
-    }
-
+    /**
+     * @return array<array<'id'|'firstName'|'lastName'|'email', string>>
+     */
     public static function getNormalizedUsers(): array
     {
         $normalizedUsers = [];
 
         $userIds = array_keys(self::USERS_DATA);
         foreach ($userIds as $userId) {
-            $normalizedUsers[] = static::getNormalizedUser($userId);
+            $normalizedUsers[] = self::getNormalizedUser($userId);
         }
 
         return $normalizedUsers;
     }
 
+    /**
+     * @return array<'id'|'firstName'|'lastName'|'email', string>
+     */
     public static function getNormalizedUser(string $userId): array
     {
         return [
             'id' => $userId,
-            'firstName' => static::USERS_DATA[$userId]['firstName'],
-            'lastName' => static::USERS_DATA[$userId]['lastName'],
-            'email' => static::USERS_DATA[$userId]['email'],
+            'firstName' => self::USERS_DATA[$userId]['firstName'],
+            'lastName' => self::USERS_DATA[$userId]['lastName'],
+            'email' => self::USERS_DATA[$userId]['email'],
         ];
     }
 
     public static function getPassword(string $userId): string
     {
-        return static::USERS_DATA[$userId]['password'];
+        return self::USERS_DATA[$userId]['password'];
     }
 }

@@ -27,7 +27,7 @@ final class UserDoesNotExistTest extends TestCase
     {
         $exception = $this->instantiateUserDoesNotExist();
 
-        static::assertSame(
+        self::assertSame(
             sprintf('There is no user with identifier "%s"', UserFixtures::ID_OF_NON_EXISTENT_USER),
             $exception->getMessage()
         );

@@ -45,16 +45,16 @@ final class CreateUserHandler implements MessageHandlerInterface
 
     public function __invoke(CreateUser $createUser): void
     {
-        if (($this->isEmailAlreadyUsed)($createUser->email)) {
-            throw EmailIsAlreadyUsed::fromEmail($createUser->email);
+        if (($this->isEmailAlreadyUsed)($createUser->email())) {
+            throw EmailIsAlreadyUsed::fromEmail($createUser->email());
         }
 
         $user = $this->userFactory->create(
             (Uuid::uuid4())->toString(),
-            $createUser->firstName,
-            $createUser->lastName,
-            $createUser->email,
-            ($this->encodePassword)($createUser->password),
+            $createUser->firstName(),
+            $createUser->lastName(),
+            $createUser->email(),
+            ($this->encodePassword)($createUser->password()),
         );
 
         $this->userRepository->create($user);

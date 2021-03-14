@@ -3,6 +3,7 @@ export interface UserData {
   email: string;
   firstName: string;
   lastName: string;
+  password: string;
 }
 
 function getApiUrl(route: string, userId?: string): string {
@@ -57,6 +58,7 @@ export function createUser(data: UserData): Promise<Response> {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
+      password: data.password,
     }),
     headers: createPostHeaders(),
     method: 'POST',

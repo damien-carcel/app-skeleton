@@ -44,9 +44,9 @@ final class GetUserFromMemoryTest extends TestCase
     /** @test */
     public function itGetsAUserById(): void
     {
-        $user = ($this->getUser)(Uuid::fromString(static::TONY_STARK_ID));
+        $user = ($this->getUser)(Uuid::fromString(self::TONY_STARK_ID));
 
-        static::assertUserShouldBeRetrieved($user, static::TONY_STARK_ID);
+        self::assertUserShouldBeRetrieved($user, self::TONY_STARK_ID);
     }
 
     /** @test */
@@ -54,15 +54,17 @@ final class GetUserFromMemoryTest extends TestCase
     {
         $user = ($this->getUser)(Uuid::fromString(UserFixtures::ID_OF_NON_EXISTENT_USER));
 
-        static::assertNull($user);
+        self::assertNull($user);
     }
 
     private function assertUserShouldBeRetrieved(User $user, string $usersId): void
     {
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['id'], $user->getId());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['email'], $user->getEmail());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['firstName'], $user->getFirstName());
-        static::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $user->getLastName());
+        $normalizedUser = $user->normalize();
+
+        self::assertSame(UserFixtures::getNormalizedUser($usersId)['id'], $normalizedUser['id']);
+        self::assertSame(UserFixtures::getNormalizedUser($usersId)['email'], $normalizedUser['email']);
+        self::assertSame(UserFixtures::getNormalizedUser($usersId)['firstName'], $normalizedUser['firstName']);
+        self::assertSame(UserFixtures::getNormalizedUser($usersId)['lastName'], $normalizedUser['lastName']);
     }
 
     private function userRepository(): UserRepository

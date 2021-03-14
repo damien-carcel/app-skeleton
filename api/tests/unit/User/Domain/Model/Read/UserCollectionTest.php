@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserCollectionTest extends TestCase
 {
+    /** @var array<array<'id'|'firstName'|'lastName'|'email', string>> */
     private array $usersData;
 
     /**
@@ -37,7 +38,7 @@ final class UserCollectionTest extends TestCase
     /** @test */
     public function itCanCreateAnEmptyUserCollection(): void
     {
-        static::assertInstanceOf(UserCollection::class, new UserCollection([]));
+        self::assertInstanceOf(UserCollection::class, new UserCollection([]));
     }
 
     /** @test */
@@ -45,7 +46,7 @@ final class UserCollectionTest extends TestCase
     {
         $userCollection = $this->instantiateUserCollection();
 
-        static::assertSame($this->usersData, $userCollection->normalize());
+        self::assertSame($this->usersData, $userCollection->normalize());
     }
 
     private function instantiateUserCollection(): UserCollection

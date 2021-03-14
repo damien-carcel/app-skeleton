@@ -18,8 +18,31 @@ namespace Carcel\User\Application\Command;
  */
 final class CreateUser
 {
-    public string $firstName;
-    public string $lastName;
-    public string $email;
-    public string $password;
+    public function __construct(
+        private string $firstName,
+        private string $lastName,
+        private string $email,
+        private string $password
+    ) {
+    }
+
+    public function firstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function lastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function email(): string
+    {
+        return $this->email;
+    }
+
+    public function password(): string
+    {
+        return $this->password;
+    }
 }

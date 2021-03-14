@@ -40,22 +40,22 @@ build: pull ## Build all Docker images at once (API and client, development and 
 build-dev: build-api-dev build-client-dev ## Build all development images (API and client).
 
 .PHONY: build-api-dev
-build-api-dev: pull ## Build API development image (carcel/skeleton/dev:php).
+build-api-dev: ## Build API development image (carcel/skeleton/dev:php).
 	@docker-compose build --pull php
 
 .PHONY: build-client-dev
-build-client-dev: pull ## Build client development image (carcel/skeleton/dev:node).
+build-client-dev: ## Build client development image (carcel/skeleton/dev:node).
 	@docker-compose build --pull node
 
 .PHONY: build-prod
 build-prod: build-api-prod build-client-prod ## Build all production images (API and client).
 
 .PHONY: build-api-prod
-build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx).
+build-api-prod: ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx).
 	@docker-compose build --parallel --pull api fpm
 
 .PHONY: build-client-prod
-build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest).
+build-client-prod: ## Build client production image (carcel/skeleton/client:latest).
 	@docker-compose build --pull client
 
 # Prepare the application dependencies
@@ -109,7 +109,7 @@ mysql: install-api-dependencies ## Setup the API database.
 	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
 
 .PHONY: develop-api
-develop-api: api/config/jwt/public.pem install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
+develop-api: install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
 	@echo ""
 	@echo "Starting the API in development mode"
 	@echo ""
@@ -119,17 +119,6 @@ develop-api: api/config/jwt/public.pem install-api-dependencies #main# Run the A
 	@echo ""
 	@echo "API is now running in development mode, you can access it through http://localhost:8000"
 	@echo ""
-
-api/config/jwt:
-	@mkdir -p api/config/jwt
-
-api/config/jwt/public.pem: api/config/jwt
-	@echo "Generating public and private keys for JWT tokens"
-	@docker-compose run --rm php sh -c ' \
-		jwt_passphrase=$$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''=''); \
-		echo "$$jwt_passphrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096; \
-		echo "$$jwt_passphrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout; \
-	'
 
 .PHONY: develop-client
 develop-client: develop-api install-client-dependencies #main# Run the client using Webpack development server (hit CTRL+c to stop the server).
@@ -162,6 +151,12 @@ serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod ## Se
 .PHONY: down
 down: #main# Stop the application and remove all containers, networks and volumes.
 	@docker-compose down -v
+
+# Usefull aliases
+
+.PHONY: console
+console: #main# Use the Symfony CLI. Example: "make console IO=debug:container"
+	@docker-compose run --rm php bin/console ${IO}
 
 # Test the API
 
@@ -244,7 +239,7 @@ api-integration-tests: ## Execute API integration tests (use "make api-integrati
 	@docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" ${IO}
 
 .PHONY: api-end-to-end-tests
-api-end-to-end-tests: api/config/jwt/public.pem ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
+api-end-to-end-tests: ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
 	@docker-compose run --rm php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty ${IO}
 
 .PHONY: phpmd
