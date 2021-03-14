@@ -22,4 +22,16 @@ final class UpdateUser
     public string $firstName;
     public string $lastName;
     public string $email;
+
+    public function __construct(
+        string $identifier,
+        string $firstName,
+        string $lastName,
+        string $email
+    ) {
+        $this->identifier = $identifier;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+    }
 }

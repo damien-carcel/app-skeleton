@@ -21,3 +21,10 @@ api_users_collection_get:
   controller: Carcel\User\Infrastructure\UserInterface\WebApi\GetUserCollection
   methods: GET
   path: /api/users
+
+api_users_update:
+  controller: Carcel\User\Infrastructure\UserInterface\WebApi\UpdateUser
+  methods: PUT
+  path: /api/users/{id}
+  requirements:
+    id: '.+'

@@ -16,10 +16,8 @@ namespace Carcel\Tests\EndToEnd\Context;
 use Behat\Behat\Context\Context;
 use Carcel\Tests\Fixtures\UserFixtures;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -35,17 +33,15 @@ final class UpdateUserContext implements Context
 
     private string $updatedUserIdentifier;
 
-    private ResponseInterface $response;
-
-    private KernelInterface $kernel;
-    private RouterInterface $router;
     private Connection $connection;
+    private KernelBrowser $client;
+    private RouterInterface $router;
 
-    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
+    public function __construct(Connection $connection, KernelBrowser $client, RouterInterface $router)
     {
-        $this->kernel = $kernel;
-        $this->router = $router;
         $this->connection = $connection;
+        $this->client = $client;
+        $this->router = $router;
     }
 
     /**
@@ -55,18 +51,16 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $this->response = $this->client()->request(
+        $this->client->request(
             'PUT',
             $this->router->generate(
-                'api_update_users_put_item',
+                'api_users_update',
                 ['id' => $this->updatedUserIdentifier]
             ),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-                'json' => static::USER_DATA_TO_UPDATE,
-            ],
+            [],
+            [],
+            [],
+            json_encode(self::USER_DATA_TO_UPDATE),
         );
     }
 
@@ -75,22 +69,20 @@ final class UpdateUserContext implements Context
      */
     public function updateUserWithInvalidData(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'PUT',
             $this->router->generate(
-                'api_update_users_put_item',
+                'api_users_update',
                 ['id' => array_keys(UserFixtures::USERS_DATA)[0]]
             ),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-                'json' => [
-                    'firstName' => '',
-                    'lastName' => '',
-                    'email' => 'not an email',
-                ],
-            ],
+            [],
+            [],
+            [],
+            json_encode([
+                'firstName' => '',
+                'lastName' => '',
+                'email' => 'not an email',
+            ]),
         );
     }
 
@@ -99,18 +91,16 @@ final class UpdateUserContext implements Context
      */
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'PUT',
             $this->router->generate(
-                'api_update_users_put_item',
+                'api_users_update',
                 ['id' => UserFixtures::ID_OF_NON_EXISTENT_USER]
             ),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-                'json' => static::USER_DATA_TO_UPDATE,
-            ],
+            [],
+            [],
+            [],
+            json_encode(self::USER_DATA_TO_UPDATE),
         );
     }
 
@@ -119,7 +109,7 @@ final class UpdateUserContext implements Context
      */
     public function userHasNewData(): void
     {
-        Assert::same($this->response->getStatusCode(), 202);
+        Assert::same($this->client->getResponse()->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user WHERE id = :id
@@ -144,13 +134,13 @@ final class UpdateUserContext implements Context
      */
     public function iCannotChangeTheUserData(): void
     {
-        Assert::same($this->response->getStatusCode(), 400);
+        Assert::same($this->client->getResponse()->getStatusCode(), 400);
         Assert::contains(
-            $this->response->getContent(false),
+            $this->client->getResponse()->getContent(),
             'This value should not be blank.'
         );
         Assert::contains(
-            $this->response->getContent(false),
+            $this->client->getResponse()->getContent(),
             'This value is not a valid email address.'
         );
     }
@@ -160,15 +150,10 @@ final class UpdateUserContext implements Context
      */
     public function gotNothingToUpdate(): void
     {
-        Assert::same($this->response->getStatusCode(), 404);
+        Assert::same($this->client->getResponse()->getStatusCode(), 404);
         Assert::contains(
-            $this->response->getContent(false),
+            $this->client->getResponse()->getContent(),
             sprintf('There is no user with identifier \u0022%s\u0022', UserFixtures::ID_OF_NON_EXISTENT_USER),
         );
-    }
-
-    private function client(): HttpClientInterface
-    {
-        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

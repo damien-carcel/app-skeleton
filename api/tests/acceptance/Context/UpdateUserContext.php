@@ -47,11 +47,7 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = $this->updatedUserIdentifier;
-        $changeUserName->firstName = 'Peter';
-        $changeUserName->lastName = 'Parker';
-        $changeUserName->email = 'new.ironman@avengers.org';
+        $changeUserName = new UpdateUser($this->updatedUserIdentifier, 'Peter', 'Parker', 'new.ironman@avengers.org');
 
         $this->bus->dispatch($changeUserName);
     }
@@ -63,11 +59,12 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = $this->updatedUserIdentifier;
-        $changeUserName->firstName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'];
-        $changeUserName->lastName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'];
-        $changeUserName->email = 'new.ironman@avengers.org';
+        $changeUserName = new UpdateUser(
+            $this->updatedUserIdentifier,
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'],
+            'new.ironman@avengers.org',
+        );
 
         $this->bus->dispatch($changeUserName);
     }
@@ -79,11 +76,12 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = $this->updatedUserIdentifier;
-        $changeUserName->firstName = 'Peter';
-        $changeUserName->lastName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'];
-        $changeUserName->email = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'];
+        $changeUserName = new UpdateUser(
+            $this->updatedUserIdentifier,
+            'Peter',
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['lastName'],
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
+        );
 
         $this->bus->dispatch($changeUserName);
     }
@@ -95,11 +93,12 @@ final class UpdateUserContext implements Context
     {
         $this->updatedUserIdentifier = array_keys(UserFixtures::USERS_DATA)[0];
 
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = $this->updatedUserIdentifier;
-        $changeUserName->firstName = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'];
-        $changeUserName->lastName = 'Parker';
-        $changeUserName->email = UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'];
+        $changeUserName = new UpdateUser(
+            $this->updatedUserIdentifier,
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['firstName'],
+            'Parker',
+            UserFixtures::USERS_DATA[$this->updatedUserIdentifier]['email'],
+        );
 
         $this->bus->dispatch($changeUserName);
     }
@@ -109,11 +108,7 @@ final class UpdateUserContext implements Context
      */
     public function updateUserWithInvalidData(): void
     {
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = array_keys(UserFixtures::USERS_DATA)[0];
-        $changeUserName->firstName = '';
-        $changeUserName->lastName = '';
-        $changeUserName->email = 'not an email';
+        $changeUserName = new UpdateUser(array_keys(UserFixtures::USERS_DATA)[0], '', '', 'not an email');
 
         try {
             $this->bus->dispatch($changeUserName);
@@ -127,11 +122,12 @@ final class UpdateUserContext implements Context
      */
     public function changeTheNameOfAUserThatDoesNotExist(): void
     {
-        $changeUserName = new UpdateUser();
-        $changeUserName->identifier = UserFixtures::ID_OF_NON_EXISTENT_USER;
-        $changeUserName->firstName = 'Peter';
-        $changeUserName->lastName = 'Parker';
-        $changeUserName->email = 'peter.parker@avengers.org';
+        $changeUserName = new UpdateUser(
+            UserFixtures::ID_OF_NON_EXISTENT_USER,
+            'Peter',
+            'Parker',
+            'peter.parker@avengers.org',
+        );
 
         try {
             $this->bus->dispatch($changeUserName);

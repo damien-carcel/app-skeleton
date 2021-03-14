@@ -7,8 +7,6 @@ api_platform:
             page_parameter_name: _page
     exception_to_status:
         Carcel\User\Domain\Exception\UserDoesNotExist: 404
-    mapping:
-        paths: ['%kernel.project_dir%/config/api_platform']
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:
