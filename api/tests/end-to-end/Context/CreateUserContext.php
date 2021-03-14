@@ -112,18 +112,10 @@ final class CreateUserContext implements Context
      */
     public function iCannotCreateAnInvalidUser(): void
     {
-        Assert::same(
-            $this->client->getResponse()->getStatusCode(),
-            400,
-        );
+        $response = $this->client->getResponse();
 
-        Assert::contains(
-            $this->client->getResponse()->getContent(),
-            'This value should not be blank.',
-        );
-        Assert::contains(
-            $this->client->getResponse()->getContent(),
-            'This value is not a valid email address.',
-        );
+        Assert::same($response->getStatusCode(), 400);
+        Assert::contains($response->getContent(), 'This value should not be blank.');
+        Assert::contains($response->getContent(), 'This value is not a valid email address.');
     }
 }

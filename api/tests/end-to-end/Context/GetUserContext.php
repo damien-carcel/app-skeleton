@@ -54,11 +54,12 @@ final class GetUserContext implements Context
      */
     public function specifiedUserShouldBeRetrieved(): void
     {
-        Assert::same($this->client->getResponse()->getStatusCode(), 200);
+        $response = $this->client->getResponse();
+        Assert::same($response->getStatusCode(), 200);
 
         $uuidList = array_keys(UserFixtures::USERS_DATA);
 
-        $responseContent = $this->client->getResponse()->getContent();
+        $responseContent = $response->getContent();
         $decodedContent = json_decode($responseContent, true);
 
         Assert::keyExists($decodedContent, 'id');

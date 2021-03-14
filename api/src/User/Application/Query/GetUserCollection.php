@@ -27,4 +27,10 @@ final class GetUserCollection
 {
     public int $numberOfUsers;
     public int $userPage;
+
+    public function __construct(int $numberOfUsers, int $userPage)
+    {
+        $this->numberOfUsers = $numberOfUsers;
+        $this->userPage = $userPage;
+    }
 }

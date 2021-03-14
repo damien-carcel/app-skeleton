@@ -1,13 +1,4 @@
 resources:
-    Carcel\User\Application\Query\GetUserCollection:
-        collectionOperations:
-            get:
-                path: '/users'
-        itemOperations: {}
-        properties:
-            identifier:
-                identifier: true
-
     Carcel\User\Application\Command\UpdateUser:
         attributes:
             messenger: true

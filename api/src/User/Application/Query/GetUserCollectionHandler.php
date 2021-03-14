@@ -15,11 +15,12 @@ namespace Carcel\User\Application\Query;
 
 use Carcel\User\Domain\Model\Read\UserCollection;
 use Carcel\User\Domain\QueryFunction\GetUserCollection as GetUserCollectionQueryFunction;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-final class GetUserCollectionHandler
+final class GetUserCollectionHandler implements MessageHandlerInterface
 {
     private GetUserCollectionQueryFunction $getUserCollectionQueryFunction;
 

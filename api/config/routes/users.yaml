@@ -16,3 +16,8 @@ api_users_get:
   path: /api/users/{id}
   requirements:
     id: '.+'
+
+api_users_collection_get:
+  controller: Carcel\User\Infrastructure\UserInterface\WebApi\GetUserCollection
+  methods: GET
+  path: /api/users

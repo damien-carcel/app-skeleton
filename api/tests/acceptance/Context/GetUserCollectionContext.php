@@ -39,9 +39,7 @@ final class GetUserCollectionContext implements Context
      */
     public function listUsers(string $position, int $quantity): void
     {
-        $getUserCollection = new GetUserCollectionQuery();
-        $getUserCollection->numberOfUsers = $quantity;
-        $getUserCollection->userPage = (int) substr($position, 0, 1);
+        $getUserCollection = new GetUserCollectionQuery($quantity, (int) substr($position, 0, 1));
 
         $this->userCollection = ($this->handler)($getUserCollection);
     }
