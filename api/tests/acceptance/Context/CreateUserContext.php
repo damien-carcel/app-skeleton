@@ -51,11 +51,12 @@ final class CreateUserContext implements Context
      */
     public function createNewUser(): void
     {
-        $createUser = new CreateUser();
-        $createUser->firstName = static::NEW_USER['firstName'];
-        $createUser->lastName = static::NEW_USER['lastName'];
-        $createUser->email = static::NEW_USER['email'];
-        $createUser->password = static::NEW_USER['password'];
+        $createUser = new CreateUser(
+            self::NEW_USER['firstName'],
+            self::NEW_USER['lastName'],
+            self::NEW_USER['email'],
+            self::NEW_USER['password'],
+        );
 
         $this->bus->dispatch($createUser);
     }
@@ -65,11 +66,7 @@ final class CreateUserContext implements Context
      */
     public function tryToCreateUserWithInvalidData(): void
     {
-        $createUser = new CreateUser();
-        $createUser->firstName = '';
-        $createUser->lastName = '';
-        $createUser->email = 'not an email';
-        $createUser->password = '';
+        $createUser = new CreateUser('', '', 'not an email', '');
 
         try {
             $this->bus->dispatch($createUser);
@@ -83,11 +80,12 @@ final class CreateUserContext implements Context
      */
     public function tryToCreateUserWithAnAlreadyUsedEmail(): void
     {
-        $createUser = new CreateUser();
-        $createUser->firstName = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['firstName'];
-        $createUser->lastName = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['lastName'];
-        $createUser->email = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email'];
-        $createUser->password = UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['password'];
+        $createUser = new CreateUser(
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['firstName'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['lastName'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['email'],
+            UserFixtures::USERS_DATA['02432f0b-c33e-4d71-8ba9-a5e3267a45d5']['password'],
+        );
 
         try {
             $this->bus->dispatch($createUser);
@@ -113,10 +111,10 @@ final class CreateUserContext implements Context
         Assert::count($newUuidList, 1);
 
         $newUser = $this->userRepository->find(Uuid::fromString(array_shift($newUuidList)));
-        Assert::same((string) $newUser->email(), static::NEW_USER['email']);
-        Assert::same((string) $newUser->firstName(), static::NEW_USER['firstName']);
-        Assert::same((string) $newUser->lastName(), static::NEW_USER['lastName']);
-        Assert::same((string) $newUser->password(), sprintf('dummy_encoded-<%s>', static::NEW_USER['password']));
+        Assert::same((string) $newUser->email(), self::NEW_USER['email']);
+        Assert::same((string) $newUser->firstName(), self::NEW_USER['firstName']);
+        Assert::same((string) $newUser->lastName(), self::NEW_USER['lastName']);
+        Assert::same((string) $newUser->password(), sprintf('dummy_encoded-<%s>', self::NEW_USER['password']));
     }
 
     /**

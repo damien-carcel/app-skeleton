@@ -15,10 +15,9 @@ namespace Carcel\Tests\EndToEnd\Context;
 
 use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -40,17 +39,15 @@ final class CreateUserContext implements Context
         'password' => '',
     ];
 
-    private ResponseInterface $response;
-
-    private KernelInterface $kernel;
-    private RouterInterface $router;
+    private KernelBrowser $client;
     private Connection $connection;
+    private RouterInterface $router;
 
-    public function __construct(KernelInterface $kernel, RouterInterface $router, Connection $connection)
+    public function __construct(KernelBrowser $client, Connection $connection, RouterInterface $router)
     {
-        $this->kernel = $kernel;
-        $this->router = $router;
+        $this->client = $client;
         $this->connection = $connection;
+        $this->router = $router;
     }
 
     /**
@@ -58,15 +55,13 @@ final class CreateUserContext implements Context
      */
     public function createNewUser(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'POST',
-            $this->router->generate('api_create_users_post_collection'),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-                'json' => static::NEW_VALID_USER,
-            ],
+            $this->router->generate('api_users_create'),
+            [],
+            [],
+            [],
+            json_encode(self::NEW_VALID_USER),
         );
     }
 
@@ -75,15 +70,13 @@ final class CreateUserContext implements Context
      */
     public function tryToCreateUserWithInvalidData(): void
     {
-        $this->response = $this->client()->request(
+        $this->client->request(
             'POST',
-            $this->router->generate('api_create_users_post_collection'),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . AuthenticationContext::$TOKEN,
-                ],
-                'json' => static::NEW_INVALID_USER,
-            ],
+            $this->router->generate('api_users_create'),
+            [],
+            [],
+            [],
+            json_encode(self::NEW_INVALID_USER),
         );
     }
 
@@ -92,13 +85,13 @@ final class CreateUserContext implements Context
      */
     public function newUserIsCreated(): void
     {
-        Assert::same($this->response->getStatusCode(), 202);
+        Assert::same($this->client->getResponse()->getStatusCode(), 202);
 
         $query = <<<SQL
             SELECT * FROM user WHERE email = :email
             SQL;
 
-        $parameters = ['email' => static::NEW_VALID_USER['email']];
+        $parameters = ['email' => self::NEW_VALID_USER['email']];
         $types = ['email' => \PDO::PARAM_STR];
 
         $statement = $this->connection->executeQuery($query, $parameters, $types);
@@ -108,10 +101,10 @@ final class CreateUserContext implements Context
 
         $queriedUser = $result[0];
         Assert::uuid($queriedUser['id']);
-        Assert::same($queriedUser['email'], static::NEW_VALID_USER['email']);
-        Assert::same($queriedUser['first_name'], static::NEW_VALID_USER['firstName']);
-        Assert::same($queriedUser['last_name'], static::NEW_VALID_USER['lastName']);
-        Assert::notContains($queriedUser['password'], static::NEW_VALID_USER['password']);
+        Assert::same($queriedUser['email'], self::NEW_VALID_USER['email']);
+        Assert::same($queriedUser['first_name'], self::NEW_VALID_USER['firstName']);
+        Assert::same($queriedUser['last_name'], self::NEW_VALID_USER['lastName']);
+        Assert::notContains($queriedUser['password'], self::NEW_VALID_USER['password']);
         Assert::contains($queriedUser['password'], '$argon2id$v=19$m=65536,t=4,p=1$');
     }
 
@@ -120,20 +113,18 @@ final class CreateUserContext implements Context
      */
     public function iCannotCreateAnInvalidUser(): void
     {
-        Assert::same($this->response->getStatusCode(), 400);
+        Assert::same(
+            $this->client->getResponse()->getStatusCode(),
+            400,
+        );
 
         Assert::contains(
-            $this->response->getContent(false),
-            'This value should not be blank.'
+            $this->client->getResponse()->getContent(),
+            'This value should not be blank.',
         );
         Assert::contains(
-            $this->response->getContent(false),
-            'This value is not a valid email address.'
+            $this->client->getResponse()->getContent(),
+            'This value is not a valid email address.',
         );
-    }
-
-    private function client(): HttpClientInterface
-    {
-        return $this->kernel->getContainer()->get('test.api_platform.client');
     }
 }

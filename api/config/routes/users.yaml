@@ -1,0 +1,4 @@
+api_users_create:
+  controller: Carcel\User\Infrastructure\UserInterface\WebApi\CreateUser
+  methods: POST
+  path: /api/users

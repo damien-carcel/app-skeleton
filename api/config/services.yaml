@@ -22,9 +22,9 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-#    Carcel\User\Infrastructure\Controller\:
-#        resource: '../src/User/Infrastructure/Controller'
-#        tags: ['controller.service_arguments']
+    Carcel\User\Infrastructure\UserInterface\WebApi\:
+        resource: '../src/User/Infrastructure/UserInterface/WebApi'
+        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

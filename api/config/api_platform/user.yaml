@@ -1,19 +1,12 @@
 resources:
-    Carcel\User\Application\Command\CreateUser:
-        attributes:
-            messenger: true
-            output: false
-        collectionOperations:
-            post:
-                path: '/users'
-                status: 202
-        itemOperations: {}
-
     Carcel\User\Application\Query\GetUserCollection:
         collectionOperations:
             get:
                 path: '/users'
         itemOperations: {}
+        properties:
+            identifier:
+                identifier: true
 
     Carcel\User\Application\Query\GetUser:
         collectionOperations: {}

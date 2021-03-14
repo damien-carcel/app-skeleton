@@ -40,22 +40,22 @@ build: pull ## Build all Docker images at once (API and client, development and 
 build-dev: build-api-dev build-client-dev ## Build all development images (API and client).
 
 .PHONY: build-api-dev
-build-api-dev: pull ## Build API development image (carcel/skeleton/dev:php).
+build-api-dev: ## Build API development image (carcel/skeleton/dev:php).
 	@docker-compose build --pull php
 
 .PHONY: build-client-dev
-build-client-dev: pull ## Build client development image (carcel/skeleton/dev:node).
+build-client-dev: ## Build client development image (carcel/skeleton/dev:node).
 	@docker-compose build --pull node
 
 .PHONY: build-prod
 build-prod: build-api-prod build-client-prod ## Build all production images (API and client).
 
 .PHONY: build-api-prod
-build-api-prod: pull ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx).
+build-api-prod: ## Build API production images (carcel/skeleton/api:fpm and carcel/skeleton/api:nginx).
 	@docker-compose build --parallel --pull api fpm
 
 .PHONY: build-client-prod
-build-client-prod: pull ## Build client production image (carcel/skeleton/client:latest).
+build-client-prod: ## Build client production image (carcel/skeleton/client:latest).
 	@docker-compose build --pull client
 
 # Prepare the application dependencies
@@ -162,6 +162,12 @@ serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod ## Se
 .PHONY: down
 down: #main# Stop the application and remove all containers, networks and volumes.
 	@docker-compose down -v
+
+# Usefull aliases
+
+.PHONY: console
+console: #main# Use the Symfony CLI. Example: "make console IO=debug:container"
+	@docker-compose run --rm php bin/console ${IO}
 
 # Test the API
 
