@@ -92,7 +92,8 @@ WORKDIR /var/www/html
 
 COPY . .
 RUN mkdir -p /tmp/composer/cache && \
-    composer install --optimize-autoloader --no-interaction --no-scripts --prefer-dist --no-dev
+    composer install --optimize-autoloader --no-interaction --prefer-dist --no-dev && \
+    composer dump-env prod
 
 ###############################
 # Image used for production   #
@@ -101,13 +102,25 @@ RUN mkdir -p /tmp/composer/cache && \
 
 FROM base as api-fpm
 
-ENV APP_ENV=prod
+ENV APP_ENV=prod \
+    APP_DEBUG=0
 
-COPY --from=builder /var/www/html /var/www/html
+# Copy the application with its dependencies
 WORKDIR /var/www/html
-RUN mkdir var && \
-    bin/console ca:c && \
-    chown -R www-data:www-data /var/www/html
+COPY --chown=www-data:www-data --from=builder /var/www/html/bin bin
+COPY --chown=www-data:www-data --from=builder /var/www/html/config config
+COPY --chown=www-data:www-data --from=builder /var/www/html/migrations migrations
+COPY --chown=www-data:www-data --from=builder /var/www/html/public public
+COPY --chown=www-data:www-data --from=builder /var/www/html/src src
+COPY --chown=www-data:www-data --from=builder /var/www/html/vendor vendor
+COPY --chown=www-data:www-data --from=builder /var/www/html/composer.json composer.json
+COPY --chown=www-data:www-data --from=builder /var/www/html/composer.lock composer.lock
+COPY --chown=www-data:www-data --from=builder /var/www/html/.env.local.php .env.local.php
+
+# Prepare the application
+RUN mkdir -p var && \
+    chown -R www-data:www-data var && \
+    su www-data -s /bin/bash -c "bin/console cache:warmup"
 
 ###################################
 # Nginx image used for production #
