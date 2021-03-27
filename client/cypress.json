@@ -1,4 +1,4 @@
 {
   "baseUrl": "http://client/",
-  "pluginsFile": "tests/e2e/plugins/index.js"
+  "pluginsFile": "tests/e2e/plugins/index.ts"
 }
