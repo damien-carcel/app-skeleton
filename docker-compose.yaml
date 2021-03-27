@@ -111,7 +111,7 @@ services:
     networks:
       - skeleton-client
     ports:
-      - '${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}'
+      - '${CLIENT_PORT:-3000}:3000'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
@@ -131,7 +131,7 @@ services:
       _X11_NO_MITSHM: 1
     image: 'cypress/browsers:node14.15.0-chrome86-ff82'
     networks:
-      - 'proxy'
+      - proxy
     user: 'node'
     volumes:
       - './client:/srv/app'

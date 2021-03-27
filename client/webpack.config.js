@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,6 +11,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     open: true,
     port: 3000,
+    hot: true,
     watchContentBase: true,
   },
   devtool: 'inline-source-map',
@@ -48,6 +50,7 @@ module.exports = {
       filename: '[name].[contenthash].css',
       chunkFilename: '[id].[contenthash].css',
     }),
+    new webpack.EnvironmentPlugin(['API_BASE_URL']),
   ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],

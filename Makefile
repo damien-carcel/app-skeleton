@@ -125,7 +125,7 @@ develop-client: develop-api install-client-dependencies #main# Run the client us
 	@echo ""
 	@echo "Starting the Client in development mode"
 	@echo ""
-	@docker-compose run --rm --service-ports node yarn serve
+	@docker-compose run --rm --service-ports node yarn serve --host=0.0.0.0
 
 .PHONY: serve
 serve: serve-api serve-client #main# Serve the whole application in production mode.
