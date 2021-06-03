@@ -6,8 +6,8 @@ var
 .gitignore
 .phpunit.result.cache
 .php_cd.php
-.php_cs.cache
-.php_cs.php
+.php-cs-fixer.cache
+.php-cs-fixer.dist.php
 behat.yaml
 phpunit.xml.dist
 phpunit.xml

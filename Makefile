@@ -197,7 +197,7 @@ api-tests: install-api-dependencies #main# Execute all the API tests.
 
 .PHONY: api-coding-standards
 api-coding-standards: ## Check API coding style with PHP CS Fixer.
-	@docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+	@docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php-cs-fixer.dist.php
 
 .PHONY: sniff-api-code
 sniff-api-code: ## Check API coding style with PHP Code Sniffer.
@@ -208,7 +208,7 @@ lint-api-code: api-coding-standards sniff-api-code ## Lint the PHP code using bo
 
 .PHONY: fix-api-code
 fix-api-code: ## Attempt to fix the violations detected by PHP Code Sniffer and PHP CS Fixer.
-	@docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php_cs.php
+	@docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.dist.php
 	@docker-compose run --rm php vendor/bin/phpcbf
 
 .PHONY: analyse-api-src
