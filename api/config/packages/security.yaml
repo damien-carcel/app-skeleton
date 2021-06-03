@@ -1,18 +1,22 @@
 security:
-    encoders:
-        Carcel\User\Infrastructure\Security\User:
-            algorithm: sodium
-
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
+    enable_authenticator_manager: true
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         app_user_provider:
             id: Carcel\User\Infrastructure\Security\UserProvider
+
+    password_hashers:
+        Carcel\User\Infrastructure\Security\User:
+            algorithm: sodium
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
+            lazy: true
+            provider: app_user_provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
