@@ -1,13 +1,9 @@
-config/jwt
 public/check.php
 tests
 var
 .env.*
 .gitignore
-.phpunit.result.cache
 .php_cd.php
 .php-cs-fixer.cache
 .php-cs-fixer.dist.php
-behat.yaml
-phpunit.xml.dist
-phpunit.xml
+behat.yaml*

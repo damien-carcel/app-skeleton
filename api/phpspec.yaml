@@ -1,0 +1,6 @@
+suites:
+    SharedCatalogs:
+        namespace: App
+        psr4_prefix: App
+        spec_path: tests
+        spec_prefix: unit

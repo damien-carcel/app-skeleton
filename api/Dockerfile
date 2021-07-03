@@ -39,9 +39,9 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
         php8.0-fpm \
         php8.0-intl \
         php8.0-mbstring \
-        php8.0-mysql \
         php8.0-opcache \
         php8.0-pdo \
+        php8.0-pgsql \
         php8.0-zip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \

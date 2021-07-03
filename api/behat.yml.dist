@@ -1,0 +1,32 @@
+acceptance:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'acceptance'
+    suites:
+        user:
+            contexts: []
+
+integration:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'tests'
+    suites:
+        user:
+            paths:
+                - '%paths.base%/tests/integration'
+            contexts: []
+            filters:
+                tags: '@integration'
+
+end-to-end:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'tests'
+    suites:
+        user:
+            contexts: []
+            filters:
+                tags: '@end-to-end'

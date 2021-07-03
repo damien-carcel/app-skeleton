@@ -1,30 +1,3 @@
-api_users_create:
-    controller: Carcel\User\Infrastructure\UserInterface\WebApi\CreateUser
-    methods: POST
-    path: /api/users
-
-api_users_delete:
-    controller: Carcel\User\Infrastructure\UserInterface\WebApi\DeleteUser
-    methods: DELETE
-    path: /api/users/{id}
-    requirements:
-        id: '.+'
-
-api_users_get:
-    controller: Carcel\User\Infrastructure\UserInterface\WebApi\GetUser
-    methods: GET
-    path: /api/users/{id}
-    requirements:
-        id: '.+'
-
-api_users_collection_get:
-    controller: Carcel\User\Infrastructure\UserInterface\WebApi\GetUserCollection
-    methods: GET
-    path: /api/users
-
-api_users_update:
-    controller: Carcel\User\Infrastructure\UserInterface\WebApi\UpdateUser
-    methods: PUT
-    path: /api/users/{id}
-    requirements:
-        id: '.+'
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index

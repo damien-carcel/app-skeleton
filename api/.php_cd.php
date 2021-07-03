@@ -6,8 +6,7 @@ use Akeneo\CouplingDetector\Configuration\Configuration;
 use Akeneo\CouplingDetector\Configuration\DefaultFinder;
 use Akeneo\CouplingDetector\Domain\Rule;
 use Akeneo\CouplingDetector\Domain\RuleInterface;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 $finder = new DefaultFinder();
@@ -15,16 +14,15 @@ $finder->name('*.php')->in('src');
 
 
 $rules = [
-    new Rule('Carcel\User\Domain', [
-        'Carcel\User\Domain',
-        'Ramsey\Uuid\Uuid',
+    new Rule('App\User\Domain', [
+        'App\User\Domain',
+        Uuid::class,
         Assert::class,
     ], RuleInterface::TYPE_ONLY),
-    new Rule('Carcel\User\Application', [
-        'Carcel\User\Application',
-        'Carcel\User\Domain',
+    new Rule('App\User\Application', [
+        'App\User\Application',
+        'App\User\Domain',
         Uuid::class,
-        MessageHandlerInterface::class,
     ], RuleInterface::TYPE_ONLY),
 ];
 

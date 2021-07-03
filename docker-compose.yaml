@@ -82,22 +82,17 @@ services:
       - skeleton-api
     restart: 'always'
 
-  mysql:
-    image: 'mysql:8'
-    command: ['--default-authentication-plugin=mysql_native_password']
+  database:
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'app_skeleton'
-      MYSQL_PASSWORD: 'app_skeleton'
-      MYSQL_DATABASE: 'app_skeleton'
+      POSTGRES_DB: '${PGSQL_DB:-app_skeleton}'
+      POSTGRES_USER: '${PGSQL_USERNAME:-app_skeleton}'
+      POSTGRES_PASSWORD: '${PGSQL_PASSWORD:-app_skeleton}'
+    image: 'postgres:13'
     networks:
       - skeleton-api
     ports:
-      - '${MYSQL_SKELETON_PORT:-33006}:3306'
-    restart: 'always'
-    tmpfs:
-      - '/tmp'
-      - '/var/lib/mysql'
+      - '5432:5432'
+    restart: 'unless-stopped'
 
   node:
     environment:
