@@ -34,6 +34,10 @@ endif
 
 # Build Docker images
 
+.PHONY: up
+up: ## Pull all Docker images used in docker-compose.yaml.
+	@docker-compose up -d --remove-orphans ${IO}
+
 .PHONY: pull
 pull: ## Pull all Docker images used in docker-compose.yaml.
 	@docker-compose pull
@@ -98,7 +102,7 @@ update-dependencies: update-api-dependencies update-client-dependencies ## Updat
 
 .PHONY: proxy
 proxy:
-	@docker-compose up -d traefik
+	@make up IO=traefik
 
 traefik/ssl/_wildcard.docker.localhost.pem:
 	@cd ${CURDIR}/traefik/ssl && mkcert "*.docker.localhost"
@@ -110,7 +114,7 @@ cache: install-api-dependencies ## Clear the API (Symfony) cache.
 
 .PHONY: database
 database: install-api-dependencies ## Setup the API database.
-	@docker-compose up -d database
+	@make up IO=database
 	@sh ${CURDIR}/api/docker/database/wait_for_it.sh
 	@$(DC_RUN) php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
@@ -121,7 +125,7 @@ develop-api: install-api-dependencies #main# Run the API using the PHP developme
 	@echo ""
 	@make database
 	@make cache
-	@docker-compose up -d api-dev
+	@make up IO=api-dev
 	@echo ""
 	@echo "API is now running in development mode, you can access it through http://localhost:8000"
 	@echo ""
@@ -131,26 +135,27 @@ develop-client: develop-api install-client-dependencies #main# Run the client us
 	@echo ""
 	@echo "Starting the Client in development mode"
 	@echo ""
-	@$(DC_RUN) --service-ports node yarn serve
+	@make up IO=client-dev
+	@echo ""
+	@echo "Client is now running in development mode, you can access it through http://localhost:3000"
+	@echo ""
 
 .PHONY: serve
 serve: serve-api serve-client #main# Serve the whole application in production mode.
 
 .PHONY: serve-api
-serve-api: traefik/ssl/_wildcard.docker.localhost.pem database build-api-prod ## Serve the API in production mode (nginx + PHP-FPM).
+serve-api: traefik/ssl/_wildcard.docker.localhost.pem database build-api-prod proxy ## Serve the API in production mode (nginx + PHP-FPM).
 	@echo "Starting the API in production mode"
 	@echo "..."
-	@make proxy
-	@docker-compose up -d api
+	@make up IO=api
 	@echo "..."
 	@echo "API is now running in production mode, you can access it through https://skeleton-api.docker.localhost"
 
 .PHONY: serve-client
-serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod ## Serve the client in production mode (nginx serving static files).
+serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod proxy ## Serve the client in production mode (nginx serving static files).
 	@echo "Starting the client in production mode"
 	@echo "..."
-	@make proxy
-	@docker-compose up -d client
+	@make up IO=client
 	@echo "..."
 	@echo "Client is now running in production mode, you can access it through https://skeleton.docker.localhost"
 
@@ -293,7 +298,7 @@ stylelint: ## Lint the LESS stylesheet code.
 
 .PHONY: eslint
 eslint: ## Lint the TypeScript code.
-	@$(DC_RUN) node yarn -s lint
+	@$(DC_RUN) node yarn -s eslint
 
 .PHONY: type-check-client
 type-check-client: ## Check for type errors.
@@ -301,7 +306,7 @@ type-check-client: ## Check for type errors.
 
 .PHONY: client-unit-tests
 client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=path/to/test" to run a specific test).
-	@$(DC_RUN) -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn jest ${IO}
+	@$(DC_RUN) -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn test ${IO}
 
 .PHONY: client-end-to-end-tests
 client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode).

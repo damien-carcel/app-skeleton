@@ -46,7 +46,7 @@ services:
     networks:
       - skeleton-api
     ports:
-      - '${PHP_SKELETON_OUTPUT:-8000}:8000'
+      - '${API_DEV_OUTPUT:-8000}:8000'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './api:/srv/app:rw'
@@ -96,17 +96,11 @@ services:
 
   node:
     environment:
-      API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
-      CLIENT_PORT: '${CLIENT_PORT:-3000}'
       CYPRESS_CACHE_FOLDER: '/home/cypress-cache'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
-    expose:
-      - '${CLIENT_PORT:-3000}'
     image: 'node:slim'
     networks:
       - skeleton-client
-    ports:
-      - '${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
@@ -114,6 +108,23 @@ services:
       - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
       - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
       - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
+    working_dir: '/srv/app'
+
+  client-dev:
+    command: 'yarn start'
+    environment:
+      REACT_APP_API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
+    expose:
+      - '3000'
+    image: 'node:slim'
+    networks:
+      - skeleton-client
+    ports:
+      - '${CLIENT_DEV_OUTPUT:-3000}:3000'
+    tty: true
+    user: '${HOST_USER_IDS:-1000:1000}'
+    volumes:
+      - './client:/srv/app'
     working_dir: '/srv/app'
 
   cypress:

@@ -13,7 +13,7 @@ WORKDIR /home/node/client
 
 COPY --chown=node:node . .
 RUN yarn install --frozen-lockfile --check-files && \
-    API_BASE_URL=${API_BASE_URL_FOR_PRODUCTION} yarn run build
+    REACT_APP_API_BASE_URL=${API_BASE_URL_FOR_PRODUCTION} yarn build
 
 ###################################
 # Nginx image used for production #
@@ -24,4 +24,4 @@ FROM nginx:alpine as client
 COPY docker/nginx.conf /etc/nginx/default.conf
 
 # Copy the application
-COPY --from=builder --chown=root:root /home/node/client/dist /usr/share/nginx/html
+COPY --from=builder --chown=root:root /home/node/client/build /usr/share/nginx/html
