@@ -9,6 +9,7 @@ entryPoints:
 
 providers:
   docker:
+    exposedbydefault: false
     network: 'proxy'
   file:
     directory: '/etc/traefik/dynamic'

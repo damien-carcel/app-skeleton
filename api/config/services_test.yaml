@@ -3,8 +3,8 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Tests\EndToEnd\:
-        resource: '../tests/end-to-end/*'
+    App\Tests\Acceptance\:
+        resource: '../tests/acceptance/*'
 
     App\Tests\Fixtures\:
         resource: '../tests/fixtures/*'

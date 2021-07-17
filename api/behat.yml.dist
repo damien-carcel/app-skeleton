@@ -1,11 +1,24 @@
-acceptance:
+acceptance-in-memory:
     extensions:
         FriendsOfBehat\SymfonyExtension:
             kernel:
-                environment: 'acceptance'
+                environment: 'in_memory'
     suites:
         user:
             contexts: []
+            filters:
+                tags: '@in-memory'
+
+acceptance-with-io:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'tests'
+    suites:
+        user:
+            contexts: []
+            filters:
+                tags: '@with-io'
 
 integration:
     extensions:
@@ -19,14 +32,3 @@ integration:
             contexts: []
             filters:
                 tags: '@integration'
-
-end-to-end:
-    extensions:
-        FriendsOfBehat\SymfonyExtension:
-            kernel:
-                environment: 'tests'
-    suites:
-        user:
-            contexts: []
-            filters:
-                tags: '@end-to-end'

@@ -101,7 +101,7 @@ update-dependencies: update-api-dependencies update-client-dependencies ## Updat
 # Serve the applications
 
 .PHONY: proxy
-proxy:
+proxy: traefik/ssl/_wildcard.docker.localhost.pem
 	@make up IO=traefik
 
 traefik/ssl/_wildcard.docker.localhost.pem:
@@ -118,46 +118,44 @@ database: install-api-dependencies ## Setup the API database.
 	@sh ${CURDIR}/api/docker/database/wait_for_it.sh
 	@$(DC_RUN) php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
+.PHONY: dev
+dev: develop-api develop-client #main# Serve the whole application in development mode.
+	@make proxy
+	@echo "..."
+	@echo "The application is now running in development mode, you can access it through http://skeleton.docker.localhost"
+
 .PHONY: develop-api
-develop-api: install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
+develop-api: database ## Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
 	@echo ""
 	@echo "Starting the API in development mode"
 	@echo ""
-	@make database
 	@make cache
 	@make up IO=api-dev
-	@echo ""
-	@echo "API is now running in development mode, you can access it through http://localhost:8000"
-	@echo ""
 
 .PHONY: develop-client
-develop-client: develop-api install-client-dependencies #main# Run the client using Webpack development server (hit CTRL+c to stop the server).
+develop-client: install-client-dependencies ## Run the client using Webpack development server (hit CTRL+c to stop the server).
 	@echo ""
 	@echo "Starting the Client in development mode"
 	@echo ""
 	@make up IO=client-dev
-	@echo ""
-	@echo "Client is now running in development mode, you can access it through http://localhost:3000"
-	@echo ""
 
-.PHONY: serve
-serve: serve-api serve-client #main# Serve the whole application in production mode.
+.PHONY: prod
+prod: serve-api serve-client #main# Serve the whole application in production mode.
+	@make proxy
+	@echo "..."
+	@echo "The application is now running in production mode, you can access it through https://skeleton.docker.localhost"
 
 .PHONY: serve-api
-serve-api: traefik/ssl/_wildcard.docker.localhost.pem database build-api-prod proxy ## Serve the API in production mode (nginx + PHP-FPM).
+serve-api: database build-api-prod ## Serve the API in production mode (nginx + PHP-FPM).
 	@echo "Starting the API in production mode"
 	@echo "..."
 	@make up IO=api
-	@echo "..."
-	@echo "API is now running in production mode, you can access it through https://skeleton-api.docker.localhost"
 
 .PHONY: serve-client
-serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod proxy ## Serve the client in production mode (nginx serving static files).
+serve-client: build-client-prod ## Serve the client in production mode (nginx serving static files).
 	@echo "Starting the client in production mode"
 	@echo "..."
 	@make up IO=client
-	@echo "..."
-	@echo "Client is now running in production mode, you can access it through https://skeleton.docker.localhost"
 
 .PHONY: down
 down: #main# Stop the application and remove all containers, networks and volumes.
@@ -194,18 +192,18 @@ api-tests: install-api-dependencies #main# Execute all the API tests.
 	@echo ""
 	@make api-unit-tests
 	@echo ""
-	@echo "Execute API acceptance tests"
+	@echo "Execute \"in memory\" API acceptance tests"
 	@echo ""
-	@make api-acceptance-tests
+	@make api-acceptance-tests-in-memory
+	@echo ""
+	@echo "Execute API acceptance tests with I/O"
+	@echo ""
+	@make database
+	@make api-acceptance-tests-with-io
 	@echo ""
 	@echo "Execute API integration tests"
 	@echo ""
-	@make database
 	@make api-integration-tests
-	@echo ""
-	@echo "Execute API end to end tests"
-	@echo ""
-	@make api-end-to-end-tests
 	@echo ""
 	@echo "All API tests were successfully executed"
 	@echo ""
@@ -246,17 +244,17 @@ api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/t
 describe: ## Create a phpspec unit test (use as follow: "make describe IO=namepace/with/slash/instead/of/antislash", then running "make api-unit-tests" will create the class corresponding to the test).
 	@$(DC_RUN) php vendor/bin/phpspec describe ${IO}
 
-.PHONY: api-acceptance-tests
-api-acceptance-tests: ## Execute API acceptance tests (use "make api-acceptance-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests" to activate the debugger.
-	@$(DC_RUN) php vendor/bin/behat --profile=acceptance -o std --colors -f pretty ${IO}
+.PHONY: api-acceptance-tests-in-memory
+api-acceptance-tests-in-memory: ## Execute "in memory" API acceptance tests (use "make api-acceptance-tests-in-memory IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests-in-memory" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/behat --profile=acceptance-in-memory -o std --colors -f pretty ${IO}
+
+.PHONY: api-acceptance-tests-with-io
+api-acceptance-tests-with-io: ## Execute API acceptance tests with I/O (use "make api-acceptance-tests-with-io IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests-with-io" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/behat --profile=acceptance-with-io -o std --colors -f pretty ${IO}
 
 .PHONY: api-integration-tests
 api-integration-tests: ## Execute API integration tests (use "make api-integration-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-integration-tests" to activate the debugger.
 	@$(DC_RUN) php vendor/bin/behat --profile=integration -o std --colors -f pretty ${IO}
-
-.PHONY: api-end-to-end-tests
-api-end-to-end-tests: ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
-	@$(DC_RUN) php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty ${IO}
 
 .PHONY: phpmetrics
 phpmetrics: ## Run PHP Metrics on the API code.
@@ -284,11 +282,6 @@ client-tests: install-client-dependencies #main# Execute all the client tests.
 	@echo ""
 	@make client-unit-tests
 	@echo ""
-	@echo "Execute end-to-end tests"
-	@echo ""
-	@make serve
-	@make client-end-to-end-tests IO="--headless"
-	@echo ""
 	@echo "All client tests were successfully executed"
 	@echo ""
 
@@ -307,15 +300,3 @@ type-check-client: ## Check for type errors.
 .PHONY: client-unit-tests
 client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=path/to/test" to run a specific test).
 	@$(DC_RUN) -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn test ${IO}
-
-.PHONY: client-end-to-end-tests
-client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode).
-	@$(DC_RUN) cypress yarn cypress run ${IO}
-
-.PHONY: open-cypress ## Open the Cypress UI.
-open-cypress:
-	@$(DC_RUN) cypress yarn cypress open
-
-.PHONY: install-cypress ## Force the install of the Cypress binary.
-install-cypress:
-	@$(DC_RUN) node yarn cypress install

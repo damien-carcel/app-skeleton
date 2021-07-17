@@ -16,7 +16,7 @@ To be able to run both the API and the client in production-like mode, you'll fi
 Then you can start the full application using docker by running:
 ```bash
 $ mkcert -install
-$ make serve
+$ make prod
 ```
 
 The full list of commands is available by running:
@@ -36,7 +36,7 @@ COMPOSE_DOCKER_CLI_BUILD=1
 DOCKER_BUILDKIT=1
 ```
 
-You can export them directly before running `make serve`, or make them permanent by adding them to your shell profile.
+You can export them directly before running `make prod`, or make them permanent by adding them to your shell profile.
 
 ## License
 

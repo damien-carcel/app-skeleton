@@ -5,7 +5,6 @@ declare(strict_types=1);
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__.'/src')
     ->in(__DIR__.'/tests/acceptance')
-    ->in(__DIR__.'/tests/end-to-end')
     ->in(__DIR__.'/tests/fixtures')
     ->in(__DIR__.'/tests/integration')
     ->notName('Kernel.php');
