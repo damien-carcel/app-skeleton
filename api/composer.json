@@ -1,95 +1,86 @@
 {
-  "name": "carcel/app-skeleton",
-  "description": "A basic skeleton for web API using Symfony",
-  "type": "project",
-  "license": "MIT",
-  "require": {
-    "php": "^8.0",
-    "ext-ctype": "*",
-    "ext-iconv": "*",
-    "ext-pdo": "*",
-    "composer/package-versions-deprecated": "1.11.99.1",
-    "doctrine/doctrine-bundle": "^2",
-    "doctrine/doctrine-migrations-bundle": "^2",
-    "nelmio/cors-bundle": "^2.0",
-    "ramsey/uuid": "^4.1",
-    "symfony/console": "5.3.*",
-    "symfony/dotenv": "5.3.*",
-    "symfony/flex": "^1.6",
-    "symfony/framework-bundle": "5.3.*",
-    "symfony/messenger": "5.3.*",
-    "symfony/monolog-bundle": "^3.5",
-    "symfony/runtime": "5.3.*",
-    "symfony/security-bundle": "5.3.*",
-    "symfony/serializer": "5.3.*",
-    "symfony/translation": "5.3.*",
-    "symfony/validator": "5.3.*",
-    "symfony/yaml": "5.3.*",
-    "webmozart/assert": "^1.5"
-  },
-  "require-dev": {
-    "akeneo/php-coupling-detector": "^0.6",
-    "behat/behat": "^3.5",
-    "friends-of-behat/symfony-extension": "^2.2",
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "phpmd/phpmd": "^2.7",
-    "phpmetrics/phpmetrics": "^2.5",
-    "phpstan/phpstan": "^0.12.10",
-    "phpunit/phpunit": "^9.0",
-    "squizlabs/php_codesniffer": "^3.5",
-    "symfony/browser-kit": "5.3.*",
-    "symfony/http-client": "5.3.*"
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "preferred-install": {
-      "*": "dist"
+    "name": "carcel/app-skeleton",
+    "description": "A basic skeleton for web API using Symfony",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.0",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-pdo": "*",
+        "composer/package-versions-deprecated": "1.11.99.2",
+        "doctrine/doctrine-bundle": "^2.4",
+        "doctrine/doctrine-migrations-bundle": "^3.1",
+        "nelmio/cors-bundle": "^2.1",
+        "symfony/console": "5.3.*",
+        "symfony/dotenv": "5.3.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "5.3.*",
+        "symfony/messenger": "5.3.*",
+        "symfony/monolog-bundle": "^3.7",
+        "symfony/proxy-manager-bridge": "5.3.*",
+        "symfony/runtime": "5.3.*",
+        "symfony/security-bundle": "5.3.*",
+        "symfony/translation": "5.3.*",
+        "symfony/uid": "5.3.*",
+        "symfony/validator": "5.3.*",
+        "symfony/yaml": "5.3.*",
+        "webmozart/assert": "^1.10"
     },
-    "sort-packages": true
-  },
-  "autoload": {
-    "psr-4": {
-      "Carcel\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Carcel\\Tests\\Acceptance\\": "tests/acceptance/",
-      "Carcel\\Tests\\EndToEnd\\": "tests/end-to-end/",
-      "Carcel\\Tests\\Fixtures\\": "tests/fixtures/",
-      "Carcel\\Tests\\Integration\\": "tests/integration/",
-      "Carcel\\Tests\\Unit\\": "tests/unit/"
-    }
-  },
-  "replace": {
-    "paragonie/random_compat": "2.*",
-    "symfony/polyfill-ctype": "*",
-    "symfony/polyfill-iconv": "*",
-    "symfony/polyfill-php72": "*",
-    "symfony/polyfill-php71": "*",
-    "symfony/polyfill-php70": "*",
-    "symfony/polyfill-php56": "*"
-  },
-  "scripts": {
-    "auto-scripts": {
-      "cache:clear": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    "require-dev": {
+        "akeneo/php-coupling-detector": "^0.7.0",
+        "friends-of-behat/symfony-extension": "^2.2",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpmd/phpmd": "^2.10",
+        "phpmetrics/phpmetrics": "^2.7",
+        "phpspec/phpspec": "^7.1",
+        "phpstan/phpstan": "^0.12.90"
     },
-    "post-install-cmd": [
-      "@auto-scripts"
-    ],
-    "post-update-cmd": [
-      "@auto-scripts"
-    ]
-  },
-  "conflict": {
-    "symfony/symfony": "*"
-  },
-  "extra": {
-    "symfony": {
-      "id": "01C0Y4X3Q8GCEHX7AH8SJJB02E",
-      "allow-contrib": true,
-      "require": "5.3.*"
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\Acceptance\\": "tests/acceptance/",
+            "App\\Tests\\Fixtures\\": "tests/fixtures/",
+            "App\\Tests\\Integration\\": "tests/integration/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": true,
+            "require": "5.3.*"
+        }
     }
-  }
 }

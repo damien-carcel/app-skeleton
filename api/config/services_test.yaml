@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Tests\Acceptance\:
+        resource: '../tests/acceptance/*'
+
+    App\Tests\Fixtures\:
+        resource: '../tests/fixtures/*'
+
+    App\Tests\Integration\:
+        resource: '../tests/integration/*'

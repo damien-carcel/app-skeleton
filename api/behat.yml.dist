@@ -1,0 +1,34 @@
+acceptance-in-memory:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'in_memory'
+    suites:
+        user:
+            contexts: []
+            filters:
+                tags: '@in-memory'
+
+acceptance-with-io:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'tests'
+    suites:
+        user:
+            contexts: []
+            filters:
+                tags: '@with-io'
+
+integration:
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: 'tests'
+    suites:
+        user:
+            paths:
+                - '%paths.base%/tests/integration'
+            contexts: []
+            filters:
+                tags: '@integration'

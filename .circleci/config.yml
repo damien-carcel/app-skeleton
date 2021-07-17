@@ -38,7 +38,6 @@ jobs:
             touch ~/.yarnrc
             mkdir ~/.yarn
             mkdir -p ~/.cache/yarn
-            mkdir -p ~/.cache/Cypress
       - restore_cache:
           name: Restore the "node_modules" directory
           keys:
@@ -61,35 +60,32 @@ jobs:
           name: Create report directory
           command: mkdir api/reports
       - run:
-          name: Run API static analysis - PHP CS Fixer
-          command: make api-coding-standards
+          name: Lint API code
+          command: make lint-api-code
       - run:
-          name: Run API static analysis - PHP Coding Sniffer
-          command: make sniff-api-code
-      - run:
-          name: Run API static analysis - PHPStan
+          name: Run API static analysis
           command: make analyse-api-code
       - run:
           name: Run coupling detector
           command: make api-coupling
       - run:
+          name: Run PHP mess detector
+          command: make phpmd
+      - run:
           name: Run API unit tests
-          command: make api-unit-tests IO="--log-junit reports/unit_tests.xml"
+          command: make api-unit-tests IO="--format=junit" > api/reports/unit_tests.xml
       - run:
           name: Run API acceptance tests
-          command: make api-acceptance-tests IO="-f junit -o reports/acceptance"
+          command: make api-acceptance-tests-in-memory IO="-f junit -o reports/acceptance_in_memory"
       - run:
-          name: start MySQL container
-          command: cd ~/project/api && docker-compose up -d mysql
+          name: Start PostgreSQL container and update database schema
+          command: make database
       - run:
-          name: Update database schema
-          command: make mysql
+          name: Run API acceptance tests with I/O
+          command: make api-acceptance-tests-with-io IO="-f junit -o reports/acceptance_with_io"
       - run:
           name: Run API integration tests
-          command: make api-integration-tests IO="--log-junit reports/integration_tests.xml ${IO}"
-      - run:
-          name: Run API end to end tests
-          command: make api-end-to-end-tests IO="-f junit -o reports/e2e"
+          command: make api-integration-tests IO="-f junit -o reports/integration"
       - run:
           name: Create report directory
           command: mkdir client/reports
@@ -104,30 +100,7 @@ jobs:
           command: make type-check-client
       - run:
           name: Run client unit tests
-          command: make client-unit-tests IO="--ci --reporters=default --reporters=jest-junit"
-      - run:
-          name: Install mkcert
-          command: |
-            sudo apt-get update
-            sudo apt-get install libnss3-tools
-            sudo curl -Lo /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64
-            sudo chmod +x /usr/local/bin/mkcert
-            mkcert -install
-      - run:
-          name: Install the application in production-like conditions
-          command: make -j serve
-      - run:
-          name: Install the Cypress binary
-          command: make install-cypress
-      - run:
-          name: Set the project permissions so the "node" user of the Cypress Docker image can access it
-          command: |
-            sudo chown -R 1000:1000 ~/project
-            sudo chown -R 1000:1000 ~/.cache/yarn
-            sudo chown -R 1000:1000 ~/.cache/Cypress
-      - run:
-          name: Run client end to end tests
-          command: make client-end-to-end-tests IO="--headless --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/e2e.xml"
+          command: make client-unit-tests IO="--watchAll=false --ci --reporters=default --reporters=jest-junit"
       - run:
           name: Set back the project permissions so the CircleCI user so the test results and artefact can be used
           command: sudo chown -R 1001:1002 ~/project
@@ -141,10 +114,6 @@ jobs:
           path: client/reports
       - store_artifacts:
           path: client/reports
-      - store_artifacts:
-          path: client/tests/e2e/screenshots
-      - store_artifacts:
-          path: client/tests/e2e/videos
 
 workflows:
   pull_request:

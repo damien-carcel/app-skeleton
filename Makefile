@@ -26,7 +26,17 @@ TL ?= 6
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
 
+ifeq ($(CI),true)
+	DC_RUN = docker-compose run --rm -T
+else
+	DC_RUN = docker-compose run --rm
+endif
+
 # Build Docker images
+
+.PHONY: up
+up: ## Pull all Docker images used in docker-compose.yaml.
+	@docker-compose up -d --remove-orphans ${IO}
 
 .PHONY: pull
 pull: ## Pull all Docker images used in docker-compose.yaml.
@@ -62,28 +72,28 @@ build-client-prod: ## Build client production image (carcel/skeleton/client:late
 
 .PHONY: install-api-dependencies
 install-api-dependencies: build-api-dev ## Install API dependencies.
-	@docker-compose run --rm php composer install --prefer-dist --optimize-autoloader --no-interaction
+	@$(DC_RUN) php composer install --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: install-client-dependencies
 install-client-dependencies: build-client-dev ## Install client dependencies.
 ifeq ($(wildcard client/yarn.lock),)
 	@echo "Install the Node modules according to package.json"
-	@docker-compose run --rm node yarn install
+	@$(DC_RUN) node yarn install
 endif
 	@echo "Install the Node modules according to yarn.lock"
-	@docker-compose run --rm node yarn install --frozen-lockfile --check-files
+	@$(DC_RUN) node yarn install --frozen-lockfile --check-files
 
 .PHONY: dependencies
 dependencies: install-api-dependencies install-client-dependencies ## Install API and client dependencies.
 
 .PHONY: update-api-dependencies
 update-api-dependencies: build-api-dev ## Update API dependencies.
-	@docker-compose run --rm php composer update --prefer-dist --optimize-autoloader --no-interaction
+	@$(DC_RUN) php composer update --prefer-dist --optimize-autoloader --no-interaction
 
 .PHONY: update-client-dependencies
 update-client-dependencies: build-client-dev ## Update client dependencies.
-	@docker-compose run --rm node yarn upgrade-interactive --latest
-	@docker-compose run --rm node yarn upgrade
+	@$(DC_RUN) node yarn upgrade-interactive --latest
+	@$(DC_RUN) node yarn upgrade
 
 .PHONY: update-dependencies
 update-dependencies: update-api-dependencies update-client-dependencies ## Update all dependencies at once (API and client).
@@ -91,62 +101,61 @@ update-dependencies: update-api-dependencies update-client-dependencies ## Updat
 # Serve the applications
 
 .PHONY: proxy
-proxy:
-	@docker-compose up -d traefik
+proxy: traefik/ssl/_wildcard.docker.localhost.pem
+	@make up IO=traefik
 
 traefik/ssl/_wildcard.docker.localhost.pem:
 	@cd ${CURDIR}/traefik/ssl && mkcert "*.docker.localhost"
 
 .PHONY: cache
 cache: install-api-dependencies ## Clear the API (Symfony) cache.
-	@docker-compose run --rm php rm -rf var/cache/*
-	@docker-compose run --rm -e APP_ENV=${APP_ENV} php bin/console cache:clear
+	@$(DC_RUN) php rm -rf var/cache/*
+	@$(DC_RUN) -e APP_ENV=${APP_ENV} php bin/console cache:clear
 
-.PHONY: mysql
-mysql: install-api-dependencies ## Setup the API database.
-	@docker-compose up -d mysql
-	@sh ${CURDIR}/api/docker/mysql/wait_for_it.sh
-	@docker-compose run --rm php bin/console doctrine:migrations:migrate --no-interaction
+.PHONY: database
+database: install-api-dependencies ## Setup the API database.
+	@make up IO=database
+	@sh ${CURDIR}/api/docker/database/wait_for_it.sh
+	@$(DC_RUN) php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
+.PHONY: dev
+dev: develop-api develop-client #main# Serve the whole application in development mode.
+	@make proxy
+	@echo "..."
+	@echo "The application is now running in development mode, you can access it through http://skeleton.docker.localhost"
 
 .PHONY: develop-api
-develop-api: install-api-dependencies #main# Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
+develop-api: database ## Run the API using the PHP development server. Use "XDEBUG_MODE=debug make develop-api" to activate the debugger.
 	@echo ""
 	@echo "Starting the API in development mode"
 	@echo ""
-	@make mysql
 	@make cache
-	@docker-compose up -d api-dev
-	@echo ""
-	@echo "API is now running in development mode, you can access it through http://localhost:8000"
-	@echo ""
+	@make up IO=api-dev
 
 .PHONY: develop-client
-develop-client: develop-api install-client-dependencies #main# Run the client using Webpack development server (hit CTRL+c to stop the server).
+develop-client: install-client-dependencies ## Run the client using Webpack development server (hit CTRL+c to stop the server).
 	@echo ""
 	@echo "Starting the Client in development mode"
 	@echo ""
-	@docker-compose run --rm --service-ports node yarn serve
+	@make up IO=client-dev
 
-.PHONY: serve
-serve: serve-api serve-client #main# Serve the whole application in production mode.
+.PHONY: prod
+prod: serve-api serve-client #main# Serve the whole application in production mode.
+	@make proxy
+	@echo "..."
+	@echo "The application is now running in production mode, you can access it through https://skeleton.docker.localhost"
 
 .PHONY: serve-api
-serve-api: traefik/ssl/_wildcard.docker.localhost.pem mysql build-api-prod ## Serve the API in production mode (nginx + PHP-FPM).
+serve-api: database build-api-prod ## Serve the API in production mode (nginx + PHP-FPM).
 	@echo "Starting the API in production mode"
 	@echo "..."
-	@make proxy
-	@docker-compose up -d api
-	@echo "..."
-	@echo "API is now running in production mode, you can access it through https://skeleton-api.docker.localhost"
+	@make up IO=api
 
 .PHONY: serve-client
-serve-client: traefik/ssl/_wildcard.docker.localhost.pem build-client-prod ## Serve the client in production mode (nginx serving static files).
+serve-client: build-client-prod ## Serve the client in production mode (nginx serving static files).
 	@echo "Starting the client in production mode"
 	@echo "..."
-	@make proxy
-	@docker-compose up -d client
-	@echo "..."
-	@echo "Client is now running in production mode, you can access it through https://skeleton.docker.localhost"
+	@make up IO=client
 
 .PHONY: down
 down: #main# Stop the application and remove all containers, networks and volumes.
@@ -156,7 +165,7 @@ down: #main# Stop the application and remove all containers, networks and volume
 
 .PHONY: console
 console: #main# Use the Symfony CLI. Example: "make console IO=debug:container"
-	@docker-compose run --rm php bin/console ${IO}
+	@$(DC_RUN) php bin/console ${IO}
 
 # Test the API
 
@@ -175,80 +184,81 @@ api-tests: install-api-dependencies #main# Execute all the API tests.
 	@echo ""
 	@make api-coupling
 	@echo ""
+	@echo "Run PHP Mess Detector on the API code"
+	@echo ""
+	@make phpmd
+	@echo ""
 	@echo "Execute API unit tests"
 	@echo ""
 	@make api-unit-tests
 	@echo ""
-	@echo "Execute API acceptance tests"
+	@echo "Execute \"in memory\" API acceptance tests"
 	@echo ""
-	@make api-acceptance-tests
+	@make api-acceptance-tests-in-memory
+	@echo ""
+	@echo "Execute API acceptance tests with I/O"
+	@echo ""
+	@make database
+	@make api-acceptance-tests-with-io
 	@echo ""
 	@echo "Execute API integration tests"
 	@echo ""
-	@make mysql
 	@make api-integration-tests
-	@echo ""
-	@echo "Execute API end to end tests"
-	@echo ""
-	@make api-end-to-end-tests
 	@echo ""
 	@echo "All API tests were successfully executed"
 	@echo ""
 
-.PHONY: api-coding-standards
-api-coding-standards: ## Check API coding style with PHP CS Fixer.
-	@docker-compose run --rm php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php-cs-fixer.dist.php
-
-.PHONY: sniff-api-code
-sniff-api-code: ## Check API coding style with PHP Code Sniffer.
-	@docker-compose run --rm php vendor/bin/phpcs
-
 .PHONY: lint-api-code
-lint-api-code: api-coding-standards sniff-api-code ## Lint the PHP code using both PHP Code Sniffer and PHP CS Fixer.
+lint-api-code: ## Check API coding style with PHP CS Fixer.
+	@$(DC_RUN) php vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php-cs-fixer.dist.php
 
 .PHONY: fix-api-code
 fix-api-code: ## Attempt to fix the violations detected by PHP Code Sniffer and PHP CS Fixer.
-	@docker-compose run --rm php vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.dist.php
-	@docker-compose run --rm php vendor/bin/phpcbf
+	@$(DC_RUN) php vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.dist.php
+	@$(DC_RUN) php vendor/bin/phpcbf
 
 .PHONY: analyse-api-src
 analyse-api-src: ## Run PHP static analysis on source folder.
-	@docker-compose run --rm php vendor/bin/phpstan analyse -l ${L} src
+	@$(DC_RUN) php vendor/bin/phpstan analyse -l ${L} src
 
 .PHONY: analyse-api-tests
 analyse-api-tests: ## Run PHP static analysis on tests folder.
-	@docker-compose run --rm php vendor/bin/phpstan analyse -l ${TL} tests
+	@$(DC_RUN) php vendor/bin/phpstan analyse -l ${TL} tests
 
 .PHONY: analyse-api-code ## Run PHP static analysis the API code.
 analyse-api-code: analyse-api-src analyse-api-tests
 
 .PHONY: api-coupling
 api-coupling: ## Check coupling violations between API code layers.
-	@docker-compose run --rm php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
-
-.PHONY: api-unit-tests
-api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-unit-tests" to activate the debugger.
-	@docker-compose run --rm php vendor/bin/phpunit --testsuite "Unit tests" ${IO}
-
-.PHONY: api-acceptance-tests
-api-acceptance-tests: ## Execute API acceptance tests (use "make api-acceptance-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests" to activate the debugger.
-	@docker-compose run --rm php vendor/bin/behat --profile=acceptance -o std --colors -f pretty ${IO}
-
-.PHONY: api-integration-tests
-api-integration-tests: ## Execute API integration tests (use "make api-integration-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-integration-tests" to activate the debugger.
-	@docker-compose run --rm php vendor/bin/phpunit --testsuite="Integration tests" ${IO}
-
-.PHONY: api-end-to-end-tests
-api-end-to-end-tests: ## Execute API end to end tests (use "make api-end-to-end-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-end-to-end-tests" to activate the debugger.
-	@docker-compose run --rm php vendor/bin/behat --profile=end-to-end -o std --colors -f pretty ${IO}
+	@$(DC_RUN) php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
 
 .PHONY: phpmd
 phpmd: ## Run PHP Mess Detector on the API code.
-	@docker-compose run --rm php vendor/bin/phpmd src,tests ${PHPMD_OUTPUT} ${PHPMD_RULESETS}
+	@$(DC_RUN) php vendor/bin/phpmd src,tests --exclude *src/Kernel.php ${PHPMD_OUTPUT} ${PHPMD_RULESETS}
+
+.PHONY: api-unit-tests
+api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-unit-tests" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/phpspec run ${IO}
+
+.PHONY: api-unit-tests
+describe: ## Create a phpspec unit test (use as follow: "make describe IO=namepace/with/slash/instead/of/antislash", then running "make api-unit-tests" will create the class corresponding to the test).
+	@$(DC_RUN) php vendor/bin/phpspec describe ${IO}
+
+.PHONY: api-acceptance-tests-in-memory
+api-acceptance-tests-in-memory: ## Execute "in memory" API acceptance tests (use "make api-acceptance-tests-in-memory IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests-in-memory" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/behat --profile=acceptance-in-memory -o std --colors -f pretty ${IO}
+
+.PHONY: api-acceptance-tests-with-io
+api-acceptance-tests-with-io: ## Execute API acceptance tests with I/O (use "make api-acceptance-tests-with-io IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests-with-io" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/behat --profile=acceptance-with-io -o std --colors -f pretty ${IO}
+
+.PHONY: api-integration-tests
+api-integration-tests: ## Execute API integration tests (use "make api-integration-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-integration-tests" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/behat --profile=integration -o std --colors -f pretty ${IO}
 
 .PHONY: phpmetrics
 phpmetrics: ## Run PHP Metrics on the API code.
-	@docker-compose run --rm php vendor/bin/phpmetrics --report-html=reports/phpmetrics .
+	@$(DC_RUN) php vendor/bin/phpmetrics --report-html=reports/phpmetrics .
 	@xdg-open api/reports/phpmetrics/index.html
 
 # Test the client
@@ -272,38 +282,21 @@ client-tests: install-client-dependencies #main# Execute all the client tests.
 	@echo ""
 	@make client-unit-tests
 	@echo ""
-	@echo "Execute end-to-end tests"
-	@echo ""
-	@make serve
-	@make client-end-to-end-tests IO="--headless"
-	@echo ""
 	@echo "All client tests were successfully executed"
 	@echo ""
 
 .PHONY: stylelint
 stylelint: ## Lint the LESS stylesheet code.
-	@docker-compose run --rm node yarn -s stylelint
+	@$(DC_RUN) node yarn -s stylelint
 
 .PHONY: eslint
 eslint: ## Lint the TypeScript code.
-	@docker-compose run --rm node yarn -s lint
+	@$(DC_RUN) node yarn -s eslint
 
 .PHONY: type-check-client
 type-check-client: ## Check for type errors.
-	@docker-compose run --rm node yarn type-check
+	@$(DC_RUN) node yarn type-check
 
 .PHONY: client-unit-tests
 client-unit-tests: ## Execute client unit tests (use "make client-unit-tests IO=path/to/test" to run a specific test).
-	@docker-compose run --rm -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn jest ${IO}
-
-.PHONY: client-end-to-end-tests
-client-end-to-end-tests: ## Run end to end tests — use "make end-to-end IO=--headless" for headless mode and "make end-to-end IO=--headless -s path/to/test" to run a specific test (works only in headless mode).
-	@docker-compose run --rm cypress yarn cypress run ${IO}
-
-.PHONY: open-cypress ## Open the Cypress UI.
-open-cypress:
-	@docker-compose run --rm cypress yarn cypress open
-
-.PHONY: install-cypress ## Force the install of the Cypress binary.
-install-cypress:
-	@docker-compose run --rm node yarn cypress install
+	@$(DC_RUN) -e JEST_JUNIT_OUTPUT_DIR="./reports" -e JEST_JUNIT_OUTPUT_NAME="jest.xml" node yarn test ${IO}

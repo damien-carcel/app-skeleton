@@ -13,36 +13,13 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    Carcel\:
+    App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
+            - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/User/Domain/Model/'
-
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    Carcel\User\Infrastructure\UserInterface\WebApi\:
-        resource: '../src/User/Infrastructure/UserInterface/WebApi'
-        tags: ['controller.service_arguments']
+            - '../src/Tests/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    Carcel\User\Infrastructure\Persistence\Doctrine\Repository\DoctrineUserRepository: ~
-    Carcel\User\Domain\Repository\UserRepository: '@Carcel\User\Infrastructure\Persistence\Doctrine\Repository\DoctrineUserRepository'
-
-    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase: ~
-    Carcel\User\Domain\QueryFunction\GetUserCollection: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserCollectionFromDatabase'
-
-    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase: ~
-    Carcel\User\Domain\QueryFunction\GetUser: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserFromDatabase'
-
-    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase: ~
-    Carcel\User\Domain\QueryFunction\GetUserPassword: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\GetUserPasswordFromDatabase'
-
-    Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder: ~
-    Carcel\User\Domain\Service\EncodePassword: '@Carcel\User\Infrastructure\Security\EncodePasswordWithSymfonyEncoder'
-
-    Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\IsEmailAlreadyInUseInDatabase: ~
-    Carcel\User\Domain\QueryFunction\IsEmailAlreadyUsed: '@Carcel\User\Infrastructure\Persistence\Doctrine\QueryFunction\IsEmailAlreadyInUseInDatabase'

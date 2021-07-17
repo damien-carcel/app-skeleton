@@ -43,10 +43,16 @@ services:
     expose:
       - '8000'
     image: 'carcel/skeleton/dev:php'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api-dev.entrypoints=web'
+      - 'traefik.http.routers.api-dev.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.api-dev.rule=PathPrefix(`/api`)'
     networks:
+      - proxy
       - skeleton-api
     ports:
-      - '${PHP_SKELETON_OUTPUT:-8000}:8000'
+      - '${API_DEV_OUTPUT:-8000}:8000'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './api:/srv/app:rw'
@@ -67,108 +73,96 @@ services:
       context: './api'
       target: 'api-nginx'
     depends_on:
-      - 'fpm'
+      - fpm
     image: 'carcel/skeleton/api:nginx'
     labels:
-      - 'traefik.http.middlewares.redirect-skeleton-api-http-to-https.redirectScheme.scheme=https'
-      - 'traefik.http.routers.skeleton-api.entrypoints=web'
-      - 'traefik.http.routers.skeleton-api.middlewares=redirect-skeleton-api-http-to-https'
-      - 'traefik.http.routers.skeleton-api.rule=Host(`skeleton-api.docker.localhost`)'
-      - 'traefik.http.routers.skeleton-api-with-https.entrypoints=websecure'
-      - 'traefik.http.routers.skeleton-api-with-https.rule=Host(`skeleton-api.docker.localhost`)'
-      - 'traefik.http.routers.skeleton-api-with-https.tls=true'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.entrypoints=websecure'
+      - 'traefik.http.routers.api.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.api.rule=PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.tls=true'
     networks:
       - proxy
       - skeleton-api
-    restart: 'always'
+    restart: on-failure
 
-  mysql:
-    image: 'mysql:8'
-    command: ['--default-authentication-plugin=mysql_native_password']
+  database:
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'app_skeleton'
-      MYSQL_PASSWORD: 'app_skeleton'
-      MYSQL_DATABASE: 'app_skeleton'
+      POSTGRES_DB: '${PGSQL_DB:-app_skeleton}'
+      POSTGRES_USER: '${PGSQL_USERNAME:-app_skeleton}'
+      POSTGRES_PASSWORD: '${PGSQL_PASSWORD:-app_skeleton}'
+    image: 'postgres:13'
     networks:
       - skeleton-api
     ports:
-      - '${MYSQL_SKELETON_PORT:-33006}:3306'
-    restart: 'always'
-    tmpfs:
-      - '/tmp'
-      - '/var/lib/mysql'
+      - '5432:5432'
+    restart: unless-stopped
 
   node:
     environment:
-      API_BASE_URL: 'http://0.0.0.0:${FAKE_API_PORT:-8000}'
-      CLIENT_PORT: '${CLIENT_PORT:-3000}'
-      CYPRESS_CACHE_FOLDER: '/home/cypress-cache'
       YARN_CACHE_FOLDER: '/home/yarn-cache'
-    expose:
-      - '${CLIENT_PORT:-3000}'
     image: 'node:slim'
     networks:
       - skeleton-client
-    ports:
-      - '${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
-      - '${HOST_CYPRESS_CACHE_FOLDER:-~/.cache/Cypress}:/home/cypress-cache'
       - '${HOST_YARN_CACHE_FOLDER:-~/.cache/yarn}:/home/yarn-cache'
       - '${HOST_YARN_CONFIG_FOLDER:-~/.yarn}:/.yarn'
       - '${HOST_YARN_CONFIG_FILE:-~/.yarnrc}:/.yarnrc'
     working_dir: '/srv/app'
 
-  cypress:
+  client-dev:
+    command: 'yarn start'
     environment:
-      CYPRESS_baseUrl: 'http://client'
-      CYPRESS_CACHE_FOLDER: '/home/cypress-cache'
-      DISPLAY: '${DISPLAY}'
-      QT_X11_NO_MITSHM: 1
-      _MITSHM: 0
-      _X11_NO_MITSHM: 1
-    image: 'cypress/browsers:node14.15.0-chrome86-ff82'
+      REACT_APP_API_BASE_URL: 'http://skeleton.docker.localhost'
+    expose:
+      - '3000'
+    image: 'node:slim'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.client-dev.entrypoints=web'
+      - 'traefik.http.routers.client-dev.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.client-dev.rule=PathPrefix(`/`)'
     networks:
-      - 'proxy'
-    user: 'node'
+      - proxy
+      - skeleton-client
+    ports:
+      - '${CLIENT_DEV_OUTPUT:-3000}:3000'
+    restart: on-failure
+    tty: true
+    user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
-      - '${HOST_CYPRESS_CACHE_FOLDER:-~/.cache/Cypress}:/home/cypress-cache'
-      - '/tmp/.X11-unix:/tmp/.X11-unix'
-      - '/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket'
     working_dir: '/srv/app'
 
   client:
     build:
       args:
-        API_BASE_URL_FOR_PRODUCTION: 'https://skeleton-api.docker.localhost'
+        API_BASE_URL_FOR_PRODUCTION: 'https://skeleton.docker.localhost'
       context: './client'
       target: 'client'
     image: 'carcel/skeleton/client:latest'
     labels:
-      - 'traefik.http.middlewares.redirect-skeleton-client-http-to-https.redirectScheme.scheme=https'
-      - 'traefik.http.routers.skeleton-client.entrypoints=web'
-      - 'traefik.http.routers.skeleton-client.middlewares=redirect-skeleton-client-http-to-https'
-      - 'traefik.http.routers.skeleton-client.rule=Host(`skeleton.docker.localhost`)'
-      - 'traefik.http.routers.skeleton-client-with-https.entrypoints=websecure'
-      - 'traefik.http.routers.skeleton-client-with-https.rule=Host(`skeleton.docker.localhost`)'
-      - 'traefik.http.routers.skeleton-client-with-https.tls=true'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.client.entrypoints=websecure'
+      - 'traefik.http.routers.client.rule=Host(`skeleton.docker.localhost`)'
+      - 'traefik.http.routers.client.rule=PathPrefix(`/`)'
+      - 'traefik.http.routers.client.tls=true'
     networks:
       - proxy
       - skeleton-client
-    restart: 'always'
+    restart: on-failure
 
   traefik:
     image: 'traefik'
     networks:
       - proxy
     ports:
-      - '80:80'
-      - '443:443'
-      - '8888:8080'
-    restart: 'always'
+      - '${SKELETON_WEB_HTTP_PORT:-80}:80'
+      - '${SKELETON_WEB_HTTPS_PORT:-443}:443'
+      - '${SKELETON_TRAEFIK_ADMIN_PORT:-8080}:8080'
+    restart: always
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - './traefik/dynamic:/etc/traefik/dynamic:ro'
