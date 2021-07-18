@@ -75,7 +75,7 @@ jobs:
           name: Run API unit tests
           command: make api-unit-tests IO="--format=junit" > api/reports/unit_tests.xml
       - run:
-          name: Run API acceptance tests
+          name: Run API acceptance tests in memory
           command: make api-acceptance-tests-in-memory IO="-f junit -o reports/acceptance_in_memory"
       - run:
           name: Start PostgreSQL container and update database schema
@@ -90,13 +90,13 @@ jobs:
           name: Create report directory
           command: mkdir -p client/reports
       - run:
-          name: Lint CSS/LESS code
+          name: Lint CSS code
           command: make stylelint IO="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"
       - run:
-          name: Lint JavaScript/TypeScript code
+          name: Lint TypeScript code
           command: make eslint IO="--no-fix -f junit > reports/eslint.xml"
       - run:
-          name: Run TS type checking
+          name: Run TypeScript type checking
           command: make type-check-client
       - run:
           name: Run client unit tests
