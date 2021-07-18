@@ -8,7 +8,7 @@ FROM node:slim as builder
 ARG API_BASE_URL_FOR_PRODUCTION
 
 USER node
-RUN mkdir /home/node/client
+RUN mkdir -p /home/node/client
 WORKDIR /home/node/client
 
 COPY --chown=node:node . .
