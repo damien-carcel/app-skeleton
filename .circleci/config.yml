@@ -4,7 +4,7 @@ version: 2.1
 
 executor-config: &executor-config
   machine:
-    image: ubuntu-1604:202004-01
+    image: ubuntu-2004:202104-01
   environment:
     COMPOSE_DOCKER_CLI_BUILD: 1
     DOCKER_BUILDKIT: 1
@@ -36,7 +36,7 @@ jobs:
           name: Create cache and configuration directories for the client dependencies
           command: |
             touch ~/.yarnrc
-            mkdir ~/.yarn
+            mkdir -p ~/.yarn
             mkdir -p ~/.cache/yarn
       - restore_cache:
           name: Restore the "node_modules" directory
@@ -58,7 +58,7 @@ jobs:
             - client/node_modules
       - run:
           name: Create report directory
-          command: mkdir api/reports
+          command: mkdir -p api/reports
       - run:
           name: Lint API code
           command: make lint-api-code
@@ -88,7 +88,7 @@ jobs:
           command: make api-integration-tests IO="-f junit -o reports/integration"
       - run:
           name: Create report directory
-          command: mkdir client/reports
+          command: mkdir -p client/reports
       - run:
           name: Lint CSS/LESS code
           command: make stylelint IO="--custom-formatter 'node_modules/stylelint-junit-formatter' > reports/stylelint.xml"

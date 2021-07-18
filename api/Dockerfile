@@ -47,7 +47,7 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     ln -s /usr/sbin/php-fpm8.0 /usr/local/sbin/php-fpm && \
-    mkdir /run/php/
+    mkdir -p /run/php/
 
 COPY docker/php/skeleton.ini /etc/php/8.0/cli/conf.d/99-skeleton.ini
 COPY docker/php/skeleton.ini /etc/php/8.0/fpm/conf.d/99-skeleton.ini
@@ -105,7 +105,7 @@ ENV APP_ENV=prod
 
 COPY --from=builder /var/www/html /var/www/html
 WORKDIR /var/www/html
-RUN mkdir var && \
+RUN mkdir -p var && \
     bin/console ca:c && \
     chown -R www-data:www-data /var/www/html
 
