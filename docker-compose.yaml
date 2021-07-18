@@ -17,8 +17,6 @@ services:
       XDEBUG_CONFIG: 'client_host=172.17.0.1'
       XDEBUG_MODE: '${XDEBUG_MODE:-off}'
     image: 'carcel/skeleton/dev:php'
-    networks:
-      - skeleton-api
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './api:/srv/app:rw'
@@ -48,9 +46,6 @@ services:
       - 'traefik.http.routers.api-dev.entrypoints=web'
       - 'traefik.http.routers.api-dev.rule=Host(`skeleton.docker.localhost`)'
       - 'traefik.http.routers.api-dev.rule=PathPrefix(`/api`)'
-    networks:
-      - proxy
-      - skeleton-api
     ports:
       - '${API_DEV_OUTPUT:-8000}:8000'
     user: '${HOST_USER_IDS:-1000:1000}'
@@ -64,8 +59,6 @@ services:
       target: 'api-fpm'
     command: 'php-fpm -F'
     image: 'carcel/skeleton/api:fpm'
-    networks:
-      - skeleton-api
     restart: 'always'
 
   api:
@@ -81,9 +74,6 @@ services:
       - 'traefik.http.routers.api.rule=Host(`skeleton.docker.localhost`)'
       - 'traefik.http.routers.api.rule=PathPrefix(`/api`)'
       - 'traefik.http.routers.api.tls=true'
-    networks:
-      - proxy
-      - skeleton-api
     restart: on-failure
 
   database:
@@ -92,8 +82,6 @@ services:
       POSTGRES_USER: '${PGSQL_USERNAME:-app_skeleton}'
       POSTGRES_PASSWORD: '${PGSQL_PASSWORD:-app_skeleton}'
     image: 'postgres:13'
-    networks:
-      - skeleton-api
     ports:
       - '5432:5432'
     restart: unless-stopped
@@ -102,8 +90,6 @@ services:
     environment:
       YARN_CACHE_FOLDER: '/home/yarn-cache'
     image: 'node:slim'
-    networks:
-      - skeleton-client
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './client:/srv/app'
@@ -124,9 +110,6 @@ services:
       - 'traefik.http.routers.client-dev.entrypoints=web'
       - 'traefik.http.routers.client-dev.rule=Host(`skeleton.docker.localhost`)'
       - 'traefik.http.routers.client-dev.rule=PathPrefix(`/`)'
-    networks:
-      - proxy
-      - skeleton-client
     ports:
       - '${CLIENT_DEV_OUTPUT:-3000}:3000'
     restart: on-failure
@@ -149,15 +132,10 @@ services:
       - 'traefik.http.routers.client.rule=Host(`skeleton.docker.localhost`)'
       - 'traefik.http.routers.client.rule=PathPrefix(`/`)'
       - 'traefik.http.routers.client.tls=true'
-    networks:
-      - proxy
-      - skeleton-client
     restart: on-failure
 
   traefik:
     image: 'traefik'
-    networks:
-      - proxy
     ports:
       - '${SKELETON_WEB_HTTP_PORT:-80}:80'
       - '${SKELETON_WEB_HTTPS_PORT:-443}:443'
@@ -168,8 +146,3 @@ services:
       - './traefik/dynamic:/etc/traefik/dynamic:ro'
       - './traefik/ssl:/etc/traefik/ssl:ro'
       - './traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro'
-
-networks:
-  proxy:
-  skeleton-api:
-  skeleton-client:
