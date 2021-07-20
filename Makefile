@@ -215,7 +215,6 @@ lint-api-code: ## Check API coding style with PHP CS Fixer.
 .PHONY: fix-api-code
 fix-api-code: ## Attempt to fix the violations detected by PHP Code Sniffer and PHP CS Fixer.
 	@$(DC_RUN) php vendor/bin/php-cs-fixer fix -v --diff --config=.php-cs-fixer.dist.php
-	@$(DC_RUN) php vendor/bin/phpcbf
 
 .PHONY: analyse-api-src
 analyse-api-src: ## Run PHP static analysis on source folder.
