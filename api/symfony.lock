@@ -172,8 +172,20 @@
     "phpspec/prophecy": {
         "version": "1.13.0"
     },
+    "phpstan/extension-installer": {
+        "version": "1.1.0"
+    },
     "phpstan/phpstan": {
         "version": "0.12.90"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.12.42"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.41"
+    },
+    "phpstan/phpstan-webmozart-assert": {
+        "version": "0.12.15"
     },
     "psr/cache": {
         "version": "2.0.0"
@@ -314,7 +326,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.7",
-            "ref": "329f6a5ef2e7aa033f802be833ef8d1268dd0848"
+            "ref": "a7bace7dbc5a7ed5608dbe2165e0774c87175fe6"
         },
         "files": [
             "config/packages/dev/monolog.yaml",
@@ -374,7 +386,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "5.3",
-            "ref": "2d706bd8c6a9e6730343bb22092dabba1f42f4f3"
+            "ref": "44633353926a0382d7dfb0530922c5c0b30fae11"
         },
         "files": [
             "config/packages/routing.yaml",
@@ -442,7 +454,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.3",
-            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+            "ref": "3eb8df139ec05414489d55b97603c5f6ca0c44cb"
         },
         "files": [
             "config/packages/test/validator.yaml",
@@ -457,6 +469,9 @@
     },
     "symfony/yaml": {
         "version": "v5.3.3"
+    },
+    "thecodingmachine/phpstan-strict-rules": {
+        "version": "v0.12.1"
     },
     "webmozart/assert": {
         "version": "1.10.0"

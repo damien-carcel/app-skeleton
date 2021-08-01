@@ -30,13 +30,18 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
-        "akeneo/php-coupling-detector": "^0.7.0",
+        "akeneo/php-coupling-detector": "^0.7",
         "friends-of-behat/symfony-extension": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpmd/phpmd": "^2.10",
         "phpmetrics/phpmetrics": "^2.7",
         "phpspec/phpspec": "^7.1",
-        "phpstan/phpstan": "^0.12.90"
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12.90",
+        "phpstan/phpstan-doctrine": "^0.12.42",
+        "phpstan/phpstan-symfony": "^0.12.41",
+        "phpstan/phpstan-webmozart-assert": "^0.12.15",
+        "thecodingmachine/phpstan-strict-rules": "^0.12.1"
     },
     "config": {
         "optimize-autoloader": true,
