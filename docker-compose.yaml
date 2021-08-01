@@ -45,8 +45,6 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api-dev.entrypoints=web'
       - 'traefik.http.routers.api-dev.rule=Host(`skeleton-api.docker.localhost`)'
-    ports:
-      - '${API_DEV_OUTPUT:-8000}:8000'
     user: '${HOST_USER_IDS:-1000:1000}'
     volumes:
       - './api:/srv/app:rw'
@@ -108,8 +106,6 @@ services:
       - 'traefik.http.routers.client-dev.entrypoints=web'
       - 'traefik.http.routers.client-dev.rule=Host(`skeleton.docker.localhost`)'
       - 'traefik.http.routers.client-dev.rule=PathPrefix(`/`)'
-    ports:
-      - '${CLIENT_DEV_OUTPUT:-3000}:3000'
     restart: on-failure
     tty: true
     user: '${HOST_USER_IDS:-1000:1000}'
@@ -135,9 +131,9 @@ services:
   traefik:
     image: 'traefik'
     ports:
-      - '${SKELETON_WEB_HTTP_PORT:-80}:80'
-      - '${SKELETON_WEB_HTTPS_PORT:-443}:443'
-      - '${SKELETON_TRAEFIK_ADMIN_PORT:-8080}:8080'
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
     restart: always
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
