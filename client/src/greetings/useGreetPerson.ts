@@ -26,7 +26,11 @@ export const useGreetPerson = () => {
 
         setPersonToGreet(personToGreet);
       } catch (error) {
-        setError(error);
+        if (error instanceof Error) {
+          setError(error);
+        } else {
+          setError(new Error('Something went terribly wrong…'));
+        }
       }
     };
 
