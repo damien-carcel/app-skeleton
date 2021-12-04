@@ -3,7 +3,7 @@
 # between development and production #
 ######################################
 
-FROM debian:buster-slim as base
+FROM debian:bullseye-slim as base
 
 ENV DEBIAN_FRONTEND=noninteractive\
     PHP_CONF_DATE_TIMEZONE=UTC \
@@ -28,30 +28,30 @@ RUN echo 'APT::Install-Recommends "0" ; APT::Install-Suggests "0" ;' > /etc/apt/
     echo 'path-exclude=/usr/share/man/*' >> /etc/dpkg/dpkg.cfg.d/path_exclusions && \
     apt-get update && \
     apt-get --yes install apt-transport-https ca-certificates gpg gpg-agent wget && \
-    echo 'deb https://packages.sury.org/php/ buster main' > /etc/apt/sources.list.d/sury.list && \
+    echo 'deb https://packages.sury.org/php/ bullseye main' > /etc/apt/sources.list.d/sury.list && \
     wget -O sury.gpg https://packages.sury.org/php/apt.gpg && apt-key add sury.gpg && rm sury.gpg && \
     apt-get update && \
     apt-get --yes install \
-        php8.0-apcu \
-        php8.0-cli \
-        php8.0-curl \
-        php8.0-dom \
-        php8.0-fpm \
-        php8.0-intl \
-        php8.0-mbstring \
-        php8.0-opcache \
-        php8.0-pdo \
-        php8.0-pgsql \
-        php8.0-zip && \
+        php8.1-apcu \
+        php8.1-cli \
+        php8.1-curl \
+        php8.1-dom \
+        php8.1-fpm \
+        php8.1-intl \
+        php8.1-mbstring \
+        php8.1-opcache \
+        php8.1-pdo \
+        php8.1-pgsql \
+        php8.1-zip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    ln -s /usr/sbin/php-fpm8.0 /usr/local/sbin/php-fpm && \
+    ln -s /usr/sbin/php-fpm8.1 /usr/local/sbin/php-fpm && \
     mkdir -p /run/php/
 
-COPY docker/php/skeleton.ini /etc/php/8.0/cli/conf.d/99-skeleton.ini
-COPY docker/php/skeleton.ini /etc/php/8.0/fpm/conf.d/99-skeleton.ini
-COPY docker/php/fpm.conf /etc/php/8.0/fpm/pool.d/zzz-skeleton.conf
+COPY docker/php/skeleton.ini /etc/php/8.1/cli/conf.d/99-skeleton.ini
+COPY docker/php/skeleton.ini /etc/php/8.1/fpm/conf.d/99-skeleton.ini
+COPY docker/php/fpm.conf /etc/php/8.1/fpm/pool.d/zzz-skeleton.conf
 
 ######################################
 # PHP CLI image used for development #
@@ -65,15 +65,15 @@ ENV XDEBUG_ENABLED=0
 RUN apt-get update && \
     apt-get --yes install \
         git \
-        php8.0-xdebug \
+        php8.1-xdebug \
         unzip && \
     apt-get clean && \
     apt-get --yes autoremove --purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure XDEBUG and make XDEBUG activable at container start
-COPY docker/php/xdebug.ini /etc/php/8.0/cli/conf.d/99-skeleton-xdebug.ini
-COPY docker/php/xdebug.ini /etc/php/8.0/fpm/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/8.1/cli/conf.d/99-skeleton-xdebug.ini
+COPY docker/php/xdebug.ini /etc/php/8.1/fpm/conf.d/99-skeleton-xdebug.ini
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer

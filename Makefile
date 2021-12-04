@@ -180,10 +180,10 @@ api-tests: install-api-dependencies #main# Execute all the API tests.
 	@echo ""
 	@make analyse-api-code
 	@echo ""
-	@echo "Check coupling violations between API code layers"
-	@echo ""
-	@make api-coupling
-	@echo ""
+#	@echo "Check coupling violations between API code layers"
+#	@echo ""
+#	@make api-coupling
+#	@echo ""
 	@echo "Run PHP Mess Detector on the API code"
 	@echo ""
 	@make phpmd
@@ -227,21 +227,17 @@ analyse-api-tests: ## Run PHP static analysis on tests folder.
 .PHONY: analyse-api-code ## Run PHP static analysis the API code.
 analyse-api-code: analyse-api-src analyse-api-tests
 
-.PHONY: api-coupling
-api-coupling: ## Check coupling violations between API code layers.
-	@$(DC_RUN) php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
+#.PHONY: api-coupling
+#api-coupling: ## Check coupling violations between API code layers.
+#	@$(DC_RUN) php vendor/bin/php-coupling-detector detect --config-file .php_cd.php
 
 .PHONY: phpmd
 phpmd: ## Run PHP Mess Detector on the API code.
 	@$(DC_RUN) php vendor/bin/phpmd src,tests --exclude *src/Kernel.php ${PHPMD_OUTPUT} ${PHPMD_RULESETS}
 
 .PHONY: api-unit-tests
-api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-unit-tests" to activate the debugger.
-	@$(DC_RUN) php vendor/bin/phpspec run ${IO}
-
-.PHONY: api-unit-tests
-describe: ## Create a phpspec unit test (use as follow: "make describe IO=namepace/with/slash/instead/of/antislash", then running "make api-unit-tests" will create the class corresponding to the test).
-	@$(DC_RUN) php vendor/bin/phpspec describe ${IO}
+api-unit-tests: ## Execute API unit tests (use "make api-unit-tests IO=path/to/test" to run a specific test or test directory). Use "XDEBUG_MODE=debug make api-unit-tests" to activate the debugger.
+	@$(DC_RUN) php vendor/bin/phpunit ${IO}
 
 .PHONY: api-acceptance-tests-in-memory
 api-acceptance-tests-in-memory: ## Execute "in memory" API acceptance tests (use "make api-acceptance-tests-in-memory IO=path/to/test" to run a specific test). Use "XDEBUG_MODE=debug make api-acceptance-tests-in-memory" to activate the debugger.
