@@ -4,7 +4,7 @@ version: 2.1
 
 executor-config: &executor-config
   machine:
-    image: ubuntu-2004:202104-01
+    image: ubuntu-2004:202111-01
   environment:
     COMPOSE_DOCKER_CLI_BUILD: 1
     DOCKER_BUILDKIT: 1
