@@ -21,7 +21,7 @@ help:
 APP_ENV ?= dev
 IO ?=
 L ?= max
-TL ?= 6
+TL ?= max
 
 PHPMD_OUTPUT=ansi
 PHPMD_RULESETS=cleancode,codesize,controversial,design,naming,unusedcode
