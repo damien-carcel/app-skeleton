@@ -1,8 +1,10 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { App } from './App';
 
 test('renders learn react link', async () => {
-  const { getByText } = render(<App />);
+  render(<App />);
 
-  await waitFor(() => getByText(/Hello World!/i));
+  await waitFor(() => screen.findByText('Hello World!'));
+
+  expect(screen.getByText('Hello World!')).toBeVisible();
 });
