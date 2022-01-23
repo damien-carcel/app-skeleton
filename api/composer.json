@@ -38,7 +38,6 @@
         "phpspec/phpspec": "^7.1",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
-        "phpstan/phpstan-doctrine": "^1.0",
         "phpstan/phpstan-symfony": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "thecodingmachine/phpstan-strict-rules": "^1.0"
@@ -48,7 +47,13 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {

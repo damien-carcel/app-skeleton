@@ -14,6 +14,9 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
+    "composer/pcre": {
+        "version": "1.0.1"
+    },
     "composer/semver": {
         "version": "3.2.5"
     },
@@ -177,9 +180,6 @@
     },
     "phpstan/phpstan": {
         "version": "0.12.90"
-    },
-    "phpstan/phpstan-doctrine": {
-        "version": "0.12.42"
     },
     "phpstan/phpstan-symfony": {
         "version": "0.12.41"
