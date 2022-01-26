@@ -4,7 +4,8 @@ version: 2.1
 
 executor-config: &executor-config
   machine:
-    image: ubuntu-2004:202111-01
+    image: ubuntu-2004:202111-02
+    docker_layer_caching: true
   environment:
     COMPOSE_DOCKER_CLI_BUILD: 1
     DOCKER_BUILDKIT: 1
@@ -75,15 +76,15 @@ jobs:
       - run:
           name: Run API static analysis
           command: make analyse-api-code
-      - run:
-          name: Run coupling detector
-          command: make api-coupling
+#      - run:
+#          name: Run coupling detector
+#          command: make api-coupling
       - run:
           name: Run PHP mess detector
           command: make phpmd
       - run:
           name: Run API unit tests
-          command: make api-unit-tests IO="--format=junit" > api/reports/unit_tests.xml
+          command: make api-unit-tests IO="--log-junit reports/unit_tests.xml"
       - run:
           name: Run API acceptance tests in memory
           command: make api-acceptance-tests-in-memory IO="-f junit -o reports/acceptance_in_memory"

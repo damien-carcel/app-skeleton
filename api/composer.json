@@ -39,7 +39,7 @@
         "phpstan/phpstan-symfony": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
-        "thecodingmachine/phpstan-strict-rules": "^1.0"
+        "thecodingmachine/phpstan-safe-rule": "^1.0"
     },
     "config": {
         "optimize-autoloader": true,
