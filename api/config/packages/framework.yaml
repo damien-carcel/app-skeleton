@@ -23,7 +23,7 @@ when@test:
         session:
             storage_factory_id: session.storage.factory.mock_file
 
-when@acceptance:
+when@in_memory:
     framework:
         test: true
         session:

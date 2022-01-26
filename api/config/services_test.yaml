@@ -3,9 +3,6 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Tests\Acceptance\:
-        resource: '../tests/acceptance/*'
-
     App\Tests\Fixtures\:
         resource: '../tests/fixtures/*'
 
